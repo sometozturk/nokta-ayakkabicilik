@@ -27,6 +27,9 @@
         .toolbar { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 16px 0; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
         .toolbar-label { color: var(--muted); font-size: 13px; }
         .toolbar-label strong { color: var(--ink); }
+        .brand-filters { display: flex; gap: 8px; overflow-x: auto; padding: 0 0 22px; scrollbar-width: thin; }
+        .brand-filter { flex: 0 0 auto; border: 1px solid var(--line); padding: 9px 15px; color: var(--muted); background: transparent; font: 600 12px 'DM Sans', sans-serif; cursor: pointer; transition: .2s ease; }
+        .brand-filter:hover, .brand-filter.active { border-color: var(--ink); color: var(--white); background: var(--ink); }
         .search { width: 260px; border: 1px solid var(--line); border-radius: 4px; padding: 11px 14px; color: var(--ink); background: var(--white); font: inherit; outline: none; }
         .search:focus { border-color: var(--ink); }
         .urun-izgarasi { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
@@ -57,7 +60,7 @@
     </header>
     <main>
         <section class="hero"><div><p class="eyebrow">Yeni sezon / 2024</p><h1>Adımını<br>kendin seç.</h1><p class="hero-copy">Şehrin temposuna uyum sağlayan, özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu.</p></div><div class="hero-aside"><strong id="hero-count">49</strong><span>seçili model</span></div></section>
-        <div class="container"><div class="toolbar"><div class="toolbar-label"><strong id="product-count">49 ürün</strong> · Shopier üzerinden güvenli alışveriş</div><input class="search" id="search" type="search" placeholder="Model ara..." aria-label="Model ara"></div><div id="urun-izgarasi" class="urun-izgarasi"></div></div>
+        <div class="container"><div class="toolbar"><div class="toolbar-label"><strong id="product-count">49 ürün</strong> · Shopier üzerinden güvenli alışveriş</div><input class="search" id="search" type="search" placeholder="Model ara..." aria-label="Model ara"></div><div id="brand-filters" class="brand-filters" aria-label="Marka filtreleri"></div><div id="urun-izgarasi" class="urun-izgarasi"></div></div>
     </main>
     <footer><div><span>NOKTA AYAKKABICILIK</span><span>Güvenli ödeme · Hızlı gönderim · Kolay iletişim</span></div></footer>
 
@@ -484,6 +487,11 @@
 
             const grid = document.getElementById('urun-izgarasi');
             const total = PRODUCTS.length;
+            const knownBrands = ['Nike', 'Adidas', 'Lacoste', 'Lufian', 'Calvin Klein', 'Alexander Mcqueen', 'Goldengoose'];
+            function getBrand(title){
+                const normalizedTitle = title.toLocaleLowerCase('tr-TR');
+                return knownBrands.find(brand => normalizedTitle.startsWith(brand.toLocaleLowerCase('tr-TR'))) || title.split(' ')[0];
+            }
             for(let i=1;i<=total;i++){
                 const card = document.createElement('div');
                 card.className = 'urun-karti';
@@ -505,6 +513,7 @@
                 const product = productFromFile || productFromId || null;
                 const title = product?.title || `Ürün ${i}`;
                 card.dataset.title = title.toLocaleLowerCase('tr-TR');
+                card.dataset.brand = getBrand(title).toLocaleLowerCase('tr-TR');
 
                 img.alt = title;
 
@@ -575,13 +584,33 @@
             }
 
             const search = document.getElementById('search');
+            const brandFilters = document.getElementById('brand-filters');
             const productCount = document.getElementById('product-count');
             const heroCount = document.getElementById('hero-count');
+            const brands = [...new Set([...grid.querySelectorAll('.urun-karti')].map(card => card.dataset.brand))].sort((a, b) => a.localeCompare(b, 'tr-TR'));
+            let activeBrand = '';
+            function createBrandFilter(label, value){
+                const button = document.createElement('button');
+                button.className = 'brand-filter';
+                button.type = 'button';
+                button.textContent = label;
+                button.dataset.brand = value;
+                button.addEventListener('click', () => {
+                    activeBrand = value;
+                    brandFilters.querySelectorAll('.brand-filter').forEach(filter => filter.classList.toggle('active', filter.dataset.brand === activeBrand));
+                    filterProducts();
+                });
+                brandFilters.appendChild(button);
+            }
+            createBrandFilter('Tümü', '');
+            brands.forEach(brand => createBrandFilter(brand.replace(/(^|\s)\S/g, letter => letter.toLocaleUpperCase('tr-TR')), brand));
+            brandFilters.querySelector('.brand-filter').classList.add('active');
+
             function filterProducts(){
                 const query = search.value.trim().toLocaleLowerCase('tr-TR');
                 let visible = 0;
                 grid.querySelectorAll('.urun-karti').forEach(card => {
-                    const matches = !query || card.dataset.title.includes(query);
+                    const matches = (!query || card.dataset.title.includes(query)) && (!activeBrand || card.dataset.brand === activeBrand);
                     card.hidden = !matches;
                     if(matches) visible++;
                 });
