@@ -13,8 +13,8 @@
         body { margin: 0; color: var(--ink); background: var(--paper); font-family: 'DM Sans', sans-serif; }
         header { background: var(--ink); color: var(--white); }
         .nav { width: min(1240px, calc(100% - 40px)); margin: auto; min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-        .logo { display: flex; align-items: center; gap: 12px; font: 700 18px 'Space Grotesk', sans-serif; letter-spacing: .5px; }
-        .logo-mark { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; color: var(--ink); background: var(--accent); font: 700 16px 'Space Grotesk', sans-serif; }
+        .logo { display: flex; align-items: center; min-width: 176px; height: 54px; overflow: hidden; background: #d8d5cf; }
+        .brand-logo { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
         .nav-note { color: #bcbab6; font-size: 13px; }
         .hero { width: min(1240px, calc(100% - 40px)); margin: 0 auto; padding: 74px 0 56px; display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: end; gap: 40px; }
         .eyebrow { margin: 0 0 18px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
@@ -56,7 +56,7 @@
 <body>
 
     <header>
-        <div class="nav"><div class="logo"><span class="logo-mark">N</span> NOKTA AYAKKABICILIK</div><div class="nav-note">Günlük stilin güçlü adımı</div></div>
+        <div class="nav"><div class="logo"><img class="brand-logo" src="logo.jpeg" alt="Nokta Ayakkabıcılık"></div><div class="nav-note">Günlük stilin güçlü adımı</div></div>
     </header>
     <main>
         <section class="hero"><div><p class="eyebrow">Yeni sezon / 2024</p><h1>Adımını<br>kendin seç.</h1><p class="hero-copy">Şehrin temposuna uyum sağlayan, özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu.</p></div><div class="hero-aside"><strong id="hero-count">49</strong><span>seçili model</span></div></section>
