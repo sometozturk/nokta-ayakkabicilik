@@ -26,6 +26,9 @@ function absoluteUrl(value) {
 function extractProduct(html, url) {
   const $ = cheerio.load(html);
   const title = $('meta[property="og:title"]').attr('content') || $('title').text().trim();
+  if (/just a moment|enable javascript and cookies|challenge-platform/i.test($.text()) || /just a moment/i.test(title)) {
+    throw new Error('Shopier Cloudflare challenge page received');
+  }
   let image = $('meta[property="og:image"]').attr('content') || '';
   if (image.startsWith('//')) image = `https:${image}`;
 
