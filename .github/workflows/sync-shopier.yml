@@ -27,6 +27,13 @@ jobs:
       - name: Install Chrome for Puppeteer
         run: npx puppeteer browsers install chrome
 
+      - name: Configure Chrome executable path
+        run: |
+          CHROME_PATH=$(find "$HOME/.cache/puppeteer" -type f -path '*/chrome-linux64/chrome' | head -n 1)
+          test -n "$CHROME_PATH"
+          echo "PUPPETEER_EXECUTABLE_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          echo "Using Chrome at $CHROME_PATH"
+
       - name: Sync Shopier catalog
         run: node sync_shopier.js
 
