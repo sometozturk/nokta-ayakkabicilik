@@ -1,5 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 const shopUrl = 'https://www.shopier.com/noktaayakkabi';
@@ -7,9 +8,10 @@ const urlsFile = 'shopier-urls.json';
 const productsFile = 'products.json';
 const headers = { 'User-Agent': 'Mozilla/5.0 (compatible; NoktaAyakkabicilikSync/1.0)' };
 
-async function fetchHtml(url) {
-  const response = await axios.get(url, { headers, timeout: 30000 });
-  return response.data;
+async function fetchHtml(page, url) {
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await new Promise((resolve) => setTimeout(resolve, 2500));
+  return page.content();
 }
 
 function absoluteUrl(value) {
@@ -36,8 +38,8 @@ function extractProduct(html, url) {
   return { title: title.trim(), price: price.trim(), image, url };
 }
 
-async function discoverUrls() {
-  const html = await fetchHtml(shopUrl);
+async function discoverUrls(page) {
+  const html = await fetchHtml(page, shopUrl);
   const $ = cheerio.load(html);
   return $('a[href]')
     .map((_, element) => absoluteUrl($(element).attr('href')))
@@ -46,10 +48,13 @@ async function discoverUrls() {
 }
 
 async function main() {
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  const page = await browser.newPage();
+  await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36');
   const known = JSON.parse(fs.readFileSync(urlsFile, 'utf8'));
   const existing = fs.existsSync(productsFile) ? JSON.parse(fs.readFileSync(productsFile, 'utf8')) : [];
   const byUrl = new Map(known.map((item) => [item.url, item]));
-  const discovered = await discoverUrls();
+  const discovered = await discoverUrls(page);
   let nextId = Math.max(0, ...existing.map((product) => Number(product.id) || 0), ...known.map((item) => Number(item.id) || 0)) + 1;
 
   for (const url of discovered) {
@@ -62,7 +67,7 @@ async function main() {
   for (const item of byUrl.values()) {
     const previous = existing.find((product) => product.url === item.url) || {};
     try {
-      const live = extractProduct(await fetchHtml(item.url), item.url);
+      const live = extractProduct(await fetchHtml(page, item.url), item.url);
       products.push({
         id: Number(item.id),
         title: live.title || previous.title || `Urun ${item.id}`,
@@ -83,6 +88,7 @@ async function main() {
   fs.writeFileSync(productsFile, `${JSON.stringify(products, null, 2)}\n`);
   fs.writeFileSync(urlsFile, `${JSON.stringify(syncedUrls, null, 2)}\n`);
   console.log(`Done. Products: ${products.length}`);
+  await browser.close();
 }
 
 main().catch((error) => {
