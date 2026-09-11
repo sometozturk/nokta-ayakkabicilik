@@ -12,14 +12,14 @@
         * { box-sizing: border-box; }
         body { margin: 0; color: var(--ink); background: var(--paper); font-family: 'DM Sans', sans-serif; }
         header { position: sticky; top: 0; z-index: 10; background: var(--ink); color: var(--white); }
-        .nav { width: min(1240px, calc(100% - 40px)); margin: auto; min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+        .nav { width: min(1240px, calc(100% - 40px)); margin: auto; min-height: 76px; display: flex; align-items: center; justify-content: flex-start; gap: 24px; }
         .logo { display: flex; align-items: center; width: 190px; height: 68px; overflow: hidden; }
         .brand-logo { display: block; width: 190px; height: auto; filter: invert(1); }
-        .brand-menu { display: flex; flex: 1; justify-content: center; gap: 22px; overflow-x: auto; scrollbar-width: none; }
+        .brand-menu { display: flex; flex: 1; justify-content: flex-start; gap: 22px; overflow-x: auto; scrollbar-width: none; }
         .brand-menu::-webkit-scrollbar { display: none; }
         .brand-menu button { flex: 0 0 auto; border: 0; border-bottom: 2px solid transparent; padding: 10px 0 8px; color: #bcbab6; background: transparent; font: 600 11px 'DM Sans', sans-serif; cursor: pointer; transition: color .2s ease, border-color .2s ease; }
         .brand-menu button:hover, .brand-menu button.active { border-color: var(--accent); color: var(--white); }
-        .instagram-link { flex: 0 0 auto; color: #bcbab6; font-size: 13px; text-decoration: none; transition: color .2s ease; }
+        .instagram-link { flex: 0 0 auto; margin-left: auto; color: #bcbab6; font-size: 13px; text-decoration: none; transition: color .2s ease; }
         .instagram-link:hover { color: var(--white); }
         .hero { width: min(1240px, calc(100% - 40px)); margin: 0 auto; padding: 74px 0 56px; display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: end; gap: 40px; }
         .eyebrow { margin: 0 0 18px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
@@ -63,13 +63,13 @@
 <body>
 
     <header>
-        <div class="nav"><div class="logo"><img class="brand-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık"></div><nav id="brand-menu" class="brand-menu" aria-label="Marka menüsü"></nav><a class="instagram-link" href="https://www.instagram.com/noktaayakkabilicik/" target="_blank" rel="noopener noreferrer">@noktaayakkabilicik</a></div>
+        <div class="nav"><div class="logo"><img class="brand-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık"></div><nav id="brand-menu" class="brand-menu" aria-label="Marka menüsü"></nav><a class="instagram-link" href="https://www.instagram.com/nokta.ayakkabilicik/" target="_blank" rel="noopener noreferrer">@nokta.ayakkabilicik</a></div>
     </header>
     <main>
         <section class="hero"><div><p class="eyebrow">Yeni Sezon / 2026</p><h1>Adımını<br>kendin seç.</h1><p class="hero-copy">Şehrin temposuna uyum sağlayan, özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu.</p></div><div class="hero-aside"><strong id="hero-count">49</strong><span>seçili model</span></div></section>
         <div class="container"><div class="toolbar"><div class="toolbar-label"><strong id="product-count">49 ürün</strong> · Shopier üzerinden güvenli alışveriş</div><input class="search" id="search" type="search" placeholder="Model ara..." aria-label="Model ara"></div><div id="brand-filters" class="brand-filters" aria-label="Marka filtreleri"></div><div id="urun-izgarasi" class="urun-izgarasi"></div></div>
     </main>
-    <footer><div><span>NOKTA AYAKKABICILIK</span><span>Güvenli ödeme · Hızlı gönderim · Kolay iletişim</span><a class="footer-instagram" href="https://www.instagram.com/noktaayakkabilicik/" target="_blank" rel="noopener noreferrer">Instagram · @noktaayakkabilicik</a></div></footer>
+    <footer><div><span>NOKTA AYAKKABICILIK</span><span>Güvenli ödeme · Hızlı gönderim · Kolay iletişim</span><a class="footer-instagram" href="https://www.instagram.com/nokta.ayakkabilicik/" target="_blank" rel="noopener noreferrer">Instagram · @nokta.ayakkabilicik</a></div></footer>
 
     <script>
         (async ()=>{
