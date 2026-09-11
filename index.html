@@ -11,10 +11,14 @@
         :root { --ink: #171717; --muted: #737373; --paper: #f7f5f1; --line: #e7e2db; --accent: #e85d3f; --white: #fff; }
         * { box-sizing: border-box; }
         body { margin: 0; color: var(--ink); background: var(--paper); font-family: 'DM Sans', sans-serif; }
-        header { background: var(--ink); color: var(--white); }
+        header { position: sticky; top: 0; z-index: 10; background: var(--ink); color: var(--white); }
         .nav { width: min(1240px, calc(100% - 40px)); margin: auto; min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
         .logo { display: flex; align-items: center; width: 190px; height: 68px; overflow: hidden; }
         .brand-logo { display: block; width: 190px; height: auto; filter: invert(1); }
+        .brand-menu { display: flex; flex: 1; justify-content: center; gap: 22px; overflow-x: auto; scrollbar-width: none; }
+        .brand-menu::-webkit-scrollbar { display: none; }
+        .brand-menu button { flex: 0 0 auto; border: 0; border-bottom: 2px solid transparent; padding: 10px 0 8px; color: #bcbab6; background: transparent; font: 600 11px 'DM Sans', sans-serif; cursor: pointer; transition: color .2s ease, border-color .2s ease; }
+        .brand-menu button:hover, .brand-menu button.active { border-color: var(--accent); color: var(--white); }
         .nav-note { color: #bcbab6; font-size: 13px; }
         .hero { width: min(1240px, calc(100% - 40px)); margin: 0 auto; padding: 74px 0 56px; display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: end; gap: 40px; }
         .eyebrow { margin: 0 0 18px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
@@ -50,16 +54,16 @@
         footer div { width: min(1240px, calc(100% - 40px)); margin: auto; display: flex; justify-content: space-between; }
         @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 900px) { .urun-izgarasi { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (max-width: 640px) { .nav, .hero, .container, footer div { width: min(100% - 28px, 1240px); } .nav-note { display: none; } .hero { padding: 52px 0 42px; display: block; } h1 { letter-spacing: -2px; } .hero-aside { margin-top: 32px; padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--line); } .toolbar { align-items: stretch; flex-direction: column; } .search { width: 100%; } .urun-izgarasi { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .urun-karti { padding: 7px 7px 12px; } .urun-meta { padding-top: 10px; } .urun-baslik { font-size: 14px; min-height: 56px; } .urun-fiyat { font-size: 16px; } .satin-al-buton { padding: 11px 10px; font-size: 11px; } footer div { display: block; line-height: 1.8; } }
+        @media (max-width: 640px) { .nav, .hero, .container, footer div { width: min(100% - 28px, 1240px); } .nav { gap: 12px; } .logo, .brand-logo { width: 145px; } .nav-note { display: none; } .brand-menu { justify-content: flex-start; gap: 16px; } .brand-menu button { font-size: 10px; } .hero { padding: 52px 0 42px; display: block; } h1 { letter-spacing: -2px; } .hero-aside { margin-top: 32px; padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--line); } .toolbar { align-items: stretch; flex-direction: column; } .search { width: 100%; } .urun-izgarasi { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .urun-karti { padding: 7px 7px 12px; } .urun-meta { padding-top: 10px; } .urun-baslik { font-size: 14px; min-height: 56px; } .urun-fiyat { font-size: 16px; } .satin-al-buton { padding: 11px 10px; font-size: 11px; } footer div { display: block; line-height: 1.8; } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="nav"><div class="logo"><img class="brand-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık"></div><div class="nav-note">Günlük stilin güçlü adımı</div></div>
+        <div class="nav"><div class="logo"><img class="brand-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık"></div><nav id="brand-menu" class="brand-menu" aria-label="Marka menüsü"></nav><div class="nav-note">Günlük stilin güçlü adımı</div></div>
     </header>
     <main>
-        <section class="hero"><div><p class="eyebrow">Yeni sezon / 2024</p><h1>Adımını<br>kendin seç.</h1><p class="hero-copy">Şehrin temposuna uyum sağlayan, özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu.</p></div><div class="hero-aside"><strong id="hero-count">49</strong><span>seçili model</span></div></section>
+        <section class="hero"><div><p class="eyebrow">Yeni Sezon / 2026</p><h1>Adımını<br>kendin seç.</h1><p class="hero-copy">Şehrin temposuna uyum sağlayan, özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu.</p></div><div class="hero-aside"><strong id="hero-count">49</strong><span>seçili model</span></div></section>
         <div class="container"><div class="toolbar"><div class="toolbar-label"><strong id="product-count">49 ürün</strong> · Shopier üzerinden güvenli alışveriş</div><input class="search" id="search" type="search" placeholder="Model ara..." aria-label="Model ara"></div><div id="brand-filters" class="brand-filters" aria-label="Marka filtreleri"></div><div id="urun-izgarasi" class="urun-izgarasi"></div></div>
     </main>
     <footer><div><span>NOKTA AYAKKABICILIK</span><span>Güvenli ödeme · Hızlı gönderim · Kolay iletişim</span></div></footer>
@@ -584,27 +588,34 @@
             }
 
             const search = document.getElementById('search');
+            const brandMenu = document.getElementById('brand-menu');
             const brandFilters = document.getElementById('brand-filters');
             const productCount = document.getElementById('product-count');
             const heroCount = document.getElementById('hero-count');
             const brands = [...new Set([...grid.querySelectorAll('.urun-karti')].map(card => card.dataset.brand))].sort((a, b) => a.localeCompare(b, 'tr-TR'));
             let activeBrand = '';
-            function createBrandFilter(label, value){
+            function selectBrand(value){
+                activeBrand = value;
+                document.querySelectorAll(`[data-brand-filter]`).forEach(filter => filter.classList.toggle('active', filter.dataset.brandFilter === activeBrand));
+                filterProducts();
+            }
+            function createBrandControl(container, label, value){
                 const button = document.createElement('button');
-                button.className = 'brand-filter';
+                button.className = container === brandMenu ? 'brand-menu-button' : 'brand-filter';
                 button.type = 'button';
                 button.textContent = label;
-                button.dataset.brand = value;
-                button.addEventListener('click', () => {
-                    activeBrand = value;
-                    brandFilters.querySelectorAll('.brand-filter').forEach(filter => filter.classList.toggle('active', filter.dataset.brand === activeBrand));
-                    filterProducts();
-                });
-                brandFilters.appendChild(button);
+                button.dataset.brandFilter = value;
+                button.addEventListener('click', () => selectBrand(value));
+                container.appendChild(button);
             }
-            createBrandFilter('Tümü', '');
-            brands.forEach(brand => createBrandFilter(brand.replace(/(^|\s)\S/g, letter => letter.toLocaleUpperCase('tr-TR')), brand));
-            brandFilters.querySelector('.brand-filter').classList.add('active');
+            const brandLabel = brand => brand.replace(/(^|\s)\S/g, letter => letter.toLocaleUpperCase('tr-TR'));
+            createBrandControl(brandMenu, 'Tümü', '');
+            createBrandControl(brandFilters, 'Tümü', '');
+            brands.forEach(brand => {
+                createBrandControl(brandMenu, brandLabel(brand), brand);
+                createBrandControl(brandFilters, brandLabel(brand), brand);
+            });
+            selectBrand('');
 
             function filterProducts(){
                 const query = search.value.trim().toLocaleLowerCase('tr-TR');
