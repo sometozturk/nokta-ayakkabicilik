@@ -131,10 +131,12 @@
     .search-suggestions button{display:block;width:100%;padding:9px 12px;border:0;background:transparent;color:var(--ink);font:13px 'DM Sans',sans-serif;text-align:left;cursor:pointer;}
     .search-suggestions button:hover,.search-suggestions button:focus{background:var(--accent);color:var(--ink);outline:none;}
 
-    .brand-filters{display:flex;gap:8px;overflow-x:auto;padding:0 0 28px;scrollbar-width:thin;}
-    .brand-filter-row{position:sticky;top:78px;z-index:20;display:flex;align-items:flex-start;gap:16px;padding:14px 0 0;background:var(--paper);box-shadow:0 8px 18px rgba(27,23,18,.18);}
-    .brand-filter-row .brand-filters{flex:1;min-width:0;}
-    .brand-filter-row .search-wrap{flex:0 0 auto;}
+    .brand-filters{display:flex;gap:8px;overflow-x:auto;padding:0;scrollbar-width:thin;}
+    .brand-filter-row{position:sticky;top:78px;z-index:20;display:flex;align-items:center;gap:12px;padding:14px 0;background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 8px 18px rgba(27,23,18,.18);}
+    .brand-filter-row .brand-filters{flex:1 1 auto;min-width:0;}
+    .brand-filter-row .search-wrap{flex:0 1 180px;min-width:150px;}
+    .brand-filter-row .search{width:100%;}
+    .brand-filter-row .sort{flex:0 1 155px;min-width:140px;}
     .brand-filter{flex:0 0 auto;border:1px solid var(--line);padding:10px 17px;color:var(--muted);background:var(--surface);font:600 12px 'DM Sans',sans-serif;cursor:pointer;transition:transform .2s ease,border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;border-radius:4px;}
     .brand-filter:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-2px);box-shadow:0 6px 14px rgba(27,23,18,.08);}
     .brand-filter.active{border-color:var(--ink);color:var(--paper);background:var(--ink);}
@@ -246,7 +248,7 @@
     .trust-bar{background:transparent;margin:0 0 28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
     .trust-inner{width:100%;padding:15px 0;color:var(--muted);gap:10px 30px;}
     .trust-inner li::before{background:var(--accent);}
-    .brand-filters{position:sticky;top:78px;z-index:15;margin:0;padding:14px 0 16px;background:rgba(21,21,21,.96);border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.16);}
+    .brand-filters{margin:0;background:transparent;}
     .brand-filter{border-color:var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:10px 18px;}
     .brand-filter:hover{border-color:var(--accent);color:var(--ink);box-shadow:none;}
     .brand-filter.active{background:var(--ink);border-color:var(--ink);color:var(--paper);}
@@ -274,6 +276,9 @@
         .hero{grid-template-columns:1fr;padding-top:58px;padding-bottom:64px;}
         .urun-izgarasi{grid-template-columns:repeat(3,minmax(0,1fr));}
         .hero-collage{margin-top:30px;}
+        .brand-filter-row{flex-wrap:wrap;}
+        .brand-filter-row .brand-filters{flex-basis:100%;}
+        .brand-filter-row .search-wrap,.brand-filter-row .sort{flex:1 1 0;min-width:0;}
     }
     @media (max-width:640px){
         .hero{padding-top:46px;padding-bottom:48px;}
@@ -307,8 +312,10 @@
     .modal-size{margin:0 0 24px;color:#655b52;font-size:13px;line-height:1.6;}
     .modal-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
     .modal-shopier{display:inline-flex;margin:0!important;width:auto!important;}
-    .floating-contact{position:fixed;right:18px;bottom:18px;z-index:40;display:inline-flex;align-items:center;gap:8px;padding:13px 16px;background:#25d366;color:#071a0d;border-radius:999px;box-shadow:0 10px 24px rgba(0,0,0,.25);font-size:12px;font-weight:700;text-decoration:none;}
-    .floating-contact:hover{background:#48df80;transform:translateY(-2px);}
+    .floating-contact{position:fixed;right:18px;bottom:18px;z-index:40;display:inline-flex;align-items:center;gap:10px;padding:12px 16px;background:linear-gradient(135deg,#fdf2f8,#ffffff);color:#111827;border:1px solid rgba(17,24,39,.08);border-radius:999px;box-shadow:0 10px 24px rgba(0,0,0,.18);font-size:12px;font-weight:700;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease;}
+    .floating-contact:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,0,0,.22);}
+    .floating-contact .ig-icon{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#f9ce34,#ee2a7b 35%,#6228d7 70%,#1b1464);color:#fff;flex:0 0 auto;}
+    .floating-contact .ig-icon svg{width:12px;height:12px;display:block;}
     .legal-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;}
     .legal-links a{font-size:11px;color:var(--muted);text-decoration:none;}
     .legal-links a:hover{color:var(--accent);}
@@ -317,7 +324,9 @@
         .modal-image{height:280px;min-height:0;}
         .modal-content{padding:26px 22px 30px;}
         .modal-title{font-size:27px;}
-        .floating-contact{right:12px;bottom:12px;padding:12px 14px;}
+        .floating-contact{right:12px;bottom:12px;padding:10px 12px;gap:8px;font-size:11px;}
+        .floating-contact .ig-icon{width:18px;height:18px;}
+        .floating-contact .ig-icon svg{width:10px;height:10px;}
     }
 </style>
 </head>
@@ -382,9 +391,6 @@
                 <option value="price-asc">Fiyat: Düşükten yükseğe</option>
                 <option value="price-desc">Fiyat: Yüksekten düşüğe</option>
             </select>
-                <select class="sort" id="size-filter" aria-label="Numara filtrele">
-                    <option value="">Tüm numaralar</option>
-                </select>
                 <select class="sort" id="price-filter" aria-label="Fiyat filtrele">
                     <option value="">Tüm fiyatlar</option>
                     <option value="0-1200">1.200 TL altı</option>
@@ -428,7 +434,16 @@
     </div>
 </footer>
 
-<a class="floating-contact" href="https://www.instagram.com/nokta.ayakkabicilik/" target="_blank" rel="noopener noreferrer" aria-label="Instagram'dan iletişime geç">Instagram'dan yaz</a>
+<a class="floating-contact" href="https://www.instagram.com/nokta.ayakkabicilik/" target="_blank" rel="noopener noreferrer" aria-label="Instagram'dan iletişime geç">
+    <span class="ig-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+            <circle cx="12" cy="12" r="4"></circle>
+            <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"></circle>
+        </svg>
+    </span>
+    <span>Instagram'dan yaz</span>
+</a>
 
 <div class="modal-backdrop" id="product-modal" hidden>
     <section class="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -1052,7 +1067,6 @@
             const search = document.getElementById('search');
             const searchSuggestions = document.getElementById('search-suggestions');
             const sortSelect = document.getElementById('sort');
-            const sizeFilter = document.getElementById('size-filter');
             const priceFilter = document.getElementById('price-filter');
             const brandFilters = document.getElementById('brand-filters');
             const footerBrands = document.getElementById('footer-brands');
@@ -1075,17 +1089,6 @@
             });
             const brandLabel = brand => brand.replace(/(^|\s)\S/g, letter => letter.toLocaleUpperCase('tr-TR'));
             let activeBrand = '';
-
-            const sizeOptions = [...new Set(cards.flatMap(card => {
-                const match = card.dataset.size.match(/\d+(?:-\d+)?/g);
-                return match || [];
-            }))].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
-            sizeOptions.forEach(size => {
-                const option = document.createElement('option');
-                option.value = size;
-                option.textContent = `${size} numara`;
-                sizeFilter.appendChild(option);
-            });
 
             function openProductModal(product, imageSource, brand, sizeRange){
                 modalImage.src = imageSource;
@@ -1140,7 +1143,6 @@
 
             function filterProducts(){
                 const query = search.value.trim().toLocaleLowerCase('tr-TR');
-                const selectedSize = sizeFilter.value;
                 const selectedPrice = priceFilter.value;
                 const priceRange = selectedPrice ? selectedPrice.split('-').map(Number) : null;
                 let visible = 0;
@@ -1149,7 +1151,6 @@
                     const cardPrice = parseFloat(card.dataset.price) || 0;
                     const matches = (!query || card.dataset.title.includes(query))
                         && (!activeBrand || card.dataset.brand === activeBrand)
-                        && (!selectedSize || card.dataset.size.includes(selectedSize))
                         && (!priceRange || (cardPrice >= priceRange[0] && cardPrice < priceRange[1]));
                     card.hidden = !matches;
                     if(matches){ visible++; visibleCards.push(card); }
@@ -1216,7 +1217,6 @@
                 if(!event.target.closest('.search-wrap')) searchSuggestions.hidden = true;
             });
             sortSelect.addEventListener('change', filterProducts);
-            sizeFilter.addEventListener('change', filterProducts);
             priceFilter.addEventListener('change', filterProducts);
             closeModalButton.addEventListener('click', closeProductModal);
             backModalButton.addEventListener('click', closeProductModal);
