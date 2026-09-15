@@ -73,6 +73,9 @@
         .opening-screen{animation-delay:.25s;animation-duration:.25s;}
         .curtain{animation-delay:0s;animation-duration:.25s;}
     }
+    @media (max-width:640px){
+        .curtain-logo{z-index:4;width:min(48vw,300px);height:min(20vw,150px);min-height:90px;}
+    }
 
     /* ---------- header ---------- */
     header{position:sticky;top:0;z-index:30;background:rgba(246,241,230,.94);backdrop-filter:blur(10px);border-bottom:1px solid rgba(230,221,202,.8);}
