@@ -73,6 +73,10 @@
         .opening-screen{animation-delay:.25s;animation-duration:.25s;}
         .curtain{animation-delay:0s;animation-duration:.25s;}
     }
+    @media (max-width:640px){
+        .opening-screen{animation-delay:.25s;animation-duration:.3s;}
+        .curtain{animation-delay:0s;animation-duration:1.1s;}
+    }
     /* ---------- header ---------- */
     header{position:sticky;top:0;z-index:30;background:rgba(246,241,230,.94);backdrop-filter:blur(10px);border-bottom:1px solid rgba(230,221,202,.8);}
     .nav{width:min(1240px,calc(100% - 40px));margin:auto;min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
@@ -920,24 +924,7 @@
     }
 ];
 
-            let PRODUCTS = FALLBACK_PRODUCTS;
-            try {
-                let remoteProducts;
-                if(location.protocol === 'file:'){
-                    const request = new XMLHttpRequest();
-                    request.open('GET', 'products.json', false);
-                    request.send();
-                    if((request.status === 0 || (request.status >= 200 && request.status < 400)) && request.responseText){
-                        remoteProducts = JSON.parse(request.responseText);
-                    }
-                } else {
-                    const response = await fetch('products.json', { cache: 'no-store' });
-                    if(response.ok) remoteProducts = await response.json();
-                }
-                if(Array.isArray(remoteProducts) && remoteProducts.length) PRODUCTS = remoteProducts;
-            }catch(error){
-                // products.json okunamazsa sayfa gömülü katalogla açılır.
-            }
+            const PRODUCTS = FALLBACK_PRODUCTS;
 
             function fsExists(name){
                 try{ const req = new XMLHttpRequest(); req.open('HEAD', name, false); req.send(); return req.status >= 200 && req.status < 400; }catch(e){ return false; }
