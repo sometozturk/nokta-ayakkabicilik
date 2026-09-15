@@ -73,6 +73,10 @@
         .opening-screen{animation-delay:.25s;animation-duration:.25s;}
         .curtain{animation-delay:0s;animation-duration:.25s;}
     }
+    @media (max-width:640px){
+        .opening-screen{animation-delay:1.25s;}
+        .curtain{animation-delay:.25s;animation-duration:.9s;}
+    }
 
     /* ---------- header ---------- */
     header{position:sticky;top:0;z-index:30;background:rgba(246,241,230,.94);backdrop-filter:blur(10px);border-bottom:1px solid rgba(230,221,202,.8);}
@@ -324,9 +328,11 @@
     <div class="curtain curtain-right" aria-hidden="true"><img class="curtain-logo" src="logo.jpeg" alt=""><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i></div>
 </div>
 <script>
-    document.querySelector('.opening-screen').addEventListener('animationend', event => {
-        if(event.animationName === 'openingFade') event.currentTarget.remove();
+    const openingScreen = document.querySelector('.opening-screen');
+    openingScreen.addEventListener('animationend', event => {
+        if(event.animationName === 'openingFade') openingScreen.remove();
     });
+    window.setTimeout(() => openingScreen.remove(), 2600);
 </script>
 
 <header>
@@ -922,10 +928,6 @@
                 // products.json okunamazsa sayfa gömülü katalogla açılır.
             }
 
-            function fsExists(name){
-                try{ const req = new XMLHttpRequest(); req.open('HEAD', name, false); req.send(); return req.status >= 200 && req.status < 400; }catch(e){ return false; }
-            }
-
             let productsById = {};
             let productsByFilename = {};
             (PRODUCTS || []).forEach(p=>{
@@ -985,13 +987,7 @@
                 img.className = 'urun-resmi';
                 img.loading = 'lazy';
                 img.alt = title;
-                if(fsExists(localJpeg) || fsExists(localJpg)){
-                    img.src = fsExists(localJpeg) ? localJpeg : localJpg;
-                }else if(product.image){
-                    img.src = product.image;
-                }else{
-                    img.src = localJpeg;
-                }
+                img.src = localJpeg;
                 img.onerror = function(){
                     if(this.src.endsWith('.jpeg')){ this.src = localJpg; return; }
                     if(product.image && this.src !== product.image){ this.src = product.image; return; }
