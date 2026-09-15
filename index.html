@@ -74,13 +74,8 @@
         .curtain{animation-delay:0s;animation-duration:.25s;}
     }
     @media (max-width:640px){
-        .opening-screen{
-            animation-delay:1.5s;
-        }
-        .curtain{
-            animation-delay:.35s;
-            animation-duration:1.8s;
-        }
+        .opening-screen{animation-delay:1.25s;}
+        .curtain{animation-delay:.25s;animation-duration:.9s;}
     }
 
     /* ---------- header ---------- */
@@ -335,10 +330,9 @@
 <script>
     const openingScreen = document.querySelector('.opening-screen');
     openingScreen.addEventListener('animationend', event => {
-        if (event.animationName === 'openingFade') {
-            openingScreen.remove();
-        }
+        if(event.animationName === 'openingFade') openingScreen.remove();
     });
+    window.setTimeout(() => openingScreen.remove(), 2600);
 </script>
 
 <header>
