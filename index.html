@@ -3,12 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nokta Ayakkabıcılık — Sneaker &amp; Ayakkabı Koleksiyonu</title>
-<meta name="description" content="Nike, Adidas, Lacoste ve daha fazlası — Nokta Ayakkabıcılık'ta özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu. Shopier üzerinden güvenli alışveriş.">
+<title>Nokta Ayakkabıcılık | Nike, Adidas ve Sneaker Modelleri</title>
+<meta name="description" content="Nike, Adidas, Vans, Lacoste ve daha fazla markadan sneaker ve günlük ayakkabı modellerini Nokta Ayakkabıcılık'ta keşfedin. Shopier üzerinden güvenli alışveriş.">
+<meta name="robots" content="index,follow">
 <meta property="og:title" content="Nokta Ayakkabıcılık">
 <meta property="og:description" content="Özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://www.noktaayakkabicilik.com/">
 <meta property="og:image" content="logo-transparent.png">
+<meta property="og:site_name" content="Nokta Ayakkabıcılık">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nokta Ayakkabıcılık | Sneaker ve Ayakkabı Koleksiyonu">
+<meta name="twitter:description" content="Nike, Adidas, Vans ve daha fazla ayakkabı modelini keşfedin.">
+<meta name="twitter:image" content="https://www.noktaayakkabicilik.com/logo-transparent.png">
 <link rel="canonical" href="https://www.noktaayakkabicilik.com/">
 <meta name="theme-color" content="#151515">
 <script type="application/ld+json">
@@ -18,12 +25,35 @@
     "name":"Nokta Ayakkabıcılık",
     "url":"https://www.noktaayakkabicilik.com/",
     "logo":"https://www.noktaayakkabicilik.com/logo-transparent.png",
+    "description":"Nike, Adidas, Vans ve daha fazla markadan sneaker ve günlük ayakkabı koleksiyonu.",
+    "priceRange":"₺₺",
     "sameAs":["https://www.instagram.com/nokta.ayakkabicilik/","https://shopier.com/noktaayakkabi"]
+}
+</script>
+<script type="application/ld+json" id="website-schema">
+{
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Nokta Ayakkabıcılık",
+    "url":"https://www.noktaayakkabicilik.com/",
+    "potentialAction":{"@type":"SearchAction","target":"https://www.noktaayakkabicilik.com/?q={search_term_string}","query-input":"required name=search_term_string"}
+}
+</script>
+<script type="application/ld+json" id="faq-schema">
+{
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+        {"@type":"Question","name":"Ayakkabı siparişi nereden verilir?","acceptedAnswer":{"@type":"Answer","text":"Ürün kartındaki Shopier'de satın al bağlantısından güvenli sipariş sayfasına geçebilirsiniz."}},
+        {"@type":"Question","name":"Hangi ayakkabı markaları bulunuyor?","acceptedAnswer":{"@type":"Answer","text":"Nike, Adidas, Vans, Lacoste, Lufian, Calvin Klein, Alexander McQueen ve Goldengoose modelleri koleksiyonda yer alıyor."}},
+        {"@type":"Question","name":"Ayakkabı numarası nasıl öğrenilir?","acceptedAnswer":{"@type":"Answer","text":"Her ürün kartında mevcut numara aralığı gösterilir. Sipariş öncesi ürün sayfasındaki bilgileri kontrol edebilirsiniz."}}
+    ]
 }
 </script>
 <link rel="icon" type="image/png" href="logo-transparent.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.shopier.app">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,450;9..144,560;9..144,650&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
     :root{
@@ -121,6 +151,13 @@
     .toolbar{padding:34px 0 18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;}
     .toolbar-label{font-size:14px;color:var(--muted);}
     .toolbar-label strong{color:var(--ink);font-family:'Fraunces',serif;font-size:16px;}
+    .collection-heading{margin:0 0 14px;font:560 24px/1.15 'Fraunces',serif;color:var(--ink);}
+    .faq-section{margin:70px 0 0;padding-top:28px;border-top:1px solid var(--line);}
+    .faq-section h2{margin:0 0 18px;font:560 26px/1.15 'Fraunces',serif;}
+    .faq-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+    .faq-item{padding:18px;background:rgba(255,255,255,.58);border:1px solid var(--line);}
+    .faq-item h3{margin:0 0 8px;font:600 15px/1.3 'DM Sans',sans-serif;}
+    .faq-item p{margin:0;color:var(--muted);font-size:13px;line-height:1.65;}
     .toolbar-controls{display:flex;gap:10px;flex-wrap:wrap;}
     .search, .sort{border:1px solid var(--line);border-radius:4px;padding:12px 14px;color:var(--ink);background:var(--surface);font:13px 'DM Sans',sans-serif;outline:none;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;}
     .search-wrap{position:relative;}
@@ -188,6 +225,7 @@
         .toolbar-controls{flex-direction:column;}
         .search,.sort{width:100%;}
         .urun-izgarasi{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+        .faq-list{grid-template-columns:1fr;}
         .urun-meta{padding:12px 12px 0;}
         .urun-baslik{font-size:14.5px;min-height:52px;}
         .satin-al-buton{margin:12px 12px 12px;}
@@ -380,6 +418,7 @@
         <div class="toolbar">
             <div class="toolbar-label"><strong id="product-count">50 ürün</strong> · Shopier üzerinden güvenli alışveriş</div>
         </div>
+        <h2 class="collection-heading">Sneaker ve günlük ayakkabı modelleri</h2>
         <div class="brand-filter-row">
             <div id="brand-filters" class="brand-filters" aria-label="Marka filtreleri"></div>
             <div class="search-wrap">
@@ -400,6 +439,23 @@
         </div>
             <p class="result-note" id="result-note">Modelleri marka, numara ve fiyat aralığına göre filtreleyin.</p>
         <div id="urun-izgarasi" class="urun-izgarasi"></div>
+        <section class="faq-section" aria-labelledby="faq-heading">
+            <h2 id="faq-heading">Ayakkabı alışverişi hakkında</h2>
+            <div class="faq-list">
+                <article class="faq-item">
+                    <h3>Ayakkabı siparişi nereden verilir?</h3>
+                    <p>Beğendiğiniz ürünün kartındaki Shopier'de satın al bağlantısından güvenli sipariş sayfasına geçebilirsiniz.</p>
+                </article>
+                <article class="faq-item">
+                    <h3>Hangi ayakkabı markaları bulunuyor?</h3>
+                    <p>Nike, Adidas, Vans, Lacoste, Lufian, Calvin Klein, Alexander McQueen ve Goldengoose modelleri koleksiyonda yer alıyor.</p>
+                </article>
+                <article class="faq-item">
+                    <h3>Ayakkabı numarası nasıl öğrenilir?</h3>
+                    <p>Her ürün kartında mevcut numara aralığı gösterilir. Sipariş öncesi ürün sayfasındaki bilgileri kontrol edebilirsiniz.</p>
+                </article>
+            </div>
+        </section>
     </div>
 </main>
 
@@ -924,24 +980,7 @@
     }
 ];
 
-            let PRODUCTS = FALLBACK_PRODUCTS;
-            try {
-                let remoteProducts;
-                if(location.protocol === 'file:'){
-                    const request = new XMLHttpRequest();
-                    request.open('GET', 'products.json', false);
-                    request.send();
-                    if((request.status === 0 || (request.status >= 200 && request.status < 400)) && request.responseText){
-                        remoteProducts = JSON.parse(request.responseText);
-                    }
-                } else {
-                    const response = await fetch('products.json', { cache: 'no-store' });
-                    if(response.ok) remoteProducts = await response.json();
-                }
-                if(Array.isArray(remoteProducts) && remoteProducts.length) PRODUCTS = remoteProducts;
-            }catch(error){
-                // products.json okunamazsa sayfa gömülü katalogla açılır.
-            }
+            const PRODUCTS = FALLBACK_PRODUCTS;
 
             let productsById = {};
             let productsByFilename = {};
@@ -1000,8 +1039,9 @@
 
                 const img = document.createElement('img');
                 img.className = 'urun-resmi';
-                img.loading = 'lazy';
-                img.alt = title;
+                img.loading = i <= 4 ? 'eager' : 'lazy';
+                if(i <= 4) img.fetchPriority = 'high';
+                img.alt = `${cleanTitle} ayakkabı modeli`;
                 img.src = localJpeg;
                 img.onerror = function(){
                     if(this.src.endsWith('.jpeg')){ this.src = localJpg; return; }
@@ -1063,6 +1103,41 @@
                 grid.appendChild(card);
                 cards.push(card);
             }
+
+            const productSchema = {
+                '@context': 'https://schema.org',
+                '@type': 'ItemList',
+                name: 'Nokta Ayakkabıcılık ayakkabı koleksiyonu',
+                numberOfItems: cards.length,
+                itemListElement: cards.map((card, index) => {
+                    const product = card.productData;
+                    const title = product.title || `Ürün ${index + 1}`;
+                    const price = parseFloat(String(product.price).replace(',', '.')) || 0;
+                    const imageUrl = product.image || `https://www.noktaayakkabicilik.com/${product.filename || `${index + 1}.jpeg`}`;
+                    return {
+                        '@type': 'ListItem',
+                        position: index + 1,
+                        item: {
+                            '@type': 'Product',
+                            name: title,
+                            image: imageUrl,
+                            brand: { '@type': 'Brand', name: getBrand(title) },
+                            offers: {
+                                '@type': 'Offer',
+                                url: product.url || 'https://shopier.com/noktaayakkabi',
+                                priceCurrency: 'TRY',
+                                price: price.toFixed(2),
+                                availability: 'https://schema.org/InStock'
+                            }
+                        }
+                    };
+                })
+            };
+            const productSchemaScript = document.createElement('script');
+            productSchemaScript.type = 'application/ld+json';
+            productSchemaScript.id = 'product-schema';
+            productSchemaScript.textContent = JSON.stringify(productSchema);
+            document.head.appendChild(productSchemaScript);
 
             const search = document.getElementById('search');
             const searchSuggestions = document.getElementById('search-suggestions');
@@ -1134,6 +1209,12 @@
                 filterProducts();
             }
 
+            function clearBrandForSearch(){
+                if(!activeBrand) return;
+                activeBrand = '';
+                document.querySelectorAll('[data-brand-filter]').forEach(filter => filter.classList.toggle('active', filter.dataset.brandFilter === ''));
+            }
+
             createBrandControl(brandFilters, 'Tümü', '');
             brands.forEach(brand => {
                 createBrandControl(brandFilters, brandLabel(brand), brand);
@@ -1155,7 +1236,7 @@
                     card.hidden = !matches;
                     if(matches){ visible++; visibleCards.push(card); }
                 });
-                applySort(visibleCards);
+                applySort(visibleCards, query);
                 productCount.textContent = `${visible} ürün`;
                 heroCount.textContent = visible;
                 resultNote.textContent = visible ? `${visible} model gösteriliyor. Shopier üzerinden güvenli alışveriş.` : 'Filtrelerinize uyan bir model bulunamadı.';
@@ -1188,6 +1269,7 @@
                     button.textContent = title;
                     button.addEventListener('click', () => {
                         search.value = title;
+                        clearBrandForSearch();
                         searchSuggestions.hidden = true;
                         filterProducts();
                     });
@@ -1197,18 +1279,27 @@
                 searchSuggestions.hidden = matchingTitles.length === 0;
             }
 
-            function applySort(visibleCards){
+            function applySort(visibleCards, query){
                 const mode = sortSelect.value;
-                if(mode === 'default') return;
                 const sorted = [...visibleCards].sort((a, b) => {
+                    if(mode === 'default' && query){
+                        const aTitle = a.dataset.title;
+                        const bTitle = b.dataset.title;
+                        const aScore = aTitle === query ? 0 : aTitle.startsWith(query) ? 1 : aTitle.includes(` ${query}`) ? 2 : 3;
+                        const bScore = bTitle === query ? 0 : bTitle.startsWith(query) ? 1 : bTitle.includes(` ${query}`) ? 2 : 3;
+                        if(aScore !== bScore) return aScore - bScore;
+                        return aTitle.localeCompare(bTitle, 'tr-TR');
+                    }
+                    if(mode === 'default') return 0;
                     const pa = parseFloat(a.dataset.price) || 0;
                     const pb = parseFloat(b.dataset.price) || 0;
                     return mode === 'price-asc' ? pa - pb : pb - pa;
                 });
-                sorted.forEach(card => grid.appendChild(card));
+                if(mode !== 'default' || query) sorted.forEach(card => grid.appendChild(card));
             }
 
             search.addEventListener('input', () => {
+                clearBrandForSearch();
                 filterProducts();
                 updateSearchSuggestions();
             });
