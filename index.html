@@ -131,9 +131,11 @@
     .search-suggestions button:hover,.search-suggestions button:focus{background:var(--accent);color:var(--ink);outline:none;}
 
     .brand-filters{display:flex;gap:8px;overflow-x:auto;padding:0 0 28px;scrollbar-width:thin;}
-    .brand-filter-row{position:sticky;top:78px;z-index:20;display:flex;align-items:flex-start;gap:16px;padding:14px 0 0;background:var(--paper);box-shadow:0 8px 18px rgba(27,23,18,.18);}
-    .brand-filter-row .brand-filters{flex:1;min-width:0;}
-    .brand-filter-row .search-wrap{flex:0 0 auto;}
+    .brand-filter-row{position:sticky;top:78px;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;padding:14px 0;background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 8px 18px rgba(27,23,18,.18);}
+    .brand-filter-row .brand-filters{flex:1 1 100%;min-width:0;}
+    .brand-filter-row .search-wrap{flex:1 1 230px;}
+    .brand-filter-row .search{width:100%;}
+    .brand-filter-row .sort{flex:0 1 190px;min-width:150px;}
     .brand-filter{flex:0 0 auto;border:1px solid var(--line);padding:10px 17px;color:var(--muted);background:var(--surface);font:600 12px 'DM Sans',sans-serif;cursor:pointer;transition:transform .2s ease,border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;border-radius:4px;}
     .brand-filter:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-2px);box-shadow:0 6px 14px rgba(27,23,18,.08);}
     .brand-filter.active{border-color:var(--ink);color:var(--paper);background:var(--ink);}
@@ -245,7 +247,7 @@
     .trust-bar{background:transparent;margin:0 0 28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
     .trust-inner{width:100%;padding:15px 0;color:var(--muted);gap:10px 30px;}
     .trust-inner li::before{background:var(--accent);}
-    .brand-filters{position:sticky;top:78px;z-index:15;margin:0;padding:14px 0 16px;background:rgba(21,21,21,.96);border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.16);}
+    .brand-filters{margin:0;padding:0 0 2px;background:transparent;}
     .brand-filter{border-color:var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:10px 18px;}
     .brand-filter:hover{border-color:var(--accent);color:var(--ink);box-shadow:none;}
     .brand-filter.active{background:var(--ink);border-color:var(--ink);color:var(--paper);}
@@ -386,17 +388,14 @@
                 <option value="price-asc">Fiyat: Düşükten yükseğe</option>
                 <option value="price-desc">Fiyat: Yüksekten düşüğe</option>
             </select>
-                <select class="sort" id="size-filter" aria-label="Numara filtrele">
-                    <option value="">Tüm numaralar</option>
-                </select>
-                <select class="sort" id="price-filter" aria-label="Fiyat filtrele">
-                    <option value="">Tüm fiyatlar</option>
-                    <option value="0-1200">1.200 TL altı</option>
-                    <option value="1200-1800">1.200 - 1.800 TL</option>
-                    <option value="1800-99999">1.800 TL üzeri</option>
-                </select>
+            <select class="sort" id="price-filter" aria-label="Fiyat filtrele">
+                <option value="">Tüm fiyatlar</option>
+                <option value="0-1200">1.200 TL altı</option>
+                <option value="1200-1800">1.200 - 1.800 TL</option>
+                <option value="1800-99999">1.800 TL üzeri</option>
+            </select>
         </div>
-            <p class="result-note" id="result-note">Modelleri marka, numara ve fiyat aralığına göre filtreleyin.</p>
+            <p class="result-note" id="result-note">Modelleri marka ve fiyat aralığına göre filtreleyin.</p>
         <div id="urun-izgarasi" class="urun-izgarasi"></div>
     </div>
 </main>
@@ -1075,7 +1074,6 @@
             const search = document.getElementById('search');
             const searchSuggestions = document.getElementById('search-suggestions');
             const sortSelect = document.getElementById('sort');
-            const sizeFilter = document.getElementById('size-filter');
             const priceFilter = document.getElementById('price-filter');
             const brandFilters = document.getElementById('brand-filters');
             const footerBrands = document.getElementById('footer-brands');
@@ -1098,17 +1096,6 @@
             });
             const brandLabel = brand => brand.replace(/(^|\s)\S/g, letter => letter.toLocaleUpperCase('tr-TR'));
             let activeBrand = '';
-
-            const sizeOptions = [...new Set(cards.flatMap(card => {
-                const match = card.dataset.size.match(/\d+(?:-\d+)?/g);
-                return match || [];
-            }))].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
-            sizeOptions.forEach(size => {
-                const option = document.createElement('option');
-                option.value = size;
-                option.textContent = `${size} numara`;
-                sizeFilter.appendChild(option);
-            });
 
             function openProductModal(product, imageSource, brand, sizeRange){
                 modalImage.src = imageSource;
@@ -1163,7 +1150,6 @@
 
             function filterProducts(){
                 const query = search.value.trim().toLocaleLowerCase('tr-TR');
-                const selectedSize = sizeFilter.value;
                 const selectedPrice = priceFilter.value;
                 const priceRange = selectedPrice ? selectedPrice.split('-').map(Number) : null;
                 let visible = 0;
@@ -1172,7 +1158,6 @@
                     const cardPrice = parseFloat(card.dataset.price) || 0;
                     const matches = (!query || card.dataset.title.includes(query))
                         && (!activeBrand || card.dataset.brand === activeBrand)
-                        && (!selectedSize || card.dataset.size.includes(selectedSize))
                         && (!priceRange || (cardPrice >= priceRange[0] && cardPrice < priceRange[1]));
                     card.hidden = !matches;
                     if(matches){ visible++; visibleCards.push(card); }
@@ -1239,7 +1224,6 @@
                 if(!event.target.closest('.search-wrap')) searchSuggestions.hidden = true;
             });
             sortSelect.addEventListener('change', filterProducts);
-            sizeFilter.addEventListener('change', filterProducts);
             priceFilter.addEventListener('change', filterProducts);
             closeModalButton.addEventListener('click', closeProductModal);
             backModalButton.addEventListener('click', closeProductModal);
