@@ -42,7 +42,7 @@
   {
     "id": 6,
     "title": "Nike Jordan 1 Low Dark-red-Black",
-    "price": "1099",
+    "price": "1400",
     "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_4a3aac04a8d830473bb4dba31506ffaf.jpeg",
     "filename": "6.jpeg",
     "url": "https://www.shopier.com/noktaayakkabi/43639776"
@@ -210,7 +210,7 @@
   {
     "id": 27,
     "title": "Nike Airforce 1 Black (36-45)",
-    "price": "999",
+    "price": "1100",
     "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_309b1674210317dbecf01c8ec19139e3.jpeg",
     "filename": "27.jpeg",
     "url": "https://www.shopier.com/noktaayakkabi/40842361"
@@ -338,7 +338,7 @@
   {
     "id": 43,
     "title": "Nike Airforce 1 White-Blue (36-45)",
-    "price": "999",
+    "price": "1100",
     "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_de8f4a80b9b5983dc21d47d8b722f5e5.jpeg",
     "filename": "43.jpeg",
     "url": "https://www.shopier.com/noktaayakkabi/40841802"
@@ -354,7 +354,7 @@
   {
     "id": 45,
     "title": "Nike Airforce 1 White- Black swoosh (36-45)",
-    "price": "999",
+    "price": "1100",
     "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_ea9ff53b24554b27bd0d0517e72549fc.jpeg",
     "filename": "45.jpeg",
     "url": "https://www.shopier.com/noktaayakkabi/40841682"
@@ -390,5 +390,69 @@
     "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_d9750d7774f21e488539157a29fdffd4.jpeg",
     "filename": "49.jpeg",
     "url": "https://www.shopier.com/noktaayakkabi/40826356"
+  },
+  {
+    "id": 50,
+    "title": "Nike Dunk Pembe-Beyaz (36-40)",
+    "price": "1250",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_592f7f8b31ee6df5459af550d73d3586.jpeg",
+    "filename": "50.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/50762940"
+  },
+  {
+    "id": 51,
+    "title": "Vans Knu Skool (36-45)",
+    "price": "2350",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_6f0e405255d1aa522972f17f6ac67610.jpeg",
+    "filename": "51.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/50852879"
+  },
+  {
+    "id": 52,
+    "title": "Vans Classic (36-44)",
+    "price": "1100",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_d017de3be6fa2aa971ee77758e2e09a9.jpeg",
+    "filename": "52.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/50852526"
+  },
+  {
+    "id": 53,
+    "title": "Vans Hyline White (36-44)",
+    "price": "2150",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_de1046184cbdc4fdaa83432574c994c5.jpeg",
+    "filename": "53.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/50852480"
+  },
+  {
+    "id": 54,
+    "title": "Vans Hylane Black-White (36-44)",
+    "price": "2150",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_7ca59bbb1f531c9a9539860a67fbb075.jpeg",
+    "filename": "54.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/50850691"
+  },
+  {
+    "id": 55,
+    "title": "Nike Airforce1  White (45-46-47)",
+    "price": "1100",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_1134107d73b2698de0b7c5883e79de26.jpeg",
+    "filename": "55.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/50820140"
+  },
+  {
+    "id": 56,
+    "title": "Nike Tn (36-44)",
+    "price": "2350",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_41591ddf748c12201f2ed2ef6c365c38.jpeg",
+    "filename": "56.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/50854500"
+  },
+  {
+    "id": 57,
+    "title": "Nike AirJordan 4 Military Black (36-44)",
+    "price": "2360",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_c720131df017a860b5367cdeaaaca9f4.jpeg",
+    "filename": "57.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/50853560"
   }
 ]
