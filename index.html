@@ -1,470 +1,79 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nokta Ayakkabıcılık — Sneaker &amp; Ayakkabı Koleksiyonu</title>
-<meta name="description" content="Nike, Adidas, Lacoste ve daha fazlası — Nokta Ayakkabıcılık'ta özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu. Shopier üzerinden güvenli alışveriş.">
-<meta property="og:title" content="Nokta Ayakkabıcılık">
-<meta property="og:description" content="Özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu.">
-<meta property="og:type" content="website">
-<meta property="og:image" content="logo-transparent.png">
-<link rel="canonical" href="https://www.noktaayakkabicilik.com/">
-<meta name="theme-color" content="#151515">
-<script type="application/ld+json">
-{
-    "@context":"https://schema.org",
-    "@type":"Store",
-    "name":"Nokta Ayakkabıcılık",
-    "url":"https://www.noktaayakkabicilik.com/",
-    "logo":"https://www.noktaayakkabicilik.com/logo-transparent.png",
-    "sameAs":["https://www.instagram.com/nokta.ayakkabicilik/","https://shopier.com/noktaayakkabi"]
-}
-</script>
-<link rel="icon" type="image/png" href="logo-transparent.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,450;9..144,560;9..144,650&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-    :root{
-        --ink:#1b1712;
-        --paper:#f6f1e6;
-        --surface:#ffffff;
-        --line:#e6ddca;
-        --muted:#8a8073;
-        --accent:#c1291f;
-        --shadow:0 14px 34px rgba(27,23,18,.08);
-        --shadow-hover:0 22px 42px rgba(27,23,18,.14);
-    }
-    *{box-sizing:border-box;}
-    html{scroll-behavior:smooth;}
-    body{margin:0;color:var(--ink);background:var(--paper);font-family:'DM Sans',sans-serif;}
-    body:has(.opening-screen){overflow:hidden;}
-    a{color:inherit;}
-    img{max-width:100%;}
-    .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
-
-    /* ---------- opening screen ---------- */
-    .opening-screen{position:fixed;inset:0;z-index:100;background:transparent;overflow:hidden;pointer-events:none;animation:openingFade .45s ease 2.3s forwards;}
-    .curtain{position:absolute;top:-2%;bottom:-2%;width:50%;z-index:3;overflow:hidden;background:#000;box-shadow:inset 0 0 90px #000,0 0 22px #000;animation-duration:1.55s;animation-delay:.95s;animation-timing-function:cubic-bezier(.72,0,.18,1);animation-fill-mode:forwards;}
-    .curtain::before{content:'';position:absolute;inset:0;z-index:2;background:linear-gradient(90deg,rgba(255,255,255,.05),transparent 8%,rgba(0,0,0,.65) 18%,transparent 28%,rgba(255,255,255,.035) 40%,rgba(0,0,0,.72) 52%,transparent 64%,rgba(255,255,255,.04) 78%,rgba(0,0,0,.65) 90%,transparent);mix-blend-mode:screen;opacity:.55;pointer-events:none;}
-    .curtain-fold{position:absolute;top:0;bottom:0;width:15%;background:linear-gradient(90deg,#000 0%,#020202 28%,#101010 45%,#000 67%,#030303 100%);box-shadow:inset 7px 0 13px rgba(255,255,255,.025),inset -12px 0 18px rgba(0,0,0,.95);transform:skewX(-1deg);}
-    .curtain-fold:nth-child(1){left:-2%;}
-    .curtain-fold:nth-child(2){left:10%;transform:skewX(2deg);}
-    .curtain-fold:nth-child(3){left:22%;}
-    .curtain-fold:nth-child(4){left:34%;transform:skewX(-2deg);}
-    .curtain-fold:nth-child(5){left:46%;}
-    .curtain-fold:nth-child(6){left:58%;transform:skewX(2deg);}
-    .curtain-fold:nth-child(7){left:70%;}
-    .curtain-fold:nth-child(8){left:82%;transform:skewX(-2deg);}
-    .curtain-fold:nth-child(9){left:94%;}
-    .curtain-logo{position:absolute;top:50%;z-index:1;width:min(48vw,300px);height:min(20vw,150px);min-height:90px;object-fit:cover;object-position:center;filter:grayscale(1) contrast(3.2) invert(1);mix-blend-mode:screen;opacity:.9;transform:translateY(-50%);}
-    .curtain-left .curtain-logo{right:calc(-1 * min(24vw,150px));}
-    .curtain-right .curtain-logo{left:calc(-1 * min(24vw,150px));}
-    .curtain::after{content:'';position:absolute;top:0;bottom:0;width:22px;background:linear-gradient(90deg,rgba(0,0,0,.75),transparent);}
-    .curtain-left{left:0;animation-name:curtainLeft;transform-origin:right center;}
-    .curtain-right{right:0;animation-name:curtainRight;transform-origin:left center;}
-    .curtain-left::after{right:0;transform:scaleX(-1);}
-    .curtain-right::after{left:0;}
-    @keyframes curtainLeft{from{transform:translateX(0);}to{transform:translateX(-100%);}}
-    @keyframes curtainRight{from{transform:translateX(0);}to{transform:translateX(100%);}}
-    @keyframes openingFade{to{opacity:0;visibility:hidden;pointer-events:none;}}
-    @media (prefers-reduced-motion:reduce){
-        .opening-screen{animation-delay:.25s;animation-duration:.25s;}
-        .curtain{animation-delay:0s;animation-duration:.25s;}
-    }
-    @media (max-width:640px){
-        .opening-screen{animation-delay:.25s;animation-duration:.3s;}
-        .curtain{animation-delay:0s;animation-duration:1.1s;}
-    }
-    /* ---------- header ---------- */
-    header{position:sticky;top:0;z-index:30;background:rgba(246,241,230,.94);backdrop-filter:blur(10px);border-bottom:1px solid rgba(230,221,202,.8);}
-    .nav{width:min(1240px,calc(100% - 40px));margin:auto;min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
-    .wordmark{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);}
-    .wordmark img{display:block;height:34px;width:auto;}
-    .header-links{display:flex;align-items:center;gap:22px;}
-    .header-links a{font-size:13px;font-weight:600;text-decoration:none;color:var(--ink);padding-bottom:2px;border-bottom:1px solid transparent;transition:border-color .2s ease,color .2s ease;}
-    .header-links a:hover{border-color:var(--accent);color:var(--accent);}
-    .header-links .ig{display:flex;align-items:center;gap:7px;color:var(--muted);}
-    .header-links .ig:hover{color:var(--accent);}
-    .header-links .ig svg{width:16px;height:16px;flex:0 0 auto;}
-
-    /* ---------- hero ---------- */
-    .hero{width:min(1240px,calc(100% - 40px));margin:0 auto;padding:64px 0 72px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center;gap:56px;}
-    .hero-eyebrow{margin:0 0 16px;color:var(--muted);font-size:13px;font-weight:600;}
-    .hero-eyebrow .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:middle;}
-    h1{margin:0;font-family:'Fraunces',serif;font-weight:560;font-size:clamp(38px,5.4vw,64px);line-height:1.04;letter-spacing:-.5px;}
-    .hero-copy{max-width:440px;margin:20px 0 30px;color:var(--muted);font-size:16px;line-height:1.7;}
-    .hero-ctas{display:flex;align-items:center;gap:22px;}
-    .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);text-decoration:none;font-size:13px;font-weight:700;padding:15px 24px;border:1px solid var(--ink);box-shadow:0 8px 18px rgba(27,23,18,.12);transition:transform .25s ease,background .25s ease,color .25s ease,box-shadow .25s ease;}
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(27,23,18,.18);}
-    .btn-primary:hover{background:var(--accent);border-color:var(--accent);}
-    .hero-count{font-family:'Fraunces',serif;font-size:15px;color:var(--muted);}
-    .hero-count strong{color:var(--ink);font-size:17px;}
-
-    .hero-collage{position:relative;height:min(58vw,420px);min-height:280px;}
-    .hero-collage img{position:absolute;object-fit:cover;background:#e9e3d4;border:6px solid var(--surface);box-shadow:0 18px 40px rgba(27,23,18,.16);}
-    .hero-collage .c1{width:62%;aspect-ratio:1/1.05;left:0;top:6%;z-index:2;}
-    .hero-collage .c2{width:46%;aspect-ratio:1/1.05;right:0;bottom:4%;z-index:3;}
-    .hero-collage .c3{width:34%;aspect-ratio:1/1;left:36%;bottom:-4%;z-index:1;}
-
-    /* ---------- trust bar ---------- */
-    .trust-bar{margin:0 0 24px;background:var(--ink);border:0;}
-    .trust-inner{width:min(1240px,calc(100% - 40px));margin:auto;display:flex;flex-wrap:wrap;gap:10px 34px;padding:15px 18px;font-size:12px;color:rgba(246,241,230,.76);}
-    .trust-inner li{list-style:none;display:flex;align-items:center;gap:9px;}
-    .trust-inner li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex:0 0 auto;}
-    .trust-inner{margin:0;padding-left:0;}
-
-    /* ---------- toolbar ---------- */
-    .container{width:min(1240px,calc(100% - 40px));margin:0 auto;padding-bottom:90px;}
-    .toolbar{padding:34px 0 18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;}
-    .toolbar-label{font-size:14px;color:var(--muted);}
-    .toolbar-label strong{color:var(--ink);font-family:'Fraunces',serif;font-size:16px;}
-    .toolbar-controls{display:flex;gap:10px;flex-wrap:wrap;}
-    .search, .sort{border:1px solid var(--line);border-radius:4px;padding:12px 14px;color:var(--ink);background:var(--surface);font:13px 'DM Sans',sans-serif;outline:none;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;}
-    .search-wrap{position:relative;}
-    .search{width:230px;}
-    .search:focus, .sort:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(193,41,31,.1);transform:translateY(-1px);}
-    .search-suggestions{position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:10;margin:0;padding:4px 0;list-style:none;background:var(--paper);border:1px solid var(--paper);box-shadow:0 10px 24px rgba(27,23,18,.24);}
-    .search-suggestions[hidden]{display:none;}
-    .search-suggestions button{display:block;width:100%;padding:9px 12px;border:0;background:transparent;color:var(--ink);font:13px 'DM Sans',sans-serif;text-align:left;cursor:pointer;}
-    .search-suggestions button:hover,.search-suggestions button:focus{background:var(--accent);color:var(--ink);outline:none;}
-
-    .brand-filters{display:flex;gap:8px;overflow-x:auto;padding:0 0 28px;scrollbar-width:thin;}
-    .brand-filter-row{position:sticky;top:78px;z-index:20;display:flex;align-items:center;gap:12px;padding:14px 0;background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 8px 18px rgba(27,23,18,.18);}
-    .brand-filter-row .brand-filters{flex:1 1 auto;min-width:0;}
-    .brand-filter-row .search-wrap{flex:0 1 180px;min-width:150px;}
-    .brand-filter-row .search{width:100%;}
-    .brand-filter-row .sort{flex:0 1 155px;min-width:140px;}
-    .brand-filter{flex:0 0 auto;border:1px solid var(--line);padding:10px 17px;color:var(--muted);background:var(--surface);font:600 12px 'DM Sans',sans-serif;cursor:pointer;transition:transform .2s ease,border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;border-radius:4px;}
-    .brand-filter:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-2px);box-shadow:0 6px 14px rgba(27,23,18,.08);}
-    .brand-filter.active{border-color:var(--ink);color:var(--paper);background:var(--ink);}
-
-    /* ---------- product grid ---------- */
-    .urun-izgarasi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;}
-    .urun-karti{min-width:0;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;box-shadow:var(--shadow);animation:rise .5s both;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;}
-    .urun-karti:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);border-color:#d8ccb5;}
-    .urun-karti[hidden]{display:none;}
-    .image-wrap{position:relative;overflow:hidden;background:#ece5d3;aspect-ratio:1/1.05;}
-    .urun-resmi{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
-    .urun-karti:hover .urun-resmi{transform:scale(1.045);}
-    .brand-tag{position:absolute;top:10px;left:10px;background:rgba(246,241,230,.94);color:var(--ink);font-size:10px;font-weight:700;padding:5px 9px;letter-spacing:.3px;}
-    .urun-meta{padding:16px 16px 0;flex:1;}
-    .urun-code{color:var(--muted);font-size:11px;font-weight:600;}
-    .urun-baslik{min-height:42px;margin:8px 0 10px;font-family:'Fraunces',serif;font-weight:560;font-size:17px;line-height:1.3;}
-    .urun-fiyat{font-family:'Fraunces',serif;font-weight:650;font-size:19px;color:var(--ink);}
-    .satin-al-buton{display:block;text-align:center;margin:16px 16px 16px;padding:13px;color:var(--ink);border:1px solid var(--ink);background:transparent;text-decoration:none;font-size:12px;font-weight:700;transition:transform .2s ease,background .2s ease,color .2s ease;}
-    .satin-al-buton:hover{transform:translateY(-1px);}
-    .satin-al-buton:hover{background:var(--ink);color:var(--paper);}
-    .empty-state{grid-column:1/-1;padding:70px 20px;color:var(--muted);text-align:center;font-size:15px;}
-
-    @keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-
-    /* ---------- footer ---------- */
-    footer{border-top:1px solid var(--line);background:var(--surface);}
-    .footer-inner{width:min(1240px,calc(100% - 40px));margin:auto;padding:48px 0 30px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;}
-    .footer-brand .wordmark img{height:28px;}
-    .footer-brand p{max-width:320px;color:var(--muted);font-size:13.5px;line-height:1.7;margin:16px 0 0;}
-    .footer-col h4{font-family:'Fraunces',serif;font-size:14px;margin:0 0 14px;}
-    .footer-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;}
-    .footer-col a{font-size:13px;color:var(--muted);text-decoration:none;}
-    .footer-col a:hover{color:var(--accent);}
-    .footer-bottom{border-top:1px solid var(--line);padding:18px 0;}
-    .footer-bottom div{width:min(1240px,calc(100% - 40px));margin:auto;display:flex;justify-content:space-between;gap:20px;font-size:12px;color:var(--muted);}
-
-    @media (max-width:900px){
-        .hero{grid-template-columns:1fr;padding:44px 0 40px;}
-        .hero-collage{margin-top:30px;height:min(90vw,360px);}
-        .urun-izgarasi{grid-template-columns:repeat(3,minmax(0,1fr));}
-        .footer-inner{grid-template-columns:1fr 1fr;}
-        .footer-brand{grid-column:1/-1;}
-    }
-    @media (max-width:640px){
-        .nav,.hero,.container,.trust-inner,.footer-inner,.footer-bottom div{width:min(100% - 28px,1240px);}
-        .header-links a:not(.ig){display:none;}
-        h1{letter-spacing:-.3px;}
-        .toolbar{flex-direction:column;align-items:stretch;}
-        .toolbar-controls{flex-direction:column;}
-        .search,.sort{width:100%;}
-        .urun-izgarasi{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-        .urun-meta{padding:12px 12px 0;}
-        .urun-baslik{font-size:14.5px;min-height:52px;}
-        .satin-al-buton{margin:12px 12px 12px;}
-        .footer-inner{grid-template-columns:1fr;padding:36px 0 20px;}
-        .footer-bottom div{flex-direction:column;gap:6px;}
-    }
-
-    /* ---------- editorial storefront refresh ---------- */
-    :root{
-        --ink:#f5efe4;
-        --paper:#151515;
-        --surface:#f8f4ec;
-        --line:rgba(245,239,228,.16);
-        --muted:#a9a096;
-        --accent:#e34b35;
-        --shadow:0 18px 36px rgba(0,0,0,.2);
-        --shadow-hover:0 26px 48px rgba(0,0,0,.34);
-    }
-    body{background:var(--paper);color:var(--ink);}
-    header{background:rgba(21,21,21,.88);border-bottom:1px solid var(--line);}
-    .wordmark img{filter:invert(1);}
-    .header-links a{color:var(--ink);}
-    .header-links .ig{color:var(--muted);}
-    .header-links a:hover,.header-links .ig:hover{color:var(--accent);border-color:var(--accent);}
-    .hero{grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);padding-top:76px;padding-bottom:88px;}
-    .hero-eyebrow{color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-size:11px;}
-    .hero-eyebrow .dot{background:var(--accent);}
-    h1{color:var(--ink);font-size:clamp(44px,6vw,78px);line-height:.98;}
-    .hero-copy{color:var(--muted);max-width:480px;}
-    .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 12px 26px rgba(227,75,53,.2);}
-    .btn-primary:hover{background:#f05a43;border-color:#f05a43;}
-    .hero-count{color:var(--muted);}
-    .hero-count strong{color:var(--ink);}
-    .hero-collage img{background:#282828;border:1px solid rgba(245,239,228,.48);box-shadow:0 22px 44px rgba(0,0,0,.34);}
-    .hero-collage{height:auto;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch;}
-    .hero-collage img{position:relative;inset:auto;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;border:1px solid rgba(245,239,228,.48);box-shadow:0 18px 30px rgba(0,0,0,.25);transform:none!important;}
-    .hero-collage .c1,.hero-collage .c2,.hero-collage .c3{width:100%;left:auto;right:auto;top:auto;bottom:auto;z-index:auto;}
-    .hero-logo-display{min-height:360px;display:flex;align-items:center;justify-content:center;}
-    .hero-logo-display .hero-logo{width:min(82%,420px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:invert(1);}
-    .hero-editorial{position:relative;min-height:360px;display:flex;flex-direction:column;justify-content:space-between;padding:30px 28px;background-image:linear-gradient(90deg,rgba(10,10,10,.9) 0%,rgba(10,10,10,.68) 48%,rgba(10,10,10,.3) 100%),url('5.jpeg');background-size:cover;background-position:center;border:1px solid rgba(245,239,228,.18);overflow:hidden;box-shadow:0 22px 44px rgba(0,0,0,.3);}
-    .hero-editorial::before{content:'';position:absolute;inset:18px;border:1px solid rgba(245,239,228,.14);pointer-events:none;}
-    .hero-editorial::after{content:'01';position:absolute;right:22px;bottom:12px;color:rgba(245,239,228,.12);font-family:'Fraunces',serif;font-size:clamp(86px,11vw,150px);font-weight:650;line-height:1;letter-spacing:-.08em;}
-    .hero-editorial .editorial-footer::after{content:'';width:28px;height:2px;background:var(--accent);margin-left:auto;}
-    .editorial-kicker{position:relative;z-index:1;margin:0;color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;}
-    .editorial-copy{position:relative;z-index:1;margin:0;color:var(--ink);font-family:'Fraunces',serif;font-size:clamp(42px,5vw,76px);line-height:.92;letter-spacing:-1px;text-transform:uppercase;}
-    .editorial-copy em{color:var(--accent);font-style:normal;}
-    .editorial-footer{position:relative;z-index:1;display:flex;align-items:center;gap:12px;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase;}
-    .editorial-footer::before{content:'';width:42px;height:1px;background:var(--accent);}
-    .nav,.hero,.container,.footer-inner,.footer-bottom div{width:calc(100% - 40px);max-width:none;}
-    .container{padding-bottom:110px;}
-    .toolbar{padding-top:42px;padding-bottom:22px;}
-    .toolbar-label{color:var(--muted);}
-    .toolbar-label strong{color:var(--ink);}
-    .toolbar-controls{background:#202020;padding:6px;border:1px solid var(--line);}
-    .search,.sort{border:0;border-radius:2px;background:#2a2a2a;color:var(--ink);}
-    .search::placeholder{color:#8f8880;}
-    .search:focus,.sort:focus{border:0;box-shadow:0 0 0 2px var(--accent);transform:none;}
-    .trust-bar{background:transparent;margin:0 0 28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-    .trust-inner{width:100%;padding:15px 0;color:var(--muted);gap:10px 30px;}
-    .trust-inner li::before{background:var(--accent);}
-    .brand-filters{margin:0;padding:0 0 2px;background:transparent;}
-    .brand-filter{border-color:var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:10px 18px;}
-    .brand-filter:hover{border-color:var(--accent);color:var(--ink);box-shadow:none;}
-    .brand-filter.active{background:var(--ink);border-color:var(--ink);color:var(--paper);}
-    .urun-izgarasi{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;}
-    .urun-karti{background:var(--surface);border:0;border-radius:4px;box-shadow:var(--shadow);overflow:hidden;}
-    .urun-karti:hover{border-color:transparent;box-shadow:var(--shadow-hover);}
-    .image-wrap{background:#e8e0d4;aspect-ratio:1/1.12;}
-    .urun-resmi{transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .7s ease;}
-    .urun-karti:hover .urun-resmi{transform:scale(1.08);filter:saturate(1.08);}
-    .brand-tag{top:12px;left:12px;background:rgba(21,21,21,.9);color:#fff;padding:6px 10px;border-radius:999px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;}
-    .urun-meta{padding:18px 18px 0;}
-    .urun-code{color:#928a80;letter-spacing:.04em;text-transform:uppercase;}
-    .urun-baslik{color:#191715;font-size:18px;line-height:1.22;margin:9px 0 12px;}
-    .urun-fiyat{color:#191715;font-size:21px;}
-    .satin-al-buton{margin:18px;border-color:#191715;border-radius:2px;color:#191715;padding:14px;}
-    .satin-al-buton:hover{background:#191715;color:var(--surface);}
-    .empty-state{color:var(--muted);}
-    footer{background:#101010;border-top:1px solid var(--line);}
-    .footer-brand .wordmark img{filter:invert(1);}
-    .footer-brand p,.footer-col a,.footer-bottom div{color:var(--muted);}
-    .footer-col h4{color:var(--ink);}
-    .footer-col a:hover{color:var(--accent);}
-    .footer-bottom{border-top-color:var(--line);}
-    @media (max-width:900px){
-        .hero{grid-template-columns:1fr;padding-top:58px;padding-bottom:64px;}
-        .urun-izgarasi{grid-template-columns:repeat(3,minmax(0,1fr));}
-        .hero-collage{margin-top:30px;}
-        .brand-filter-row{flex-wrap:wrap;}
-        .brand-filter-row .brand-filters{flex-basis:100%;}
-        .brand-filter-row .search-wrap,.brand-filter-row .sort{flex:1 1 0;}
-    }
-    @media (max-width:640px){
-        .hero{padding-top:46px;padding-bottom:48px;}
-        h1{font-size:clamp(42px,12vw,62px);}
-        .hero-collage{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:24px;}
-        .toolbar-controls{padding:0;background:transparent;border:0;}
-        .search,.sort{background:#242424;border:1px solid var(--line);}
-        .trust-inner{padding:14px 0;gap:10px 18px;}
-        .urun-izgarasi{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-        .urun-meta{padding:14px 14px 0;}
-        .satin-al-buton{margin:14px;padding:12px 8px;}
-    }
-
-    /* ---------- storefront tools ---------- */
-    .toolbar-controls{align-items:center;}
-    .toolbar-controls select{min-width:150px;}
-    .result-note{margin:0 0 22px;color:var(--muted);font-size:12px;}
-    .urun-karti{position:relative;}
-    .product-badge{position:absolute;right:12px;top:12px;z-index:2;background:var(--accent);color:#fff;padding:6px 9px;border-radius:999px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
-    .product-open{display:block;width:100%;margin:10px 0 0;border:0;background:none;color:#655b52;font:600 11px 'DM Sans',sans-serif;text-align:left;cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
-    .product-open:hover{color:var(--accent);}
-    .modal-backdrop{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.72);}
-    .modal-backdrop[hidden]{display:none;}
-    .product-modal{position:relative;width:min(860px,100%);max-height:min(760px,calc(100vh - 40px));overflow:auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);background:var(--surface);color:#191715;box-shadow:0 30px 80px rgba(0,0,0,.45);}
-    .modal-image{width:100%;height:100%;min-height:360px;object-fit:cover;background:#e8e0d4;}
-    .modal-content{padding:38px;display:flex;flex-direction:column;justify-content:center;}
-    .modal-close{position:absolute;right:14px;top:12px;width:34px;height:34px;border:1px solid rgba(25,23,21,.18);border-radius:50%;background:#fff;color:#191715;font-size:22px;line-height:1;cursor:pointer;}
-    .modal-kicker{margin:0 0 10px;color:#8b8177;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
-    .modal-title{margin:0 0 14px;font:560 32px/1.05 'Fraunces',serif;}
-    .modal-price{margin:0 0 14px;font:650 24px 'Fraunces',serif;}
-    .modal-size{margin:0 0 24px;color:#655b52;font-size:13px;line-height:1.6;}
-    .modal-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-    .modal-shopier{display:inline-flex;margin:0!important;width:auto!important;}
-    .floating-contact{position:fixed;right:18px;bottom:18px;z-index:40;display:inline-flex;align-items:center;gap:10px;padding:12px 16px;background:linear-gradient(135deg,#fdf2f8,#ffffff);color:#111827;border:1px solid rgba(17,24,39,.08);border-radius:999px;box-shadow:0 10px 24px rgba(0,0,0,.18);font-size:12px;font-weight:700;text-decoration:none;transition:transform .2s ease, box-shadow .2s ease;}
-    .floating-contact:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,0,0,.22);}
-    .floating-contact .ig-icon{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#f9ce34,#ee2a7b 35%,#6228d7 70%,#1b1464);color:#fff;flex:0 0 auto;}
-    .floating-contact .ig-icon svg{width:12px;height:12px;display:block;}
-    @media (max-width:700px){
-        .floating-contact{right:12px;bottom:12px;padding:10px 12px;gap:8px;font-size:11px;}
-        .floating-contact .ig-icon{width:18px;height:18px;}
-        .floating-contact .ig-icon svg{width:10px;height:10px;}
-    }
-    .legal-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;}
-    .legal-links a{font-size:11px;color:var(--muted);text-decoration:none;}
-    .legal-links a:hover{color:var(--accent);}
-    @media (max-width:700px){
-        .product-modal{grid-template-columns:1fr;max-height:calc(100vh - 28px);}
-        .modal-image{height:280px;min-height:0;}
-        .modal-content{padding:26px 22px 30px;}
-        .modal-title{font-size:27px;}
-        .floating-contact{right:12px;bottom:12px;padding:12px 14px;}
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nokta Ayakkabıcılık</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --ink: #171717; --muted: #737373; --paper: #f7f5f1; --line: #e7e2db; --accent: #e85d3f; --white: #fff; }
+        * { box-sizing: border-box; }
+        body { margin: 0; color: var(--ink); background: var(--paper); font-family: 'DM Sans', sans-serif; }
+        header { position: sticky; top: 0; z-index: 10; background: var(--ink); color: var(--white); }
+        .nav { width: min(1240px, calc(100% - 40px)); margin: auto; min-height: 76px; display: flex; align-items: center; justify-content: flex-start; gap: 24px; }
+        .logo { display: flex; align-items: center; width: 190px; height: 68px; overflow: hidden; }
+        .brand-logo { display: block; width: 190px; height: auto; filter: invert(1); }
+        .brand-menu { display: flex; flex: 1; justify-content: flex-start; gap: 22px; overflow-x: auto; scrollbar-width: none; }
+        .brand-menu::-webkit-scrollbar { display: none; }
+        .brand-menu button { flex: 0 0 auto; border: 0; border-bottom: 2px solid transparent; padding: 10px 0 8px; color: #bcbab6; background: transparent; font: 600 11px 'DM Sans', sans-serif; cursor: pointer; transition: color .2s ease, border-color .2s ease; }
+        .brand-menu button:hover, .brand-menu button.active { border-color: var(--accent); color: var(--white); }
+        .instagram-link { flex: 0 0 auto; margin-left: auto; color: #bcbab6; font-size: 13px; text-decoration: none; transition: color .2s ease; }
+        .instagram-link:hover { color: var(--white); }
+        .hero { width: min(1240px, calc(100% - 40px)); margin: 0 auto; padding: 74px 0 56px; display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: end; gap: 40px; }
+        .eyebrow { margin: 0 0 18px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+        h1 { max-width: 700px; margin: 0; font: 600 clamp(42px, 6vw, 78px)/.98 'Space Grotesk', sans-serif; letter-spacing: -3px; }
+        .hero-copy { max-width: 450px; margin: 22px 0 0; color: var(--muted); font-size: 16px; line-height: 1.65; }
+        .hero-aside { border-left: 1px solid var(--line); padding-left: 28px; }
+        .hero-aside strong { display: block; font: 600 42px 'Space Grotesk', sans-serif; }
+        .hero-aside span { color: var(--muted); font-size: 13px; }
+        .container { width: min(1240px, calc(100% - 40px)); margin: 0 auto; padding-bottom: 80px; }
+        .toolbar { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 16px 0; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+        .toolbar-label { color: var(--muted); font-size: 13px; }
+        .toolbar-label strong { color: var(--ink); }
+        .brand-filters { display: flex; gap: 8px; overflow-x: auto; padding: 0 0 22px; scrollbar-width: thin; }
+        .brand-filter { flex: 0 0 auto; border: 1px solid var(--line); padding: 9px 15px; color: var(--muted); background: transparent; font: 600 12px 'DM Sans', sans-serif; cursor: pointer; transition: .2s ease; }
+        .brand-filter:hover, .brand-filter.active { border-color: var(--ink); color: var(--white); background: var(--ink); }
+        .search { width: 260px; border: 1px solid var(--line); border-radius: 4px; padding: 11px 14px; color: var(--ink); background: var(--white); font: inherit; outline: none; }
+        .search:focus { border-color: var(--ink); }
+        .urun-izgarasi { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+        .urun-karti { min-width: 0; background: var(--white); border: 1px solid var(--line); padding: 10px 10px 16px; transition: transform .25s ease, box-shadow .25s ease; animation: rise .55s both; }
+        .urun-karti:hover { transform: translateY(-5px); box-shadow: 0 16px 30px rgba(23,23,23,.10); }
+        .image-wrap { position: relative; overflow: hidden; background: #efede8; aspect-ratio: 1 / 1.08; }
+        .urun-resmi { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; }
+        .urun-karti:hover .urun-resmi { transform: scale(1.04); }
+        .urun-meta { padding: 14px 4px 0; }
+        .urun-code { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .urun-baslik { min-height: 44px; margin: 7px 0 9px; font: 600 16px/1.35 'Space Grotesk', sans-serif; }
+        .urun-fiyat { font: 700 18px 'Space Grotesk', sans-serif; }
+        .satin-al-buton { display: flex; align-items: center; justify-content: space-between; margin-top: 15px; padding: 12px 13px; color: var(--white); background: var(--ink); text-decoration: none; font-size: 12px; font-weight: 700; transition: background .2s ease; }
+        .satin-al-buton::after { content: '↗'; font-size: 17px; font-weight: 400; }
+        .satin-al-buton:hover { background: var(--accent); }
+        .empty-state { grid-column: 1 / -1; padding: 60px; color: var(--muted); text-align: center; }
+        footer { border-top: 1px solid var(--line); padding: 24px 0; color: var(--muted); font-size: 12px; }
+        footer div { width: min(1240px, calc(100% - 40px)); margin: auto; display: flex; justify-content: space-between; gap: 20px; }
+        .footer-instagram { color: var(--ink); font-weight: 700; text-decoration: none; }
+        .footer-instagram:hover { color: var(--accent); }
+        @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 900px) { .urun-izgarasi { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (max-width: 640px) { .nav, .hero, .container, footer div { width: min(100% - 28px, 1240px); } .nav { gap: 12px; } .logo, .brand-logo { width: 145px; } .instagram-link { font-size: 11px; } .brand-menu { justify-content: flex-start; gap: 16px; } .brand-menu button { font-size: 10px; } .hero { padding: 52px 0 42px; display: block; } h1 { letter-spacing: -2px; } .hero-aside { margin-top: 32px; padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--line); } .toolbar { align-items: stretch; flex-direction: column; } .search { width: 100%; } .urun-izgarasi { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .urun-karti { padding: 7px 7px 12px; } .urun-meta { padding-top: 10px; } .urun-baslik { font-size: 14px; min-height: 56px; } .urun-fiyat { font-size: 16px; } .satin-al-buton { padding: 11px 10px; font-size: 11px; } footer div { display: block; line-height: 1.8; } }
+    </style>
 </head>
 <body>
 
-<div class="opening-screen" aria-label="Nokta Ayakkabıcılık açılışı">
-    <div class="curtain curtain-left" aria-hidden="true"><img class="curtain-logo" src="logo.jpeg" alt=""><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i></div>
-    <div class="curtain curtain-right" aria-hidden="true"><img class="curtain-logo" src="logo.jpeg" alt=""><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i></div>
-</div>
-<script>
-    document.querySelector('.opening-screen').addEventListener('animationend', event => {
-        if(event.animationName === 'openingFade') event.currentTarget.remove();
-    });
-</script>
+    <header>
+        <div class="nav"><div class="logo"><img class="brand-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık"></div><nav id="brand-menu" class="brand-menu" aria-label="Marka menüsü"></nav><a class="instagram-link" href="https://www.instagram.com/nokta.ayakkabicilik/" target="_blank" rel="noopener noreferrer">@nokta.ayakkabicilik</a></div>
+    </header>
+    <main>
+        <section class="hero"><div><p class="eyebrow">Yeni Sezon / 2026</p><h1>Adımını<br>kendin seç.</h1><p class="hero-copy">Şehrin temposuna uyum sağlayan, özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu.</p></div><div class="hero-aside"><strong id="hero-count">49</strong><span>seçili model</span></div></section>
+        <div class="container"><div class="toolbar"><div class="toolbar-label"><strong id="product-count">49 ürün</strong> · Shopier üzerinden güvenli alışveriş</div><input class="search" id="search" type="search" placeholder="Model ara..." aria-label="Model ara"></div><div id="brand-filters" class="brand-filters" aria-label="Marka filtreleri"></div><div id="urun-izgarasi" class="urun-izgarasi"></div></div>
+    </main>
+    <footer><div><span>NOKTA AYAKKABICILIK</span><span>Güvenli ödeme · Hızlı gönderim · Kolay iletişim</span><a class="footer-instagram" href="https://www.instagram.com/nokta.ayakkabicilik/" target="_blank" rel="noopener noreferrer">Instagram · @nokta.ayakkabicilik</a></div></footer>
 
-<header>
-    <div class="nav">
-        <a class="wordmark" href="#top">
-            <img src="logo-transparent.png" alt="Nokta Ayakkabıcılık">
-        </a>
-        <div class="header-links">
-            <a href="#urunler">Koleksiyon</a>
-            <a href="#iletisim">İletişim</a>
-            <a class="ig" href="https://www.instagram.com/nokta.ayakkabicilik/" target="_blank" rel="noopener noreferrer">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
-                @nokta.ayakkabicilik
-            </a>
-        </div>
-    </div>
-</header>
-
-<main id="top">
-    <section class="hero">
-        <div>
-            <p class="hero-eyebrow"><span class="dot"></span>2026 koleksiyonu</p>
-            <h1>Attığın her adım<br>bir tercih.</h1>
-            <p class="hero-copy">Nike'tan Adidas'a, Lacoste'tan Goldengoose'a — şehrin temposuna uyum sağlayan, tek tek seçilmiş sneaker ve günlük ayakkabı modelleri.</p>
-            <div class="hero-ctas">
-                <a class="btn-primary" href="#urunler">Koleksiyonu gör</a>
-                <span class="hero-count"><strong id="hero-count">Yükleniyor...</strong> model stokta</span>
-            </div>
-        </div>
-        <div class="hero-collage hero-logo-display" aria-label="Nokta Ayakkabıcılık logosu">
-            <img class="hero-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık">
-        </div>
-    </section>
-
-    <div class="container" id="urunler">
-        <div class="toolbar">
-            <div class="toolbar-label"><strong id="product-count">Ürünler yükleniyor...</strong> · Shopier üzerinden güvenli alışveriş</div>
-        </div>
-        <div class="brand-filter-row">
-            <div id="brand-filters" class="brand-filters" aria-label="Marka filtreleri"></div>
-            <div class="search-wrap">
-                <input class="search" id="search" type="search" placeholder="Model ara..." aria-label="Model ara" autocomplete="off" aria-controls="search-suggestions" aria-autocomplete="list">
-                <ul class="search-suggestions" id="search-suggestions" role="listbox" hidden></ul>
-            </div>
-            <select class="sort" id="sort" aria-label="Sırala">
-                <option value="default">Öne çıkanlar</option>
-                <option value="price-asc">Fiyat: Düşükten yükseğe</option>
-                <option value="price-desc">Fiyat: Yüksekten düşüğe</option>
-            </select>
-            <select class="sort" id="price-filter" aria-label="Fiyat filtrele">
-                <option value="">Tüm fiyatlar</option>
-                <option value="0-1200">1.200 TL altı</option>
-                <option value="1200-1800">1.200 - 1.800 TL</option>
-                <option value="1800-99999">1.800 TL üzeri</option>
-            </select>
-        </div>
-            <p class="result-note" id="result-note">Modelleri marka ve fiyat aralığına göre filtreleyin.</p>
-        <div id="urun-izgarasi" class="urun-izgarasi"></div>
-    </div>
-</main>
-
-<footer id="iletisim">
-    <div class="footer-inner">
-        <div class="footer-brand">
-            <a class="wordmark" href="#top"><img src="logo-transparent.png" alt="Nokta Ayakkabıcılık"></a>
-            <p>Nokta Ayakkabıcılık, seçili sneaker ve günlük ayakkabı modellerini Shopier üzerinden güvenle sizlere ulaştırır. Sorularınız için Instagram üzerinden bize ulaşabilirsiniz.</p>
-        </div>
-        <div class="footer-col">
-            <h4>Markalar</h4>
-            <ul id="footer-brands"></ul>
-        </div>
-        <div class="footer-col">
-            <h4>İletişim</h4>
-            <ul>
-                <li><a href="https://www.instagram.com/nokta.ayakkabicilik/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                <li><a href="https://shopier.com/noktaayakkabi" target="_blank" rel="noopener noreferrer">Shopier mağazası</a></li>
-            </ul>
-            <div class="legal-links">
-                <a href="bilgilendirme.html#kargo">Kargo ve teslimat</a>
-                <a href="bilgilendirme.html#iade">İade ve değişim</a>
-                <a href="bilgilendirme.html#kvkk">KVKK ve gizlilik</a>
-            </div>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <div>
-            <span>© 2026 Nokta Ayakkabıcılık</span>
-            <span>Güvenli ödeme · Hızlı gönderim · Kolay iletişim</span>
-        </div>
-    </div>
-</footer>
-
-<a class="floating-contact" href="https://www.instagram.com/nokta.ayakkabicilik/" target="_blank" rel="noopener noreferrer" aria-label="Instagram'dan iletişime geç">
-    <span class="ig-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-            <circle cx="12" cy="12" r="4"></circle>
-            <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"></circle>
-        </svg>
-    </span>
-    <span>Instagram'dan yaz</span>
-</a>
-
-<div class="modal-backdrop" id="product-modal" hidden>
-    <section class="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <button class="modal-close" id="modal-close" type="button" aria-label="Pencereyi kapat">&times;</button>
-        <img class="modal-image" id="modal-image" alt="">
-        <div class="modal-content">
-            <p class="modal-kicker" id="modal-kicker"></p>
-            <h2 class="modal-title" id="modal-title"></h2>
-            <p class="modal-price" id="modal-price"></p>
-            <p class="modal-size" id="modal-size"></p>
-            <div class="modal-actions">
-                <a class="satin-al-buton modal-shopier" id="modal-shopier" target="_blank" rel="noopener noreferrer">Shopier'de satın al</a>
-                <button class="product-open" id="modal-back" type="button">Kapat</button>
-            </div>
-        </div>
-    </section>
-</div>
-
-<script>
-(async ()=>{
-    // products.json içeriği inline: sunucu olmadan çalışsın diye PRODUCTS değişkenine gömüldü
+    <script>
+        (async ()=>{
+                        // products.json içeriği inline: sunucu olmadan çalışsın diye PRODUCTS değişkenine gömüldü
                         const FALLBACK_PRODUCTS = [
     {
         "id": 1,
@@ -857,90 +466,31 @@
         "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_d9750d7774f21e488539157a29fdffd4.jpeg",
         "filename": "49.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40826356"
-    },
-    {
-        "id": 50,
-        "title": "Nike Dunk Pembe-Beyaz (36-40)",
-        "price": "1250",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_592f7f8b31ee6df5459af550d73d3586.jpeg",
-        "filename": "50.jpeg",
-        "url": "https://www.shopier.com/noktaayakkabi/50762940"
-    },
-    {
-        "id": 51,
-        "title": "Vans Knu Skool (36-45)",
-        "price": "2350",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_6f0e405255d1aa522972f17f6ac67610.jpeg",
-        "filename": "51.jpeg",
-        "url": "https://www.shopier.com/noktaayakkabi/50852879"
-    },
-    {
-        "id": 52,
-        "title": "Vans Classic (36-44)",
-        "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_d017de3be6fa2aa971ee77758e2e09a9.jpeg",
-        "filename": "52.jpeg",
-        "url": "https://www.shopier.com/noktaayakkabi/50852526"
-    },
-    {
-        "id": 53,
-        "title": "Vans Hyline White (36-44)",
-        "price": "2150",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_de1046184cbdc4fdaa83432574c994c5.jpeg",
-        "filename": "53.jpeg",
-        "url": "https://www.shopier.com/noktaayakkabi/50852480"
-    },
-    {
-        "id": 54,
-        "title": "Vans Hylane Black-White (36-44)",
-        "price": "2150",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_7ca59bbb1f531c9a9539860a67fbb075.jpeg",
-        "filename": "54.jpeg",
-        "url": "https://www.shopier.com/noktaayakkabi/50850691"
-    },
-    {
-        "id": 55,
-        "title": "Nike Airforce1 White (45-46-47)",
-        "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_1134107d73b2698de0b7c5883e79de26.jpeg",
-        "filename": "55.jpeg",
-        "url": "https://www.shopier.com/noktaayakkabi/50820140"
-    },
-    {
-        "id": 56,
-        "title": "Nike Tn (36-44)",
-        "price": "2350",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_41591ddf748c12201f2ed2ef6c365c38.jpeg",
-        "filename": "56.jpeg",
-        "url": "https://www.shopier.com/noktaayakkabi/50854500"
-    },
-    {
-        "id": 57,
-        "title": "Nike AirJordan 4 Military Black (36-44)",
-        "price": "2360",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_c720131df017a860b5367cdeaaaca9f4.jpeg",
-        "filename": "57.jpeg",
-        "url": "https://www.shopier.com/noktaayakkabi/50853560"
     }
 ];
 
-            const PRODUCTS = FALLBACK_PRODUCTS;
-
-            function fsExists(name){
-                try{ const req = new XMLHttpRequest(); req.open('HEAD', name, false); req.send(); return req.status >= 200 && req.status < 400; }catch(e){ return false; }
+            let PRODUCTS = FALLBACK_PRODUCTS;
+            try {
+                const response = await fetch('products.json', { cache: 'no-store' });
+                if(response.ok){
+                    const remoteProducts = await response.json();
+                    if(Array.isArray(remoteProducts) && remoteProducts.length) PRODUCTS = remoteProducts;
+                }
+            }catch(error){
+                // file:// ile açıldığında fallback katalogu kullanılır.
             }
 
-            let productsById = {};
-            let productsByFilename = {};
-            (PRODUCTS || []).forEach(p=>{
-                if(p && p.id) productsById[p.id] = p;
-                if(p && p.filename){
-                    const f = p.filename.toLowerCase();
-                    productsByFilename[f] = p;
-                    if(f.endsWith('.jpeg')) productsByFilename[f.replace('.jpeg', '.jpg')] = p;
-                    if(f.endsWith('.jpg')) productsByFilename[f.replace('.jpg', '.jpeg')] = p;
-                }
-            });
+                        let productsById = {};
+                        let productsByFilename = {};
+                        (PRODUCTS || []).forEach(p=>{
+                                if(p && p.id) productsById[p.id] = p;
+                                if(p && p.filename){
+                                        const f = p.filename.toLowerCase();
+                                        productsByFilename[f] = p;
+                                        if(f.endsWith('.jpeg')) productsByFilename[f.replace('.jpeg', '.jpg')] = p;
+                                        if(f.endsWith('.jpg')) productsByFilename[f.replace('.jpg', '.jpeg')] = p;
+                                }
+                        });
 
             const grid = document.getElementById('urun-izgarasi');
             const total = PRODUCTS.length;
@@ -949,209 +499,137 @@
                 const normalizedTitle = title.toLocaleLowerCase('tr-TR');
                 return knownBrands.find(brand => normalizedTitle.startsWith(brand.toLocaleLowerCase('tr-TR'))) || title.split(' ')[0];
             }
-            function getSizeRange(title){
-                const match = title.match(/\(([^)]+)\)/);
-                return match ? match[1] : '';
-            }
-            function formatPrice(price){
-                const n = parseFloat(String(price).replace(',', '.'));
-                if(isNaN(n)) return price ? `${price} TL` : '-';
-                return `${n.toLocaleString('tr-TR')} TL`;
-            }
-
-            const cards = [];
             for(let i=1;i<=total;i++){
-                const productFromId = productsById[i];
-                const localJpeg = `${i}.jpeg`;
-                const localJpg = `${i}.jpg`;
-                const productFromFile = productsByFilename[localJpeg] || productsByFilename[localJpg];
-                const product = productFromFile || productFromId || null;
-                if(!product) continue;
-
-                const title = product.title || `Ürün ${i}`;
-                const brand = getBrand(title);
-                const sizeRange = getSizeRange(title);
-                const cleanTitle = title.replace(/\s*\([^)]*\)\s*$/, '').trim();
-
                 const card = document.createElement('div');
                 card.className = 'urun-karti';
-                card.style.animationDelay = `${Math.min(i, 8) * 40}ms`;
-                card.dataset.title = title.toLocaleLowerCase('tr-TR');
-                card.dataset.brand = brand.toLocaleLowerCase('tr-TR');
-                card.dataset.size = sizeRange.toLocaleLowerCase('tr-TR');
-                card.dataset.price = parseFloat(String(product.price).replace(',', '.')) || 0;
-                card.productData = product;
-
-                const imageWrap = document.createElement('div');
-                imageWrap.className = 'image-wrap';
+                card.style.animationDelay = `${Math.min(i, 8) * 45}ms`;
 
                 const img = document.createElement('img');
                 img.className = 'urun-resmi';
-                img.loading = 'lazy';
+
+                const imageWrap = document.createElement('div');
+                imageWrap.className = 'image-wrap';
+                imageWrap.appendChild(img);
+
+                const localJpeg = `${i}.jpeg`;
+                const localJpg = `${i}.jpg`;
+
+                // Öncelik: filename ile eşleşen product, sonra id ile eşleşen product
+                const productFromFile = productsByFilename[localJpeg] || productsByFilename[localJpg];
+                const productFromId = productsById[i];
+                const product = productFromFile || productFromId || null;
+                const title = product?.title || `Ürün ${i}`;
+                card.dataset.title = title.toLocaleLowerCase('tr-TR');
+                card.dataset.brand = getBrand(title).toLocaleLowerCase('tr-TR');
+
                 img.alt = title;
-                if(fsExists(localJpeg) || fsExists(localJpg)){
-                    img.src = fsExists(localJpeg) ? localJpeg : localJpg;
-                }else if(product.image){
+
+                // Önce yerel dosyayı dene, yoksa products.json içindeki dış resmi kullan
+                if(productFromFile || fsExists(localJpeg) || fsExists(localJpg)){
+                    img.src = localJpeg;
+                }else if(product && product.image){
                     img.src = product.image;
                 }else{
-                    img.src = localJpeg;
+                    img.src = localJpeg; // dene yine, onerror ile placeholder olacak
                 }
+
                 img.onerror = function(){
-                    if(this.src.endsWith('.jpeg')){ this.src = localJpg; return; }
-                    if(product.image && this.src !== product.image){ this.src = product.image; return; }
-                    this.style.backgroundColor = '#ece5d3';
+                    if(this.src.endsWith('.jpeg')){ this.src = `${i}.jpg`; return; }
+                    // eğer dış resim varsa tekrar dene
+                    if(product && product.image && this.src !== product.image){ this.src = product.image; return; }
+                    this.style.backgroundColor = '#ddd';
                     this.src = '';
                 };
 
-                const brandTag = document.createElement('span');
-                brandTag.className = 'brand-tag';
-                brandTag.textContent = brand;
-
-                const numericPrice = parseFloat(String(product.price).replace(',', '.')) || 0;
-                if(Number(product.id) > 50 || numericPrice < 1000){
-                    const badge = document.createElement('span');
-                    badge.className = 'product-badge';
-                    badge.textContent = Number(product.id) > 50 ? 'Yeni' : 'Fırsat';
-                    imageWrap.appendChild(badge);
-                }
-
-                imageWrap.appendChild(img);
-                imageWrap.appendChild(brandTag);
+                const h = document.createElement('h3');
+                h.className = 'urun-baslik';
+                h.textContent = title;
 
                 const code = document.createElement('div');
                 code.className = 'urun-code';
-                code.textContent = sizeRange ? `Beden ${sizeRange}` : `Model ${String(i).padStart(2, '0')}`;
+                code.textContent = `Model ${String(i).padStart(2, '0')}`;
 
-                const h = document.createElement('h3');
-                h.className = 'urun-baslik';
-                h.textContent = cleanTitle;
+                const priceText = product?.price ? (`${product.price} TL`) : '-';
 
                 const price = document.createElement('div');
                 price.className = 'urun-fiyat';
-                price.textContent = formatPrice(product.price);
+                price.textContent = priceText;
+
+                const a = document.createElement('a');
+                a.className = 'satin-al-buton';
+                a.textContent = "Shopier'den Güvenle Al";
+                a.target = '_blank';
+                a.href = product?.url || 'https://shopier.com/noktaayakkabi';
+
+                // Başlık ve fiyat doğrudan düzenlenebilir olsun
+                h.contentEditable = 'true';
+                price.contentEditable = 'true';
+                // değişiklikleri blur ile kaydet
+                function saveEdit(){
+                    const newTitle = h.textContent.trim();
+                    const newPrice = price.textContent.replace(/\s*TL\s*/i,'').trim();
+                    const existing = product || {};
+                    existing.title = newTitle || existing.title || `Ürün ${i}`;
+                    existing.price = newPrice || existing.price || '';
+                    existing.id = existing.id || i;
+                    existing.filename = existing.filename || (fsExists(`${i}.jpeg`) ? `${i}.jpeg` : (fsExists(`${i}.jpg`) ? `${i}.jpg` : null));
+                    productsById[existing.id] = existing;
+                    if(existing.filename) productsByFilename[existing.filename.toLowerCase()] = existing;
+                }
+                h.addEventListener('blur', saveEdit);
+                price.addEventListener('blur', saveEdit);
 
                 const meta = document.createElement('div');
                 meta.className = 'urun-meta';
                 meta.appendChild(code);
                 meta.appendChild(h);
                 meta.appendChild(price);
-
-                const a = document.createElement('a');
-                a.className = 'satin-al-buton';
-                a.textContent = "Shopier'de satın al";
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                a.href = product.url || 'https://shopier.com/noktaayakkabi';
-
-                const details = document.createElement('button');
-                details.className = 'product-open';
-                details.type = 'button';
-                details.textContent = 'Ürün detaylarını gör';
-                details.addEventListener('click', () => openProductModal(product, img.src, brand, sizeRange));
-
                 card.appendChild(imageWrap);
                 card.appendChild(meta);
-                meta.appendChild(details);
                 card.appendChild(a);
                 grid.appendChild(card);
-                cards.push(card);
             }
 
             const search = document.getElementById('search');
-            const searchSuggestions = document.getElementById('search-suggestions');
-            const sortSelect = document.getElementById('sort');
-            const priceFilter = document.getElementById('price-filter');
+            const brandMenu = document.getElementById('brand-menu');
             const brandFilters = document.getElementById('brand-filters');
-            const footerBrands = document.getElementById('footer-brands');
             const productCount = document.getElementById('product-count');
             const heroCount = document.getElementById('hero-count');
-            const resultNote = document.getElementById('result-note');
-            const productModal = document.getElementById('product-modal');
-            const modalImage = document.getElementById('modal-image');
-            const modalKicker = document.getElementById('modal-kicker');
-            const modalTitle = document.getElementById('modal-title');
-            const modalPrice = document.getElementById('modal-price');
-            const modalSize = document.getElementById('modal-size');
-            const modalShopier = document.getElementById('modal-shopier');
-            const closeModalButton = document.getElementById('modal-close');
-            const backModalButton = document.getElementById('modal-back');
-            const brands = [...new Set(cards.map(card => card.dataset.brand))].sort((a, b) => {
-                if(a === 'nike') return -1;
-                if(b === 'nike') return 1;
-                return a.localeCompare(b, 'tr-TR');
-            });
-            const brandLabel = brand => brand.replace(/(^|\s)\S/g, letter => letter.toLocaleUpperCase('tr-TR'));
+            const brands = [...new Set([...grid.querySelectorAll('.urun-karti')].map(card => card.dataset.brand))].sort((a, b) => a.localeCompare(b, 'tr-TR'));
             let activeBrand = '';
-
-            function openProductModal(product, imageSource, brand, sizeRange){
-                modalImage.src = imageSource;
-                modalImage.alt = product.title || 'Ürün görseli';
-                modalKicker.textContent = `${brand} · Shopier ürünü`;
-                modalTitle.textContent = String(product.title || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
-                modalPrice.textContent = formatPrice(product.price);
-                modalSize.textContent = sizeRange ? `Mevcut numaralar: ${sizeRange}` : 'Numara bilgisi için bizimle iletişime geçebilirsiniz.';
-                modalShopier.href = product.url || 'https://shopier.com/noktaayakkabi';
-                productModal.hidden = false;
-                document.body.style.overflow = 'hidden';
-                closeModalButton.focus();
+            function selectBrand(value){
+                activeBrand = value;
+                document.querySelectorAll(`[data-brand-filter]`).forEach(filter => filter.classList.toggle('active', filter.dataset.brandFilter === activeBrand));
+                filterProducts();
             }
-
-            function closeProductModal(){
-                productModal.hidden = true;
-                document.body.style.overflow = '';
-            }
-
-            function createBrandControl(container, label, value, isFooter){
-                if(isFooter){
-                    const li = document.createElement('li');
-                    const link = document.createElement('a');
-                    link.href = '#urunler';
-                    link.textContent = label;
-                    link.addEventListener('click', () => selectBrand(value));
-                    li.appendChild(link);
-                    container.appendChild(li);
-                    return;
-                }
+            function createBrandControl(container, label, value){
                 const button = document.createElement('button');
-                button.className = 'brand-filter';
+                button.className = container === brandMenu ? 'brand-menu-button' : 'brand-filter';
                 button.type = 'button';
                 button.textContent = label;
                 button.dataset.brandFilter = value;
                 button.addEventListener('click', () => selectBrand(value));
                 container.appendChild(button);
             }
-
-            function selectBrand(value){
-                activeBrand = value;
-                document.querySelectorAll('[data-brand-filter]').forEach(filter => filter.classList.toggle('active', filter.dataset.brandFilter === activeBrand));
-                filterProducts();
-            }
-
+            const brandLabel = brand => brand.replace(/(^|\s)\S/g, letter => letter.toLocaleUpperCase('tr-TR'));
+            createBrandControl(brandMenu, 'Tümü', '');
             createBrandControl(brandFilters, 'Tümü', '');
             brands.forEach(brand => {
+                createBrandControl(brandMenu, brandLabel(brand), brand);
                 createBrandControl(brandFilters, brandLabel(brand), brand);
-                createBrandControl(footerBrands, brandLabel(brand), brand, true);
             });
             selectBrand('');
 
             function filterProducts(){
                 const query = search.value.trim().toLocaleLowerCase('tr-TR');
-                const selectedPrice = priceFilter.value;
-                const priceRange = selectedPrice ? selectedPrice.split('-').map(Number) : null;
                 let visible = 0;
-                let visibleCards = [];
-                cards.forEach(card => {
-                    const cardPrice = parseFloat(card.dataset.price) || 0;
-                    const matches = (!query || card.dataset.title.includes(query))
-                        && (!activeBrand || card.dataset.brand === activeBrand)
-                        && (!priceRange || (cardPrice >= priceRange[0] && cardPrice < priceRange[1]));
+                grid.querySelectorAll('.urun-karti').forEach(card => {
+                    const matches = (!query || card.dataset.title.includes(query)) && (!activeBrand || card.dataset.brand === activeBrand);
                     card.hidden = !matches;
-                    if(matches){ visible++; visibleCards.push(card); }
+                    if(matches) visible++;
                 });
-                applySort(visibleCards);
                 productCount.textContent = `${visible} ürün`;
                 heroCount.textContent = visible;
-                resultNote.textContent = visible ? `${visible} model gösteriliyor. Shopier üzerinden güvenli alışveriş.` : 'Filtrelerinize uyan bir model bulunamadı.';
                 if(!visible && !grid.querySelector('.empty-state')){
                     const empty = document.createElement('div');
                     empty.className = 'empty-state';
@@ -1161,64 +639,14 @@
                     grid.querySelector('.empty-state').remove();
                 }
             }
+            search.addEventListener('input', filterProducts);
 
-            function updateSearchSuggestions(){
-                const query = search.value.trim().toLocaleLowerCase('tr-TR');
-                searchSuggestions.replaceChildren();
-                if(!query){
-                    searchSuggestions.hidden = true;
-                    return;
-                }
-
-                const matchingTitles = [...new Set(cards
-                    .filter(card => card.dataset.title.startsWith(query))
-                    .map(card => card.querySelector('.urun-baslik').textContent))];
-                matchingTitles.slice(0, 8).forEach(title => {
-                    const item = document.createElement('li');
-                    const button = document.createElement('button');
-                    button.type = 'button';
-                    button.role = 'option';
-                    button.textContent = title;
-                    button.addEventListener('click', () => {
-                        search.value = title;
-                        searchSuggestions.hidden = true;
-                        filterProducts();
-                    });
-                    item.appendChild(button);
-                    searchSuggestions.appendChild(item);
-                });
-                searchSuggestions.hidden = matchingTitles.length === 0;
+            // küçük yardımcı: local dosya var mı kontrolü
+            function fsExists(name){
+                try{ var req = new XMLHttpRequest(); req.open('HEAD', name, false); req.send(); return req.status >= 200 && req.status < 400; }catch(e){ return false; }
             }
 
-            function applySort(visibleCards){
-                const mode = sortSelect.value;
-                if(mode === 'default') return;
-                const sorted = [...visibleCards].sort((a, b) => {
-                    const pa = parseFloat(a.dataset.price) || 0;
-                    const pb = parseFloat(b.dataset.price) || 0;
-                    return mode === 'price-asc' ? pa - pb : pb - pa;
-                });
-                sorted.forEach(card => grid.appendChild(card));
-            }
-
-            search.addEventListener('input', () => {
-                filterProducts();
-                updateSearchSuggestions();
-            });
-            search.addEventListener('focus', updateSearchSuggestions);
-            document.addEventListener('click', event => {
-                if(!event.target.closest('.search-wrap')) searchSuggestions.hidden = true;
-            });
-            sortSelect.addEventListener('change', filterProducts);
-            priceFilter.addEventListener('change', filterProducts);
-            closeModalButton.addEventListener('click', closeProductModal);
-            backModalButton.addEventListener('click', closeProductModal);
-            productModal.addEventListener('click', event => {
-                if(event.target === productModal) closeProductModal();
-            });
-            document.addEventListener('keydown', event => {
-                if(event.key === 'Escape' && !productModal.hidden) closeProductModal();
-            });
+            // Not: Butonlar kaldırıldı; `products.json` yalnızca bulunan ürünleri doldurmak için kullanılır.
         })();
     </script>
 
