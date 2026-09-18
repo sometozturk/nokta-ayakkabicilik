@@ -65,8 +65,17 @@ async function fetchHtml(url){
       const html = await fetchHtml(url);
       const $$ = cheerio.load(html);
       const title = $$('meta[property="og:title"]').attr('content') || $$('title').text().trim();
-      let image = $$('meta[property="og:image"]').attr('content') || $$('img').first().attr('src') || '';
-      if(image && image.startsWith('//')) image = 'https:' + image;
+      const images = [];
+      $$('meta[property="og:image"], img[src], img[data-src], img[data-lazy-src]').each((_, el) => {
+        const value = $$(el).attr('content') || $$(el).attr('src') || $$(el).attr('data-src') || $$(el).attr('data-lazy-src') || '';
+        try {
+          const image = new URL(value, shopUrl).href;
+          if(image && /\/pictures_(large|small)\//i.test(image) && !images.includes(image)) images.push(image);
+        }catch(e){}
+      });
+      const productImages = images.filter(image => /\/pictures_large\//i.test(image));
+      const selectedImages = productImages.length ? productImages : images;
+      const image = selectedImages[0] || '';
       let price = $$('meta[itemprop="price"]').attr('content') || $$('meta[property="product:price:amount"]').attr('content') || '';
       if(!price){
         const text = $$.text();
@@ -88,7 +97,7 @@ async function fetchHtml(url){
         }
       }
 
-      products.push({ id: idx, title, price, image, filename, url });
+      products.push({ id: idx, title, price, image, images: selectedImages, filename, url });
       idx++;
     }catch(e){
       console.error('Failed', url, e.message);

@@ -23,14 +23,25 @@ function absoluteUrl(value) {
   }
 }
 
+function extractImages($) {
+  const images = [];
+  $('meta[property="og:image"], img[src], img[data-src], img[data-lazy-src]').each((_, element) => {
+    const value = $(element).attr('content') || $(element).attr('src') || $(element).attr('data-src') || $(element).attr('data-lazy-src');
+    const image = absoluteUrl(value);
+    if (image && /\/pictures_(large|small)\//i.test(image) && !images.includes(image)) images.push(image);
+  });
+  const largeImages = images.filter(image => /\/pictures_large\//i.test(image));
+  return largeImages.length ? largeImages : images;
+}
+
 function extractProduct(html, url) {
   const $ = cheerio.load(html);
   const title = $('meta[property="og:title"]').attr('content') || $('title').text().trim();
   if (/just a moment|enable javascript and cookies|challenge-platform/i.test($.text()) || /just a moment/i.test(title)) {
     throw new Error('Shopier Cloudflare challenge page received');
   }
-  let image = $('meta[property="og:image"]').attr('content') || '';
-  if (image.startsWith('//')) image = `https:${image}`;
+  const images = extractImages($);
+  const image = images[0] || '';
 
   let price = $('meta[itemprop="price"]').attr('content') || $('meta[property="product:price:amount"]').attr('content') || '';
   if (!price) {
@@ -38,7 +49,7 @@ function extractProduct(html, url) {
     price = match ? match[0].replace(/TL/i, '').replace(/[.\s]/g, '').replace(',', '.').trim() : '';
   }
 
-  return { title: title.trim(), price: price.trim(), image, url };
+  return { title: title.trim(), price: price.trim(), image, images, url };
 }
 
 async function discoverUrls(page) {
@@ -80,6 +91,7 @@ async function main() {
         title: live.title || previous.title || `Urun ${item.id}`,
         price: live.price || previous.price || '',
         image: live.image || previous.image || '',
+        images: live.images?.length ? live.images : (previous.images || (previous.image ? [previous.image] : [])),
         filename: previous.filename || `${item.id}.jpeg`,
         url: item.url
       });

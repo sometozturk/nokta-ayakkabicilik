@@ -30,7 +30,15 @@ try{
 }
 
 // Normalize: ensure ids are numbers and sorted by id
-data = data.map(p=>({ id: Number(p.id)||null, filename: p.filename||null, title: p.title||'', price: p.price||'', url: p.url||'' }));
+data = data.map(p=>({
+  id: Number(p.id)||null,
+  filename: p.filename||null,
+  title: p.title||'',
+  price: p.price||'',
+  image: p.image||'',
+  images: Array.isArray(p.images) ? p.images : (p.image ? [p.image] : []),
+  url: p.url||''
+}));
 data.sort((a,b)=> (a.id||0)-(b.id||0));
 
 fs.writeFileSync(outJson, JSON.stringify(data, null, 2), 'utf8');

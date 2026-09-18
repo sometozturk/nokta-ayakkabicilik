@@ -184,8 +184,21 @@
     .urun-karti:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);border-color:#d8ccb5;}
     .urun-karti[hidden]{display:none;}
     .image-wrap{position:relative;overflow:hidden;background:#ece5d3;aspect-ratio:1/1.05;}
+    .image-gallery{display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;}
+    .image-gallery::-webkit-scrollbar{display:none;}
+    .image-slide{position:relative;flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;}
     .urun-resmi{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
     .urun-karti:hover .urun-resmi{transform:scale(1.045);}
+    .gallery-dots{position:absolute;right:10px;bottom:10px;display:flex;gap:5px;padding:5px 7px;background:rgba(21,21,21,.68);pointer-events:none;}
+    .gallery-dot{width:5px;height:5px;border-radius:50%;background:rgba(245,239,228,.5);}
+    .gallery-dot:first-child{background:var(--ink);}
+    .image-gallery{cursor:grab;}
+    .image-gallery:active{cursor:grabbing;}
+    .gallery-arrow{position:absolute;z-index:3;top:50%;width:34px;height:34px;border:0;border-radius:50%;background:rgba(21,21,21,.72);color:#fff;font-size:27px;line-height:1;cursor:pointer;opacity:0;transform:translateY(-50%);transition:opacity .2s ease,background .2s ease;}
+    .image-wrap:hover .gallery-arrow,.gallery-arrow:focus{opacity:1;}
+    .gallery-arrow:hover{background:var(--accent);}
+    .image-wrap .gallery-arrow-prev{left:10px;}
+    .image-wrap .gallery-arrow-next{right:10px;}
     .brand-tag{position:absolute;top:10px;left:10px;background:rgba(246,241,230,.94);color:var(--ink);font-size:10px;font-weight:700;padding:5px 9px;letter-spacing:.3px;}
     .urun-meta{padding:16px 16px 0;flex:1;}
     .urun-code{color:var(--muted);font-size:11px;font-weight:600;}
@@ -341,7 +354,16 @@
     .modal-backdrop{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.72);}
     .modal-backdrop[hidden]{display:none;}
     .product-modal{position:relative;width:min(860px,100%);max-height:min(760px,calc(100vh - 40px));overflow:auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);background:var(--surface);color:#191715;box-shadow:0 30px 80px rgba(0,0,0,.45);}
-    .modal-image{width:100%;height:100%;min-height:360px;object-fit:cover;background:#e8e0d4;}
+    .modal-gallery{position:relative;min-height:360px;background:#e8e0d4;overflow:hidden;}
+    .modal-gallery-track{display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;}
+    .modal-gallery-track::-webkit-scrollbar{display:none;}
+    .modal-image{flex:0 0 100%;width:100%;height:100%;min-height:360px;object-fit:cover;scroll-snap-align:start;background:#e8e0d4;}
+    .modal-gallery .gallery-arrow{opacity:1;}
+    .modal-gallery .gallery-arrow-prev{left:14px;}
+    .modal-gallery .gallery-arrow-next{right:14px;}
+    .modal-gallery-dots{position:absolute;left:50%;bottom:14px;display:flex;gap:6px;padding:6px 8px;background:rgba(21,21,21,.68);transform:translateX(-50%);}
+    .modal-gallery-dots .gallery-dot{background:rgba(245,239,228,.5);}
+    .modal-gallery-dots .gallery-dot.active{background:#fff;}
     .modal-content{padding:38px;display:flex;flex-direction:column;justify-content:center;}
     .modal-close{position:absolute;right:14px;top:12px;width:34px;height:34px;border:1px solid rgba(25,23,21,.18);border-radius:50%;background:#fff;color:#191715;font-size:22px;line-height:1;cursor:pointer;}
     .modal-kicker{margin:0 0 10px;color:#8b8177;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
@@ -504,7 +526,12 @@
 <div class="modal-backdrop" id="product-modal" hidden>
     <section class="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <button class="modal-close" id="modal-close" type="button" aria-label="Pencereyi kapat">&times;</button>
-        <img class="modal-image" id="modal-image" alt="">
+        <div class="modal-gallery" id="modal-gallery">
+            <div class="modal-gallery-track" id="modal-gallery-track"></div>
+            <button class="gallery-arrow gallery-arrow-prev" id="modal-prev" type="button" aria-label="Önceki fotoğraf">&#8249;</button>
+            <button class="gallery-arrow gallery-arrow-next" id="modal-next" type="button" aria-label="Sonraki fotoğraf">&#8250;</button>
+            <div class="modal-gallery-dots" id="modal-gallery-dots" aria-hidden="true"></div>
+        </div>
         <div class="modal-content">
             <p class="modal-kicker" id="modal-kicker"></p>
             <h2 class="modal-title" id="modal-title"></h2>
@@ -525,8 +552,12 @@
     {
         "id": 1,
         "title": "Nike Air270 (36-45)",
-        "price": "2100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_297a2519ead5df55fb5b270c2f252a15.jpeg",
+        "price": "2650",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_58956c04b1e813b752edb1d787e2f072.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_58956c04b1e813b752edb1d787e2f072.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_297a2519ead5df55fb5b270c2f252a15.jpeg"
+        ],
         "filename": "1.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50694343"
     },
@@ -535,14 +566,21 @@
         "title": "Goldengoose Silver (36-40)",
         "price": "3099",
         "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_22411d058ff09eb48532be06949b4d86.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_22411d058ff09eb48532be06949b4d86.jpeg"
+        ],
         "filename": "2.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50517952"
     },
     {
         "id": 3,
-        "title": "Nike Initiator (36-44) ",
+        "title": "Nike Initiator (36-44)",
         "price": "2099",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_9518797e2529306d319061e2777a279f.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_b76e03380d8b1a690d63ab4a5086602c.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_b76e03380d8b1a690d63ab4a5086602c.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_9518797e2529306d319061e2777a279f.jpeg"
+        ],
         "filename": "3.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50517188"
     },
@@ -550,7 +588,11 @@
         "id": 4,
         "title": "Nike p6000 (36-46)",
         "price": "2099",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_eaa9720927d4d24b44fbf173654eb861.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_566b3c9c2d83b70caef8c5765996f316.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_566b3c9c2d83b70caef8c5765996f316.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_eaa9720927d4d24b44fbf173654eb861.jpeg"
+        ],
         "filename": "4.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50517164"
     },
@@ -558,15 +600,22 @@
         "id": 5,
         "title": "Adidas Superstar (36-45)",
         "price": "1300",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_575553d16b3069e50c922674640dc380.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_26f6d31afb3201b11e0f391907bd52d4.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_26f6d31afb3201b11e0f391907bd52d4.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_575553d16b3069e50c922674640dc380.jpeg"
+        ],
         "filename": "5.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/44394060"
     },
     {
         "id": 6,
         "title": "Nike Jordan 1 Low Dark-red-Black",
-        "price": "1099",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_4a3aac04a8d830473bb4dba31506ffaf.jpeg",
+        "price": "1400",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_5a0d4549661c0925b7886df82428aa95.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_5a0d4549661c0925b7886df82428aa95.png"
+        ],
         "filename": "6.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/43639776"
     },
@@ -574,7 +623,11 @@
         "id": 7,
         "title": "Adidas Terrex (36-44)",
         "price": "1999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_08ce1187affbcb276d10f934b471ec04.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_99fa495674043bf2da71f1d7a196e841.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_99fa495674043bf2da71f1d7a196e841.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_08ce1187affbcb276d10f934b471ec04.jpeg"
+        ],
         "filename": "7.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/42802940"
     },
@@ -582,7 +635,11 @@
         "id": 8,
         "title": "Nike Jordan Pembe (36-40)",
         "price": "1249",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_d4e7340e1ade03343df90cc4d820f8b7.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_a7a3a472caabca3207d76e5bd8c917ca.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_a7a3a472caabca3207d76e5bd8c917ca.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_d4e7340e1ade03343df90cc4d820f8b7.jpeg"
+        ],
         "filename": "8.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/42350927"
     },
@@ -590,7 +647,11 @@
         "id": 9,
         "title": "Alexander Mcqueen White (36-44)",
         "price": "1700",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_c755aee8bb7760cc075d1148609e4c8f.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_84e3c8e69dd3075f1d993c97ed000897.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_84e3c8e69dd3075f1d993c97ed000897.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_c755aee8bb7760cc075d1148609e4c8f.jpeg"
+        ],
         "filename": "9.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41690292"
     },
@@ -598,7 +659,11 @@
         "id": 10,
         "title": "Calvin Klein Black-White (36-44)",
         "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_29b9f6738a3b2264ed863b18b73bbc5f.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_037b140109dece0edca868ee3d0c40e9.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_037b140109dece0edca868ee3d0c40e9.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_29b9f6738a3b2264ed863b18b73bbc5f.jpeg"
+        ],
         "filename": "10.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689872"
     },
@@ -606,7 +671,11 @@
         "id": 11,
         "title": "Lacoste Elite Active Black-White (36-44)",
         "price": "1800",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_6c81f713cb5a1d125f654e05dd332e66.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_7265b02d9a01ae294770ce0ceb2d3578.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_7265b02d9a01ae294770ce0ceb2d3578.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_6c81f713cb5a1d125f654e05dd332e66.jpeg"
+        ],
         "filename": "11.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689818"
     },
@@ -614,7 +683,11 @@
         "id": 12,
         "title": "Lacoste Elite Active White-Green (36-44)",
         "price": "1800",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_ad82dc24790c0fffe23fdf47fcc022a5.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_7bf73b9af2db0261abb96f7f39351712.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_7bf73b9af2db0261abb96f7f39351712.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_ad82dc24790c0fffe23fdf47fcc022a5.jpeg"
+        ],
         "filename": "12.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689793"
     },
@@ -622,7 +695,11 @@
         "id": 13,
         "title": "Adidas Spezial Red (36-44)",
         "price": "1750",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_85ef2a1026f17e948c8bdc98dd329c12.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_7c73adf2b1c8877c85a0a8987d8b312a.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_7c73adf2b1c8877c85a0a8987d8b312a.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_85ef2a1026f17e948c8bdc98dd329c12.jpeg"
+        ],
         "filename": "13.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689770"
     },
@@ -630,7 +707,11 @@
         "id": 14,
         "title": "Adidas Spezial Blue (36-40)",
         "price": "1750",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_34ab8aa9aaa3c2d0740b5f032778d2f6.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_04d73a44160bd1b96b2a4c49fea81a44.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_04d73a44160bd1b96b2a4c49fea81a44.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_34ab8aa9aaa3c2d0740b5f032778d2f6.jpeg"
+        ],
         "filename": "14.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689744"
     },
@@ -638,7 +719,11 @@
         "id": 15,
         "title": "Lacoste Black-White (40-44)",
         "price": "1200",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_ae00538fd0ebc4821bba4dca35da25f4.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_bc847b8955d17b8b889f702f1d50aff0.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_bc847b8955d17b8b889f702f1d50aff0.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_ae00538fd0ebc4821bba4dca35da25f4.jpeg"
+        ],
         "filename": "15.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689712"
     },
@@ -646,7 +731,11 @@
         "id": 16,
         "title": "Lacoste Full White (40-44)",
         "price": "1200",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_3d5c277446767ab5e95a6d0715184a57.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_5f197a770b703c0b2e2aae091111d74c.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_5f197a770b703c0b2e2aae091111d74c.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_3d5c277446767ab5e95a6d0715184a57.jpeg"
+        ],
         "filename": "16.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689675"
     },
@@ -654,7 +743,11 @@
         "id": 17,
         "title": "Alexander Mcqueen Black (36-45)",
         "price": "1700",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_ce9ead9d6d64c4d5fbdd9d23e51b6a6c.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_961b1f14924135710a31975842a9c9a2.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_961b1f14924135710a31975842a9c9a2.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_ce9ead9d6d64c4d5fbdd9d23e51b6a6c.jpeg"
+        ],
         "filename": "17.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689597"
     },
@@ -662,15 +755,23 @@
         "id": 18,
         "title": "Calvin Klein White-Gray Logo (36-44)",
         "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_78b23ee3b31e25a85386b07d0cbbfdf9.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_5131044959d6ed7cee270b4b974b7591.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_5131044959d6ed7cee270b4b974b7591.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_78b23ee3b31e25a85386b07d0cbbfdf9.jpeg"
+        ],
         "filename": "18.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689541"
     },
     {
         "id": 19,
-        "title": "Calvin Klein White-Black Logo (36-44) ",
+        "title": "Calvin Klein White-Black Logo (36-44)",
         "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_944e1b463e09a12e4bdeb2efed197fc5.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_cb91e87fc0ed87f3a89db6d1dca98156.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_cb91e87fc0ed87f3a89db6d1dca98156.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_944e1b463e09a12e4bdeb2efed197fc5.jpeg"
+        ],
         "filename": "19.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689482"
     },
@@ -678,7 +779,11 @@
         "id": 20,
         "title": "Lufian White (40-44)",
         "price": "1200",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_00c9e7ff71eeae8cbcd670c69213a375.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_2dad975977cd94f5196c2cd295f5bd1c.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_2dad975977cd94f5196c2cd295f5bd1c.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_00c9e7ff71eeae8cbcd670c69213a375.jpeg"
+        ],
         "filename": "20.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689455"
     },
@@ -686,7 +791,11 @@
         "id": 21,
         "title": "Lufian Siyah-Beyaz (40-44)",
         "price": "1200",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_9358fb505b3b61a48dc8794abc07e365.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_2deb10a78eb7c392c60bcadc43b0a1d2.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_2deb10a78eb7c392c60bcadc43b0a1d2.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_9358fb505b3b61a48dc8794abc07e365.jpeg"
+        ],
         "filename": "21.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41689430"
     },
@@ -694,23 +803,35 @@
         "id": 22,
         "title": "Adidas Spezial Black (36-44)",
         "price": "1750",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_957d654ce1cf4362150171e2b5429a9a.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_eb92b317772225946a915bf5088748ee.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_eb92b317772225946a915bf5088748ee.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_957d654ce1cf4362150171e2b5429a9a.jpeg"
+        ],
         "filename": "22.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41171904"
     },
     {
         "id": 23,
-        "title": "Adidas Spezial Brown (36-44) ",
+        "title": "Adidas Spezial Brown (36-44)",
         "price": "1750",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_d50aeee6ea9b442276eef01fea47f25d.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_57d15588fcea079644e127f7443fdcd0.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_57d15588fcea079644e127f7443fdcd0.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_d50aeee6ea9b442276eef01fea47f25d.jpeg"
+        ],
         "filename": "23.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/41171855"
     },
     {
         "id": 24,
-        "title": "Nike Dunk Low Pro White-Red-Black Swoosh (36-45) ",
+        "title": "Nike Dunk Low Pro White-Red-Black Swoosh (36-45)",
         "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_c3da8ac0754a32eab5d85077552cc6b6.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_c6aa83ac119c502f7585c6980f9dd0fb.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_c6aa83ac119c502f7585c6980f9dd0fb.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_c3da8ac0754a32eab5d85077552cc6b6.jpeg"
+        ],
         "filename": "24.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842449"
     },
@@ -718,7 +839,11 @@
         "id": 25,
         "title": "Nike Dunk Low Pro White (36-45)",
         "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_84be6bd2b341f407d96aa6704be3bebf.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_4971bd55022c4cafd2b55133e7a7810b.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_4971bd55022c4cafd2b55133e7a7810b.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_84be6bd2b341f407d96aa6704be3bebf.jpeg"
+        ],
         "filename": "25.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842418"
     },
@@ -726,15 +851,23 @@
         "id": 26,
         "title": "Nike Cherry White-Red (36-40)",
         "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_8ed96712b5406a9318a533614cb18246.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_aba45daf83737087bebb305b270ced71.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_aba45daf83737087bebb305b270ced71.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_8ed96712b5406a9318a533614cb18246.jpeg"
+        ],
         "filename": "26.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842384"
     },
     {
         "id": 27,
         "title": "Nike Airforce 1 Black (36-45)",
-        "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_309b1674210317dbecf01c8ec19139e3.jpeg",
+        "price": "1100",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_cae391f07452c64a17997b0fe60233dd.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_cae391f07452c64a17997b0fe60233dd.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_309b1674210317dbecf01c8ec19139e3.jpeg"
+        ],
         "filename": "27.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842361"
     },
@@ -742,7 +875,11 @@
         "id": 28,
         "title": "Nike Airforce 1 White (36-45)",
         "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_4516a1ab64fe0f54b8e9f881945381b1.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_de9c4d9d19985fbe8a837117785526a9.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_de9c4d9d19985fbe8a837117785526a9.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_4516a1ab64fe0f54b8e9f881945381b1.jpeg"
+        ],
         "filename": "28.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842343"
     },
@@ -750,7 +887,11 @@
         "id": 29,
         "title": "Nike Dunk Low Pro Red-White (36-45)",
         "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_4f663458141f91011579faadebec2429.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_59d03a2a8129f6cd40337cffa2526fdd.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_59d03a2a8129f6cd40337cffa2526fdd.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_4f663458141f91011579faadebec2429.jpeg"
+        ],
         "filename": "29.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842313"
     },
@@ -758,7 +899,11 @@
         "id": 30,
         "title": "Nike Dunk Low Pro White-Blue (36-45)",
         "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_3b051595656e793baf6d3a12158c54e1.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_25d40e1d59780e3fa733e4f05a31364a.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_25d40e1d59780e3fa733e4f05a31364a.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_3b051595656e793baf6d3a12158c54e1.jpeg"
+        ],
         "filename": "30.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842277"
     },
@@ -766,7 +911,11 @@
         "id": 31,
         "title": "Nike Dunk Low Pro White-Pink (36-45)",
         "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_790853ded988b9d561a22ec7e46b1148.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_3e123f4da7788a8658e4dc740acbbd1c.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_3e123f4da7788a8658e4dc740acbbd1c.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_790853ded988b9d561a22ec7e46b1148.jpeg"
+        ],
         "filename": "31.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842236"
     },
@@ -774,7 +923,11 @@
         "id": 32,
         "title": "Nike Dunk Low Pro Black-White (36-45)",
         "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_1f8b2074cb0e3295c6a27c9fe5867e8b.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_1600c4b8d5857b9c81da29a72e83026b.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_1600c4b8d5857b9c81da29a72e83026b.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_1f8b2074cb0e3295c6a27c9fe5867e8b.jpeg"
+        ],
         "filename": "32.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842144"
     },
@@ -782,7 +935,11 @@
         "id": 33,
         "title": "Nike Dunk Low Pro Brown (36-45)",
         "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_83f288d8b510a64479a4333dbe0ad765.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_b83963696483cad78c15402c5f7d6f3a.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_b83963696483cad78c15402c5f7d6f3a.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_83f288d8b510a64479a4333dbe0ad765.jpeg"
+        ],
         "filename": "33.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842120"
     },
@@ -790,7 +947,11 @@
         "id": 34,
         "title": "Adidas Samba White (36-45)",
         "price": "1500",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_a6329312c0e1c9f67e713535778fb3e3.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_35e654ae3326b5e90ff057b0aa160bdb.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_35e654ae3326b5e90ff057b0aa160bdb.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_a6329312c0e1c9f67e713535778fb3e3.jpeg"
+        ],
         "filename": "34.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842081"
     },
@@ -798,7 +959,11 @@
         "id": 35,
         "title": "Adidas Samba Bej (36-45)",
         "price": "1500",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_98f02dc9552e9d2f01f3f4d2f795b3ee.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_62082d680e6b07bbe673c01dfc7227dc.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_62082d680e6b07bbe673c01dfc7227dc.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_98f02dc9552e9d2f01f3f4d2f795b3ee.jpeg"
+        ],
         "filename": "35.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842061"
     },
@@ -806,7 +971,11 @@
         "id": 36,
         "title": "Adidas Samba Black (36-45)",
         "price": "1500",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_dd64627e838422b9694403f3635559e8.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_6fbaa9d424bc784e54e86151d20a91bc.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_6fbaa9d424bc784e54e86151d20a91bc.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_dd64627e838422b9694403f3635559e8.jpeg"
+        ],
         "filename": "36.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842042"
     },
@@ -814,7 +983,11 @@
         "id": 37,
         "title": "Adidas Süperstar White (36-45)",
         "price": "1190",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_55f0f7c748b33bd6bf89caa649597c75.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_0efeea0bce6e57a5204b5b8abed51ba1.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_0efeea0bce6e57a5204b5b8abed51ba1.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_55f0f7c748b33bd6bf89caa649597c75.jpeg"
+        ],
         "filename": "37.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40842013"
     },
@@ -822,7 +995,11 @@
         "id": 38,
         "title": "Adidas Süperstar Black (36-44)",
         "price": "1190",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_6bee81df20ed3617361f5b349e4197f0.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_d97e7c77b5f0539f84408366e14a60ef.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_d97e7c77b5f0539f84408366e14a60ef.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_6bee81df20ed3617361f5b349e4197f0.jpeg"
+        ],
         "filename": "38.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841982"
     },
@@ -830,7 +1007,11 @@
         "id": 39,
         "title": "Adidas Campus White (36-45)",
         "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_925c2837521d7d8608844f719e57ea07.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_c73282a5520005e8e06cc305632a9055.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_c73282a5520005e8e06cc305632a9055.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_925c2837521d7d8608844f719e57ea07.jpeg"
+        ],
         "filename": "39.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841951"
     },
@@ -838,7 +1019,11 @@
         "id": 40,
         "title": "Adidas Campus Black-White (36-45)",
         "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_1c350a00eba9003163a55c2ab22856ad.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_1cdf24463d33790b5c6bbf574d5159d7.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_1cdf24463d33790b5c6bbf574d5159d7.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_1c350a00eba9003163a55c2ab22856ad.jpeg"
+        ],
         "filename": "40.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841909"
     },
@@ -846,7 +1031,11 @@
         "id": 41,
         "title": "Adidas Campus Black (36-45)",
         "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_fc625b89bef3b07418f3f2f32c0980f9.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_657ebea805a518fbd965e7be227bc73b.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_657ebea805a518fbd965e7be227bc73b.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_fc625b89bef3b07418f3f2f32c0980f9.jpeg"
+        ],
         "filename": "41.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841883"
     },
@@ -854,15 +1043,23 @@
         "id": 42,
         "title": "Adidas Neo Entrap (36-45)",
         "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_d30047cefcd240436978685d25aa78a9.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_dc68982eea61092e7bef4f62359f815e.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_dc68982eea61092e7bef4f62359f815e.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_d30047cefcd240436978685d25aa78a9.jpeg"
+        ],
         "filename": "42.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841848"
     },
     {
         "id": 43,
         "title": "Nike Airforce 1 White-Blue (36-45)",
-        "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_de8f4a80b9b5983dc21d47d8b722f5e5.jpeg",
+        "price": "1100",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_196bfd847cb46bafa5f2a953553c273f.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_196bfd847cb46bafa5f2a953553c273f.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_de8f4a80b9b5983dc21d47d8b722f5e5.jpeg"
+        ],
         "filename": "43.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841802"
     },
@@ -870,15 +1067,23 @@
         "id": 44,
         "title": "Nike Cherry White-Purple (36-40)",
         "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_adf7b28282e2494591313f7cd061b46e.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_766ec991867b54124ac4cddd89655ecd.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_766ec991867b54124ac4cddd89655ecd.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_adf7b28282e2494591313f7cd061b46e.jpeg"
+        ],
         "filename": "44.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841743"
     },
     {
         "id": 45,
         "title": "Nike Airforce 1 White- Black swoosh (36-45)",
-        "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_ea9ff53b24554b27bd0d0517e72549fc.jpeg",
+        "price": "1100",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_83deabbdf25333c91ba9e1aa0149458e.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_83deabbdf25333c91ba9e1aa0149458e.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_ea9ff53b24554b27bd0d0517e72549fc.jpeg"
+        ],
         "filename": "45.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841682"
     },
@@ -886,7 +1091,11 @@
         "id": 46,
         "title": "Nike Zoom X (36-45)",
         "price": "1200",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_3ac1a65a1f15dbc81f646c05ebb28975.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_e7e4f406ba798f143ce521c16568f01c.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_e7e4f406ba798f143ce521c16568f01c.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_3ac1a65a1f15dbc81f646c05ebb28975.jpeg"
+        ],
         "filename": "46.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841626"
     },
@@ -894,7 +1103,11 @@
         "id": 47,
         "title": "Nike Zoom Structure (36-45)",
         "price": "1199",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_74a7e0d0a490e1ae907606a4058af92a.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_a0cf692b18c43f2d5472e411d610ff49.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_a0cf692b18c43f2d5472e411d610ff49.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_74a7e0d0a490e1ae907606a4058af92a.jpeg"
+        ],
         "filename": "47.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841568"
     },
@@ -902,7 +1115,11 @@
         "id": 48,
         "title": "Nike Court Borough Low 2 Unisex",
         "price": "999",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_93f3e7eefc2556caaf91a1dfad42b553.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_4d018b525386bad31213a9df08ad0505.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_4d018b525386bad31213a9df08ad0505.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_93f3e7eefc2556caaf91a1dfad42b553.jpeg"
+        ],
         "filename": "48.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40841503"
     },
@@ -910,7 +1127,11 @@
         "id": 49,
         "title": "Adidas Spezial (36-44)",
         "price": "1750",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_d9750d7774f21e488539157a29fdffd4.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_7c4e87b84a2e01fd829d947b032d82c4.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_7c4e87b84a2e01fd829d947b032d82c4.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_d9750d7774f21e488539157a29fdffd4.jpeg"
+        ],
         "filename": "49.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/40826356"
     },
@@ -918,7 +1139,11 @@
         "id": 50,
         "title": "Nike Dunk Pembe-Beyaz (36-40)",
         "price": "1250",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_592f7f8b31ee6df5459af550d73d3586.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_8c65c1be2eac95b836737f2fdf8f0272.png",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_8c65c1be2eac95b836737f2fdf8f0272.png",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_592f7f8b31ee6df5459af550d73d3586.jpeg"
+        ],
         "filename": "50.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50762940"
     },
@@ -927,6 +1152,9 @@
         "title": "Vans Knu Skool (36-45)",
         "price": "2350",
         "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_6f0e405255d1aa522972f17f6ac67610.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_6f0e405255d1aa522972f17f6ac67610.jpeg"
+        ],
         "filename": "51.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50852879"
     },
@@ -935,6 +1163,9 @@
         "title": "Vans Classic (36-44)",
         "price": "1100",
         "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_d017de3be6fa2aa971ee77758e2e09a9.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_d017de3be6fa2aa971ee77758e2e09a9.jpeg"
+        ],
         "filename": "52.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50852526"
     },
@@ -943,6 +1174,9 @@
         "title": "Vans Hyline White (36-44)",
         "price": "2150",
         "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_de1046184cbdc4fdaa83432574c994c5.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_de1046184cbdc4fdaa83432574c994c5.jpeg"
+        ],
         "filename": "53.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50852480"
     },
@@ -951,14 +1185,21 @@
         "title": "Vans Hylane Black-White (36-44)",
         "price": "2150",
         "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_7ca59bbb1f531c9a9539860a67fbb075.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_7ca59bbb1f531c9a9539860a67fbb075.jpeg"
+        ],
         "filename": "54.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50850691"
     },
     {
         "id": 55,
-        "title": "Nike Airforce1 White (45-46-47)",
+        "title": "Nike Airforce1  White (45-46-47)",
         "price": "1100",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_1134107d73b2698de0b7c5883e79de26.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_36066f3e98bf3aa6bb6ac878882dc3b2.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_36066f3e98bf3aa6bb6ac878882dc3b2.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_1134107d73b2698de0b7c5883e79de26.jpeg"
+        ],
         "filename": "55.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50820140"
     },
@@ -966,7 +1207,11 @@
         "id": 56,
         "title": "Nike Tn (36-44)",
         "price": "2350",
-        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_41591ddf748c12201f2ed2ef6c365c38.jpeg",
+        "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_19b178126646c437885a4db9bee10b22.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_19b178126646c437885a4db9bee10b22.jpeg",
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_41591ddf748c12201f2ed2ef6c365c38.jpeg"
+        ],
         "filename": "56.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50854500"
     },
@@ -975,12 +1220,17 @@
         "title": "Nike AirJordan 4 Military Black (36-44)",
         "price": "2360",
         "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_c720131df017a860b5367cdeaaaca9f4.jpeg",
+        "images": [
+            "https://cdn.shopier.app/pictures_large/noktaayakkabi_c720131df017a860b5367cdeaaaca9f4.jpeg"
+        ],
         "filename": "57.jpeg",
         "url": "https://www.shopier.com/noktaayakkabi/50853560"
     }
 ];
 
-            const PRODUCTS = FALLBACK_PRODUCTS;
+            const PRODUCTS = await fetch('products.json', { cache: 'no-store' })
+                .then(response => response.ok ? response.json() : Promise.reject(new Error('Ürün verisi yüklenemedi')))
+                .catch(() => FALLBACK_PRODUCTS);
 
             let productsById = {};
             let productsByFilename = {};
@@ -1037,18 +1287,31 @@
                 const imageWrap = document.createElement('div');
                 imageWrap.className = 'image-wrap';
 
-                const img = document.createElement('img');
-                img.className = 'urun-resmi';
-                img.loading = i <= 4 ? 'eager' : 'lazy';
-                if(i <= 4) img.fetchPriority = 'high';
-                img.alt = `${cleanTitle} ayakkabı modeli`;
-                img.src = localJpeg;
-                img.onerror = function(){
-                    if(this.src.endsWith('.jpeg')){ this.src = localJpg; return; }
-                    if(product.image && this.src !== product.image){ this.src = product.image; return; }
-                    this.style.backgroundColor = '#ece5d3';
-                    this.src = '';
-                };
+                const gallery = document.createElement('div');
+                gallery.className = 'image-gallery';
+                const imageSources = Array.isArray(product.images) && product.images.length
+                    ? [...new Set(product.images.filter(Boolean))]
+                    : product.image
+                        ? [product.image]
+                        : [localJpeg, localJpg];
+                const galleryImages = [];
+                const cardImageSource = imageSources[0];
+                [cardImageSource].forEach((source) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'image-slide';
+                    const img = document.createElement('img');
+                    img.className = 'urun-resmi';
+                    img.loading = i <= 4 ? 'eager' : 'lazy';
+                    if(i <= 4) img.fetchPriority = 'high';
+                    img.alt = `${cleanTitle} ayakkabı modeli`;
+                    img.src = source;
+                    img.onerror = function(){
+                        this.closest('.image-slide').hidden = true;
+                    };
+                    slide.appendChild(img);
+                    gallery.appendChild(slide);
+                    galleryImages.push(img);
+                });
 
                 const brandTag = document.createElement('span');
                 brandTag.className = 'brand-tag';
@@ -1062,7 +1325,7 @@
                     imageWrap.appendChild(badge);
                 }
 
-                imageWrap.appendChild(img);
+                imageWrap.appendChild(gallery);
                 imageWrap.appendChild(brandTag);
 
                 const code = document.createElement('div');
@@ -1094,7 +1357,7 @@
                 details.className = 'product-open';
                 details.type = 'button';
                 details.textContent = 'Ürün detaylarını gör';
-                details.addEventListener('click', () => openProductModal(product, img.src, brand, sizeRange));
+                details.addEventListener('click', () => openProductModal(product, cardImageSource || product.image, brand, sizeRange));
 
                 card.appendChild(imageWrap);
                 card.appendChild(meta);
@@ -1149,7 +1412,10 @@
             const heroCount = document.getElementById('hero-count');
             const resultNote = document.getElementById('result-note');
             const productModal = document.getElementById('product-modal');
-            const modalImage = document.getElementById('modal-image');
+            const modalGalleryTrack = document.getElementById('modal-gallery-track');
+            const modalGalleryDots = document.getElementById('modal-gallery-dots');
+            const modalPreviousButton = document.getElementById('modal-prev');
+            const modalNextButton = document.getElementById('modal-next');
             const modalKicker = document.getElementById('modal-kicker');
             const modalTitle = document.getElementById('modal-title');
             const modalPrice = document.getElementById('modal-price');
@@ -1166,8 +1432,28 @@
             let activeBrand = '';
 
             function openProductModal(product, imageSource, brand, sizeRange){
-                modalImage.src = imageSource;
-                modalImage.alt = product.title || 'Ürün görseli';
+                const imageSources = Array.isArray(product.images) && product.images.length ? product.images : [imageSource || product.image].filter(Boolean);
+                const selectedIndex = Math.max(0, imageSources.indexOf(imageSource));
+                modalGalleryTrack.replaceChildren();
+                modalGalleryDots.replaceChildren();
+                imageSources.forEach((source, index) => {
+                    const image = document.createElement('img');
+                    image.className = 'modal-image';
+                    image.src = source;
+                    image.alt = `${product.title || 'Ürün görseli'}, görsel ${index + 1}`;
+                    modalGalleryTrack.appendChild(image);
+                    const dot = document.createElement('i');
+                    dot.className = `gallery-dot${index === selectedIndex ? ' active' : ''}`;
+                    modalGalleryDots.appendChild(dot);
+                });
+                modalPreviousButton.hidden = imageSources.length < 2;
+                modalNextButton.hidden = imageSources.length < 2;
+                modalGalleryDots.hidden = imageSources.length < 2;
+                modalGalleryTrack.onscroll = () => {
+                    const activeIndex = Math.round(modalGalleryTrack.scrollLeft / modalGalleryTrack.clientWidth);
+                    modalGalleryDots.querySelectorAll('.gallery-dot').forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === activeIndex));
+                };
+                modalGalleryTrack.scrollLeft = selectedIndex * modalGalleryTrack.clientWidth;
                 modalKicker.textContent = `${brand} · Shopier ürünü`;
                 modalTitle.textContent = String(product.title || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
                 modalPrice.textContent = formatPrice(product.price);
@@ -1177,6 +1463,9 @@
                 document.body.style.overflow = 'hidden';
                 closeModalButton.focus();
             }
+
+            modalPreviousButton.addEventListener('click', () => modalGalleryTrack.scrollBy({ left: -modalGalleryTrack.clientWidth, behavior: 'smooth' }));
+            modalNextButton.addEventListener('click', () => modalGalleryTrack.scrollBy({ left: modalGalleryTrack.clientWidth, behavior: 'smooth' }));
 
             function closeProductModal(){
                 productModal.hidden = true;

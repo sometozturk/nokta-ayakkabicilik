@@ -50,7 +50,13 @@ async function extractProduct(page, url){
   const data = await page.evaluate(()=>{
     const getMeta = (name) => document.querySelector(`meta[property="${name}"]`)?.content || document.querySelector(`meta[name="${name}"]`)?.content || '';
     const title = getMeta('og:title') || document.title || '';
-    const image = getMeta('og:image') || document.querySelector('img')?.src || '';
+    const images = Array.from(document.querySelectorAll('meta[property="og:image"], img[src], img[data-src], img[data-lazy-src]'))
+      .map(element => element.content || element.src || element.dataset.src || element.dataset.lazySrc || '')
+      .filter(image => /\/pictures_(large|small)\//i.test(image))
+      .filter((image, index, all) => image && all.indexOf(image) === index);
+    const largeImages = images.filter(image => /\/pictures_large\//i.test(image));
+    const selectedImages = largeImages.length ? largeImages : images;
+    const image = selectedImages[0] || '';
     let price = '';
     const p1 = document.querySelector('[itemprop="price"]');
     if(p1) price = p1.getAttribute('content') || p1.textContent || '';
@@ -58,7 +64,7 @@ async function extractProduct(page, url){
       const priceEl = Array.from(document.querySelectorAll('*')).find(n=>/\d+\s*TL/i.test(n.textContent || ''));
       if(priceEl) price = (priceEl.textContent.match(/\d[\d\.\,\s]*TL/i)||[''])[0];
     }
-    return { title, image, price };
+    return { title, image, images: selectedImages, price };
   });
   return data;
 }
@@ -90,7 +96,7 @@ async function extractProduct(page, url){
             console.error('Image save failed', err.message);
           }
         }
-        products.push({ id: idx, title: p.title, price: p.price, image: p.image, filename, url });
+        products.push({ id: idx, title: p.title, price: p.price, image: p.image, images: p.images, filename, url });
         idx++;
       }catch(e){ console.error('Failed product', url, e.message); }
     }
