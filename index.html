@@ -985,6 +985,10 @@
                 const mode = sortSelect.value;
                 const sorted = [...visibleCards].sort((a, b) => {
                     if(mode === 'default'){
+                        const brandPriorityA = (a.dataset.brand || '') === 'nike' ? 0 : 1;
+                        const brandPriorityB = (b.dataset.brand || '') === 'nike' ? 0 : 1;
+                        if(brandPriorityA !== brandPriorityB) return brandPriorityA - brandPriorityB;
+
                         const modelA = getModelFamily(a.dataset.title || '');
                         const modelB = getModelFamily(b.dataset.title || '');
                         if(modelA !== modelB) return modelA.localeCompare(modelB, 'tr-TR');
