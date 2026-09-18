@@ -1008,7 +1008,7 @@
                     const pb = parseFloat(b.dataset.price) || 0;
                     return mode === 'price-asc' ? pa - pb : pb - pa;
                 });
-                if(mode !== 'default' || query) sorted.forEach(card => grid.appendChild(card));
+                sorted.forEach(card => grid.appendChild(card));
             }
 
             search.addEventListener('input', () => {
