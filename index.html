@@ -832,6 +832,14 @@
                 const normalized = normalizeText(title);
                 if(!normalized) return 'other';
 
+                const preferredFamilyOrder = [
+                    'nike court borough mid 2 black white',
+                    'nike air force 1 mid bilekli',
+                    'nike court borough mid black'
+                ];
+                const preferredFamily = preferredFamilyOrder.findIndex(item => normalized.includes(item));
+                if(preferredFamily !== -1) return `preferred-${String(preferredFamily).padStart(2, '0')}`;
+
                 const familyMatchers = [
                     'dunk', 'campus', 'vans', 'old skool', 'air max', 'air force', 'superstar',
                     'blazer', 'gazelle', 'samba', 'ultra boost', 'yeezy', 'new balance', 'jordan', 'prada'
