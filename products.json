@@ -539,7 +539,7 @@
   },
   {
     "id": 46,
-    "title": "Nike Zoom X (36-45)",
+    "title": "Nike Zoom X Black (36-45)",
     "price": "1200",
     "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_e7e4f406ba798f143ce521c16568f01c.png",
     "images": [
@@ -675,5 +675,182 @@
     ],
     "filename": "57.jpeg",
     "url": "https://www.shopier.com/noktaayakkabi/50853560"
+  },
+  {
+    "id": 58,
+    "title": "Prada High Taban (36-44)",
+    "price": "1560",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_3567039da005c7fc2b8068d3f00b73be.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_3567039da005c7fc2b8068d3f00b73be.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_3ad2d442c929827c8525145826dc7f97.jpeg"
+    ],
+    "filename": "58.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51013740"
+  },
+  {
+    "id": 59,
+    "title": "Nike Court Borough Mid Black (36-44)",
+    "price": "2099",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_75415c8d5072cc3fbad1122f5cbaaa7f.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_75415c8d5072cc3fbad1122f5cbaaa7f.jpeg"
+    ],
+    "filename": "59.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51013379"
+  },
+  {
+    "id": 60,
+    "title": "Nike Air Zoom White (36-44)",
+    "price": "3099",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_9769306b5b00300115b74a3f01c30307.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_9769306b5b00300115b74a3f01c30307.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_389973ce70d7515f4acd842b971c2d8d.jpeg"
+    ],
+    "filename": "60.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51013201"
+  },
+  {
+    "id": 61,
+    "title": "Nike Zoom X White (36-44)",
+    "price": "1200",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_fcbeb881e9174add684511c02e519ee0.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_fcbeb881e9174add684511c02e519ee0.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_53f26da174f1a8eb08b5f7afce4095c9.jpeg"
+    ],
+    "filename": "61.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51012704"
+  },
+  {
+    "id": 62,
+    "title": "Adidas Duramo Lightstrike Black (36-44)",
+    "price": "2450",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_27d131d7fd97f824c153041fb3850bd8.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_27d131d7fd97f824c153041fb3850bd8.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_2c86a5026a25cac9b1f36fc5c304614f.jpeg"
+    ],
+    "filename": "62.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51012336"
+  },
+  {
+    "id": 63,
+    "title": "Adidas Duramo Lightstrike White (36-44)",
+    "price": "2450",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_2ef8828675581ff1e5ae8bdf008cfbb4.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_2ef8828675581ff1e5ae8bdf008cfbb4.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_d3863ee9ce92dc9405f8706712c15a36.jpeg"
+    ],
+    "filename": "63.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51012127"
+  },
+  {
+    "id": 64,
+    "title": "Prada Elite (40-44)",
+    "price": "2350",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_72ca030bc117893dd69f607c1a494969.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_72ca030bc117893dd69f607c1a494969.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_745415049c2094236fc0589d5bdf6b60.jpeg"
+    ],
+    "filename": "64.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51011917"
+  },
+  {
+    "id": 65,
+    "title": "Adidas Neo Entrap (36-44)",
+    "price": "1500",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_61d62149e3e697aa51bc8edffcbc773c.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_61d62149e3e697aa51bc8edffcbc773c.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_1bb6c89a87a6bee94dc6efd8a9177c5d.jpeg"
+    ],
+    "filename": "65.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51009727"
+  },
+  {
+    "id": 66,
+    "title": "Nike AirJordan1 White-Blue",
+    "price": "1400",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_2987a7be82f463d9b6aeecceee01b258.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_2987a7be82f463d9b6aeecceee01b258.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_547cf3e8b492bbf04e51751a4e86e87b.jpeg"
+    ],
+    "filename": "66.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51009589"
+  },
+  {
+    "id": 67,
+    "title": "Nike Air Force 1 Mid Bilekli (36-44)",
+    "price": "2099",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_0ce4e9ddde176a3c9b6f5db8c3071f00.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_0ce4e9ddde176a3c9b6f5db8c3071f00.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_29e924beb07e5b444eafcc59eb955157.jpeg"
+    ],
+    "filename": "67.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51009454"
+  },
+  {
+    "id": 68,
+    "title": "Nike Court Borough Mid 2 Black-White",
+    "price": "2099",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_56a6be147ac551e8423e74dfb007ca30.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_56a6be147ac551e8423e74dfb007ca30.jpeg"
+    ],
+    "filename": "68.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51009335"
+  },
+  {
+    "id": 69,
+    "title": "Nike Air Jordan 1 Low x Travis Scott Black",
+    "price": "1249",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_057cdb1448cb03dc6f8f9631472c6e03.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_057cdb1448cb03dc6f8f9631472c6e03.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_f09a641cfee9d3053896ecdbada57bba.jpg"
+    ],
+    "filename": "69.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51008327"
+  },
+  {
+    "id": 70,
+    "title": "Nike Airforce1 White-Black Swoosh Kırışık Deri (36-44)",
+    "price": "1400",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_395b5180637e576b5332a946ff487fe1.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_395b5180637e576b5332a946ff487fe1.jpeg"
+    ],
+    "filename": "70.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51008200"
+  },
+  {
+    "id": 71,
+    "title": "Nike Dunk Low Pro White-Blue (36-44)",
+    "price": "1249",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_996dcad8dff963457bceb4c90f42a913.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_996dcad8dff963457bceb4c90f42a913.jpeg",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_f0e60009dacfc25c511d1f83da247fc1.jpg"
+    ],
+    "filename": "71.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51008091"
+  },
+  {
+    "id": 72,
+    "title": "Nike Jordan White (36-44)",
+    "price": "1400",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_89fd0fe887ce2a28aa369b8d21aaac25.png",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_89fd0fe887ce2a28aa369b8d21aaac25.png",
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_62132ad88200731695d862353380d7b5.png"
+    ],
+    "filename": "72.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/51007823"
   }
 ]

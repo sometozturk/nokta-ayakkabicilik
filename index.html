@@ -633,7 +633,7 @@
 
             const grid = document.getElementById('urun-izgarasi');
             const total = PRODUCTS.length;
-            const knownBrands = ['Nike', 'Adidas', 'Lacoste', 'Lufian', 'Calvin Klein', 'Alexander Mcqueen', 'Goldengoose'];
+            const knownBrands = ['Nike', 'Adidas', 'Lacoste', 'Lufian', 'Calvin Klein', 'Alexander Mcqueen', 'Goldengoose', 'Prada'];
             function getBrand(title){
                 const normalizedTitle = title.toLocaleLowerCase('tr-TR');
                 return knownBrands.find(brand => normalizedTitle.startsWith(brand.toLocaleLowerCase('tr-TR'))) || title.split(' ')[0];
@@ -834,7 +834,7 @@
 
                 const familyMatchers = [
                     'dunk', 'campus', 'vans', 'old skool', 'air max', 'air force', 'superstar',
-                    'blazer', 'gazelle', 'samba', 'ultra boost', 'yeezy', 'new balance', 'jordan'
+                    'blazer', 'gazelle', 'samba', 'ultra boost', 'yeezy', 'new balance', 'jordan', 'prada'
                 ];
 
                 const match = familyMatchers.find(item => normalized.includes(item));
