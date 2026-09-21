@@ -270,7 +270,7 @@
     .header-links a{color:var(--ink);}
     .header-links .ig{color:var(--muted);}
     .header-links a:hover,.header-links .ig:hover{color:var(--accent);border-color:var(--accent);}
-    .hero{grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);padding-top:76px;padding-bottom:88px;}
+    .hero{grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);padding-top:76px;padding-bottom:0;}
     .hero-eyebrow{color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-size:11px;}
     .hero-eyebrow .dot{background:var(--accent);}
     h1{color:var(--ink);font-size:clamp(44px,6vw,78px);line-height:.98;}
@@ -285,7 +285,7 @@
     .hero-collage .c1,.hero-collage .c2,.hero-collage .c3{width:100%;left:auto;right:auto;top:auto;bottom:auto;z-index:auto;}
     .hero-logo-display{min-height:360px;display:flex;align-items:center;justify-content:center;}
     .hero-logo-display .hero-logo{width:min(82%,420px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:invert(1);}
-    .hero{position:relative;height:145vh;min-height:0;align-items:start;}
+    .hero{position:relative;height:calc(100vh + 45vh);min-height:0;align-items:start;}
     .hero > div:first-child{position:sticky;top:132px;padding-top:76px;}
     .hero-logo-display{position:sticky;top:78px;min-height:calc(100vh - 126px);height:calc(100vh - 126px);overflow:visible;perspective:1200px;transform:translateX(-120px);}
     .hero-logo-display{display:flex;grid-template-columns:none;align-items:center;justify-content:center;}
@@ -360,8 +360,8 @@
         .brand-filter-row .search-wrap,.brand-filter-row .sort{flex:1 1 0;min-width:0;}
     }
     @media (max-width:640px){
-        .hero{padding-top:46px;padding-bottom:48px;}
-        .hero{height:155vh;min-height:0;}
+        .hero{padding-top:46px;padding-bottom:0;}
+        .hero{height:calc(100vh + 55vh);min-height:0;}
         .hero-logo-display{top:72px;min-height:64vh;height:64vh;}
         .hero-logo-display .shoe-frame{width:100%;margin-left:0;}
         .shoe-progress{right:0;bottom:18%;font-size:9px;}
@@ -609,8 +609,9 @@
         }
         let lastFrame = 0;
         const updateShoe = () => {
+            const heroStart = hero.getBoundingClientRect().top + window.scrollY;
             const range = Math.max(hero.offsetHeight - window.innerHeight, 1);
-            const progress = Math.min(1, Math.max(0, window.scrollY / range));
+            const progress = Math.min(1, Math.max(0, (window.scrollY - heroStart) / range));
             hero.style.setProperty('--shoe-progress', progress.toFixed(3));
             const entranceProgress = Math.min(1, Math.max(0, progress / .45));
             const assemblyProgress = Math.min(1, Math.max(0, (progress - .45) / .55));
