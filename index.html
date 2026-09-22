@@ -291,7 +291,7 @@
     .hero-logo-display{display:flex;grid-template-columns:none;align-items:center;justify-content:center;}
     .hero-logo-display .shoe-frame{position:relative;inset:auto;display:block;width:min(100%,470px);height:auto;aspect-ratio:16/9;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:none;transform:translateY(190px) scale(.82)!important;opacity:0;}
     .hero-logo-display .hero-brand-lockup{position:absolute;left:50%;bottom:27%;width:min(42%,175px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent!important;border:0;box-shadow:none;transform:translateX(-50%)!important;opacity:.92;filter:brightness(0) invert(1);}
-    .hero-logo-display .hero-center-logo{position:absolute;left:75%;top:24%;z-index:2;width:min(42%,420px);height:auto;transform:translate(-50%,-50%);opacity:.92;filter:brightness(0) invert(1);}
+    .hero-logo-display .hero-center-logo{position:absolute;left:32%;top:72%;z-index:2;width:min(42%,420px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent!important;border:0;box-shadow:none;transform:translate(-50%,-50%);opacity:.92;filter:invert(1);mix-blend-mode:normal;}
     .shoe-caption{position:absolute;right:12%;top:15%;display:flex;flex-direction:column;gap:8px;text-align:right;transform:none;opacity:1;}
     .shoe-caption strong{color:var(--ink);font:650 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;}
     .shoe-caption span{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
@@ -373,8 +373,9 @@
         .hero{padding-top:46px;padding-bottom:0;height:calc(100vh + 20vh);min-height:0;}
         .hero > div:first-child{position:relative;top:auto;height:auto;padding-top:0;transform:none;}
         .hero-logo-display{position:sticky;top:84px;min-height:56vh;height:56vh;margin-top:34px;transform:translateY(var(--shoe-lift,0px));}
-        .hero-logo-display .shoe-frame{width:94%;margin-left:0;}
-        .hero-logo-display .hero-center-logo{left:50%;top:18%;width:min(58%,240px);z-index:4;}
+        .hero-logo-display .shoe-frame{width:94%;margin-left:0;background:transparent;}
+        .hero-logo-display .shoe-frame[src$="frame-001.webp"]{visibility:hidden;}
+        .hero-logo-display .hero-center-logo{display:none;}
         .shoe-progress{right:0;bottom:18%;font-size:9px;}
     }
 
