@@ -296,6 +296,8 @@
     .shoe-caption strong{color:var(--ink);font:650 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;}
     .shoe-caption span{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
     .shoe-caption em{color:var(--accent);font:560 25px/1 'Fraunces',serif;font-style:normal;}
+    .try-on-button{position:absolute;right:12%;bottom:8%;z-index:5;border:1px solid var(--accent);padding:11px 15px;background:var(--accent);color:#fff;font:700 11px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 10px 22px rgba(227,75,53,.2);transition:transform .2s ease,background .2s ease;}
+    .try-on-button:hover{background:#f05a43;transform:translateY(-2px);}
     .shoe-description{position:absolute;left:-175px;top:43%;width:150px;display:flex;flex-direction:column;gap:9px;color:var(--muted);opacity:0;}
     .shoe-description strong{color:var(--ink);font:560 23px/1.02 'Fraunces',serif;}
     .shoe-description span{font-size:11px;line-height:1.55;}
@@ -407,6 +409,32 @@
     .modal-price{margin:0 0 14px;font:650 24px 'Fraunces',serif;}
     .modal-size{margin:0 0 24px;color:#655b52;font-size:13px;line-height:1.6;}
     .modal-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+    .tryon-modal{position:relative;width:min(900px,100%);max-height:min(820px,calc(100vh - 32px));overflow:auto;background:#f8f4ec;color:#191715;box-shadow:0 30px 80px rgba(0,0,0,.45);padding:34px;}
+    .tryon-heading{margin:0 0 8px;font:560 32px/1.05 'Fraunces',serif;}
+    .tryon-lead{margin:0 0 22px;color:#655b52;font-size:13px;line-height:1.6;}
+    .tryon-key{display:flex;gap:8px;margin:0 0 16px;}
+    .tryon-key input{width:100%;min-width:0;border:1px solid rgba(25,23,21,.18);padding:12px 13px;background:#fff;color:#191715;font:12px 'DM Sans',sans-serif;outline:none;}
+    .tryon-key input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(227,75,53,.12);}
+    .tryon-key-note{margin:-8px 0 16px;color:#8b8177;font-size:11px;line-height:1.5;}
+    .tryon-input{display:flex;align-items:center;justify-content:center;min-height:110px;border:1px dashed rgba(25,23,21,.35);background:#eee7dc;color:#191715;cursor:pointer;text-align:center;font-size:13px;font-weight:700;}
+    .tryon-input input{position:absolute;width:1px;height:1px;opacity:0;}
+    .tryon-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:20px;}
+    .tryon-panel{display:flex;flex-direction:column;min-width:0;gap:8px;}
+    .tryon-panel-label{color:#8b8177;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+    .tryon-preview-frame,.tryon-result{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;aspect-ratio:4/5;overflow:hidden;border:1px solid rgba(25,23,21,.12);}
+    .tryon-preview-frame{background:#eee7dc;}
+    .tryon-preview{display:none;width:100%;height:100%;object-fit:cover;background:#ddd2c2;}
+    .tryon-preview-frame.has-image .tryon-preview{display:block;}
+    .tryon-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px;color:#8b8177;text-align:center;font-size:12px;line-height:1.5;}
+    .tryon-empty::before{content:'+';display:grid;place-items:center;width:38px;height:38px;border:1px solid rgba(25,23,21,.25);border-radius:50%;font:400 24px/1 'DM Sans',sans-serif;color:var(--accent);}
+    .tryon-preview-frame.has-image .tryon-empty{display:none;}
+    .tryon-result{background:#1b1b1b;}
+    .tryon-result.has-result .tryon-empty{display:none;}
+    .tryon-result canvas{display:block;width:100%;height:100%;object-fit:contain;}
+    .tryon-status{margin:14px 0 0;color:#655b52;font-size:12px;}
+    .tryon-actions{display:flex;gap:10px;align-items:center;margin-top:18px;}
+    .tryon-download{display:none;text-decoration:none;}
+    .tryon-download.is-ready{display:inline-flex;}
     .modal-shopier{display:inline-flex;margin:0!important;width:auto!important;}
     .floating-contact{position:fixed;right:18px;bottom:18px;z-index:40;display:inline-flex;align-items:center;gap:10px;padding:12px 16px;background:linear-gradient(135deg,#fdf2f8,#ffffff);color:#111827;border:1px solid rgba(17,24,39,.08);border-radius:999px;box-shadow:0 10px 24px rgba(0,0,0,.18);font-size:12px;font-weight:700;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease;}
     .floating-contact:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,0,0,.22);}
@@ -420,6 +448,10 @@
         .modal-image{height:280px;min-height:0;}
         .modal-content{padding:26px 22px 30px;}
         .modal-title{font-size:27px;}
+        .tryon-modal{padding:26px 18px;}
+        .tryon-heading{font-size:27px;}
+        .tryon-stage{grid-template-columns:1fr;}
+        .try-on-button{right:50%;bottom:5%;transform:translateX(50%);white-space:nowrap;}
         .floating-contact{right:12px;bottom:12px;padding:10px 12px;gap:8px;font-size:11px;}
         .floating-contact .ig-icon{width:18px;height:18px;}
         .floating-contact .ig-icon svg{width:10px;height:10px;}
@@ -479,6 +511,7 @@
                 <em>01</em>
                 <span id="shoe-caption-state">parçalar ayrık</span>
             </div>
+            <button class="try-on-button" id="try-on-open" type="button">Kombininde Dene</button>
             <span class="shoe-progress" aria-hidden="true">birleşiyor</span>
         </div>
     </section>
@@ -591,6 +624,192 @@
         </div>
     </section>
 </div>
+
+<div class="modal-backdrop" id="tryon-modal" hidden>
+    <section class="tryon-modal" role="dialog" aria-modal="true" aria-labelledby="tryon-title">
+        <button class="modal-close" id="tryon-close" type="button" aria-label="Kombin denemeyi kapat">&times;</button>
+        <h2 class="tryon-heading" id="tryon-title">Kombininde Dene</h2>
+        <p class="tryon-lead">Bir fotoğraf seç; Air Force 1'i fotoğrafının üzerine yerleştirip sonucu cihazında hazırlayalım.</p>
+        <p class="tryon-key-note">Fotoğrafın güvenli Firebase bağlantısı üzerinden AI servisine gönderilir ve işlem tamamlanınca saklanmaz.</p>
+        <label class="tryon-input" for="tryon-file">
+            <input id="tryon-file" type="file" accept="image/*">
+            <span>Galeriden fotoğraf seç</span>
+        </label>
+        <div class="tryon-stage">
+            <div class="tryon-panel">
+                <span class="tryon-panel-label">Senin fotoğrafın</span>
+                <div class="tryon-preview-frame" id="tryon-preview-frame">
+                    <span class="tryon-empty">Fotoğraf seçtiğinde önizlemen burada görünecek.</span>
+                    <img class="tryon-preview" id="tryon-preview" alt="Seçilen fotoğraf önizlemesi">
+                </div>
+            </div>
+            <div class="tryon-panel">
+                <span class="tryon-panel-label">AI kombin sonucu</span>
+                <div class="tryon-result"><canvas id="tryon-canvas" aria-label="Air Force 1 kombin sonucu"></canvas><span class="tryon-empty">AI sonucu burada görünecek.</span></div>
+            </div>
+        </div>
+        <p class="tryon-status" id="tryon-status">Fotoğraf seçildiğinde önizleme burada oluşur.</p>
+        <div class="tryon-actions">
+            <a class="btn-primary tryon-download" id="tryon-download" download="nokta-air-force-kombin.png">Sonucu indir</a>
+            <button class="product-open" id="tryon-reset" type="button">Başka fotoğraf seç</button>
+        </div>
+    </section>
+</div>
+
+<script>
+    (() => {
+        const modal = document.getElementById('tryon-modal');
+        const openButton = document.getElementById('try-on-open');
+        const closeButton = document.getElementById('tryon-close');
+        const resetButton = document.getElementById('tryon-reset');
+        const fileInput = document.getElementById('tryon-file');
+        const preview = document.getElementById('tryon-preview');
+        const previewFrame = document.getElementById('tryon-preview-frame');
+        const resultFrame = document.querySelector('.tryon-result');
+        const canvas = document.getElementById('tryon-canvas');
+        const status = document.getElementById('tryon-status');
+        const download = document.getElementById('tryon-download');
+        const shoeSource = 'assets/air-force-sharp-webp/ezgif-frame-121.webp';
+        const tryOnEndpoint = 'https://us-central1-nokta-ayakkabicilik-ai-1453.cloudfunctions.net/tryOn';
+        let photoUrl = '';
+
+        const closeTryOn = () => {
+            modal.hidden = true;
+            document.body.style.overflow = '';
+        };
+        const openTryOn = () => {
+            modal.hidden = false;
+            modal.scrollTop = 0;
+            document.body.style.overflow = 'hidden';
+        };
+        const loadImage = source => new Promise((resolve, reject) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.onerror = reject;
+            image.src = source;
+        });
+        const cropShoe = image => {
+            const sourceCanvas = document.createElement('canvas');
+            sourceCanvas.width = image.naturalWidth;
+            sourceCanvas.height = image.naturalHeight;
+            const sourceContext = sourceCanvas.getContext('2d');
+            sourceContext.drawImage(image, 0, 0);
+            const pixels = sourceContext.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
+            const data = pixels.data;
+            let minX = sourceCanvas.width;
+            let minY = sourceCanvas.height;
+            let maxX = 0;
+            let maxY = 0;
+            for(let index = 0; index < data.length; index += 4){
+                const brightness = (data[index] + data[index + 1] + data[index + 2]) / 3;
+                if(brightness > 36){
+                    const pixel = index / 4;
+                    const x = pixel % sourceCanvas.width;
+                    const y = Math.floor(pixel / sourceCanvas.width);
+                    minX = Math.min(minX, x);
+                    minY = Math.min(minY, y);
+                    maxX = Math.max(maxX, x);
+                    maxY = Math.max(maxY, y);
+                }
+            }
+            if(maxX <= minX || maxY <= minY) return sourceCanvas;
+            const cropped = document.createElement('canvas');
+            const padding = 12;
+            const left = Math.max(0, minX - padding);
+            const top = Math.max(0, minY - padding);
+            const right = Math.min(sourceCanvas.width, maxX + padding);
+            const bottom = Math.min(sourceCanvas.height, maxY + padding);
+            cropped.width = right - left;
+            cropped.height = bottom - top;
+            const croppedContext = cropped.getContext('2d');
+            const croppedPixels = sourceContext.getImageData(left, top, cropped.width, cropped.height);
+            for(let index = 0; index < croppedPixels.data.length; index += 4){
+                const brightness = (croppedPixels.data[index] + croppedPixels.data[index + 1] + croppedPixels.data[index + 2]) / 3;
+                if(brightness < 36) croppedPixels.data[index + 3] = 0;
+            }
+            croppedContext.putImageData(croppedPixels, 0, 0);
+            return cropped;
+        };
+        const imageToData = source => new Promise((resolve, reject) => {
+            const image = new Image();
+            image.onload = () => {
+                const temporary = document.createElement('canvas');
+                const scale = Math.min(1, 1400 / image.naturalWidth);
+                temporary.width = Math.round(image.naturalWidth * scale);
+                temporary.height = Math.round(image.naturalHeight * scale);
+                temporary.getContext('2d').drawImage(image, 0, 0, temporary.width, temporary.height);
+                resolve({base64:temporary.toDataURL('image/jpeg', .82).split(',')[1], mimeType:'image/jpeg'});
+            };
+            image.onerror = reject;
+            image.src = source;
+        });
+        const requestProfessionalTryOn = async source => {
+            const [person, shoe] = await Promise.all([imageToData(source), imageToData(shoeSource)]);
+            const response = await fetch(tryOnEndpoint, {
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({personImage:`data:${person.mimeType};base64,${person.base64}`,shoeImage:`data:${shoe.mimeType};base64,${shoe.base64}`})
+            });
+            const result = await response.json();
+            if(!response.ok) throw new Error(`AI servisi hata verdi (${result.providerStatus || response.status})`);
+            if(!result.imageUrl) throw new Error('AI result is missing.');
+            return result.imageUrl;
+        };
+        const renderTryOn = async (source, placement = null) => {
+            status.textContent = placement ? 'AI yerleşimi uygulanıyor...' : 'Kombin hazırlanıyor...';
+            const [person, shoe] = await Promise.all([loadImage(source), loadImage(shoeSource)]);
+            const ratio = person.naturalWidth / person.naturalHeight;
+            canvas.width = 720;
+            canvas.height = Math.round(canvas.width / ratio);
+            const context = canvas.getContext('2d');
+            context.drawImage(person, 0, 0, canvas.width, canvas.height);
+            const isolatedShoe = cropShoe(shoe);
+            const target = placement && placement.width > 0 ? placement : {x:.14,y:.67,width:.72,height:.22};
+            const shoeWidth = Math.round(canvas.width * Math.min(.86, Math.max(.36, target.width * 1.3)));
+            const shoeHeight = Math.round(shoeWidth * isolatedShoe.height / isolatedShoe.width);
+            const shoeX = placement ? Math.round((target.x + target.width / 2) * canvas.width - shoeWidth / 2) : Math.round((canvas.width - shoeWidth) / 2);
+            const shoeY = placement ? Math.round((target.y + target.height) * canvas.height - shoeHeight * .78) : Math.max(0, canvas.height - shoeHeight - Math.round(canvas.height * .08));
+            context.globalAlpha = .96;
+            context.drawImage(isolatedShoe, shoeX, shoeY, shoeWidth, shoeHeight);
+            context.globalAlpha = 1;
+            preview.src = source;
+            download.href = canvas.toDataURL('image/png');
+            download.classList.add('is-ready');
+            previewFrame.classList.add('has-image');
+            resultFrame.classList.add('has-result');
+            status.textContent = placement ? 'AI ayak bölgesini buldu ve Air Force 1 bu konuma yerleştirildi.' : 'Yerel önizleme hazır. AI servisi kullanılamadığı için demo sonucu gösterildi.';
+        };
+        const renderRemoteResult = async imageUrl => {
+            const result = await loadImage(imageUrl);
+            canvas.width = result.naturalWidth || 720;
+            canvas.height = result.naturalHeight || 900;
+            canvas.getContext('2d').drawImage(result, 0, 0, canvas.width, canvas.height);
+            preview.src = photoUrl;
+            download.href = imageUrl;
+            download.classList.add('is-ready');
+            previewFrame.classList.add('has-image');
+            resultFrame.classList.add('has-result');
+            status.textContent = 'AI kombin sonucu hazır. Fotoğraf cihazında saklanır; sunucuda tutulmaz.';
+        };
+        openButton.addEventListener('click', openTryOn);
+        closeButton.addEventListener('click', closeTryOn);
+        modal.addEventListener('click', event => { if(event.target === modal) closeTryOn(); });
+        resetButton.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if(!file) return;
+            if(photoUrl) URL.revokeObjectURL(photoUrl);
+            photoUrl = URL.createObjectURL(file);
+            status.textContent = 'AI kombin sonucu hazırlanıyor...';
+            requestProfessionalTryOn(photoUrl)
+                .then(renderRemoteResult)
+                .catch(error => {
+                    download.classList.remove('is-ready');
+                    status.textContent = `${error.message}. AI sonucu üretilemedi; yerel demo gösterilmedi.`;
+                });
+        });
+    })();
+</script>
 
 <script>
     (() => {
