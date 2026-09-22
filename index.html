@@ -296,7 +296,8 @@
     .shoe-caption strong{color:var(--ink);font:650 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;}
     .shoe-caption span{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
     .shoe-caption em{color:var(--accent);font:560 25px/1 'Fraunces',serif;font-style:normal;}
-    .try-on-button{position:absolute;right:12%;bottom:8%;z-index:5;border:1px solid var(--accent);padding:11px 15px;background:var(--accent);color:#fff;font:700 11px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 10px 22px rgba(227,75,53,.2);transition:transform .2s ease,background .2s ease;}
+    .try-on-button{position:absolute;right:12%;bottom:8%;z-index:5;border:1px solid var(--accent);padding:11px 15px;background:var(--accent);color:#fff;font:700 11px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 10px 22px rgba(227,75,53,.2);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .2s ease,background .2s ease;}
+    .try-on-button.is-visible{opacity:1;pointer-events:auto;}
     .try-on-button:hover{background:#f05a43;transform:translateY(-2px);}
     .shoe-description{position:absolute;left:-175px;top:43%;width:150px;display:flex;flex-direction:column;gap:9px;color:var(--muted);opacity:0;}
     .shoe-description strong{color:var(--ink);font:560 23px/1.02 'Fraunces',serif;}
@@ -430,7 +431,14 @@
     .tryon-preview-frame.has-image .tryon-empty{display:none;}
     .tryon-result{background:#1b1b1b;}
     .tryon-result.has-result .tryon-empty{display:none;}
+    .tryon-result>.tryon-empty{position:absolute;inset:0;justify-content:center;width:100%;text-align:center;}
     .tryon-result canvas{display:block;width:100%;height:100%;object-fit:contain;}
+    .tryon-loading{display:none;flex-direction:column;align-items:center;gap:12px;color:#f8f4ec;font-size:12px;text-align:center;}
+    .tryon-loading.is-active{display:flex;}
+    .tryon-spinner{width:34px;height:34px;border:3px solid rgba(248,244,236,.25);border-top-color:var(--accent);border-radius:50%;animation:tryonSpin .8s linear infinite;}
+    @keyframes tryonSpin{to{transform:rotate(360deg);}}
+    .tryon-create{margin-top:18px;}
+    .tryon-create:disabled{cursor:not-allowed;opacity:.45;transform:none;box-shadow:none;}
     .tryon-status{margin:14px 0 0;color:#655b52;font-size:12px;}
     .tryon-actions{display:flex;gap:10px;align-items:center;margin-top:18px;}
     .tryon-download{display:none;text-decoration:none;}
@@ -645,11 +653,16 @@
             </div>
             <div class="tryon-panel">
                 <span class="tryon-panel-label">AI kombin sonucu</span>
-                <div class="tryon-result"><canvas id="tryon-canvas" aria-label="Air Force 1 kombin sonucu"></canvas><span class="tryon-empty">AI sonucu burada görünecek.</span></div>
+                <div class="tryon-result">
+                    <canvas id="tryon-canvas" aria-label="Air Force 1 kombin sonucu"></canvas>
+                    <span class="tryon-empty">Fotoğrafı oluştur butonuna bastığında AI sonucu burada görünecek.</span>
+                    <span class="tryon-loading" id="tryon-loading"><i class="tryon-spinner" aria-hidden="true"></i><span>AI fotoğrafı hazırlanıyor...</span></span>
+                </div>
             </div>
         </div>
         <p class="tryon-status" id="tryon-status">Fotoğraf seçildiğinde önizleme burada oluşur.</p>
         <div class="tryon-actions">
+            <button class="btn-primary tryon-create" id="tryon-create" type="button" disabled>Fotoğrafı oluştur</button>
             <a class="btn-primary tryon-download" id="tryon-download" download="nokta-air-force-kombin.png">Sonucu indir</a>
             <button class="product-open" id="tryon-reset" type="button">Başka fotoğraf seç</button>
         </div>
@@ -666,6 +679,8 @@
         const preview = document.getElementById('tryon-preview');
         const previewFrame = document.getElementById('tryon-preview-frame');
         const resultFrame = document.querySelector('.tryon-result');
+        const createButton = document.getElementById('tryon-create');
+        const loading = document.getElementById('tryon-loading');
         const canvas = document.getElementById('tryon-canvas');
         const status = document.getElementById('tryon-status');
         const download = document.getElementById('tryon-download');
@@ -777,6 +792,8 @@
             download.classList.add('is-ready');
             previewFrame.classList.add('has-image');
             resultFrame.classList.add('has-result');
+            loading.classList.remove('is-active');
+            createButton.disabled = false;
             status.textContent = placement ? 'AI ayak bölgesini buldu ve Air Force 1 bu konuma yerleştirildi.' : 'Yerel önizleme hazır. AI servisi kullanılamadığı için demo sonucu gösterildi.';
         };
         const renderRemoteResult = async imageUrl => {
@@ -789,24 +806,41 @@
             download.classList.add('is-ready');
             previewFrame.classList.add('has-image');
             resultFrame.classList.add('has-result');
+            loading.classList.remove('is-active');
+            createButton.disabled = false;
             status.textContent = 'AI kombin sonucu hazır. Fotoğraf cihazında saklanır; sunucuda tutulmaz.';
         };
         openButton.addEventListener('click', openTryOn);
         closeButton.addEventListener('click', closeTryOn);
         modal.addEventListener('click', event => { if(event.target === modal) closeTryOn(); });
         resetButton.addEventListener('click', () => fileInput.click());
+        createButton.addEventListener('click', () => {
+            if(!photoUrl || createButton.disabled) return;
+            createButton.disabled = true;
+            download.classList.remove('is-ready');
+            resultFrame.classList.remove('has-result');
+            loading.classList.add('is-active');
+            status.textContent = 'AI fotoğrafı hazırlanıyor...';
+            requestProfessionalTryOn(photoUrl)
+                .then(renderRemoteResult)
+                .catch(error => {
+                    loading.classList.remove('is-active');
+                    createButton.disabled = false;
+                    status.textContent = `${error.message}. AI sonucu üretilemedi.`;
+                });
+        });
         fileInput.addEventListener('change', () => {
             const file = fileInput.files[0];
             if(!file) return;
             if(photoUrl) URL.revokeObjectURL(photoUrl);
             photoUrl = URL.createObjectURL(file);
-            status.textContent = 'AI kombin sonucu hazırlanıyor...';
-            requestProfessionalTryOn(photoUrl)
-                .then(renderRemoteResult)
-                .catch(error => {
-                    download.classList.remove('is-ready');
-                    status.textContent = `${error.message}. AI sonucu üretilemedi; yerel demo gösterilmedi.`;
-                });
+            preview.src = photoUrl;
+            previewFrame.classList.add('has-image');
+            resultFrame.classList.remove('has-result');
+            loading.classList.remove('is-active');
+            download.classList.remove('is-ready');
+            createButton.disabled = false;
+            status.textContent = 'Fotoğraf hazır. Sonucu oluşturmak için butona bas.';
         });
     })();
 </script>
@@ -818,6 +852,7 @@
         const captionState = document.getElementById('shoe-caption-state');
         const shoeDescription = document.getElementById('shoe-description');
         const centerLogo = document.querySelector('.hero-center-logo');
+        const tryOnOpenButton = document.getElementById('try-on-open');
         const shoeCaption = document.querySelector('.shoe-caption');
         const shoeProgress = document.querySelector('.shoe-progress');
         const collection = document.getElementById('urunler');
@@ -856,6 +891,9 @@
             if(centerLogo){
                 centerLogo.style.opacity = (1 - centerProgress).toFixed(3);
                 centerLogo.style.setProperty('transform', `translate(-50%, calc(-50% - ${Math.round(introProgress * 150)}px))`, 'important');
+            }
+            if(tryOnOpenButton){
+                tryOnOpenButton.classList.toggle('is-visible', centerProgress > 0);
             }
             frameImage.style.opacity = centerProgress > 0 ? '1' : '0';
             frameImage.style.setProperty('transform', `translateY(${Math.round((1 - centerProgress) * 190)}px) scale(${(.78 + centerProgress * .22).toFixed(3)})`, 'important');
