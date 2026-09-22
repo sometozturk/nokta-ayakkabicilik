@@ -152,6 +152,18 @@
     .toolbar-label{font-size:14px;color:var(--muted);}
     .toolbar-label strong{color:var(--ink);font-family:'Fraunces',serif;font-size:16px;}
     .collection-heading{margin:0 0 14px;font:560 24px/1.15 'Fraunces',serif;color:var(--ink);}
+    .collection-showcase{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:42px;margin:8px 0 30px;padding:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+    .collection-showcase-copy{max-width:460px;}
+    .collection-kicker{margin:0 0 12px;color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;}
+    .collection-showcase-copy .collection-heading{font-size:clamp(28px,3vw,42px);margin-bottom:14px;}
+    .collection-showcase-copy p:last-child{margin:0;color:var(--muted);font-size:14px;line-height:1.7;}
+    .collection-details{display:flex;flex-wrap:wrap;gap:8px 18px;margin:20px 0 0;padding:0;list-style:none;color:var(--ink);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
+    .collection-details li{display:flex;align-items:center;gap:7px;}
+    .collection-details li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);}
+    .collection-animation{position:relative;min-height:260px;display:grid;place-items:center;overflow:hidden;background:transparent;border:0;}
+    .collection-animation::before{content:none;}
+    .collection-animation::after{content:none;}
+    .collection-shoe-frame{position:relative;z-index:1;display:block;width:min(86%,430px);height:auto;aspect-ratio:16/9;object-fit:contain;filter:none;transform:translateY(18px) scale(.86);opacity:0;transition:opacity .25s ease;}
     .faq-section{margin:70px 0 0;padding-top:28px;border-top:1px solid var(--line);}
     .faq-section h2{margin:0 0 18px;font:560 26px/1.15 'Fraunces',serif;}
     .faq-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
@@ -238,6 +250,9 @@
         .header-links .ig{font-size:11px;}
         h1{letter-spacing:-.3px;}
         .toolbar{flex-direction:column;align-items:stretch;}
+        .collection-showcase{grid-template-columns:1fr;gap:22px;padding:22px 0;}
+        .collection-showcase-copy{max-width:none;}
+        .collection-animation{min-height:220px;}
         .toolbar-controls{flex-direction:column;}
         .brand-filter-row{display:grid;grid-template-columns:1fr;gap:10px;padding:12px 0;position:static;}
         .brand-filter-row .brand-filters{display:flex;flex-wrap:wrap;gap:6px;}
@@ -266,11 +281,11 @@
     }
     body{background:var(--paper);color:var(--ink);}
     header{background:rgba(21,21,21,.88);border-bottom:1px solid var(--line);}
-    .wordmark img{filter:brightness(0) invert(1);}
+    .wordmark img{filter:invert(1);}
     .header-links a{color:var(--ink);}
     .header-links .ig{color:var(--muted);}
     .header-links a:hover,.header-links .ig:hover{color:var(--accent);border-color:var(--accent);}
-    .hero{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);padding-top:64px;padding-bottom:0;gap:48px;}
+    .hero{grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);padding-top:76px;padding-bottom:88px;}
     .hero-eyebrow{color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-size:11px;}
     .hero-eyebrow .dot{background:var(--accent);}
     h1{color:var(--ink);font-size:clamp(44px,6vw,78px);line-height:.98;}
@@ -285,23 +300,6 @@
     .hero-collage .c1,.hero-collage .c2,.hero-collage .c3{width:100%;left:auto;right:auto;top:auto;bottom:auto;z-index:auto;}
     .hero-logo-display{min-height:360px;display:flex;align-items:center;justify-content:center;}
     .hero-logo-display .hero-logo{width:min(82%,420px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:invert(1);}
-    .hero{position:relative;height:calc(100vh + 20vh);min-height:0;align-items:start;}
-    .hero > div:first-child{position:sticky;top:112px;padding-top:64px;transform:translateY(var(--hero-lift,0px));}
-    .hero-logo-display{position:sticky;top:112px;min-height:320px;height:320px;overflow:visible;perspective:1200px;transform:translateY(var(--shoe-lift,0px));}
-    .hero-logo-display{display:flex;grid-template-columns:none;align-items:center;justify-content:center;}
-    .hero-logo-display .shoe-frame{position:relative;inset:auto;display:block;width:min(100%,470px);height:auto;aspect-ratio:16/9;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:none;transform:translateY(190px) scale(.82)!important;opacity:0;}
-    .hero-logo-display .hero-brand-lockup{position:absolute;left:50%;bottom:27%;width:min(42%,175px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent!important;border:0;box-shadow:none;transform:translateX(-50%)!important;opacity:.92;filter:brightness(0) invert(1);}
-    .hero-center-logo{position:absolute;left:75%;top:24%;z-index:2;width:min(42%,420px);height:auto;transform:translate(-50%,-50%);opacity:.92;filter:brightness(0) invert(1);}
-    .shoe-caption{position:absolute;right:12%;top:15%;display:flex;flex-direction:column;gap:8px;text-align:right;transform:none;opacity:1;}
-    .shoe-caption strong{color:var(--ink);font:650 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;}
-    .shoe-caption span{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
-    .shoe-caption em{color:var(--accent);font:560 25px/1 'Fraunces',serif;font-style:normal;}
-    .shoe-description{position:absolute;left:-175px;top:43%;width:150px;display:flex;flex-direction:column;gap:9px;color:var(--muted);opacity:0;}
-    .shoe-description strong{color:var(--ink);font:560 23px/1.02 'Fraunces',serif;}
-    .shoe-description span{font-size:11px;line-height:1.55;}
-    .shoe-description::before{content:'';width:34px;height:2px;background:var(--accent);margin-bottom:2px;}
-    .shoe-progress{position:absolute;right:2%;bottom:20%;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:10px;letter-spacing:.14em;text-transform:uppercase;writing-mode:vertical-rl;}
-    .shoe-progress::before{content:'';width:1px;height:54px;background:linear-gradient(var(--accent) calc(var(--shoe-progress) * 100%),var(--line) 0);}
     .hero-editorial{position:relative;min-height:360px;display:flex;flex-direction:column;justify-content:space-between;padding:30px 28px;background-image:linear-gradient(90deg,rgba(10,10,10,.9) 0%,rgba(10,10,10,.68) 48%,rgba(10,10,10,.3) 100%),url('5.jpeg');background-size:cover;background-position:center;border:1px solid rgba(245,239,228,.18);overflow:hidden;box-shadow:0 22px 44px rgba(0,0,0,.3);}
     .hero-editorial::before{content:'';position:absolute;inset:18px;border:1px solid rgba(245,239,228,.14);pointer-events:none;}
     .hero-editorial::after{content:'01';position:absolute;right:22px;bottom:12px;color:rgba(245,239,228,.12);font-family:'Fraunces',serif;font-size:clamp(86px,11vw,150px);font-weight:650;line-height:1;letter-spacing:-.08em;}
@@ -313,7 +311,6 @@
     .editorial-footer::before{content:'';width:42px;height:1px;background:var(--accent);}
     .nav,.hero,.container,.footer-inner,.footer-bottom div{width:calc(100% - 40px);max-width:none;}
     .container{padding-bottom:110px;}
-    .container#urunler{position:relative;z-index:2;background:var(--paper);transform:translateY(var(--collection-lift,60px));opacity:var(--collection-opacity,.7);}
     .toolbar{padding-top:42px;padding-bottom:22px;}
     .toolbar-label{color:var(--muted);}
     .toolbar-label strong{color:var(--ink);}
@@ -349,11 +346,7 @@
     .footer-col a:hover{color:var(--accent);}
     .footer-bottom{border-top-color:var(--line);}
     @media (max-width:900px){
-        .hero{grid-template-columns:1fr;padding-top:52px;padding-bottom:0;gap:28px;}
-        .hero > div:first-child{position:sticky;top:84px;padding-top:0;transform:translateY(var(--hero-lift,0px));}
-        .hero-logo-display{position:sticky;top:82px;min-height:72vh;height:72vh;transform:translateY(var(--shoe-lift,0px));}
-        .hero-center-logo{position:absolute;left:50%;top:38%;display:block;width:180px;margin:0;transform:translateX(-50%);pointer-events:none;}
-        .shoe-description{left:8%;top:8%;width:84%;}
+        .hero{grid-template-columns:1fr;padding-top:58px;padding-bottom:64px;}
         .urun-izgarasi{grid-template-columns:repeat(3,minmax(0,1fr));}
         .hero-collage{margin-top:30px;}
         .brand-filter-row{flex-wrap:wrap;}
@@ -361,11 +354,7 @@
         .brand-filter-row .search-wrap,.brand-filter-row .sort{flex:1 1 0;min-width:0;}
     }
     @media (max-width:640px){
-        .hero{padding-top:46px;padding-bottom:0;height:calc(100vh + 20vh);min-height:0;}
-        .hero > div:first-child{position:sticky;top:84px;height:auto;padding-top:0;transform:translateY(var(--hero-lift,0px));}
-        .hero-logo-display{position:sticky;top:72px;min-height:60vh;height:60vh;margin-top:24px;transform:translateY(var(--shoe-lift,0px));}
-        .hero-logo-display .shoe-frame{width:94%;margin-left:0;}
-        .shoe-progress{right:0;bottom:18%;font-size:9px;}
+        .hero{padding-top:46px;padding-bottom:48px;}
         h1{font-size:clamp(42px,12vw,62px);}
         .hero-collage{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:24px;}
         .toolbar-controls{padding:0;background:transparent;border:0;}
@@ -464,27 +453,30 @@
                 <span class="hero-count"><strong id="hero-count">50</strong> model stokta</span>
             </div>
         </div>
-        <div class="hero-collage hero-logo-display" aria-label="Scroll ile birleşen beyaz Air Force 1">
-            <div class="shoe-description" id="shoe-description" aria-hidden="true">
-                <strong>Air Force 1<br>White.</strong>
-                <span>Temiz çizgiler, ikonik Swoosh ve her adımda zamansız bir siluet.</span>
-            </div>
-            <img class="shoe-frame" id="shoe-frame" src="assets/air-force-sharp-webp/ezgif-frame-001.webp" alt="Scroll ile birleşen beyaz Air Force 1">
-            <div class="shoe-caption" aria-hidden="true">
-                <strong>NIKE / AIR FORCE 1</strong>
-                <em>01</em>
-                <span id="shoe-caption-state">parçalar ayrık</span>
-            </div>
-            <span class="shoe-progress" aria-hidden="true">birleşiyor</span>
+        <div class="hero-collage hero-logo-display" aria-label="Nokta Ayakkabıcılık logosu">
+            <img class="hero-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık">
         </div>
-        <img class="hero-center-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık">
     </section>
 
     <div class="container" id="urunler">
         <div class="toolbar">
             <div class="toolbar-label"><strong id="product-count">50 ürün</strong> · Shopier üzerinden güvenli alışveriş</div>
         </div>
-        <h2 class="collection-heading">Sneaker ve günlük ayakkabı modelleri</h2>
+        <section class="collection-showcase" aria-labelledby="collection-showcase-heading">
+            <div class="collection-showcase-copy">
+                <p class="collection-kicker">Seçili modeller</p>
+                <h2 class="collection-heading" id="collection-showcase-heading">Sneaker ve günlük ayakkabı modelleri</h2>
+                <p>Air Force 1'in temiz beyaz yüzeyi, ikonik Swoosh çizgisi ve yere sağlam basan klasik tabanıyla her kombine uyum sağlayan zamansız bir siluet. Parçaları birleşirken formunu yakından izleyin, ardından koleksiyonun tamamını keşfedin.</p>
+                <ul class="collection-details" aria-label="Air Force 1 özellikleri">
+                    <li>İkonik Swoosh</li>
+                    <li>Temiz beyaz siluet</li>
+                    <li>Klasik dolgulu taban</li>
+                </ul>
+            </div>
+            <div class="collection-animation" aria-label="Air Force 1 birleşme animasyonu">
+                <img class="collection-shoe-frame" id="collection-shoe-frame" src="assets/air-force-sharp-webp/ezgif-frame-001.webp" alt="Air Force 1 animasyonu">
+            </div>
+        </section>
         <div class="brand-filter-row">
             <div id="brand-filters" class="brand-filters" aria-label="Marka filtreleri"></div>
             <div class="search-wrap">
@@ -591,76 +583,33 @@
 
 <script>
     (() => {
-        const hero = document.querySelector('.hero');
-        const frameImage = document.getElementById('shoe-frame');
-        const captionState = document.getElementById('shoe-caption-state');
-        const shoeDescription = document.getElementById('shoe-description');
-        const heroCopy = hero.firstElementChild;
-        const centerLogo = document.querySelector('.hero-center-logo');
-        const shoeCaption = document.querySelector('.shoe-caption');
-        const shoeProgress = document.querySelector('.shoe-progress');
-        const collection = document.getElementById('urunler');
-        if(!hero || !frameImage) return;
+        const animation = document.querySelector('.collection-animation');
+        const frameImage = document.getElementById('collection-shoe-frame');
+        if(!animation || !frameImage) return;
         const frameCount = 121;
         const framePath = index => `assets/air-force-sharp-webp/ezgif-frame-${String(index).padStart(3, '0')}.webp`;
-        const preloadedFrames = [];
-        for(let index = 1; index <= 8; index++){
-            const image = new Image();
-            image.src = framePath(index);
-            preloadedFrames.push(image);
-        }
         let lastFrame = 0;
         let frameRequest = 0;
-        const ease = value => value * value * (3 - 2 * value);
-        const renderShoe = () => {
+        const render = () => {
             frameRequest = 0;
-            const heroStart = hero.getBoundingClientRect().top + window.scrollY;
-            const range = Math.max(hero.offsetHeight - window.innerHeight, 1);
-            const progress = Math.min(1, Math.max(0, (window.scrollY - heroStart) / range));
-            hero.style.setProperty('--shoe-progress', progress.toFixed(3));
-            const introProgress = ease(Math.min(1, progress / .24));
-            const centerProgress = ease(Math.min(1, Math.max(0, (progress - .24) / .18)));
-            const assemblyProgress = ease(Math.min(1, Math.max(0, (progress - .42) / .58)));
-            const entranceProgress = centerProgress;
-            const collectionReveal = ease(Math.min(1, Math.max(0, (assemblyProgress - .5) / .5)));
-            const collectionLift = Math.round(60 * (1 - collectionReveal));
-            const collectionOpacity = (.7 + collectionReveal * .3).toFixed(3);
-            const heroLift = 0;
-            hero.style.setProperty('--hero-lift', `${heroLift}px`);
-            hero.style.setProperty('--shoe-lift', `${heroLift}px`);
-            if(collection){
-                collection.style.setProperty('--collection-lift', `${collectionLift}px`);
-                collection.style.setProperty('--collection-opacity', collectionOpacity);
-            }
-            const assemblyComplete = assemblyProgress >= .995;
-            if(captionState) captionState.textContent = assemblyComplete ? 'birleştirildi' : assemblyProgress > 0 ? 'birleşiyor' : 'parçalar ayrık';
-            if(shoeProgress) shoeProgress.textContent = assemblyComplete ? 'birleştirildi' : 'birleşiyor';
-            if(centerLogo){
-                centerLogo.style.opacity = (1 - centerProgress).toFixed(3);
-                centerLogo.style.transform = `translate(-50%, calc(-50% - ${Math.round(introProgress * 150)}px))`;
-            }
-            frameImage.style.opacity = centerProgress > 0 ? '1' : '0';
-            frameImage.style.setProperty('transform', `translateY(${Math.round((1 - centerProgress) * 190)}px) scale(${(.78 + centerProgress * .22).toFixed(3)})`, 'important');
-            if(shoeCaption) shoeCaption.style.opacity = entranceProgress > 0 ? '1' : '0';
-            if(shoeProgress) shoeProgress.style.opacity = entranceProgress > 0 ? '1' : '0';
-            if(shoeDescription){
-                shoeDescription.style.opacity = entranceProgress >= 1 ? '1' : '0';
-                shoeDescription.style.transform = `translateY(${Math.round((1 - entranceProgress) * 24)}px)`;
-            }
-            const nextFrame = assemblyProgress > 0 ? Math.min(frameCount, Math.max(1, Math.round(assemblyProgress * (frameCount - 1)) + 1)) : 1;
+            const bounds = animation.getBoundingClientRect();
+            const progress = Math.min(1, Math.max(0, (window.innerHeight - bounds.top) / (window.innerHeight * .9)));
+            const eased = progress * progress * (3 - 2 * progress);
+            const nextFrame = Math.min(frameCount, Math.max(1, Math.round(eased * (frameCount - 1)) + 1));
+            frameImage.style.opacity = progress > 0 ? '1' : '0';
+            frameImage.style.transform = `translateY(${Math.round(18 - eased * 18)}px) scale(.86)`;
             if(nextFrame !== lastFrame){
                 lastFrame = nextFrame;
                 frameImage.src = framePath(nextFrame);
             }
         };
-        const updateShoe = () => {
+        const update = () => {
             if(frameRequest) return;
-            frameRequest = window.requestAnimationFrame(renderShoe);
+            frameRequest = window.requestAnimationFrame(render);
         };
-        window.addEventListener('scroll', updateShoe, { passive: true });
-        window.addEventListener('resize', updateShoe);
-        renderShoe();
-        window.addEventListener('load', updateShoe, { once: true });
+        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        render();
     })();
 </script>
 
