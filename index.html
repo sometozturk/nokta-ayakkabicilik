@@ -291,7 +291,7 @@
     .hero-logo-display{display:flex;grid-template-columns:none;align-items:center;justify-content:center;}
     .hero-logo-display .shoe-frame{position:relative;inset:auto;display:block;width:min(100%,470px);height:auto;aspect-ratio:16/9;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:none;transform:translateY(190px) scale(.82)!important;opacity:0;}
     .hero-logo-display .hero-brand-lockup{position:absolute;left:50%;bottom:27%;width:min(42%,175px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent!important;border:0;box-shadow:none;transform:translateX(-50%)!important;opacity:.92;filter:brightness(0) invert(1);}
-    .hero-center-logo{position:absolute;left:75%;top:24%;z-index:2;width:min(42%,420px);height:auto;transform:translate(-50%,-50%);opacity:.92;filter:brightness(0) invert(1);}
+    .hero-logo-display .hero-center-logo{position:absolute;left:75%;top:24%;z-index:2;width:min(42%,420px);height:auto;transform:translate(-50%,-50%);opacity:.92;filter:brightness(0) invert(1);}
     .shoe-caption{position:absolute;right:12%;top:15%;display:flex;flex-direction:column;gap:8px;text-align:right;transform:none;opacity:1;}
     .shoe-caption strong{color:var(--ink);font:650 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;}
     .shoe-caption span{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
@@ -357,6 +357,10 @@
         .brand-filter-row .search-wrap,.brand-filter-row .sort{flex:1 1 0;min-width:0;}
     }
     @media (max-width:640px){
+        header{background:rgba(248,244,236,.96);border-bottom-color:rgba(25,23,21,.14);}
+        .wordmark img{filter:none;}
+        .header-links a{color:#191715;}
+        .header-links .ig{color:#655b52;}
         .hero{padding-top:46px;padding-bottom:48px;}
         h1{font-size:clamp(42px,12vw,62px);}
         .hero-collage{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:24px;}
@@ -367,9 +371,10 @@
         .urun-meta{padding:14px 14px 0;}
         .satin-al-buton{margin:14px;padding:12px 8px;}
         .hero{padding-top:46px;padding-bottom:0;height:calc(100vh + 20vh);min-height:0;}
-        .hero > div:first-child{position:sticky;top:84px;height:auto;padding-top:0;transform:translateY(var(--hero-lift,0px));}
-        .hero-logo-display{position:sticky;top:72px;min-height:60vh;height:60vh;margin-top:24px;transform:translateY(var(--shoe-lift,0px));}
+        .hero > div:first-child{position:relative;top:auto;height:auto;padding-top:0;transform:none;}
+        .hero-logo-display{position:sticky;top:84px;min-height:56vh;height:56vh;margin-top:34px;transform:translateY(var(--shoe-lift,0px));}
         .hero-logo-display .shoe-frame{width:94%;margin-left:0;}
+        .hero-logo-display .hero-center-logo{left:50%;top:18%;width:min(58%,240px);z-index:4;}
         .shoe-progress{right:0;bottom:18%;font-size:9px;}
     }
 
@@ -467,6 +472,7 @@
                 <span>Temiz çizgiler, ikonik Swoosh ve her adımda zamansız bir siluet.</span>
             </div>
             <img class="shoe-frame" id="shoe-frame" src="assets/air-force-sharp-webp/ezgif-frame-001.webp" alt="Scroll ile birleşen beyaz Air Force 1">
+            <img class="hero-center-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık">
             <div class="shoe-caption" aria-hidden="true">
                 <strong>NIKE / AIR FORCE 1</strong>
                 <em>01</em>
@@ -474,7 +480,6 @@
             </div>
             <span class="shoe-progress" aria-hidden="true">birleşiyor</span>
         </div>
-        <img class="hero-center-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık">
     </section>
 
     <div class="container" id="urunler">
@@ -630,7 +635,7 @@
             if(shoeProgress) shoeProgress.textContent = assemblyComplete ? 'birleştirildi' : 'birleşiyor';
             if(centerLogo){
                 centerLogo.style.opacity = (1 - centerProgress).toFixed(3);
-                centerLogo.style.transform = `translate(-50%, calc(-50% - ${Math.round(introProgress * 150)}px))`;
+                centerLogo.style.setProperty('transform', `translate(-50%, calc(-50% - ${Math.round(introProgress * 150)}px))`, 'important');
             }
             frameImage.style.opacity = centerProgress > 0 ? '1' : '0';
             frameImage.style.setProperty('transform', `translateY(${Math.round((1 - centerProgress) * 190)}px) scale(${(.78 + centerProgress * .22).toFixed(3)})`, 'important');
