@@ -270,7 +270,7 @@
     .header-links a{color:var(--ink);}
     .header-links .ig{color:var(--muted);}
     .header-links a:hover,.header-links .ig:hover{color:var(--accent);border-color:var(--accent);}
-    .hero{grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);padding-top:76px;padding-bottom:0;}
+    .hero{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);padding-top:64px;padding-bottom:0;gap:48px;}
     .hero-eyebrow{color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-size:11px;}
     .hero-eyebrow .dot{background:var(--accent);}
     h1{color:var(--ink);font-size:clamp(44px,6vw,78px);line-height:.98;}
@@ -285,14 +285,14 @@
     .hero-collage .c1,.hero-collage .c2,.hero-collage .c3{width:100%;left:auto;right:auto;top:auto;bottom:auto;z-index:auto;}
     .hero-logo-display{min-height:360px;display:flex;align-items:center;justify-content:center;}
     .hero-logo-display .hero-logo{width:min(82%,420px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:invert(1);}
-    .hero{position:relative;height:calc(100vh + 45vh);min-height:0;align-items:start;}
-    .hero > div:first-child{position:sticky;top:132px;padding-top:76px;}
-    .hero-logo-display{position:sticky;top:78px;min-height:calc(100vh - 126px);height:calc(100vh - 126px);overflow:visible;perspective:1200px;transform:translateX(-120px);}
+    .hero{position:relative;height:calc(100vh + 36vh);min-height:0;align-items:start;}
+    .hero > div:first-child{position:sticky;top:112px;padding-top:64px;transform:translateY(var(--hero-lift,0px));}
+    .hero-logo-display{position:sticky;top:112px;min-height:320px;height:320px;overflow:visible;perspective:1200px;transform:translateY(var(--shoe-lift,0px));}
     .hero-logo-display{display:flex;grid-template-columns:none;align-items:center;justify-content:center;}
-    .hero-logo-display .shoe-frame{position:relative;inset:auto;display:block;width:min(100%,470px);height:auto;aspect-ratio:16/9;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:none;transform:translateY(190px)!important;opacity:0;}
+    .hero-logo-display .shoe-frame{position:relative;inset:auto;display:block;width:min(100%,470px);height:auto;aspect-ratio:16/9;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:none;transform:translateY(190px) scale(.82)!important;opacity:0;}
     .hero-logo-display .hero-brand-lockup{position:absolute;left:50%;bottom:27%;width:min(42%,175px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent!important;border:0;box-shadow:none;transform:translateX(-50%)!important;opacity:.92;filter:brightness(0) invert(1);}
-    .hero-center-logo{position:absolute;left:67%;top:16%;z-index:2;width:330px;height:auto;transform:translate(-50%,-50%);opacity:.92;filter:brightness(0) invert(1);}
-    .shoe-caption{position:absolute;right:9%;top:18%;display:flex;flex-direction:column;gap:8px;text-align:right;transform:none;opacity:1;}
+    .hero-center-logo{position:absolute;left:72%;top:17%;z-index:2;width:min(30%,320px);height:auto;transform:translate(-50%,-50%);opacity:.92;filter:brightness(0) invert(1);}
+    .shoe-caption{position:absolute;right:4%;top:15%;display:flex;flex-direction:column;gap:8px;text-align:right;transform:none;opacity:1;}
     .shoe-caption strong{color:var(--ink);font:650 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;}
     .shoe-caption span{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
     .shoe-caption em{color:var(--accent);font:560 25px/1 'Fraunces',serif;font-style:normal;}
@@ -313,6 +313,7 @@
     .editorial-footer::before{content:'';width:42px;height:1px;background:var(--accent);}
     .nav,.hero,.container,.footer-inner,.footer-bottom div{width:calc(100% - 40px);max-width:none;}
     .container{padding-bottom:110px;}
+    .container#urunler{position:relative;z-index:2;background:var(--paper);transform:translateY(var(--collection-lift,0px));}
     .toolbar{padding-top:42px;padding-bottom:22px;}
     .toolbar-label{color:var(--muted);}
     .toolbar-label strong{color:var(--ink);}
@@ -348,10 +349,10 @@
     .footer-col a:hover{color:var(--accent);}
     .footer-bottom{border-top-color:var(--line);}
     @media (max-width:900px){
-        .hero{grid-template-columns:1fr;padding-top:58px;padding-bottom:64px;}
-        .hero > div:first-child{position:sticky;top:84px;padding-top:0;}
-        .hero-logo-display{position:sticky;top:82px;min-height:72vh;height:72vh;transform:none;}
-        .hero-center-logo{position:relative;left:auto;top:auto;display:block;width:145px;margin:22px auto 0;transform:none;}
+        .hero{grid-template-columns:1fr;padding-top:52px;padding-bottom:0;gap:28px;}
+        .hero > div:first-child{position:sticky;top:84px;padding-top:0;transform:translateY(var(--hero-lift,0px));}
+        .hero-logo-display{position:sticky;top:82px;min-height:72vh;height:72vh;transform:translateY(var(--shoe-lift,0px));}
+        .hero-center-logo{position:absolute;left:50%;top:18%;display:block;width:180px;margin:0;transform:translateX(-50%);pointer-events:none;}
         .shoe-description{left:8%;top:8%;width:84%;}
         .urun-izgarasi{grid-template-columns:repeat(3,minmax(0,1fr));}
         .hero-collage{margin-top:30px;}
@@ -361,9 +362,9 @@
     }
     @media (max-width:640px){
         .hero{padding-top:46px;padding-bottom:0;}
-        .hero{height:calc(100vh + 55vh);min-height:0;}
+        .hero{height:calc(100vh + 46vh);min-height:0;}
         .hero-logo-display{top:72px;min-height:64vh;height:64vh;}
-        .hero-logo-display .shoe-frame{width:100%;margin-left:0;}
+        .hero-logo-display .shoe-frame{width:94%;margin-left:0;}
         .shoe-progress{right:0;bottom:18%;font-size:9px;}
         h1{font-size:clamp(42px,12vw,62px);}
         .hero-collage{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:24px;}
@@ -598,6 +599,7 @@
         const centerLogo = document.querySelector('.hero-center-logo');
         const shoeCaption = document.querySelector('.shoe-caption');
         const shoeProgress = document.querySelector('.shoe-progress');
+        const collection = document.getElementById('urunler');
         if(!hero || !frameImage) return;
         const frameCount = 121;
         const framePath = index => `assets/air-force-sharp-webp/ezgif-frame-${String(index).padStart(3, '0')}.webp`;
@@ -608,35 +610,51 @@
             preloadedFrames.push(image);
         }
         let lastFrame = 0;
-        const updateShoe = () => {
+        let frameRequest = 0;
+        const ease = value => value * value * (3 - 2 * value);
+        const renderShoe = () => {
+            frameRequest = 0;
             const heroStart = hero.getBoundingClientRect().top + window.scrollY;
             const range = Math.max(hero.offsetHeight - window.innerHeight, 1);
             const progress = Math.min(1, Math.max(0, (window.scrollY - heroStart) / range));
             hero.style.setProperty('--shoe-progress', progress.toFixed(3));
-            const entranceProgress = Math.min(1, Math.max(0, progress / .45));
-            const assemblyProgress = Math.min(1, Math.max(0, (progress - .45) / .55));
+            const introProgress = ease(Math.min(1, progress / .24));
+            const centerProgress = ease(Math.min(1, Math.max(0, (progress - .24) / .18)));
+            const assemblyProgress = ease(Math.min(1, Math.max(0, (progress - .42) / .36)));
+            const entranceProgress = centerProgress;
+            const heroLift = 0;
+            hero.style.setProperty('--hero-lift', `${heroLift}px`);
+            hero.style.setProperty('--shoe-lift', `${heroLift}px`);
+            if(collection){
+                collection.style.setProperty('--collection-lift', `${heroLift}px`);
+            }
             if(captionState) captionState.textContent = assemblyProgress >= .995 ? 'birleştirildi' : assemblyProgress > 0 ? 'birleşiyor' : 'parçalar ayrık';
             if(centerLogo){
-                centerLogo.style.opacity = (1 - entranceProgress).toFixed(3);
-                centerLogo.style.transform = `translate(-50%, ${-Math.round(entranceProgress * 150)}px)`;
+                centerLogo.style.opacity = (1 - centerProgress).toFixed(3);
+                centerLogo.style.transform = `translate(-50%, calc(-50% - ${Math.round(introProgress * 150)}px))`;
             }
-            frameImage.style.opacity = entranceProgress > 0 ? '1' : '0';
-            frameImage.style.setProperty('transform', `translateY(${Math.round(190 - entranceProgress * 276)}px)`, 'important');
+            frameImage.style.opacity = centerProgress > 0 ? '1' : '0';
+            frameImage.style.setProperty('transform', `translateY(${Math.round((1 - centerProgress) * 190)}px) scale(${(.78 + centerProgress * .22).toFixed(3)})`, 'important');
             if(shoeCaption) shoeCaption.style.opacity = entranceProgress > 0 ? '1' : '0';
             if(shoeProgress) shoeProgress.style.opacity = entranceProgress > 0 ? '1' : '0';
             if(shoeDescription){
                 shoeDescription.style.opacity = entranceProgress >= 1 ? '1' : '0';
                 shoeDescription.style.transform = `translateY(${Math.round((1 - entranceProgress) * 24)}px)`;
             }
-            const nextFrame = Math.min(frameCount, Math.max(1, Math.round(assemblyProgress * (frameCount - 1)) + 1));
+            const nextFrame = assemblyProgress > 0 ? Math.min(frameCount, Math.max(1, Math.round(assemblyProgress * (frameCount - 1)) + 1)) : 1;
             if(nextFrame !== lastFrame){
                 lastFrame = nextFrame;
                 frameImage.src = framePath(nextFrame);
             }
         };
+        const updateShoe = () => {
+            if(frameRequest) return;
+            frameRequest = window.requestAnimationFrame(renderShoe);
+        };
         window.addEventListener('scroll', updateShoe, { passive: true });
         window.addEventListener('resize', updateShoe);
-        updateShoe();
+        renderShoe();
+        window.addEventListener('load', updateShoe, { once: true });
     })();
 </script>
 
