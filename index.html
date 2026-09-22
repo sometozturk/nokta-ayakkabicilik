@@ -152,18 +152,12 @@
     .toolbar-label{font-size:14px;color:var(--muted);}
     .toolbar-label strong{color:var(--ink);font-family:'Fraunces',serif;font-size:16px;}
     .collection-heading{margin:0 0 14px;font:560 24px/1.15 'Fraunces',serif;color:var(--ink);}
-    .collection-showcase{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:42px;margin:8px 0 30px;padding:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-    .collection-showcase-copy{max-width:460px;}
-    .collection-kicker{margin:0 0 12px;color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;}
-    .collection-showcase-copy .collection-heading{font-size:clamp(28px,3vw,42px);margin-bottom:14px;}
-    .collection-showcase-copy p:last-child{margin:0;color:var(--muted);font-size:14px;line-height:1.7;}
-    .collection-details{display:flex;flex-wrap:wrap;gap:8px 18px;margin:20px 0 0;padding:0;list-style:none;color:var(--ink);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
-    .collection-details li{display:flex;align-items:center;gap:7px;}
-    .collection-details li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);}
+    .collection-showcase{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:28px;margin:8px 0 30px;padding:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
     .collection-animation{position:relative;min-height:260px;display:grid;place-items:center;overflow:hidden;background:transparent;border:0;}
     .collection-animation::before{content:none;}
     .collection-animation::after{content:none;}
     .collection-shoe-frame{position:relative;z-index:1;display:block;width:min(86%,430px);height:auto;aspect-ratio:16/9;object-fit:contain;filter:none;transform:translateY(18px) scale(.86);opacity:0;transition:opacity .25s ease;}
+    .collection-shoe-frame.adidas-frame{mix-blend-mode:screen;}
     .faq-section{margin:70px 0 0;padding-top:28px;border-top:1px solid var(--line);}
     .faq-section h2{margin:0 0 18px;font:560 26px/1.15 'Fraunces',serif;}
     .faq-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
@@ -250,8 +244,7 @@
         .header-links .ig{font-size:11px;}
         h1{letter-spacing:-.3px;}
         .toolbar{flex-direction:column;align-items:stretch;}
-        .collection-showcase{grid-template-columns:1fr;gap:22px;padding:22px 0;}
-        .collection-showcase-copy{max-width:none;}
+        .collection-showcase{gap:22px;padding:22px 0;}
         .collection-animation{min-height:220px;}
         .toolbar-controls{flex-direction:column;}
         .brand-filter-row{display:grid;grid-template-columns:1fr;gap:10px;padding:12px 0;position:static;}
@@ -462,19 +455,12 @@
         <div class="toolbar">
             <div class="toolbar-label"><strong id="product-count">50 ürün</strong> · Shopier üzerinden güvenli alışveriş</div>
         </div>
-        <section class="collection-showcase" aria-labelledby="collection-showcase-heading">
-            <div class="collection-showcase-copy">
-                <p class="collection-kicker">Seçili modeller</p>
-                <h2 class="collection-heading" id="collection-showcase-heading">Sneaker ve günlük ayakkabı modelleri</h2>
-                <p>Air Force 1'in temiz beyaz yüzeyi, ikonik Swoosh çizgisi ve yere sağlam basan klasik tabanıyla her kombine uyum sağlayan zamansız bir siluet. Parçaları birleşirken formunu yakından izleyin, ardından koleksiyonun tamamını keşfedin.</p>
-                <ul class="collection-details" aria-label="Air Force 1 özellikleri">
-                    <li>İkonik Swoosh</li>
-                    <li>Temiz beyaz siluet</li>
-                    <li>Klasik dolgulu taban</li>
-                </ul>
-            </div>
+        <section class="collection-showcase" aria-label="Air Force 1 animasyonu">
             <div class="collection-animation" aria-label="Air Force 1 birleşme animasyonu">
                 <img class="collection-shoe-frame" id="collection-shoe-frame" src="assets/air-force-sharp-webp/ezgif-frame-001.webp" alt="Air Force 1 animasyonu">
+            </div>
+            <div class="collection-animation" aria-label="Adidas Spezial birleşme animasyonu">
+                <img class="collection-shoe-frame adidas-frame" id="adidas-shoe-frame" src="assets/adidas-frames-clean/ezgif-frame-001.webp" alt="Adidas Spezial animasyonu">
             </div>
         </section>
         <div class="brand-filter-row">
@@ -583,25 +569,27 @@
 
 <script>
     (() => {
-        const animation = document.querySelector('.collection-animation');
-        const frameImage = document.getElementById('collection-shoe-frame');
-        if(!animation || !frameImage) return;
-        const frameCount = 121;
-        const framePath = index => `assets/air-force-sharp-webp/ezgif-frame-${String(index).padStart(3, '0')}.webp`;
-        let lastFrame = 0;
+        const animations = [
+            { root: document.querySelectorAll('.collection-animation')[0], image: document.getElementById('collection-shoe-frame'), count: 121, path: index => `assets/air-force-sharp-webp/ezgif-frame-${String(index).padStart(3, '0')}.webp` },
+            { root: document.querySelectorAll('.collection-animation')[1], image: document.getElementById('adidas-shoe-frame'), count: 83, path: index => `assets/adidas-frames-clean/ezgif-frame-${String(index).padStart(3, '0')}.webp` }
+        ].filter(animation => animation.root && animation.image);
+        if(!animations.length) return;
         let frameRequest = 0;
         const render = () => {
             frameRequest = 0;
-            const bounds = animation.getBoundingClientRect();
-            const progress = Math.min(1, Math.max(0, (window.innerHeight - bounds.top) / (window.innerHeight * .9)));
-            const eased = progress * progress * (3 - 2 * progress);
-            const nextFrame = Math.min(frameCount, Math.max(1, Math.round(eased * (frameCount - 1)) + 1));
-            frameImage.style.opacity = progress > 0 ? '1' : '0';
-            frameImage.style.transform = `translateY(${Math.round(18 - eased * 18)}px) scale(.86)`;
-            if(nextFrame !== lastFrame){
-                lastFrame = nextFrame;
-                frameImage.src = framePath(nextFrame);
-            }
+            animations.forEach(animation => {
+                const bounds = animation.root.getBoundingClientRect();
+                const progress = Math.min(1, Math.max(0, (window.innerHeight - bounds.top) / (window.innerHeight * .9)));
+                const eased = progress * progress * (3 - 2 * progress);
+                const nextFrame = Math.min(animation.count, Math.max(1, Math.round(eased * (animation.count - 1)) + 1));
+                animation.image.style.opacity = progress > 0 ? '1' : '0';
+                const direction = animation.image.classList.contains('adidas-frame') ? ' scaleX(-1)' : '';
+                animation.image.style.transform = `translateY(${Math.round(18 - eased * 18)}px) scale(.86)${direction}`;
+                if(nextFrame !== animation.lastFrame){
+                    animation.lastFrame = nextFrame;
+                    animation.image.src = animation.path(nextFrame);
+                }
+            });
         };
         const update = () => {
             if(frameRequest) return;
