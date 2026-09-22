@@ -285,14 +285,14 @@
     .hero-collage .c1,.hero-collage .c2,.hero-collage .c3{width:100%;left:auto;right:auto;top:auto;bottom:auto;z-index:auto;}
     .hero-logo-display{min-height:360px;display:flex;align-items:center;justify-content:center;}
     .hero-logo-display .hero-logo{width:min(82%,420px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:invert(1);}
-    .hero{position:relative;height:calc(100vh + 36vh);min-height:0;align-items:start;}
+    .hero{position:relative;height:calc(100vh + 20vh);min-height:0;align-items:start;}
     .hero > div:first-child{position:sticky;top:112px;padding-top:64px;transform:translateY(var(--hero-lift,0px));}
     .hero-logo-display{position:sticky;top:112px;min-height:320px;height:320px;overflow:visible;perspective:1200px;transform:translateY(var(--shoe-lift,0px));}
     .hero-logo-display{display:flex;grid-template-columns:none;align-items:center;justify-content:center;}
     .hero-logo-display .shoe-frame{position:relative;inset:auto;display:block;width:min(100%,470px);height:auto;aspect-ratio:16/9;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:none;transform:translateY(190px) scale(.82)!important;opacity:0;}
     .hero-logo-display .hero-brand-lockup{position:absolute;left:50%;bottom:27%;width:min(42%,175px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent!important;border:0;box-shadow:none;transform:translateX(-50%)!important;opacity:.92;filter:brightness(0) invert(1);}
-    .hero-center-logo{position:absolute;left:72%;top:17%;z-index:2;width:min(30%,320px);height:auto;transform:translate(-50%,-50%);opacity:.92;filter:brightness(0) invert(1);}
-    .shoe-caption{position:absolute;right:4%;top:15%;display:flex;flex-direction:column;gap:8px;text-align:right;transform:none;opacity:1;}
+    .hero-center-logo{position:absolute;left:75%;top:24%;z-index:2;width:min(42%,420px);height:auto;transform:translate(-50%,-50%);opacity:.92;filter:brightness(0) invert(1);}
+    .shoe-caption{position:absolute;right:12%;top:15%;display:flex;flex-direction:column;gap:8px;text-align:right;transform:none;opacity:1;}
     .shoe-caption strong{color:var(--ink);font:650 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;}
     .shoe-caption span{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
     .shoe-caption em{color:var(--accent);font:560 25px/1 'Fraunces',serif;font-style:normal;}
@@ -300,7 +300,7 @@
     .shoe-description strong{color:var(--ink);font:560 23px/1.02 'Fraunces',serif;}
     .shoe-description span{font-size:11px;line-height:1.55;}
     .shoe-description::before{content:'';width:34px;height:2px;background:var(--accent);margin-bottom:2px;}
-    .shoe-progress{position:absolute;right:4%;bottom:25%;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:10px;letter-spacing:.14em;text-transform:uppercase;writing-mode:vertical-rl;}
+    .shoe-progress{position:absolute;right:2%;bottom:20%;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:10px;letter-spacing:.14em;text-transform:uppercase;writing-mode:vertical-rl;}
     .shoe-progress::before{content:'';width:1px;height:54px;background:linear-gradient(var(--accent) calc(var(--shoe-progress) * 100%),var(--line) 0);}
     .hero-editorial{position:relative;min-height:360px;display:flex;flex-direction:column;justify-content:space-between;padding:30px 28px;background-image:linear-gradient(90deg,rgba(10,10,10,.9) 0%,rgba(10,10,10,.68) 48%,rgba(10,10,10,.3) 100%),url('5.jpeg');background-size:cover;background-position:center;border:1px solid rgba(245,239,228,.18);overflow:hidden;box-shadow:0 22px 44px rgba(0,0,0,.3);}
     .hero-editorial::before{content:'';position:absolute;inset:18px;border:1px solid rgba(245,239,228,.14);pointer-events:none;}
@@ -313,7 +313,7 @@
     .editorial-footer::before{content:'';width:42px;height:1px;background:var(--accent);}
     .nav,.hero,.container,.footer-inner,.footer-bottom div{width:calc(100% - 40px);max-width:none;}
     .container{padding-bottom:110px;}
-    .container#urunler{position:relative;z-index:2;background:var(--paper);transform:translateY(var(--collection-lift,0px));}
+    .container#urunler{position:relative;z-index:2;background:var(--paper);transform:translateY(var(--collection-lift,60px));opacity:var(--collection-opacity,.7);}
     .toolbar{padding-top:42px;padding-bottom:22px;}
     .toolbar-label{color:var(--muted);}
     .toolbar-label strong{color:var(--ink);}
@@ -352,7 +352,7 @@
         .hero{grid-template-columns:1fr;padding-top:52px;padding-bottom:0;gap:28px;}
         .hero > div:first-child{position:sticky;top:84px;padding-top:0;transform:translateY(var(--hero-lift,0px));}
         .hero-logo-display{position:sticky;top:82px;min-height:72vh;height:72vh;transform:translateY(var(--shoe-lift,0px));}
-        .hero-center-logo{position:absolute;left:50%;top:18%;display:block;width:180px;margin:0;transform:translateX(-50%);pointer-events:none;}
+        .hero-center-logo{position:absolute;left:50%;top:38%;display:block;width:180px;margin:0;transform:translateX(-50%);pointer-events:none;}
         .shoe-description{left:8%;top:8%;width:84%;}
         .urun-izgarasi{grid-template-columns:repeat(3,minmax(0,1fr));}
         .hero-collage{margin-top:30px;}
@@ -361,9 +361,9 @@
         .brand-filter-row .search-wrap,.brand-filter-row .sort{flex:1 1 0;min-width:0;}
     }
     @media (max-width:640px){
-        .hero{padding-top:46px;padding-bottom:0;}
-        .hero{height:calc(100vh + 46vh);min-height:0;}
-        .hero-logo-display{top:72px;min-height:64vh;height:64vh;}
+        .hero{padding-top:46px;padding-bottom:0;height:calc(100vh + 20vh);min-height:0;}
+        .hero > div:first-child{position:sticky;top:84px;height:auto;padding-top:0;transform:translateY(var(--hero-lift,0px));}
+        .hero-logo-display{position:sticky;top:72px;min-height:60vh;height:60vh;margin-top:24px;transform:translateY(var(--shoe-lift,0px));}
         .hero-logo-display .shoe-frame{width:94%;margin-left:0;}
         .shoe-progress{right:0;bottom:18%;font-size:9px;}
         h1{font-size:clamp(42px,12vw,62px);}
@@ -620,15 +620,21 @@
             hero.style.setProperty('--shoe-progress', progress.toFixed(3));
             const introProgress = ease(Math.min(1, progress / .24));
             const centerProgress = ease(Math.min(1, Math.max(0, (progress - .24) / .18)));
-            const assemblyProgress = ease(Math.min(1, Math.max(0, (progress - .42) / .36)));
+            const assemblyProgress = ease(Math.min(1, Math.max(0, (progress - .42) / .58)));
             const entranceProgress = centerProgress;
+            const collectionReveal = ease(Math.min(1, Math.max(0, (assemblyProgress - .5) / .5)));
+            const collectionLift = Math.round(60 * (1 - collectionReveal));
+            const collectionOpacity = (.7 + collectionReveal * .3).toFixed(3);
             const heroLift = 0;
             hero.style.setProperty('--hero-lift', `${heroLift}px`);
             hero.style.setProperty('--shoe-lift', `${heroLift}px`);
             if(collection){
-                collection.style.setProperty('--collection-lift', `${heroLift}px`);
+                collection.style.setProperty('--collection-lift', `${collectionLift}px`);
+                collection.style.setProperty('--collection-opacity', collectionOpacity);
             }
-            if(captionState) captionState.textContent = assemblyProgress >= .995 ? 'birleştirildi' : assemblyProgress > 0 ? 'birleşiyor' : 'parçalar ayrık';
+            const assemblyComplete = assemblyProgress >= .995;
+            if(captionState) captionState.textContent = assemblyComplete ? 'birleştirildi' : assemblyProgress > 0 ? 'birleşiyor' : 'parçalar ayrık';
+            if(shoeProgress) shoeProgress.textContent = assemblyComplete ? 'birleştirildi' : 'birleşiyor';
             if(centerLogo){
                 centerLogo.style.opacity = (1 - centerProgress).toFixed(3);
                 centerLogo.style.transform = `translate(-50%, calc(-50% - ${Math.round(introProgress * 150)}px))`;
