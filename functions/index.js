@@ -30,12 +30,13 @@ exports.tryOn = onRequest({
   if (request.method === 'OPTIONS') return response.status(204).send('');
   if (request.method !== 'POST') return response.status(405).json({error: 'Only POST is supported.'});
 
-  const {personImage, shoeImage} = request.body || {};
+  const {personImage, shoeImage, shoeTitle} = request.body || {};
   if (!isDataImage(personImage) || !isDataImage(shoeImage)) {
     return response.status(400).json({error: 'personImage and shoeImage must be base64 data images.'});
   }
 
   try {
+    const selectedShoe = String(shoeTitle || 'selected shoe').replace(/[\r\n]+/g, ' ').slice(0, 160);
     const runResponse = await fetch('https://api.fashn.ai/v1/run', {
       method: 'POST',
       headers: {
@@ -47,7 +48,7 @@ exports.tryOn = onRequest({
         inputs: {
           product_image: shoeImage,
           model_image: personImage,
-          prompt: 'Place the white Air Force 1 sneaker naturally on the person feet. Preserve the person identity, pose, lighting and the rest of the outfit.',
+          prompt: `Place the exact selected shoe, ${selectedShoe}, naturally on the person's visible feet. Match the product image precisely, including its silhouette, colorway and details. Estimate the person's foot length and width from the visible feet, ankles, legs and perspective, then scale the shoe to fit the foot naturally. The shoe must sit inside the foot outline, follow the foot angle and perspective, and never look oversized, floating or wider than the foot. Keep both shoes at a consistent realistic scale. Do not replace it with an Air Force 1 or any other shoe. Preserve the person's identity, pose, lighting, shadows and the rest of the outfit.`,
           resolution: '1k',
           generation_mode: 'fast',
           num_images: 1,
