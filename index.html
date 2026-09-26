@@ -791,7 +791,7 @@
         <p class="tryon-lead" id="tryon-lead">Bir fotoğraf seç; ayakkabını fotoğrafının üzerine yerleştirip sonucu cihazında hazırlayalım.</p>
         <p class="tryon-key-note">Fotoğrafın güvenli Firebase bağlantısı üzerinden AI servisine gönderilir ve işlem tamamlanınca saklanmaz.</p>
         <label class="tryon-input" for="tryon-file">
-            <input id="tryon-file" type="file" accept="image/*">
+            <input id="tryon-file" type="file" accept="image/*,.heic,.heif,.heif-sequence,.heic-sequence">
             <span>Galeriden fotoğraf seç</span>
         </label>
         <div class="tryon-stage">
@@ -1268,7 +1268,7 @@
             { pattern: /(alexander mcqueen|mcqueen)/i, asset: 'assets/mcqueen-frames-clean/ezgif-frame-121.webp', placement: { x: .17, y: .66, width: .68, height: .2 }, widthScale: 1.18, minWidth: .34, maxWidth: .82 },
             { pattern: /(lacoste|calvin klein|goldengoose|prada|new balance|yeezy|lufian)/i, asset: 'assets/air-force-clean/ezgif-frame-121.webp', placement: { x: .15, y: .68, width: .7, height: .2 }, widthScale: 1.22, minWidth: .34, maxWidth: .84 }
         ];
-        const tryOnEndpoint = 'https://us-central1-nokta-ayakkabicilik-ai-1453.cloudfunctions.net/tryOn';
+        const tryOnEndpoint = 'https://tryon-wgqkwujteq-uc.a.run.app';
         let photoUrl = '';
         let activeTryOnProduct = { ...defaultTryOnProduct };
         let activeTryOnProfile = tryOnProfiles[0];
@@ -1407,19 +1407,39 @@
             croppedContext.putImageData(croppedPixels, 0, 0);
             return cropped;
         };
-        const imageToData = source => new Promise((resolve, reject) => {
+        const normalizeImageSource = source => new Promise((resolve, reject) => {
             const image = new Image();
-            if (/^https?:\/\//i.test(source)) image.crossOrigin = 'anonymous';
+            const safeSource = source || '';
+            if (/^https?:\/\//i.test(safeSource) || /^blob:/i.test(safeSource) || /^data:/i.test(safeSource)) {
+                image.crossOrigin = 'anonymous';
+            }
             image.onload = () => {
-                const temporary = document.createElement('canvas');
-                const scale = Math.min(1, 1400 / image.naturalWidth);
-                temporary.width = Math.round(image.naturalWidth * scale);
-                temporary.height = Math.round(image.naturalHeight * scale);
-                temporary.getContext('2d').drawImage(image, 0, 0, temporary.width, temporary.height);
-                resolve({base64:temporary.toDataURL('image/jpeg', .82).split(',')[1], mimeType:'image/jpeg'});
+                try {
+                    const temporary = document.createElement('canvas');
+                    const scale = Math.min(1, 1400 / image.naturalWidth);
+                    temporary.width = Math.round(image.naturalWidth * scale);
+                    temporary.height = Math.round(image.naturalHeight * scale);
+                    const context = temporary.getContext('2d');
+                    context.clearRect(0, 0, temporary.width, temporary.height);
+                    context.drawImage(image, 0, 0, temporary.width, temporary.height);
+                    const dataUrl = temporary.toDataURL('image/png');
+                    const [header, base64] = dataUrl.split(',');
+                    if (!header || !base64 || !base64.length) {
+                        return reject(new Error('Görsel dönüştürülemedi. Lütfen farklı bir fotoğraf deneyin.'));
+                    }
+                    resolve({ base64, mimeType: 'image/png', originalSource: safeSource });
+                } catch (error) {
+                    reject(new Error('Fotoğrafın içeriği okunamadı. Lütfen başka bir resim seçin.'));
+                }
             };
-            image.onerror = reject;
-            image.src = source;
+            image.onerror = () => reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
+            image.src = safeSource;
+        });
+
+        const imageToData = source => new Promise((resolve, reject) => {
+            normalizeImageSource(source)
+                .then(resolve)
+                .catch(reject);
         });
         const requestProfessionalTryOn = async source => {
             const shoeImage = activeTryOnProduct.image || shoeSource;
@@ -1526,14 +1546,19 @@
             const file = fileInput.files[0];
             if(!file) return;
             if(photoUrl) URL.revokeObjectURL(photoUrl);
-            photoUrl = URL.createObjectURL(file);
+            const fileType = (file.type || '').toLowerCase();
+            const isHeicLike = fileType.includes('heic') || fileType.includes('heif') || /\.(heic|heif|heif-sequence|heic-sequence)$/i.test(file.name || '');
+            const objectUrl = URL.createObjectURL(file);
+            photoUrl = objectUrl;
             preview.src = photoUrl;
             previewFrame.classList.add('has-image');
             resultFrame.classList.remove('has-result');
             loading.classList.remove('is-active');
             download.classList.remove('is-ready');
             createButton.disabled = false;
-            status.textContent = 'Fotoğraf hazır. Sonucu oluşturmak için butona bas.';
+            status.textContent = isHeicLike
+                ? 'Fotoğraf hazır. iOS/Android dosyası normalize ediliyor; sonucu oluşturmak için butona bas.'
+                : 'Fotoğraf hazır. Sonucu oluşturmak için butona bas.';
         });
     })();
 </script>
