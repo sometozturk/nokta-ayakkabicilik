@@ -34,6 +34,46 @@ const isDataImage = value => {
   return true;
 };
 
+const allowedShoeImageHosts = new Set([
+  'cdn.shopier.app'
+]);
+
+const mimeFromContentType = contentType => {
+  const value = String(contentType || '').toLowerCase();
+  if (value.includes('png')) return 'image/png';
+  if (value.includes('webp')) return 'image/webp';
+  if (value.includes('heic')) return 'image/heic';
+  if (value.includes('heif')) return 'image/heif';
+  return 'image/jpeg';
+};
+
+const fetchShoeImageAsDataUri = async shoeImageUrl => {
+  let parsedUrl;
+  try {
+    parsedUrl = new URL(shoeImageUrl);
+  } catch (error) {
+    throw new Error('shoeImageUrl geçerli bir URL değil.');
+  }
+
+  if (parsedUrl.protocol !== 'https:' || !allowedShoeImageHosts.has(parsedUrl.hostname)) {
+    throw new Error(`shoeImageUrl izin verilmeyen bir host içeriyor: ${parsedUrl.hostname}`);
+  }
+
+  const imageResponse = await fetch(parsedUrl.toString());
+  if (!imageResponse.ok) {
+    throw new Error(`Ayakkabı görseli indirilemedi (HTTP ${imageResponse.status}).`);
+  }
+
+  const arrayBuffer = await imageResponse.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  if (buffer.length < 8) {
+    throw new Error('Ayakkabı görseli boş veya bozuk geldi.');
+  }
+
+  const mimeType = mimeFromContentType(imageResponse.headers.get('content-type'));
+  return `data:${mimeType};base64,${buffer.toString('base64')}`;
+};
+
 exports.tryOn = onRequest({
   region: 'us-central1',
   timeoutSeconds: 120,
@@ -44,12 +84,27 @@ exports.tryOn = onRequest({
   if (request.method === 'OPTIONS') return response.status(204).send('');
   if (request.method !== 'POST') return response.status(405).json({error: 'Only POST is supported.'});
 
-  const {personImage, shoeImage, shoeTitle} = request.body || {};
+  const {personImage, shoeImage: shoeImageBody, shoeImageUrl, shoeTitle} = request.body || {};
+
+  let shoeImage = shoeImageBody;
+  if (!isDataImage(shoeImage) && typeof shoeImageUrl === 'string' && shoeImageUrl) {
+    try {
+      shoeImage = await fetchShoeImageAsDataUri(shoeImageUrl);
+    } catch (error) {
+      console.error('[TryOn] Shoe image fetch failed', { shoeImageUrl, message: error?.message });
+      return response.status(502).json({
+        error: 'Ayakkabı görseli sunucu tarafında indirilemedi.',
+        details: error?.message || 'Bilinmeyen hata'
+      });
+    }
+  }
+
   console.log('[TryOn] Request received', {
     method: request.method,
     origin: request.get('origin'),
     hasPersonImage: !!personImage,
     hasShoeImage: !!shoeImage,
+    shoeImageUrl: shoeImageUrl || null,
     personLength: typeof personImage === 'string' ? personImage.length : 0,
     shoeLength: typeof shoeImage === 'string' ? shoeImage.length : 0,
     shoeTitle: String(shoeTitle || '').slice(0, 120)
