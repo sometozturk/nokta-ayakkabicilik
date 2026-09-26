@@ -57,6 +57,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,450;9..144,560;9..144,650&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.1.4/dist/heic2any.min.js"></script>
 <style>
     :root{
         --ink:#1b1712;
@@ -322,9 +323,9 @@
     .shoe-caption strong{color:var(--ink);font:650 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;}
     .shoe-caption span{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
     .shoe-caption em{color:var(--accent);font:560 25px/1 'Fraunces',serif;font-style:normal;}
-    .try-on-button{position:absolute;right:12%;bottom:8%;z-index:5;border:1px solid var(--accent);padding:11px 15px;background:var(--accent);color:#fff;font:700 11px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 10px 22px rgba(227,75,53,.2);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .2s ease,background .2s ease;}
+    .try-on-button{position:absolute;right:12%;bottom:8%;z-index:5;border:1px solid #0f6fe8;padding:11px 15px;background:#0f6fe8;color:#fff;font:700 11px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 10px 22px rgba(15,111,232,.22);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .2s ease,background .2s ease;}
     .try-on-button.is-visible{opacity:1;pointer-events:auto;}
-    .try-on-button:hover{background:#f05a43;transform:translateY(-2px);}
+    .try-on-button:hover{background:#0c5fca;transform:translateY(-2px);}
     .shoe-description{position:absolute;left:-175px;top:43%;width:150px;display:flex;flex-direction:column;gap:9px;color:var(--muted);opacity:0;}
     .shoe-description strong{color:var(--ink);font:560 23px/1.02 'Fraunces',serif;}
     .shoe-description span{font-size:11px;line-height:1.55;}
@@ -484,8 +485,8 @@
     .modal-price{margin:0 0 14px;font:650 24px 'Fraunces',serif;}
     .modal-size{margin:0 0 24px;color:#655b52;font-size:13px;line-height:1.6;}
     .modal-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-    .modal-tryon{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(25,23,21,.18);background:#fff;color:#191715;padding:12px 18px;border-radius:2px;cursor:pointer;font:600 12px 'DM Sans',sans-serif;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
-    .modal-tryon:hover{transform:translateY(-1px);border-color:var(--accent);box-shadow:0 6px 16px rgba(227,75,53,.12);}
+    .modal-tryon{display:inline-flex;align-items:center;justify-content:center;border:1px solid #0f6fe8;background:#0f6fe8;color:#fff;padding:12px 18px;border-radius:2px;cursor:pointer;font:600 12px 'DM Sans',sans-serif;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
+    .modal-tryon:hover{transform:translateY(-1px);border-color:#0c5fca;background:#0c5fca;box-shadow:0 6px 16px rgba(15,111,232,.18);}
     .tryon-modal{position:relative;width:min(900px,100%);max-height:min(820px,calc(100vh - 32px));overflow:auto;background:#f8f4ec;color:#191715;box-shadow:0 30px 80px rgba(0,0,0,.45);padding:34px;}
     .tryon-heading{margin:0 0 8px;font:560 32px/1.05 'Fraunces',serif;}
     .tryon-lead{margin:0 0 22px;color:#655b52;font-size:13px;line-height:1.6;}
@@ -514,7 +515,8 @@
     .tryon-loading.is-active{display:flex;}
     .tryon-spinner{width:34px;height:34px;border:3px solid rgba(248,244,236,.25);border-top-color:var(--accent);border-radius:50%;animation:tryonSpin .8s linear infinite;}
     @keyframes tryonSpin{to{transform:rotate(360deg);}}
-    .tryon-create{margin-top:18px;}
+    .tryon-create{margin-top:18px;background:#0f6fe8;border-color:#0f6fe8;box-shadow:0 12px 24px rgba(15,111,232,.18);}
+    .tryon-create:hover{background:#0c5fca;border-color:#0c5fca;box-shadow:0 14px 28px rgba(15,111,232,.22);}
     .tryon-create:disabled{cursor:not-allowed;opacity:.45;transform:none;box-shadow:none;}
     .tryon-status{margin:14px 0 0;color:#655b52;font-size:12px;}
     .tryon-actions{display:flex;gap:10px;align-items:center;margin-top:18px;}
@@ -1407,16 +1409,63 @@
             croppedContext.putImageData(croppedPixels, 0, 0);
             return cropped;
         };
+        const isHeicLikeFile = file => {
+            if (!file || !(file instanceof Blob)) return false;
+            const fileType = (file.type || '').toLowerCase();
+            const safeName = (file.name || '').toLowerCase();
+            return fileType.includes('heic') || fileType.includes('heif') || /(?:^|\.)heic(?:-sequence)?$|(?:^|\.)heif(?:-sequence)?$/i.test(safeName);
+        };
+
+        const convertHeicBlob = async file => {
+            if (!isHeicLikeFile(file)) return file;
+            const converters = [
+                { toType: 'image/jpeg', label: 'JPEG' },
+                { toType: 'image/png', label: 'PNG' }
+            ];
+            for (const converter of converters) {
+                if (!window.heic2any || typeof window.heic2any !== 'function') continue;
+                try {
+                    const converted = await window.heic2any({
+                        blob: file,
+                        toType: converter.toType,
+                        quality: 0.9
+                    });
+                    const convertedBlob = Array.isArray(converted) ? converted[0] : converted;
+                    if (convertedBlob && convertedBlob instanceof Blob) {
+                        return convertedBlob;
+                    }
+                } catch (error) {
+                    console.warn(`[TryOn] HEIC conversion to ${converter.label} failed`, error);
+                }
+            }
+            return file;
+        };
+
+        const prepareSelectedFile = async file => {
+            if (!file || !(file instanceof Blob)) {
+                throw new Error('Geçerli bir resim dosyası seçilmedi.');
+            }
+            if (!isHeicLikeFile(file)) {
+                return file;
+            }
+            return convertHeicBlob(file);
+        };
+
         const fileToPngData = file => new Promise((resolve, reject) => {
-            const acceptConvert = () => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    normalizeImageSource(String(reader.result || ''))
-                        .then(resolve)
-                        .catch(reject);
-                };
-                reader.onerror = () => reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
-                reader.readAsDataURL(file);
+            const acceptConvert = async () => {
+                try {
+                    const safeFile = await prepareSelectedFile(file);
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        normalizeImageSource(String(reader.result || ''))
+                            .then(resolve)
+                            .catch(reject);
+                    };
+                    reader.onerror = () => reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
+                    reader.readAsDataURL(safeFile);
+                } catch (error) {
+                    reject(new Error(error && error.message ? error.message : 'Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
+                }
             };
 
             if (window.createImageBitmap && typeof file !== 'undefined' && file && typeof file.arrayBuffer === 'function') {
@@ -1609,10 +1658,13 @@
                 download.classList.remove('is-ready');
                 createButton.disabled = false;
                 status.textContent = isHeicLike
-                    ? 'Fotoğraf hazır. iOS/Android dosyası normalize edildi; sonucu oluşturmak için butona bas.'
+                    ? 'Fotoğraf hazır. iOS/Android HEIC/HEIF dosyası normalize edildi; sonucu oluşturmak için butona bas.'
                     : 'Fotoğraf hazır. Sonucu oluşturmak için butona bas.';
             } catch (error) {
-                status.textContent = error && error.message ? error.message : 'Fotoğraf okunamadı. Lütfen başka bir resim seçin.';
+                const detail = error && error.message ? error.message : 'Fotoğraf okunamadı. Lütfen başka bir resim seçin.';
+                status.textContent = isHeicLike
+                    ? `Bu dosya türü tarayıcıda açılamıyor. Lütfen JPG/PNG formatında bir fotoğraf seçin. (${detail})`
+                    : detail;
                 preview.src = '';
                 previewFrame.classList.remove('has-image');
                 createButton.disabled = true;
