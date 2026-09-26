@@ -1246,7 +1246,7 @@
         const openButton = document.getElementById('try-on-open');
         const closeButton = document.getElementById('tryon-close');
         const resetButton = document.getElementById('tryon-reset');
-        const fileInput = document.getElementById('tryon-file');
+        let fileInput = document.getElementById('tryon-file');
         const uploadTrigger = document.querySelector('.tryon-input');
         const preview = document.getElementById('tryon-preview');
         const previewFrame = document.getElementById('tryon-preview-frame');
@@ -1627,32 +1627,12 @@
                 }
             });
         }
-        if (fileInput) {
-            fileInput.addEventListener('click', event => {
-                event.stopPropagation();
-            });
-        }
-        createButton.addEventListener('click', () => {
-            if(!photoUrl || createButton.disabled) return;
-            createButton.disabled = true;
-            download.classList.remove('is-ready');
-            resultFrame.classList.remove('has-result');
-            loading.classList.add('is-active');
-            status.textContent = 'AI fotoğrafı hazırlanıyor...';
-            requestProfessionalTryOn(photoUrl)
-                .then(renderRemoteResult)
-                .catch(error => {
-                    console.error('[TryOn] Request failed', error);
-                    loading.classList.remove('is-active');
-                    createButton.disabled = false;
-                    const message = error && error.message ? error.message : 'Bilinmeyen bir hata oluştu.';
-                    status.textContent = `${message}. AI sonucu üretilemedi.`;
-                });
-        });
-        fileInput.addEventListener('change', async () => {
-            const file = fileInput.files[0];
+
+        const handleFileInputChange = async (event) => {
+            const target = event.currentTarget || event.target;
+            const file = target.files && target.files[0];
             if(!file) return;
-            if(photoUrl) URL.revokeObjectURL(photoUrl);
+            if(photoUrl && photoUrl.startsWith('blob:')) URL.revokeObjectURL(photoUrl);
             const fileType = (file.type || '').toLowerCase();
             const isHeicLike = fileType.includes('heic') || fileType.includes('heif') || /\.(heic|heif|heif-sequence|heic-sequence)$/i.test(file.name || '');
             try {
@@ -1676,6 +1656,45 @@
                 previewFrame.classList.remove('has-image');
                 createButton.disabled = true;
             }
+            recreateFileInput();
+        };
+
+        const attachFileInputListeners = (input) => {
+            input.addEventListener('change', handleFileInputChange);
+            input.addEventListener('click', event => {
+                event.stopPropagation();
+            });
+        };
+
+        const recreateFileInput = () => {
+            const freshInput = fileInput.cloneNode(true);
+            freshInput.value = '';
+            fileInput.replaceWith(freshInput);
+            fileInput = freshInput;
+            attachFileInputListeners(fileInput);
+            return fileInput;
+        };
+
+        if (fileInput) {
+            attachFileInputListeners(fileInput);
+        }
+
+        createButton.addEventListener('click', () => {
+            if(!photoUrl || createButton.disabled) return;
+            createButton.disabled = true;
+            download.classList.remove('is-ready');
+            resultFrame.classList.remove('has-result');
+            loading.classList.add('is-active');
+            status.textContent = 'AI fotoğrafı hazırlanıyor...';
+            requestProfessionalTryOn(photoUrl)
+                .then(renderRemoteResult)
+                .catch(error => {
+                    console.error('[TryOn] Request failed', error);
+                    loading.classList.remove('is-active');
+                    createButton.disabled = false;
+                    const message = error && error.message ? error.message : 'Bilinmeyen bir hata oluştu.';
+                    status.textContent = `${message}. AI sonucu üretilemedi.`;
+                });
         });
     })();
 </script>
