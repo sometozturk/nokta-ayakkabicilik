@@ -1481,19 +1481,31 @@
         const requestProfessionalTryOn = async source => {
             const shoeImage = activeTryOnProduct.image || shoeSource;
             const [person, shoe] = await Promise.all([imageToData(source), imageToData(shoeImage)]);
+            const payload = {
+                personImage:`data:${person.mimeType};base64,${person.base64}`,
+                shoeImage:`data:${shoe.mimeType};base64,${shoe.base64}`,
+                shoeTitle: activeTryOnProduct.title || 'seçilen ayakkabı'
+            };
+            console.log('[TryOn] Sending payload', {
+                personBytes: payload.personImage.length,
+                shoeBytes: payload.shoeImage.length,
+                shoeTitle: payload.shoeTitle,
+                endpoint: tryOnEndpoint
+            });
             const response = await fetch(tryOnEndpoint, {
                 method:'POST',
                 headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({
-                    personImage:`data:${person.mimeType};base64,${person.base64}`,
-                    shoeImage:`data:${shoe.mimeType};base64,${shoe.base64}`,
-                    shoeTitle: activeTryOnProduct.title || 'seçilen ayakkabı'
-                })
+                body:JSON.stringify(payload)
             });
             const result = await response.json().catch(() => ({}));
+            console.log('[TryOn] Response', {
+                status: response.status,
+                ok: response.ok,
+                result
+            });
             if(!response.ok) {
-                const details = result && (result.error || result.message || result.providerStatus || response.status);
-                throw new Error(details ? `AI servisi hata verdi (${details})` : 'AI servisi hata verdi.');
+                const details = result && (result.error || result.providerBody || result.providerStatus || result.message || response.status);
+                throw new Error(details ? `AI servisi hata verdi (${JSON.stringify(details).slice(0, 220)})` : 'AI servisi hata verdi.');
             }
             if(!result || !result.imageUrl) {
                 throw new Error(result && result.error ? result.error : 'AI sonucu üretilemedi.');
@@ -1574,9 +1586,11 @@
             requestProfessionalTryOn(photoUrl)
                 .then(renderRemoteResult)
                 .catch(error => {
+                    console.error('[TryOn] Request failed', error);
                     loading.classList.remove('is-active');
                     createButton.disabled = false;
-                    status.textContent = `${error.message}. AI sonucu üretilemedi.`;
+                    const message = error && error.message ? error.message : 'Bilinmeyen bir hata oluştu.';
+                    status.textContent = `${message}. AI sonucu üretilemedi.`;
                 });
         });
         fileInput.addEventListener('change', async () => {
