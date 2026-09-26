@@ -485,8 +485,8 @@
     .modal-price{margin:0 0 14px;font:650 24px 'Fraunces',serif;}
     .modal-size{margin:0 0 24px;color:#655b52;font-size:13px;line-height:1.6;}
     .modal-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-    .modal-tryon{display:inline-flex;align-items:center;justify-content:center;border:1px solid #0f6fe8;background:#0f6fe8;color:#fff;padding:12px 18px;border-radius:2px;cursor:pointer;font:600 12px 'DM Sans',sans-serif;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
-    .modal-tryon:hover{transform:translateY(-1px);border-color:#0c5fca;background:#0c5fca;box-shadow:0 6px 16px rgba(15,111,232,.18);}
+    .modal-tryon{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--accent);background:var(--accent);color:#fff;padding:12px 18px;border-radius:2px;cursor:pointer;font:600 12px 'DM Sans',sans-serif;box-shadow:0 10px 22px rgba(227,75,53,.2);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;background:var(--accent);}
+    .modal-tryon:hover{transform:translateY(-1px);border-color:#f05a43;background:#f05a43;box-shadow:0 6px 16px rgba(227,75,53,.18);}
     .tryon-modal{position:relative;width:min(900px,100%);max-height:min(820px,calc(100vh - 32px));overflow:auto;background:#f8f4ec;color:#191715;box-shadow:0 30px 80px rgba(0,0,0,.45);padding:34px;}
     .tryon-heading{margin:0 0 8px;font:560 32px/1.05 'Fraunces',serif;}
     .tryon-lead{margin:0 0 22px;color:#655b52;font-size:13px;line-height:1.6;}
@@ -1416,6 +1416,13 @@
             return fileType.includes('heic') || fileType.includes('heif') || /(?:^|\.)heic(?:-sequence)?$|(?:^|\.)heif(?:-sequence)?$/i.test(safeName);
         };
 
+        const isImageLikeFile = file => {
+            if (!file || !(file instanceof Blob)) return false;
+            const fileType = (file.type || '').toLowerCase();
+            const safeName = (file.name || '').toLowerCase();
+            return fileType.startsWith('image/') || /\.(jpe?g|png|gif|bmp|webp|heic|heif|avif)$/i.test(safeName);
+        };
+
         const convertHeicBlob = async file => {
             if (!isHeicLikeFile(file)) return file;
             const converters = [
@@ -1445,22 +1452,40 @@
             if (!file || !(file instanceof Blob)) {
                 throw new Error('Geçerli bir resim dosyası seçilmedi.');
             }
-            if (!isHeicLikeFile(file)) {
-                return file;
+            if (!isImageLikeFile(file)) {
+                throw new Error('Geçerli bir resim dosyası seçilmedi.');
             }
-            return convertHeicBlob(file);
+            if (isHeicLikeFile(file)) {
+                return convertHeicBlob(file);
+            }
+            return file;
         };
+
+        const readFileAsDataUrl = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const result = String(reader.result || '');
+                if (result.startsWith('data:')) {
+                    resolve(result);
+                    return;
+                }
+                reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
+            };
+            reader.onerror = () => {
+                try {
+                    resolve(URL.createObjectURL(file));
+                } catch (error) {
+                    reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
+                }
+            };
+            reader.readAsDataURL(file);
+        });
 
         const fileToPngData = async file => {
             try {
                 const safeFile = await prepareSelectedFile(file);
-                const reader = new FileReader();
-                const dataUrl = await new Promise((resolve, reject) => {
-                    reader.onload = () => resolve(String(reader.result || ''));
-                    reader.onerror = () => reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
-                    reader.readAsDataURL(safeFile);
-                });
-                return normalizeImageSource(dataUrl);
+                const imageSource = await readFileAsDataUrl(safeFile);
+                return normalizeImageSource(imageSource);
             } catch (error) {
                 throw new Error(error && error.message ? error.message : 'Fotoğraf okunamadı. Lütfen başka bir resim seçin.');
             }
