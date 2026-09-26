@@ -12,10 +12,12 @@ const allowedOrigins = new Set([
 
 const sendCors = (request, response) => {
   const origin = request.get('origin');
-  if (allowedOrigins.has(origin)) response.set('Access-Control-Allow-Origin', origin);
+  const allowedOrigin = origin && (allowedOrigins.has(origin) || /^https?:\/\/(localhost|127\.0\.0\.1|\d+\.\d+\.\d+\.\d+)(:\d+)?$/i.test(origin) || /^capacitor:\/\//i.test(origin) || /^file:\/\//i.test(origin) || /^chrome-extension:\/\//i.test(origin));
+
   response.set('Vary', 'Origin');
+  response.set('Access-Control-Allow-Origin', allowedOrigin ? origin : '*');
   response.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  response.set('Access-Control-Allow-Headers', 'Content-Type');
+  response.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 };
 
 const isDataImage = value => typeof value === 'string' && /^data:image\/(jpeg|jpg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(value);

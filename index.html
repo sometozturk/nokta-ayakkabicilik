@@ -1433,9 +1433,14 @@
                     shoeTitle: activeTryOnProduct.title || 'seçilen ayakkabı'
                 })
             });
-            const result = await response.json();
-            if(!response.ok) throw new Error(`AI servisi hata verdi (${result.providerStatus || response.status})`);
-            if(!result.imageUrl) throw new Error('AI result is missing.');
+            const result = await response.json().catch(() => ({}));
+            if(!response.ok) {
+                const details = result && (result.error || result.message || result.providerStatus || response.status);
+                throw new Error(details ? `AI servisi hata verdi (${details})` : 'AI servisi hata verdi.');
+            }
+            if(!result || !result.imageUrl) {
+                throw new Error(result && result.error ? result.error : 'AI sonucu üretilemedi.');
+            }
             return result.imageUrl;
         };
         const renderTryOn = async (source, placement = null) => {
