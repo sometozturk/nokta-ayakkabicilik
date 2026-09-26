@@ -1407,6 +1407,43 @@
             croppedContext.putImageData(croppedPixels, 0, 0);
             return cropped;
         };
+        const fileToPngData = file => new Promise((resolve, reject) => {
+            const acceptConvert = () => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    normalizeImageSource(String(reader.result || ''))
+                        .then(resolve)
+                        .catch(reject);
+                };
+                reader.onerror = () => reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
+                reader.readAsDataURL(file);
+            };
+
+            if (window.createImageBitmap && typeof file !== 'undefined' && file && typeof file.arrayBuffer === 'function') {
+                createImageBitmap(file)
+                    .then(bitmap => {
+                        const canvas = document.createElement('canvas');
+                        const scale = Math.min(1, 1400 / Math.max(bitmap.width, 1));
+                        canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+                        canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+                        const context = canvas.getContext('2d');
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+                        const dataUrl = canvas.toDataURL('image/png');
+                        const [header, base64] = dataUrl.split(',');
+                        if (!header || !base64 || !base64.length) {
+                            return reject(new Error('Görsel dönüştürülemedi. Lütfen farklı bir fotoğraf deneyin.'));
+                        }
+                        resolve({ base64, mimeType: 'image/png', originalSource: dataUrl });
+                        bitmap.close && bitmap.close();
+                    })
+                    .catch(acceptConvert);
+                return;
+            }
+
+            acceptConvert();
+        });
+
         const normalizeImageSource = source => new Promise((resolve, reject) => {
             const image = new Image();
             const safeSource = source || '';
@@ -1542,23 +1579,30 @@
                     status.textContent = `${error.message}. AI sonucu üretilemedi.`;
                 });
         });
-        fileInput.addEventListener('change', () => {
+        fileInput.addEventListener('change', async () => {
             const file = fileInput.files[0];
             if(!file) return;
             if(photoUrl) URL.revokeObjectURL(photoUrl);
             const fileType = (file.type || '').toLowerCase();
             const isHeicLike = fileType.includes('heic') || fileType.includes('heif') || /\.(heic|heif|heif-sequence|heic-sequence)$/i.test(file.name || '');
-            const objectUrl = URL.createObjectURL(file);
-            photoUrl = objectUrl;
-            preview.src = photoUrl;
-            previewFrame.classList.add('has-image');
-            resultFrame.classList.remove('has-result');
-            loading.classList.remove('is-active');
-            download.classList.remove('is-ready');
-            createButton.disabled = false;
-            status.textContent = isHeicLike
-                ? 'Fotoğraf hazır. iOS/Android dosyası normalize ediliyor; sonucu oluşturmak için butona bas.'
-                : 'Fotoğraf hazır. Sonucu oluşturmak için butona bas.';
+            try {
+                const normalized = await fileToPngData(file);
+                photoUrl = `data:${normalized.mimeType};base64,${normalized.base64}`;
+                preview.src = photoUrl;
+                previewFrame.classList.add('has-image');
+                resultFrame.classList.remove('has-result');
+                loading.classList.remove('is-active');
+                download.classList.remove('is-ready');
+                createButton.disabled = false;
+                status.textContent = isHeicLike
+                    ? 'Fotoğraf hazır. iOS/Android dosyası normalize edildi; sonucu oluşturmak için butona bas.'
+                    : 'Fotoğraf hazır. Sonucu oluşturmak için butona bas.';
+            } catch (error) {
+                status.textContent = error && error.message ? error.message : 'Fotoğraf okunamadı. Lütfen başka bir resim seçin.';
+                preview.src = '';
+                previewFrame.classList.remove('has-image');
+                createButton.disabled = true;
+            }
         });
     })();
 </script>
