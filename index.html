@@ -1497,7 +1497,7 @@
             if (!safeSource) {
                 return reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
             }
-            if (/^https?:\/\//i.test(safeSource) || /^blob:/i.test(safeSource) || /^data:/i.test(safeSource)) {
+            if (/^https?:\/\//i.test(safeSource) || /^blob:/i.test(safeSource)) {
                 image.crossOrigin = 'anonymous';
             }
             image.onload = () => {
@@ -1520,7 +1520,7 @@
                     reject(new Error('Fotoğrafın içeriği okunamadı. Lütfen başka bir resim seçin.'));
                 }
             };
-            image.onerror = () => reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
+            image.onerror = () => reject(new Error('Görsel yüklenemedi. URL veya dosya formatı uyumlu değil.'));
             image.src = safeSource;
         });
 
@@ -1531,7 +1531,18 @@
         });
         const requestProfessionalTryOn = async source => {
             const shoeImage = activeTryOnProduct.image || shoeSource;
-            const [person, shoe] = await Promise.all([imageToData(source), imageToData(shoeImage)]);
+            let person;
+            let shoe;
+            try {
+                person = await imageToData(source);
+            } catch (error) {
+                throw new Error('Senin fotoğrafın yüklenemedi: ' + (error && error.message ? error.message : 'Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
+            }
+            try {
+                shoe = await imageToData(shoeImage);
+            } catch (error) {
+                throw new Error(`Ayakkabı görseli yüklenemedi (${shoeImage}): ` + (error && error.message ? error.message : 'Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
+            }
             const payload = {
                 personImage:`data:${person.mimeType};base64,${person.base64}`,
                 shoeImage:`data:${shoe.mimeType};base64,${shoe.base64}`,
