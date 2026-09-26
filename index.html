@@ -323,9 +323,9 @@
     .shoe-caption strong{color:var(--ink);font:650 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;}
     .shoe-caption span{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
     .shoe-caption em{color:var(--accent);font:560 25px/1 'Fraunces',serif;font-style:normal;}
-    .try-on-button{position:absolute;right:12%;bottom:8%;z-index:5;border:1px solid #0f6fe8;padding:11px 15px;background:#0f6fe8;color:#fff;font:700 11px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 10px 22px rgba(15,111,232,.22);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .2s ease,background .2s ease;}
+    .try-on-button{position:absolute;right:12%;bottom:8%;z-index:5;border:1px solid var(--accent);padding:11px 15px;background:var(--accent);color:#fff;font:700 11px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 10px 22px rgba(227,75,53,.2);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .2s ease,background .2s ease;}
     .try-on-button.is-visible{opacity:1;pointer-events:auto;}
-    .try-on-button:hover{background:#0c5fca;transform:translateY(-2px);}
+    .try-on-button:hover{background:#f05a43;transform:translateY(-2px);}
     .shoe-description{position:absolute;left:-175px;top:43%;width:150px;display:flex;flex-direction:column;gap:9px;color:var(--muted);opacity:0;}
     .shoe-description strong{color:var(--ink);font:560 23px/1.02 'Fraunces',serif;}
     .shoe-description span{font-size:11px;line-height:1.55;}
@@ -515,8 +515,8 @@
     .tryon-loading.is-active{display:flex;}
     .tryon-spinner{width:34px;height:34px;border:3px solid rgba(248,244,236,.25);border-top-color:var(--accent);border-radius:50%;animation:tryonSpin .8s linear infinite;}
     @keyframes tryonSpin{to{transform:rotate(360deg);}}
-    .tryon-create{margin-top:18px;background:#0f6fe8;border-color:#0f6fe8;box-shadow:0 12px 24px rgba(15,111,232,.18);}
-    .tryon-create:hover{background:#0c5fca;border-color:#0c5fca;box-shadow:0 14px 28px rgba(15,111,232,.22);}
+    .tryon-create{margin-top:18px;background:var(--accent);border-color:var(--accent);box-shadow:0 12px 24px rgba(227,75,53,.18);}
+    .tryon-create:hover{background:#f05a43;border-color:#f05a43;box-shadow:0 14px 28px rgba(227,75,53,.22);}
     .tryon-create:disabled{cursor:not-allowed;opacity:.45;transform:none;box-shadow:none;}
     .tryon-status{margin:14px 0 0;color:#655b52;font-size:12px;}
     .tryon-actions{display:flex;gap:10px;align-items:center;margin-top:18px;}
@@ -1451,60 +1451,37 @@
             return convertHeicBlob(file);
         };
 
-        const fileToPngData = file => new Promise((resolve, reject) => {
-            const acceptConvert = async () => {
-                try {
-                    const safeFile = await prepareSelectedFile(file);
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        normalizeImageSource(String(reader.result || ''))
-                            .then(resolve)
-                            .catch(reject);
-                    };
+        const fileToPngData = async file => {
+            try {
+                const safeFile = await prepareSelectedFile(file);
+                const reader = new FileReader();
+                const dataUrl = await new Promise((resolve, reject) => {
+                    reader.onload = () => resolve(String(reader.result || ''));
                     reader.onerror = () => reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
                     reader.readAsDataURL(safeFile);
-                } catch (error) {
-                    reject(new Error(error && error.message ? error.message : 'Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
-                }
-            };
-
-            if (window.createImageBitmap && typeof file !== 'undefined' && file && typeof file.arrayBuffer === 'function') {
-                createImageBitmap(file)
-                    .then(bitmap => {
-                        const canvas = document.createElement('canvas');
-                        const scale = Math.min(1, 1400 / Math.max(bitmap.width, 1));
-                        canvas.width = Math.max(1, Math.round(bitmap.width * scale));
-                        canvas.height = Math.max(1, Math.round(bitmap.height * scale));
-                        const context = canvas.getContext('2d');
-                        context.clearRect(0, 0, canvas.width, canvas.height);
-                        context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-                        const dataUrl = canvas.toDataURL('image/png');
-                        const [header, base64] = dataUrl.split(',');
-                        if (!header || !base64 || !base64.length) {
-                            return reject(new Error('Görsel dönüştürülemedi. Lütfen farklı bir fotoğraf deneyin.'));
-                        }
-                        resolve({ base64, mimeType: 'image/png', originalSource: dataUrl });
-                        bitmap.close && bitmap.close();
-                    })
-                    .catch(acceptConvert);
-                return;
+                });
+                return normalizeImageSource(dataUrl);
+            } catch (error) {
+                throw new Error(error && error.message ? error.message : 'Fotoğraf okunamadı. Lütfen başka bir resim seçin.');
             }
-
-            acceptConvert();
-        });
+        };
 
         const normalizeImageSource = source => new Promise((resolve, reject) => {
             const image = new Image();
             const safeSource = source || '';
+            if (!safeSource) {
+                return reject(new Error('Fotoğraf okunamadı. Lütfen başka bir resim seçin.'));
+            }
             if (/^https?:\/\//i.test(safeSource) || /^blob:/i.test(safeSource) || /^data:/i.test(safeSource)) {
                 image.crossOrigin = 'anonymous';
             }
             image.onload = () => {
                 try {
                     const temporary = document.createElement('canvas');
-                    const scale = Math.min(1, 1400 / image.naturalWidth);
-                    temporary.width = Math.round(image.naturalWidth * scale);
-                    temporary.height = Math.round(image.naturalHeight * scale);
+                    const maxSide = 1600;
+                    const scale = Math.min(1, maxSide / Math.max(image.naturalWidth || 1, image.naturalHeight || 1));
+                    temporary.width = Math.max(1, Math.round((image.naturalWidth || 1) * scale));
+                    temporary.height = Math.max(1, Math.round((image.naturalHeight || 1) * scale));
                     const context = temporary.getContext('2d');
                     context.clearRect(0, 0, temporary.width, temporary.height);
                     context.drawImage(image, 0, 0, temporary.width, temporary.height);

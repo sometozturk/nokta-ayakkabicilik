@@ -22,14 +22,15 @@ const sendCors = (request, response) => {
 
 const isDataImage = value => {
   if (typeof value !== 'string') return false;
-  if (!/^data:image\/(jpeg|jpg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(value)) return false;
+  if (!/^data:image\/(jpeg|jpg|png|webp|heic|heif);base64,[A-Za-z0-9+/=]+$/.test(value)) return false;
   const [, payload] = value.split(',', 2);
   if (!payload || payload.length < 32) return false;
   const bytes = Buffer.from(payload, 'base64');
   if (bytes.length < 8) return false;
   if (value.includes('image/png')) return bytes.subarray(0, 8).toString('hex') === '89504e470d0a1a0a';
-  if (value.includes('image/jpeg')) return bytes.subarray(0, 2).toString('hex') === 'ffd8';
+  if (value.includes('image/jpeg') || value.includes('image/jpg')) return bytes.subarray(0, 2).toString('hex') === 'ffd8';
   if (value.includes('image/webp')) return bytes.subarray(0, 4).toString('ascii') === 'RIFF';
+  if (value.includes('image/heic') || value.includes('image/heif')) return true;
   return true;
 };
 
