@@ -6,9 +6,12 @@
   },
   "main": "index.js",
   "scripts": {
-    "lint": "node --check index.js"
+    "lint": "node --check index.js && node --check tryon-handler.js && node --check tryon-usage.js && node --check sync-tryon-products.js",
+    "test": "node --test",
+    "sync:catalog": "node sync-tryon-products.js"
   },
   "dependencies": {
+    "firebase-admin": "^13.10.0",
     "firebase-functions": "^6.4.0"
   }
 }

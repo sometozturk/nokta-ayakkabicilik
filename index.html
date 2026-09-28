@@ -1259,8 +1259,9 @@
         const tryOnTitle = document.getElementById('tryon-title');
         const tryOnLead = document.getElementById('tryon-lead');
         const defaultTryOnProduct = {
-            title: 'Nike Air Force 1',
-            image: 'assets/air-force-clean/ezgif-frame-121.webp'
+            id: 28,
+            title: 'Nike Airforce 1 White',
+            image: 'https://cdn.shopier.app/pictures_large/noktaayakkabi_de9c4d9d19985fbe8a837117785526a9.jpeg'
         };
         const shoeSource = defaultTryOnProduct.image;
         const tryOnProfiles = [
@@ -1275,13 +1276,6 @@
         let activeTryOnProduct = { ...defaultTryOnProduct };
         let activeTryOnProfile = tryOnProfiles[0];
 
-        const slugifyProduct = value => String(value || '')
-            .toLocaleLowerCase('tr-TR')
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, '');
-
         const resolveTryOnProfile = product => {
             const title = String(product && product.title ? product.title : '').trim();
             const profile = tryOnProfiles.find(item => item.pattern.test(title)) || tryOnProfiles[0];
@@ -1295,35 +1289,6 @@
             image.onerror = reject;
             image.src = source;
         });
-
-        const resolveTryOnImage = async (product, profile) => {
-            if (!product) return defaultTryOnProduct.image;
-            const productId = String(product.id || '').trim();
-            const productSlug = slugifyProduct(String(product.title || '').replace(/\s*\([^)]*\)\s*$/, ''));
-            const explicitAssets = [product.tryOnImage, product.transparentImage, product.tryOnAsset].filter(Boolean);
-            const namedAssets = [
-                ...explicitAssets,
-                ...['webp', 'png', 'jpg'].flatMap(extension => [
-                    productId && `assets/try-on-products/${productId}.${extension}`,
-                    productSlug && `assets/try-on-products/${productSlug}.${extension}`,
-                    productId && `assets/transparent-products/${productId}.${extension}`,
-                    productSlug && `assets/transparent-products/${productSlug}.${extension}`
-                ])
-            ].filter(Boolean);
-
-            for (const candidate of namedAssets) {
-                try {
-                    await loadImage(candidate);
-                    return candidate;
-                } catch (error) {
-                    // Continue until an exact transparent asset or the product image is found.
-                }
-            }
-
-            const productImage = product.image || (Array.isArray(product.images) ? product.images[0] : '');
-            if (productImage) return productImage;
-            return profile.asset || shoeSource;
-        };
 
         const closeTryOn = () => {
             modal.hidden = true;
@@ -1342,12 +1307,10 @@
                 const productTitle = String(product.title || '').replace(/\s*\([^)]*\)\s*$/, '').trim() || 'Ayakkabı';
                 activeTryOnProfile = resolveTryOnProfile(product);
                 activeTryOnProduct = {
+                    id: product.id,
                     title: productTitle,
                     image: product.image || (Array.isArray(product.images) ? product.images[0] : '') || activeTryOnProfile.asset
                 };
-                resolveTryOnImage(product, activeTryOnProfile).then(image => {
-                    activeTryOnProduct.image = image;
-                });
             } else {
                 activeTryOnProduct = { ...defaultTryOnProduct };
                 activeTryOnProfile = tryOnProfiles[0];
@@ -1508,14 +1471,15 @@
                     temporary.width = Math.max(1, Math.round((image.naturalWidth || 1) * scale));
                     temporary.height = Math.max(1, Math.round((image.naturalHeight || 1) * scale));
                     const context = temporary.getContext('2d');
-                    context.clearRect(0, 0, temporary.width, temporary.height);
+                    context.fillStyle = '#fff';
+                    context.fillRect(0, 0, temporary.width, temporary.height);
                     context.drawImage(image, 0, 0, temporary.width, temporary.height);
-                    const dataUrl = temporary.toDataURL('image/png');
+                    const dataUrl = temporary.toDataURL('image/jpeg', 0.85);
                     const [header, base64] = dataUrl.split(',');
                     if (!header || !base64 || !base64.length) {
                         return reject(new Error('Görsel dönüştürülemedi. Lütfen farklı bir fotoğraf deneyin.'));
                     }
-                    resolve({ base64, mimeType: 'image/png', originalSource: safeSource });
+                    resolve({ base64, mimeType: 'image/jpeg', originalSource: safeSource });
                 } catch (error) {
                     reject(new Error('Fotoğrafın içeriği okunamadı. Lütfen başka bir resim seçin.'));
                 }
@@ -1530,7 +1494,10 @@
                 .catch(reject);
         });
         const requestProfessionalTryOn = async source => {
-            const shoeImage = activeTryOnProduct.image || shoeSource;
+            const user = typeof firebase !== 'undefined' && firebase.auth ? firebase.auth().currentUser : null;
+            if (!user || !user.emailVerified) {
+                throw new Error('Kombininde Dene için doğrulanmış bir oturum gerekli.');
+            }
             let person;
             try {
                 person = await imageToData(source);
@@ -1539,29 +1506,26 @@
             }
             const payload = {
                 personImage: `data:${person.mimeType};base64,${person.base64}`,
-                shoeImageUrl: shoeImage,
-                shoeTitle: activeTryOnProduct.title || 'seçilen ayakkabı'
+                productId: activeTryOnProduct.id
             };
-            console.log('[TryOn] Sending payload', {
-                personBytes: payload.personImage.length,
-                shoeImageUrl: payload.shoeImageUrl,
-                shoeTitle: payload.shoeTitle,
-                endpoint: tryOnEndpoint
-            });
+            const idToken = await user.getIdToken();
             const response = await fetch(tryOnEndpoint, {
                 method:'POST',
-                headers:{'Content-Type':'application/json'},
+                headers:{
+                    'Content-Type':'application/json',
+                    'Authorization':`Bearer ${idToken}`
+                },
                 body:JSON.stringify(payload)
             });
             const result = await response.json().catch(() => ({}));
-            console.log('[TryOn] Response', {
-                status: response.status,
-                ok: response.ok,
-                result
-            });
             if(!response.ok) {
-                const details = result && (result.error || result.providerBody || result.providerStatus || result.message || response.status);
-                throw new Error(details ? `AI servisi hata verdi (${JSON.stringify(details).slice(0, 220)})` : 'AI servisi hata verdi.');
+                if (response.status === 401 || response.status === 403) {
+                    throw new Error('Oturumunu veya e-posta doğrulamanı kontrol edip tekrar dene.');
+                }
+                if (response.status === 429) {
+                    throw new Error('Kullanım sınırına ulaştın. Daha sonra tekrar dene.');
+                }
+                throw new Error('AI servisi şu anda isteği tamamlayamadı.');
             }
             if(!result || !result.imageUrl) {
                 throw new Error(result && result.error ? result.error : 'AI sonucu üretilemedi.');
@@ -1788,30 +1752,36 @@
         },
         {
             id: 2,
-            title: 'Adidas Superstar (36-45)',
-            price: '1300',
-            image: 'https://cdn.shopier.app/pictures_large/noktaayakkabi_26f6d31afb3201b11e0f391907bd52d4.png',
-            images: ['https://cdn.shopier.app/pictures_large/noktaayakkabi_26f6d31afb3201b11e0f391907bd52d4.png'],
+            title: 'Goldengoose Silver (36-40)',
+            price: '3099',
+            image: 'https://cdn.shopier.app/pictures_large/noktaayakkabi_22411d058ff09eb48532be06949b4d86.jpeg',
+            images: ['https://cdn.shopier.app/pictures_large/noktaayakkabi_22411d058ff09eb48532be06949b4d86.jpeg'],
             filename: '2.jpeg',
-            url: 'https://www.shopier.com/noktaayakkabi/44394060'
+            url: 'https://www.shopier.com/noktaayakkabi/50517952'
         },
         {
             id: 3,
-            title: 'Nike Zoom Structure (36-45)',
-            price: '1199',
-            image: 'https://cdn.shopier.app/pictures_large/noktaayakkabi_a0cf692b18c43f2d5472e411d610ff49.jpeg',
-            images: ['https://cdn.shopier.app/pictures_large/noktaayakkabi_a0cf692b18c43f2d5472e411d610ff49.jpeg'],
+            title: 'Nike Initiator (36-44)',
+            price: '2099',
+            image: 'https://cdn.shopier.app/pictures_large/noktaayakkabi_b76e03380d8b1a690d63ab4a5086602c.png',
+            images: [
+                'https://cdn.shopier.app/pictures_large/noktaayakkabi_b76e03380d8b1a690d63ab4a5086602c.png',
+                'https://cdn.shopier.app/pictures_large/noktaayakkabi_9518797e2529306d319061e2777a279f.jpeg'
+            ],
             filename: '3.jpeg',
-            url: 'https://www.shopier.com/noktaayakkabi/40841568'
+            url: 'https://www.shopier.com/noktaayakkabi/50517188'
         },
         {
             id: 4,
-            title: 'Vans Classic (36-44)',
-            price: '1100',
-            image: 'https://cdn.shopier.app/pictures_large/noktaayakkabi_d017de3be6fa2aa971ee77758e2e09a9.jpeg',
-            images: ['https://cdn.shopier.app/pictures_large/noktaayakkabi_d017de3be6fa2aa971ee77758e2e09a9.jpeg'],
+            title: 'Nike p6000 (36-46)',
+            price: '2099',
+            image: 'https://cdn.shopier.app/pictures_large/noktaayakkabi_566b3c9c2d83b70caef8c5765996f316.png',
+            images: [
+                'https://cdn.shopier.app/pictures_large/noktaayakkabi_566b3c9c2d83b70caef8c5765996f316.png',
+                'https://cdn.shopier.app/pictures_large/noktaayakkabi_eaa9720927d4d24b44fbf173654eb861.jpeg'
+            ],
             filename: '4.jpeg',
-            url: 'https://www.shopier.com/noktaayakkabi/50852526'
+            url: 'https://www.shopier.com/noktaayakkabi/50517164'
         }
     ];
 

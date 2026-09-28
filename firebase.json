@@ -1,4 +1,11 @@
 {
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json",
+    "database": "tryon-quota",
+    "edition": "enterprise",
+    "location": "nam5"
+  },
   "functions": {
     "source": "functions",
     "runtime": "nodejs22",
