@@ -32,6 +32,34 @@ fbq('init', '1623153919352122');
 fbq('track', 'PageView');
 </script>
 <!-- End Meta Pixel Code -->
+<script>
+document.addEventListener('click', function (e) {
+    if (typeof fbq !== 'function') return;
+    var t = e.target;
+
+    var buy = t.closest('a.satin-al-buton');
+    if (buy && !e.defaultPrevented) {
+        fbq('trackCustom', 'ShopierTikla', { urun_id: buy.href.split('/').pop() });
+        return;
+    }
+
+    var detail = t.closest('.urun-karti .product-open');
+    if (detail) {
+        var link = detail.closest('.urun-karti').querySelector('a.satin-al-buton');
+        fbq('trackCustom', 'UrunDetayAc', { urun_id: link ? link.href.split('/').pop() : '' });
+        return;
+    }
+
+    if (t.closest('#tryon-create')) {
+        fbq('trackCustom', 'KombinDene');
+        return;
+    }
+
+    if (t.closest('a[href*="instagram.com/nokta.ayakkabicilik"]')) {
+        fbq('trackCustom', 'InstagramTikla');
+    }
+});
+</script>
 <script type="application/ld+json">
 {
     "@context":"https://schema.org",
@@ -966,7 +994,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         };
 
         const syncAuthButtons = (user) => {
-            const hasUser = Boolean(user);
+            const hasUser = Boolean(user && !user.isAnonymous);
             authButtons.forEach(button => {
                 button.style.display = hasUser ? 'none' : '';
             });
@@ -1141,7 +1169,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 if (user && user.emailVerified) {
                     closeAuthModal();
                 }
-                if (user && !user.emailVerified) {
+                if (user && !user.isAnonymous && !user.emailVerified) {
                     auth.signOut();
                 }
             });
@@ -1292,6 +1320,29 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         let photoUrl = '';
         let activeTryOnProduct = { ...defaultTryOnProduct };
         let activeTryOnProfile = tryOnProfiles[0];
+        const anonymousTrialStorageKey = 'noktaTryOnAnonymousTrialUsed';
+
+        const hasUsedAnonymousTrial = () => {
+            try {
+                return window.localStorage.getItem(anonymousTrialStorageKey) === 'true';
+            } catch (error) {
+                return false;
+            }
+        };
+
+        const markAnonymousTrialUsed = () => {
+            try {
+                window.localStorage.setItem(anonymousTrialStorageKey, 'true');
+            } catch (error) {
+                // The backend still enforces the one-time trial when browser storage is unavailable.
+            }
+        };
+
+        const requireAccountForTryOn = () => {
+            if (window.NoktaAuth && window.NoktaAuth.requireAuthForAction) {
+                window.NoktaAuth.requireAuthForAction('Ücretsiz deneme hakkınız kullanıldı. Devam etmek için giriş yapın veya kayıt olun.');
+            }
+        };
 
         const resolveTryOnProfile = product => {
             const title = String(product && product.title ? product.title : '').trim();
@@ -1316,8 +1367,28 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             fileInput.value = '';
             fileInput.click();
         };
-        const openTryOn = (product = null) => {
-            if (!window.NoktaAuth || !window.NoktaAuth.requireAuthForAction || !window.NoktaAuth.requireAuthForAction('Üye olmalısınız. Kombininde Dene özelliğini kullanmak için giriş yapın veya kayıt olun.')) {
+        const openTryOn = async (product = null) => {
+            let user = typeof firebase !== 'undefined' && firebase.auth ? firebase.auth().currentUser : null;
+            if (hasUsedAnonymousTrial() && (!user || user.isAnonymous)) {
+                requireAccountForTryOn();
+                return;
+            }
+            if (!user) {
+                try {
+                    const credential = await firebase.auth().signInAnonymously();
+                    user = credential.user;
+                } catch (error) {
+                    console.error('[TryOn] Anonymous sign-in failed', error);
+                    if (window.NoktaAuth && window.NoktaAuth.requireAuthForAction) {
+                        window.NoktaAuth.requireAuthForAction('Ücretsiz deneme başlatılamadı. Giriş yapın veya kayıt olun.');
+                    }
+                    return;
+                }
+            }
+            if (!user.isAnonymous && !user.emailVerified) {
+                if (window.NoktaAuth && window.NoktaAuth.requireAuthForAction) {
+                    window.NoktaAuth.requireAuthForAction('Kombin denemek için giriş yapın veya e-posta adresinizi doğrulayın.');
+                }
                 return;
             }
             if (product) {
@@ -1342,7 +1413,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             }
             modal.hidden = false;
             modal.scrollTop = 0;
-            lockBodyScroll();
+            document.body.style.overflow = 'hidden';
         };
         window.NoktaTryOn.open = openTryOn;
         window.NoktaTryOn.close = closeTryOn;
@@ -1512,8 +1583,8 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         });
         const requestProfessionalTryOn = async source => {
             const user = typeof firebase !== 'undefined' && firebase.auth ? firebase.auth().currentUser : null;
-            if (!user || !user.emailVerified) {
-                throw new Error('Kombininde Dene için doğrulanmış bir oturum gerekli.');
+            if (!user || (!user.isAnonymous && !user.emailVerified)) {
+                throw new Error('Kombin denemek için geçerli bir oturum gerekli.');
             }
             let person;
             try {
@@ -1540,6 +1611,11 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                     throw new Error('Oturumunu veya e-posta doğrulamanı kontrol edip tekrar dene.');
                 }
                 if (response.status === 429) {
+                    if (result.error === 'ANONYMOUS_TRIAL_USED') {
+                        markAnonymousTrialUsed();
+                        requireAccountForTryOn();
+                        throw new Error('Ücretsiz deneme hakkınız kullanıldı. Devam etmek için giriş yapın veya kayıt olun.');
+                    }
                     throw new Error('Kullanım sınırına ulaştın. Daha sonra tekrar dene.');
                 }
                 throw new Error('AI servisi şu anda isteği tamamlayamadı.');
@@ -1590,13 +1666,10 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             loading.classList.remove('is-active');
             createButton.disabled = false;
             status.textContent = 'AI kombin sonucu hazır. Fotoğraf cihazında saklanır; sunucuda tutulmaz.';
+            const user = typeof firebase !== 'undefined' && firebase.auth ? firebase.auth().currentUser : null;
+            if (user && user.isAnonymous) markAnonymousTrialUsed();
         };
-        openButton.addEventListener('click', () => {
-            if (!window.NoktaAuth || !window.NoktaAuth.requireAuthForAction || !window.NoktaAuth.requireAuthForAction('Üye olmalısınız. Kombininde Dene özelliğini kullanmak için giriş yapın veya kayıt olun.')) {
-                return;
-            }
-            openTryOn();
-        });
+        openButton.addEventListener('click', () => openTryOn());
         closeButton.addEventListener('click', closeTryOn);
         modal.addEventListener('click', event => { if(event.target === modal) closeTryOn(); });
         resetButton.addEventListener('click', () => openFilePicker());
@@ -2099,9 +2172,6 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
 
             if (modalTryOn) {
                 modalTryOn.addEventListener('click', () => {
-                    if (!window.NoktaAuth || !window.NoktaAuth.requireAuthForAction || !window.NoktaAuth.requireAuthForAction('Üye olmalısınız. Kombininde Dene özelliğini kullanmak için giriş yapın veya kayıt olun.')) {
-                        return;
-                    }
                     if (window.NoktaTryOn && typeof window.NoktaTryOn.open === 'function') {
                         window.NoktaTryOn.open(currentProductInModal || null);
                     }

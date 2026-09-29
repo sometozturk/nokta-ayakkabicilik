@@ -92,7 +92,7 @@ const fetchShoeImageAsDataUri = async (shoeImageUrl, fetchImpl) => {
 
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-const createTryOnHandler = ({verifyIdToken, reserveUsage, refundUsage = async () => {}, resolveProduct, getApiKey, fetchImpl = fetch, sleepImpl = sleep, logger = console}) => async (request, response) => {
+const createTryOnHandler = ({verifyIdToken, reserveUsage, completeUsage = async () => {}, refundUsage = async () => {}, resolveProduct, getApiKey, fetchImpl = fetch, sleepImpl = sleep, logger = console}) => async (request, response) => {
   sendCors(request, response);
   if (request.method === 'OPTIONS') return response.status(204).send('');
   if (request.method !== 'POST') return response.status(405).json({error: 'Yalnızca POST desteklenir.'});
@@ -108,7 +108,8 @@ const createTryOnHandler = ({verifyIdToken, reserveUsage, refundUsage = async ()
   } catch (error) {
     return response.status(401).json({error: 'Geçersiz oturum.'});
   }
-  if (!decodedToken.email_verified) {
+  const isAnonymous = decodedToken.firebase?.sign_in_provider === 'anonymous';
+  if (!decodedToken.email_verified && !isAnonymous) {
     return response.status(403).json({error: 'E-posta doğrulaması gerekli.'});
   }
 
@@ -139,10 +140,10 @@ const createTryOnHandler = ({verifyIdToken, reserveUsage, refundUsage = async ()
 
   let usageReservation;
   try {
-    usageReservation = await reserveUsage({uid: decodedToken.uid, ip: request.ip || request.socket?.remoteAddress || 'unknown'});
+    usageReservation = await reserveUsage({uid: decodedToken.uid, ip: request.ip || request.socket?.remoteAddress || 'unknown', isAnonymous});
   } catch (error) {
     if (error && error.code === 'TRYON_QUOTA_EXCEEDED') {
-      return response.status(429).json({error: 'Kullanım sınırına ulaştınız. Daha sonra tekrar deneyin.'});
+      return response.status(429).json({error: error.reason || 'Kullanım sınırına ulaştınız. Daha sonra tekrar deneyin.'});
     }
     logger.error('[TryOn] Usage quota unavailable', {
       message: error?.message,
@@ -153,7 +154,11 @@ const createTryOnHandler = ({verifyIdToken, reserveUsage, refundUsage = async ()
 
   const refundReservedDailyUsage = async () => {
     try {
-      await refundUsage({uid: decodedToken.uid, day: usageReservation?.day});
+      await refundUsage({
+        uid: decodedToken.uid,
+        day: usageReservation?.day,
+        ...(isAnonymous ? {isAnonymous: true} : {})
+      });
     } catch (error) {
       logger.error('[TryOn] Daily quota refund failed', {
         message: error?.message || 'Unknown refund error',
@@ -219,6 +224,11 @@ const createTryOnHandler = ({verifyIdToken, reserveUsage, refundUsage = async ()
       });
       const statusResult = await statusResponse.json().catch(() => ({}));
       if (statusResult.status === 'completed' && statusResult.output?.[0]) {
+        await completeUsage({
+          uid: decodedToken.uid,
+          day: usageReservation?.day,
+          ...(isAnonymous ? {isAnonymous: true} : {})
+        });
         return response.json({imageUrl: statusResult.output[0]});
       }
       if (!statusResponse.ok || statusResult.status === 'failed' || statusResult.error) {

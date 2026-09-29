@@ -53,7 +53,7 @@ const createRequest = ({authorization = 'Bearer valid-token', body = {personImag
   }
 });
 
-const createHandler = ({token = {uid: 'user-1', email_verified: true}, reserveUsage = async () => {}, refundUsage = async () => {}, fetchImpl, sleepImpl = async () => {}, logger = {error() {}}} = {}) => {
+const createHandler = ({token = {uid: 'user-1', email_verified: true}, reserveUsage = async () => {}, completeUsage = async () => {}, refundUsage = async () => {}, fetchImpl, sleepImpl = async () => {}, logger = {error() {}}} = {}) => {
   return createTryOnHandler({
     verifyIdToken: async value => {
       if (value !== 'valid-token') throw new Error('bad token');
@@ -61,6 +61,7 @@ const createHandler = ({token = {uid: 'user-1', email_verified: true}, reserveUs
       return token;
     },
     reserveUsage,
+    completeUsage,
     refundUsage,
     resolveProduct: productId => String(productId) === '28' ? {
       id: 28,
@@ -308,4 +309,23 @@ test('FASHN HTTP errors are logged with status but hidden from the client', asyn
   assert.equal(logs[0][1].message, 'FASHN run request failed');
   assert.equal(logs[0][1].status, 503);
   assert.doesNotMatch(JSON.stringify(response.body), /private provider detail/);
+});
+
+test('anonymous users are allowed one completed try-on', async () => {
+  const completed = [];
+  const reserved = [];
+  const handler = createHandler({
+    token: {uid: 'guest-1', email_verified: false, firebase: {sign_in_provider: 'anonymous'}},
+    reserveUsage: async usage => {
+      reserved.push(usage);
+      return {day: '2026-09-29', isAnonymous: true};
+    },
+    completeUsage: async usage => completed.push(usage)
+  });
+
+  const response = await invoke(handler);
+
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(reserved, [{uid: 'guest-1', ip: '203.0.113.10', isAnonymous: true}]);
+  assert.deepEqual(completed, [{uid: 'guest-1', day: '2026-09-29', isAnonymous: true}]);
 });

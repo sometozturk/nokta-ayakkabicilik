@@ -86,3 +86,24 @@ test('per-user minute limit remains one request', async () => {
     error => error.code === 'TRYON_QUOTA_EXCEEDED'
   );
 });
+
+test('anonymous users receive one trial and failed reservations can be retried', async () => {
+  const firestore = createMemoryFirestore();
+  let timestamp = fixedNow();
+  const usage = createTryOnUsage({firestore, FieldValue: fakeFieldValue, globalDailyLimit: 100, now: () => timestamp});
+  const reservation = await usage.reserveUsage({uid: 'guest-a', ip: 'ip-a', isAnonymous: true});
+  await assert.rejects(
+    usage.reserveUsage({uid: 'guest-a', ip: 'ip-a', isAnonymous: true}),
+    error => error.reason === 'ANONYMOUS_TRIAL_USED'
+  );
+
+  await usage.refundUsage({uid: 'guest-a', day: reservation.day, isAnonymous: true});
+  timestamp += 60000;
+  const retry = await usage.reserveUsage({uid: 'guest-a', ip: 'ip-a', isAnonymous: true});
+  await usage.completeUsage({uid: 'guest-a', day: retry.day, isAnonymous: true});
+
+  await assert.rejects(
+    usage.reserveUsage({uid: 'guest-a', ip: 'ip-a', isAnonymous: true}),
+    error => error.reason === 'ANONYMOUS_TRIAL_USED'
+  );
+});

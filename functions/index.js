@@ -15,7 +15,7 @@ const auth = getAuth();
 const firestore = getFirestore(adminApp, 'tryon-quota');
 
 const tryOnProductMap = new Map(tryOnProducts.map(product => [String(product.id), product]));
-const {reserveUsage, refundUsage} = createTryOnUsage({
+const {reserveUsage, completeUsage, refundUsage} = createTryOnUsage({
   firestore,
   FieldValue,
   globalDailyLimit: () => tryOnGlobalDailyLimit.value()
@@ -30,6 +30,7 @@ exports.tryOn = onRequest({
 }, createTryOnHandler({
   verifyIdToken: token => auth.verifyIdToken(token, true),
   reserveUsage,
+  completeUsage,
   refundUsage,
   resolveProduct: productId => tryOnProductMap.get(String(productId)),
   getApiKey: () => fashnApiKey.value()
