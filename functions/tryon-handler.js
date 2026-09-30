@@ -106,6 +106,17 @@ const isProviderQuotaError = (status, message) => {
     text.includes('rate_limit');
 };
 
+const isPermanentProviderQuota = (status, message) => {
+  const code = Number(status) || 0;
+  const text = String(message || '').toLowerCase();
+  const isHardQuota = text.includes('resource_exhausted') ||
+    text.includes('quota exhausted') ||
+    text.includes('quota exceeded') ||
+    text.includes('capacity exhausted') ||
+    text.includes('daily quota exceeded');
+  return (code === 429 && isHardQuota) || isHardQuota;
+};
+
 const quotaStatus = reason => {
   if (reason === 'GLOBAL_CAP' || reason === 'QUOTA_EXHAUSTED') return 503;
   return 429;
@@ -299,10 +310,12 @@ const createTryOnHandler = ({
       status: providerStatus
     });
     if (isProviderQuotaError(providerStatus, providerMessage)) {
-      try {
-        await markGlobalTotalExhausted();
-      } catch (quotaErrorValue) {
-        logger.error('[TryOn] Global quota mark failed', {message: quotaErrorValue?.message});
+      if (isPermanentProviderQuota(providerStatus, providerMessage)) {
+        try {
+          await markGlobalTotalExhausted();
+        } catch (quotaErrorValue) {
+          logger.error('[TryOn] Global quota mark failed', {message: quotaErrorValue?.message});
+        }
       }
       return response.status(503).json({error: 'QUOTA_EXHAUSTED'});
     }
