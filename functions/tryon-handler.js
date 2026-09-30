@@ -5,8 +5,7 @@ const MAX_SHOE_IMAGE_BYTES = 4 * 1024 * 1024;
 const allowedOrigins = new Set([
   'https://www.noktaayakkabicilik.com',
   'https://noktaayakkabicilik.com',
-  'http://localhost:3000',
-  'http://127.0.0.1:5500'
+  'http://localhost:8000'
 ]);
 
 const allowedShoeImageHosts = new Set(['cdn.shopier.app']);
@@ -18,7 +17,7 @@ const sendCors = (request, response) => {
     response.set('Access-Control-Allow-Origin', origin);
   }
   response.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  response.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  response.set('Access-Control-Allow-Headers', 'Authorization, Content-Type, X-Device-Id, X-Firebase-AppCheck');
   response.set('Access-Control-Max-Age', '3600');
 };
 
@@ -92,10 +91,57 @@ const fetchShoeImageAsDataUri = async (shoeImageUrl, fetchImpl) => {
 
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-const createTryOnHandler = ({verifyIdToken, reserveUsage, completeUsage = async () => {}, refundUsage = async () => {}, resolveProduct, getApiKey, fetchImpl = fetch, sleepImpl = sleep, logger = console}) => async (request, response) => {
+const clientIp = request => {
+  const forwarded = String(request.get('x-forwarded-for') || '').split(',')[0].trim();
+  return forwarded || request.ip || request.socket?.remoteAddress || 'unknown';
+};
+
+const isProviderQuotaError = (status, message) => {
+  const code = Number(status) || 0;
+  const text = String(message || '').toLowerCase();
+  return code === 429 ||
+    text.includes('resource_exhausted') ||
+    text.includes('quota') ||
+    text.includes('rate limit') ||
+    text.includes('rate_limit');
+};
+
+const quotaStatus = reason => {
+  if (reason === 'GLOBAL_CAP' || reason === 'QUOTA_EXHAUSTED') return 503;
+  return 429;
+};
+
+const createTryOnHandler = ({
+  verifyIdToken,
+  verifyAppCheckToken = async () => ({}),
+  getAppCheckMode = () => 'off',
+  reserveUsage,
+  completeUsage = async () => {},
+  refundUsage = async () => {},
+  markGlobalTotalExhausted = async () => {},
+  resolveProduct,
+  getApiKey,
+  fetchImpl = fetch,
+  sleepImpl = sleep,
+  logger = console
+}) => async (request, response) => {
   sendCors(request, response);
   if (request.method === 'OPTIONS') return response.status(204).send('');
   if (request.method !== 'POST') return response.status(405).json({error: 'Yalnızca POST desteklenir.'});
+
+  const appCheckMode = String(getAppCheckMode() || 'monitor').toLowerCase();
+  if (appCheckMode !== 'off') {
+    const appCheckToken = request.get('x-firebase-appcheck') || '';
+    try {
+      if (!appCheckToken) throw new Error('missing App Check token');
+      await verifyAppCheckToken(appCheckToken);
+    } catch (error) {
+      if (appCheckMode === 'enforce') {
+        return response.status(401).json({error: 'Geçersiz istemci doğrulaması.'});
+      }
+      logger.error('[TryOn] App Check rejected', {message: String(error?.message || 'invalid').slice(0, 80)});
+    }
+  }
 
   const authorization = request.get('authorization') || '';
   if (!authorization.startsWith('Bearer ')) {
@@ -140,10 +186,16 @@ const createTryOnHandler = ({verifyIdToken, reserveUsage, completeUsage = async 
 
   let usageReservation;
   try {
-    usageReservation = await reserveUsage({uid: decodedToken.uid, ip: request.ip || request.socket?.remoteAddress || 'unknown', isAnonymous});
+    usageReservation = await reserveUsage({
+      uid: decodedToken.uid,
+      ip: clientIp(request),
+      isAnonymous,
+      deviceId: request.get('x-device-id') || ''
+    });
   } catch (error) {
     if (error && error.code === 'TRYON_QUOTA_EXCEEDED') {
-      return response.status(429).json({error: error.reason || 'Kullanım sınırına ulaştınız. Daha sonra tekrar deneyin.'});
+      const reason = error.reason || 'DAILY_LIMIT';
+      return response.status(quotaStatus(reason)).json({error: reason});
     }
     logger.error('[TryOn] Usage quota unavailable', {
       message: error?.message,
@@ -154,11 +206,7 @@ const createTryOnHandler = ({verifyIdToken, reserveUsage, completeUsage = async 
 
   const refundReservedDailyUsage = async () => {
     try {
-      await refundUsage({
-        uid: decodedToken.uid,
-        day: usageReservation?.day,
-        ...(isAnonymous ? {isAnonymous: true} : {})
-      });
+      await refundUsage(usageReservation || {});
     } catch (error) {
       logger.error('[TryOn] Daily quota refund failed', {
         message: error?.message || 'Unknown refund error',
@@ -210,7 +258,13 @@ const createTryOnHandler = ({verifyIdToken, reserveUsage, completeUsage = async 
 
     const runResult = await runResponse.json().catch(() => ({}));
     if (!runResponse.ok || !runResult.id) {
-      throw Object.assign(new Error('FASHN run request failed'), {status: runResponse.status});
+      const runMessage = typeof runResult.error === 'string'
+        ? runResult.error
+        : runResult.error?.message || 'FASHN run request failed';
+      throw Object.assign(
+        new Error(isProviderQuotaError(runResponse.status, runMessage) ? runMessage : 'FASHN run request failed'),
+        {status: runResponse.status}
+      );
     }
 
     for (let attempt = 0; attempt < 30; attempt++) {
@@ -224,11 +278,7 @@ const createTryOnHandler = ({verifyIdToken, reserveUsage, completeUsage = async 
       });
       const statusResult = await statusResponse.json().catch(() => ({}));
       if (statusResult.status === 'completed' && statusResult.output?.[0]) {
-        await completeUsage({
-          uid: decodedToken.uid,
-          day: usageReservation?.day,
-          ...(isAnonymous ? {isAnonymous: true} : {})
-        });
+        await completeUsage(usageReservation || {});
         return response.json({imageUrl: statusResult.output[0]});
       }
       if (!statusResponse.ok || statusResult.status === 'failed' || statusResult.error) {
@@ -242,10 +292,20 @@ const createTryOnHandler = ({verifyIdToken, reserveUsage, completeUsage = async 
     return response.status(504).json({error: 'AI işlemi zaman aşımına uğradı.'});
   } catch (error) {
     await refundReservedDailyUsage();
+    const providerStatus = error?.status || error?.response?.status || null;
+    const providerMessage = String(error?.message || 'Unknown provider error').slice(0, 500);
     logger.error('[TryOn] AI provider request failed', {
-      message: String(error?.message || 'Unknown provider error').slice(0, 500),
-      status: error?.status || error?.response?.status || null
+      message: providerMessage,
+      status: providerStatus
     });
+    if (isProviderQuotaError(providerStatus, providerMessage)) {
+      try {
+        await markGlobalTotalExhausted();
+      } catch (quotaErrorValue) {
+        logger.error('[TryOn] Global quota mark failed', {message: quotaErrorValue?.message});
+      }
+      return response.status(503).json({error: 'QUOTA_EXHAUSTED'});
+    }
     if (Date.now() >= providerDeadline) {
       return response.status(504).json({error: 'AI işlemi zaman aşımına uğradı.'});
     }

@@ -36,25 +36,43 @@ fbq('track', 'PageView');
 document.addEventListener('click', function (e) {
     if (typeof fbq !== 'function') return;
     var t = e.target;
+    var idOf = function (href) {
+        return String(href || '').split('?')[0].replace(/\/$/, '').split('/').pop();
+    };
+    var priceOf = function (txt) {
+        return Number(String(txt || '').replace(/[^\d]/g, '')) || 0;
+    };
 
     var buy = t.closest('a.satin-al-buton');
     if (buy && !e.defaultPrevented) {
-        fbq('trackCustom', 'ShopierTikla', { urun_id: buy.href.split('/').pop() });
+        var card = buy.closest('.urun-karti');
+        var price = card
+            ? priceOf(card.querySelector('.urun-fiyat').textContent)
+            : priceOf((document.getElementById('modal-price') || {}).textContent);
+        fbq('trackCustom', 'ShopierTikla', {
+            content_ids: [idOf(buy.href)],
+            content_type: 'product',
+            value: price,
+            currency: 'TRY'
+        });
         return;
     }
 
     var detail = t.closest('.urun-karti .product-open');
     if (detail) {
-        var link = detail.closest('.urun-karti').querySelector('a.satin-al-buton');
-        fbq('trackCustom', 'UrunDetayAc', { urun_id: link ? link.href.split('/').pop() : '' });
+        var c = detail.closest('.urun-karti');
+        var link = c.querySelector('a.satin-al-buton');
+        fbq('track', 'ViewContent', {
+            content_ids: [idOf(link && link.href)],
+            content_type: 'product',
+            content_name: c.querySelector('.urun-baslik').textContent,
+            value: priceOf(c.querySelector('.urun-fiyat').textContent),
+            currency: 'TRY'
+        });
         return;
     }
 
-    if (t.closest('#tryon-create')) {
-        fbq('trackCustom', 'KombinDene');
-        return;
-    }
-
+    if (t.closest('#tryon-create')) { fbq('trackCustom', 'KombinDene'); return; }
     if (t.closest('a[href*="instagram.com/nokta.ayakkabicilik"]')) {
         fbq('trackCustom', 'InstagramTikla');
     }
@@ -99,6 +117,7 @@ document.addEventListener('click', function (e) {
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,450;9..144,560;9..144,650&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/heic2any@0.1.4/dist/heic2any.min.js"></script>
 <style>
     :root{
@@ -883,6 +902,10 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             return value.startsWith('YOUR_') || value.startsWith('PASTE_') || value.includes('your-project') || value.includes('xxxx') || value.includes('000000000000');
         });
         const firebaseApp = hasRealFirebaseConfig ? (firebase.apps.length ? firebase.app() : firebase.initializeApp(firebaseConfig)) : null;
+        const APP_CHECK_SITE_KEY = '';
+        if (firebaseApp && APP_CHECK_SITE_KEY && firebase.appCheck) {
+            firebase.appCheck().activate(APP_CHECK_SITE_KEY, true);
+        }
         const auth = firebaseApp ? firebase.auth(firebaseApp) : null;
 
         let bodyScrollLocks = 0;
@@ -1252,6 +1275,9 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                     } else {
                         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                         await userCredential.user.updateProfile({ displayName: fullName });
+                        if (typeof fbq === 'function') {
+                            fbq('track', 'CompleteRegistration', { status: true });
+                        }
                         await userCredential.user.sendEmailVerification({
                             url: verificationUrl,
                             handleCodeInApp: false
@@ -1321,6 +1347,121 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         let activeTryOnProduct = { ...defaultTryOnProduct };
         let activeTryOnProfile = tryOnProfiles[0];
         const anonymousTrialStorageKey = 'noktaTryOnAnonymousTrialUsed';
+        const deviceIdStorageKey = 'nokta_did';
+        const userType = () => {
+            const u = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth().currentUser : null;
+            return (u && !u.isAnonymous) ? 'uye' : 'anonim';
+        };
+
+        const readCookie = name => {
+            const prefix = `${name}=`;
+            const parts = String(document.cookie || '').split(';');
+            for (let index = 0; index < parts.length; index++) {
+                const part = parts[index].trim();
+                if (part.indexOf(prefix) === 0) {
+                    return decodeURIComponent(part.slice(prefix.length));
+                }
+            }
+            return '';
+        };
+
+        const writeCookie = (name, value) => {
+            const maxAge = 365 * 24 * 60 * 60;
+            const secure = location.protocol === 'https:' ? '; Secure' : '';
+            document.cookie = `${name}=${encodeURIComponent(value)}; Max-Age=${maxAge}; Path=/; SameSite=Lax${secure}`;
+        };
+
+        const idbGet = () => new Promise(resolve => {
+            try {
+                const request = indexedDB.open('nokta-tryon', 1);
+                request.onupgradeneeded = () => {
+                    request.result.createObjectStore('kv');
+                };
+                request.onsuccess = () => {
+                    const db = request.result;
+                    try {
+                        const tx = db.transaction('kv', 'readonly');
+                        const getRequest = tx.objectStore('kv').get(deviceIdStorageKey);
+                        getRequest.onsuccess = () => {
+                            resolve(getRequest.result || '');
+                            db.close();
+                        };
+                        getRequest.onerror = () => {
+                            resolve('');
+                            db.close();
+                        };
+                    } catch (error) {
+                        resolve('');
+                        db.close();
+                    }
+                };
+                request.onerror = () => resolve('');
+            } catch (error) {
+                resolve('');
+            }
+        });
+
+        const idbSet = value => new Promise(resolve => {
+            try {
+                const request = indexedDB.open('nokta-tryon', 1);
+                request.onupgradeneeded = () => {
+                    request.result.createObjectStore('kv');
+                };
+                request.onsuccess = () => {
+                    const db = request.result;
+                    try {
+                        const tx = db.transaction('kv', 'readwrite');
+                        tx.objectStore('kv').put(value, deviceIdStorageKey);
+                        tx.oncomplete = () => {
+                            db.close();
+                            resolve();
+                        };
+                        tx.onerror = () => {
+                            db.close();
+                            resolve();
+                        };
+                    } catch (error) {
+                        db.close();
+                        resolve();
+                    }
+                };
+                request.onerror = () => resolve();
+            } catch (error) {
+                resolve();
+            }
+        });
+
+        let deviceIdPromise = null;
+        const getDeviceId = () => {
+            if (deviceIdPromise) return deviceIdPromise;
+            deviceIdPromise = (async () => {
+                let fromStorage = '';
+                try {
+                    fromStorage = window.localStorage.getItem(deviceIdStorageKey) || '';
+                } catch (error) {
+                    fromStorage = '';
+                }
+                const fromCookie = readCookie(deviceIdStorageKey);
+                const fromIdb = await idbGet();
+                let id = fromStorage || fromCookie || fromIdb;
+                if (!id) {
+                    id = (window.crypto && typeof window.crypto.randomUUID === 'function')
+                        ? window.crypto.randomUUID()
+                        : `nokta-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+                }
+                try {
+                    if (window.localStorage.getItem(deviceIdStorageKey) !== id) {
+                        window.localStorage.setItem(deviceIdStorageKey, id);
+                    }
+                } catch (error) {
+                    // Backend still binds usage to IP and auth uid.
+                }
+                if (fromCookie !== id) writeCookie(deviceIdStorageKey, id);
+                if (fromIdb !== id) await idbSet(id);
+                return id;
+            })();
+            return deviceIdPromise;
+        };
 
         const hasUsedAnonymousTrial = () => {
             try {
@@ -1339,9 +1480,28 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         };
 
         const requireAccountForTryOn = () => {
+            const currentUser = typeof firebase !== 'undefined' && firebase.auth ? firebase.auth().currentUser : null;
+            if (!currentUser || !currentUser.emailVerified) {
+                if (typeof fbq === 'function') fbq('trackCustom', 'KayitDuvari');
+            }
             if (window.NoktaAuth && window.NoktaAuth.requireAuthForAction) {
                 window.NoktaAuth.requireAuthForAction('Ücretsiz deneme hakkınız kullanıldı. Devam etmek için giriş yapın veya kayıt olun.');
             }
+        };
+
+        const isAnonymousRetryBlocked = () => {
+            const user = typeof firebase !== 'undefined' && firebase.auth ? firebase.auth().currentUser : null;
+            return hasUsedAnonymousTrial() && (!user || user.isAnonymous);
+        };
+
+        const guardAnonymousRetry = event => {
+            if (!isAnonymousRetryBlocked()) return false;
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            requireAccountForTryOn();
+            return true;
         };
 
         const resolveTryOnProfile = product => {
@@ -1581,6 +1741,20 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 .then(resolve)
                 .catch(reject);
         });
+
+        const handleQuotaExhaustionMessage = errorCode => {
+            if (errorCode !== 'GLOBAL_CAP' && errorCode !== 'QUOTA_EXHAUSTED') {
+                return false;
+            }
+            if (typeof fbq === 'function') {
+                fbq('trackCustom', 'KontenjanDolu');
+            }
+            const message = errorCode === 'GLOBAL_CAP'
+                ? 'Bugünkü ücretsiz deneme kontenjanı doldu, yarın tekrar dene. Alışveriş için ürünlere göz atabilirsin.'
+                : 'AI deneme kontenjanı şu an dolu. Ürünleri incelemeye devam edebilirsin.';
+            throw new Error(message);
+        };
+
         const requestProfessionalTryOn = async source => {
             const user = typeof firebase !== 'undefined' && firebase.auth ? firebase.auth().currentUser : null;
             if (!user || (!user.isAnonymous && !user.emailVerified)) {
@@ -1609,6 +1783,9 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             if(!response.ok) {
                 if (response.status === 401 || response.status === 403) {
                     throw new Error('Oturumunu veya e-posta doğrulamanı kontrol edip tekrar dene.');
+                }
+                if (response.status === 503) {
+                    handleQuotaExhaustionMessage(result && result.error ? result.error : null);
                 }
                 if (response.status === 429) {
                     if (result.error === 'ANONYMOUS_TRIAL_USED') {
@@ -1747,7 +1924,13 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                     loading.classList.remove('is-active');
                     createButton.disabled = false;
                     const message = error && error.message ? error.message : 'Bilinmeyen bir hata oluştu.';
-                    status.textContent = `${message}. AI sonucu üretilemedi.`;
+                    const exactQuotaMessages = [
+                        'Bugünkü ücretsiz deneme kontenjanı doldu, yarın tekrar dene. Alışveriş için ürünlere göz atabilirsin.',
+                        'AI deneme kontenjanı şu an dolu. Ürünleri incelemeye devam edebilirsin.'
+                    ];
+                    status.textContent = exactQuotaMessages.includes(message)
+                        ? message
+                        : `${message}. AI sonucu üretilemedi.`;
                 });
         });
     })();
@@ -2174,15 +2357,6 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 modalTryOn.addEventListener('click', () => {
                     if (window.NoktaTryOn && typeof window.NoktaTryOn.open === 'function') {
                         window.NoktaTryOn.open(currentProductInModal || null);
-                    }
-                });
-            }
-
-            if (modalShopier) {
-                modalShopier.addEventListener('click', (event) => {
-                    if (!window.NoktaAuth || !window.NoktaAuth.requireAuthForAction || !window.NoktaAuth.requireAuthForAction('Üye olmalısınız. Satın alma işlemini tamamlamak için giriş yapın veya kayıt olun.')) {
-                        event.preventDefault();
-                        return;
                     }
                 });
             }

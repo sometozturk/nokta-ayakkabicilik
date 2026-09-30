@@ -1,92 +1,184 @@
-const {createHash} = require('node:crypto');
+const {createHmac} = require('node:crypto');
 
 const quotaError = reason => Object.assign(new Error('Try-on usage limit reached'), {code: 'TRYON_QUOTA_EXCEEDED', reason});
-const hashedId = value => createHash('sha256').update(String(value)).digest('hex');
 
-const createTryOnUsage = ({firestore, FieldValue, globalDailyLimit = 25, now = () => Date.now()}) => {
-  const reserveUsage = async ({uid, ip, isAnonymous = false}) => {
+const resolveNumber = (value, fallback) => {
+  const resolved = typeof value === 'function' ? value() : value;
+  const parsed = Number(resolved);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
+const resolveText = value => {
+  const resolved = typeof value === 'function' ? value() : value;
+  return resolved == null ? '' : String(resolved);
+};
+
+const hmacHash = (secret, value) => createHmac('sha256', secret).update(String(value)).digest('hex');
+
+const createTryOnUsage = ({
+  firestore,
+  FieldValue,
+  hashSalt,
+  now = () => Date.now(),
+  registeredDailyLimit = 2,
+  deviceDailyCap = 3,
+  anonIpDailyCap = 3,
+  globalDailyCap = 14,
+  globalTotalCap = 100
+}) => {
+  const limits = () => ({
+    registeredDailyLimit: resolveNumber(registeredDailyLimit, 2),
+    deviceDailyCap: resolveNumber(deviceDailyCap, 3),
+    anonIpDailyCap: resolveNumber(anonIpDailyCap, 3),
+    globalDailyCap: resolveNumber(globalDailyCap, 14),
+    globalTotalCap: resolveNumber(globalTotalCap, 100)
+  });
+
+  const saltOrThrow = () => {
+    const salt = resolveText(hashSalt);
+    if (!salt) {
+      throw Object.assign(new Error('HASH_SALT missing'), {code: 'failed-precondition'});
+    }
+    return salt;
+  };
+
+  const hashed = (salt, value) => hmacHash(salt, value);
+  const expireAtFrom = timestamp => new Date(timestamp + 30 * 24 * 60 * 60 * 1000);
+
+  const reserveUsage = async ({uid, ip, isAnonymous = false, deviceId = ''}) => {
+    const salt = saltOrThrow();
+    const caps = limits();
     const timestamp = now();
-    const minuteWindow = Math.floor(timestamp / 60000);
-    const tenMinuteWindow = Math.floor(timestamp / 600000);
     const utcDay = new Date(timestamp).toISOString().slice(0, 10);
-    const userRateRef = firestore.doc(`tryOnUsage/userRate_${hashedId(uid)}`);
-    const ipRateRef = firestore.doc(`tryOnUsage/ipRate_${hashedId(ip)}`);
-    const dailyRef = firestore.doc(`tryOnUsage/daily_${hashedId(uid)}`);
-    const globalDailyRef = firestore.doc('tryOnUsage/globalDaily');
-    const anonymousTrialRef = isAnonymous ? firestore.doc(`tryOnUsage/anonymousTrial_${hashedId(uid)}`) : null;
-    const dailyLimit = typeof globalDailyLimit === 'function' ? globalDailyLimit() : globalDailyLimit;
+    const dayKey = utcDay.replaceAll('-', '');
+    const expireAt = expireAtFrom(timestamp);
+    const uidHash = hashed(salt, uid);
+    const ipHash = hashed(salt, ip);
+    const deviceHash = deviceId ? hashed(salt, deviceId) : '';
+
+    const anonUidRef = isAnonymous ? firestore.doc(`tryon_usage/anon_uid_${uidHash}`) : null;
+    const deviceUsedRef = isAnonymous && deviceHash ? firestore.doc(`tryon_usage/device_${deviceHash}`) : null;
+    const ipRef = isAnonymous ? firestore.doc(`tryon_usage/ip_${ipHash}_${dayKey}`) : null;
+    const userRef = !isAnonymous ? firestore.doc(`tryon_usage/user_${uidHash}_${dayKey}`) : null;
+    const deviceDailyRef = !isAnonymous && deviceHash ? firestore.doc(`tryon_usage/device_${deviceHash}_${dayKey}`) : null;
+    const globalDailyRef = firestore.doc(`tryon_usage/global_${dayKey}`);
+    const globalTotalRef = firestore.doc('tryon_usage/global_total');
 
     return firestore.runTransaction(async transaction => {
-      const [userRate, ipRate, daily, globalDaily] = await Promise.all([
-        transaction.get(userRateRef),
-        transaction.get(ipRateRef),
-        transaction.get(dailyRef),
-        transaction.get(globalDailyRef)
-      ]);
-      const anonymousTrial = anonymousTrialRef ? await transaction.get(anonymousTrialRef) : null;
-      const userRateData = userRate.data() || {};
-      const ipRateData = ipRate.data() || {};
-      const dailyData = daily.data() || {};
-      const globalDailyData = globalDaily.data() || {};
-      const anonymousTrialData = anonymousTrial?.data() || {};
-      const userCount = userRateData.window === minuteWindow ? userRateData.count || 0 : 0;
-      const ipCount = ipRateData.window === tenMinuteWindow ? ipRateData.count || 0 : 0;
-      const dailyCount = dailyData.day === utcDay ? dailyData.count || 0 : 0;
-      const globalCount = globalDailyData.day === utcDay ? globalDailyData.count || 0 : 0;
-
-      if (isAnonymous && ['reserved', 'used'].includes(anonymousTrialData.status)) {
-        throw quotaError('ANONYMOUS_TRIAL_USED');
-      }
-      if (userCount >= 1 || ipCount >= 30 || dailyCount >= 10 || globalCount >= dailyLimit) throw quotaError();
-
-      transaction.set(userRateRef, {window: minuteWindow, count: userCount + 1});
-      transaction.set(ipRateRef, {window: tenMinuteWindow, count: ipCount + 1});
-      transaction.set(dailyRef, {day: utcDay, count: dailyCount + 1});
-      transaction.set(globalDailyRef, {day: utcDay, count: globalCount + 1});
-      if (anonymousTrialRef) transaction.set(anonymousTrialRef, {status: 'reserved', day: utcDay});
-      return {day: utcDay, isAnonymous};
-    });
-  };
-
-  const completeUsage = async ({uid, day, isAnonymous = false}) => {
-    if (!isAnonymous) return;
-    const anonymousTrialRef = firestore.doc(`tryOnUsage/anonymousTrial_${hashedId(uid)}`);
-    await firestore.runTransaction(async transaction => {
-      const anonymousTrial = await transaction.get(anonymousTrialRef);
-      const trialData = anonymousTrial.data() || {};
-      if (trialData.status !== 'reserved' || trialData.day !== day) throw quotaError('ANONYMOUS_TRIAL_USED');
-      transaction.set(anonymousTrialRef, {status: 'used', day});
-    });
-  };
-
-  const refundUsage = async ({uid, day, isAnonymous = false}) => {
-    if (!day) return;
-    const dailyRef = firestore.doc(`tryOnUsage/daily_${hashedId(uid)}`);
-    const globalDailyRef = firestore.doc('tryOnUsage/globalDaily');
-    const anonymousTrialRef = isAnonymous ? firestore.doc(`tryOnUsage/anonymousTrial_${hashedId(uid)}`) : null;
-
-    await firestore.runTransaction(async transaction => {
-      const [daily, globalDaily, anonymousTrial] = await Promise.all([
-        transaction.get(dailyRef),
+      const [anonUid, deviceUsed, ipDoc, userDoc, deviceDaily, globalDaily, globalTotal] = await Promise.all([
+        anonUidRef ? transaction.get(anonUidRef) : Promise.resolve(null),
+        deviceUsedRef ? transaction.get(deviceUsedRef) : Promise.resolve(null),
+        ipRef ? transaction.get(ipRef) : Promise.resolve(null),
+        userRef ? transaction.get(userRef) : Promise.resolve(null),
+        deviceDailyRef ? transaction.get(deviceDailyRef) : Promise.resolve(null),
         transaction.get(globalDailyRef),
-        anonymousTrialRef ? transaction.get(anonymousTrialRef) : Promise.resolve(null)
+        transaction.get(globalTotalRef)
       ]);
-      const dailyData = daily.data() || {};
-      const globalDailyData = globalDaily.data() || {};
-      const anonymousTrialData = anonymousTrial?.data() || {};
-      if (dailyData.day === day && (dailyData.count || 0) > 0) {
-        transaction.update(dailyRef, {count: FieldValue.increment(-1)});
+
+      const anonUidData = anonUid?.data() || {};
+      const deviceUsedData = deviceUsed?.data() || {};
+      const ipCount = ipDoc?.data()?.count || 0;
+      const userCount = userDoc?.data()?.count || 0;
+      const deviceCount = deviceDaily?.data()?.count || 0;
+      const globalDailyCount = globalDaily.data()?.count || 0;
+      const globalTotalCount = globalTotal.data()?.count || 0;
+
+      if (globalTotalCount >= caps.globalTotalCap) throw quotaError('QUOTA_EXHAUSTED');
+      if (globalDailyCount >= caps.globalDailyCap) throw quotaError('GLOBAL_CAP');
+
+      if (isAnonymous) {
+        if (anonUidData.used === true || deviceUsedData.used === true) {
+          throw quotaError('ANONYMOUS_TRIAL_USED');
+        }
+        if (ipCount >= caps.anonIpDailyCap) throw quotaError('ANONYMOUS_TRIAL_USED');
+      } else {
+        if (userCount >= caps.registeredDailyLimit) throw quotaError('DAILY_LIMIT');
+        if (deviceDailyRef && deviceCount >= caps.deviceDailyCap) throw quotaError('DAILY_LIMIT');
       }
-      if (globalDailyData.day === day && (globalDailyData.count || 0) > 0) {
-        transaction.update(globalDailyRef, {count: FieldValue.increment(-1)});
-      }
-      if (anonymousTrialRef && anonymousTrialData.status === 'reserved' && anonymousTrialData.day === day) {
-        transaction.set(anonymousTrialRef, {status: 'available', day});
-      }
+
+      if (anonUidRef) transaction.set(anonUidRef, {used: true, expireAt});
+      if (deviceUsedRef) transaction.set(deviceUsedRef, {used: true, expireAt});
+      if (ipRef) transaction.set(ipRef, {count: ipCount + 1, expireAt});
+      if (userRef) transaction.set(userRef, {count: userCount + 1, expireAt});
+      if (deviceDailyRef) transaction.set(deviceDailyRef, {count: deviceCount + 1, expireAt});
+      transaction.set(globalDailyRef, {count: globalDailyCount + 1, expireAt});
+      transaction.set(globalTotalRef, {count: globalTotalCount + 1});
+
+      return {
+        day: utcDay,
+        dayKey,
+        isAnonymous,
+        uidHash,
+        ipHash,
+        deviceHash
+      };
     });
   };
 
-  return {reserveUsage, completeUsage, refundUsage};
+  const completeUsage = async () => {};
+
+  const refundUsage = async (reservation = {}) => {
+    const {
+      dayKey,
+      isAnonymous = false,
+      uidHash,
+      ipHash,
+      deviceHash
+    } = reservation;
+    if (!dayKey) return;
+
+    const anonUidRef = isAnonymous && uidHash ? firestore.doc(`tryon_usage/anon_uid_${uidHash}`) : null;
+    const deviceUsedRef = isAnonymous && deviceHash ? firestore.doc(`tryon_usage/device_${deviceHash}`) : null;
+    const ipRef = isAnonymous && ipHash ? firestore.doc(`tryon_usage/ip_${ipHash}_${dayKey}`) : null;
+    const userRef = !isAnonymous && uidHash ? firestore.doc(`tryon_usage/user_${uidHash}_${dayKey}`) : null;
+    const deviceDailyRef = !isAnonymous && deviceHash ? firestore.doc(`tryon_usage/device_${deviceHash}_${dayKey}`) : null;
+    const globalDailyRef = firestore.doc(`tryon_usage/global_${dayKey}`);
+    const globalTotalRef = firestore.doc('tryon_usage/global_total');
+
+    await firestore.runTransaction(async transaction => {
+      const [anonUid, deviceUsed, ipDoc, userDoc, deviceDaily, globalDaily, globalTotal] = await Promise.all([
+        anonUidRef ? transaction.get(anonUidRef) : Promise.resolve(null),
+        deviceUsedRef ? transaction.get(deviceUsedRef) : Promise.resolve(null),
+        ipRef ? transaction.get(ipRef) : Promise.resolve(null),
+        userRef ? transaction.get(userRef) : Promise.resolve(null),
+        deviceDailyRef ? transaction.get(deviceDailyRef) : Promise.resolve(null),
+        transaction.get(globalDailyRef),
+        transaction.get(globalTotalRef)
+      ]);
+
+      const decrement = (ref, snap) => {
+        if (!ref) return;
+        const count = snap?.data()?.count || 0;
+        if (count > 0) transaction.update(ref, {count: FieldValue.increment(-1)});
+      };
+
+      if (anonUidRef && anonUid?.data()?.used === true) {
+        transaction.set(anonUidRef, {used: false, expireAt: anonUid.data().expireAt});
+      }
+      if (deviceUsedRef && deviceUsed?.data()?.used === true) {
+        transaction.set(deviceUsedRef, {used: false, expireAt: deviceUsed.data().expireAt});
+      }
+      decrement(ipRef, ipDoc);
+      decrement(userRef, userDoc);
+      decrement(deviceDailyRef, deviceDaily);
+      decrement(globalDailyRef, globalDaily);
+      decrement(globalTotalRef, globalTotal);
+    });
+  };
+
+  const markGlobalTotalExhausted = async () => {
+    const saltCheck = saltOrThrow();
+    if (!saltCheck) return;
+    const cap = limits().globalTotalCap;
+    const globalTotalRef = firestore.doc('tryon_usage/global_total');
+    await firestore.runTransaction(async transaction => {
+      const globalTotal = await transaction.get(globalTotalRef);
+      const count = globalTotal.data()?.count || 0;
+      if (count < cap) transaction.set(globalTotalRef, {count: cap});
+    });
+  };
+
+  return {reserveUsage, completeUsage, refundUsage, markGlobalTotalExhausted};
 };
 
 module.exports = {createTryOnUsage};

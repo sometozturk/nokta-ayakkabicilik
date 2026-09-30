@@ -1,9 +1,31 @@
 rules_version = '2';
 
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+// Collection: tryon_usage (Admin SDK only)
+//   anon_uid_{hmac}: { used: bool, expireAt: timestamp }
+//   device_{hmac}: { used: bool, expireAt: timestamp }
+//   ip_{hmac}_{YYYYMMDD}: { count: number, expireAt: timestamp }
+//   user_{hmac}_{YYYYMMDD}: { count: number, expireAt: timestamp }
+//   device_{hmac}_{YYYYMMDD}: { count: number, expireAt: timestamp }
+//   global_{YYYYMMDD}: { count: number, expireAt: timestamp }
+//   global_total: { count: number }
+// Collection: tryOnUsage (legacy, unused by new code)
+// ===============================================================
+
 service cloud.firestore {
   match /databases/{database}/documents {
+    function denyAll() {
+      return false;
+    }
+
+    match /tryon_usage/{document} {
+      allow read, write: if denyAll();
+    }
+
     match /tryOnUsage/{document} {
-      allow read, write: if false;
+      allow read, write: if denyAll();
     }
   }
 }
