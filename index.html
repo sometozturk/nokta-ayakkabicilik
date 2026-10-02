@@ -684,7 +684,7 @@ document.addEventListener('click', function (e) {
 
         /* Mobile product cards v3 */
         .urun-izgarasi{
-            grid-template-columns:repeat(3,minmax(0,1fr));
+            grid-template-columns:repeat(2,minmax(0,1fr));
             gap:8px;
             align-items:stretch;
         }
@@ -879,6 +879,11 @@ document.addEventListener('click', function (e) {
             animation-play-state:running !important;
         }
         .shoe-ribbon-arrow{display:none !important;}
+        .shoe-ribbon.has-active-brand{
+            position:sticky;
+            top:104px;
+            z-index:25;
+        }
     }
 
     @media (max-width:360px){
@@ -1144,7 +1149,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             <p class="modal-price" id="modal-price"></p>
             <p class="modal-size" id="modal-size"></p>
             <div class="modal-actions">
-                <a class="satin-al-buton modal-shopier" id="modal-shopier" target="_blank" rel="noopener noreferrer">Shopier'de satın al</a>
+                <a class="satin-al-buton modal-shopier" id="modal-shopier" target="_blank" rel="noopener noreferrer">Shopier'de Gör</a>
                 <button class="modal-tryon" id="modal-tryon" type="button">Kombininde Dene</button>
                 <button class="product-open" id="modal-back" type="button">Kapat</button>
             </div>
@@ -2563,7 +2568,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
 
                 const a = document.createElement('a');
                 a.className = 'satin-al-buton';
-                a.textContent = "Shopier'de satın al";
+                a.textContent = "Shopier'de Gör";
                 a.target = '_blank';
                 a.rel = 'noopener noreferrer';
                 a.href = product.url || 'https://shopier.com/noktaayakkabi';
@@ -2748,13 +2753,17 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 button.type = 'button';
                 button.textContent = label;
                 button.dataset.brandFilter = value;
-                button.addEventListener('click', () => selectBrand(value));
+                button.addEventListener('click', () => selectBrand(value, true));
                 container.appendChild(button);
             }
 
-            function selectBrand(value){
+            function selectBrand(value, preserveMobileRibbon = false){
                 activeBrand = value;
                 document.querySelectorAll('[data-brand-filter]').forEach(filter => filter.classList.toggle('active', filter.dataset.brandFilter === activeBrand));
+                const ribbon = document.querySelector('.shoe-ribbon');
+                if(ribbon && preserveMobileRibbon && window.matchMedia('(max-width:640px)').matches){
+                    ribbon.classList.add('has-active-brand');
+                }
                 filterProducts();
             }
 
