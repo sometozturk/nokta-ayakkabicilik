@@ -272,7 +272,7 @@ document.addEventListener('click', function (e) {
     .urun-karti:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);border-color:#d8ccb5;}
     .urun-karti[hidden]{display:none;}
     .image-wrap{position:relative;overflow:hidden;background:#ece5d3;aspect-ratio:1/1.05;}
-    .image-gallery{display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;}
+    .image-gallery{display:flex;width:100%;height:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;}
     .image-gallery::-webkit-scrollbar{display:none;}
     .image-slide{position:relative;flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;}
     .urun-resmi{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
