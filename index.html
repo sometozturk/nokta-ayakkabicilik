@@ -681,20 +681,29 @@ document.addEventListener('click', function (e) {
             z-index:1;
         }
 
+        /* Mobile product cards */
         .urun-izgarasi{
             grid-template-columns:repeat(3,minmax(0,1fr));
             gap:8px;
         }
         .urun-karti{border-radius:3px;}
-        .brand-tag{top:6px;left:6px;padding:3px 6px;font-size:7px;letter-spacing:.04em;}
-        .product-badge{top:6px;right:6px;padding:3px 6px;font-size:7px;}
+        .urun-karti:hover{transform:none;}
         .gallery-arrow{display:none;}
-        .urun-meta{padding:8px 8px 0;}
-        .urun-code{font-size:8.5px;letter-spacing:.02em;}
-        .urun-baslik{font-size:12px;line-height:1.2;min-height:44px;margin:5px 0 6px;}
-        .urun-fiyat{font-size:13px;}
-        .product-open{font-size:9.5px;margin-top:6px;}
-        .satin-al-buton{margin:8px;padding:9px 4px;font-size:9.5px;line-height:1.25;}
+
+        .image-wrap{aspect-ratio:1/1;}
+        .product-badge{top:6px;right:6px;padding:3px 6px;font-size:7.5px;letter-spacing:.03em;}
+        .brand-tag{top:auto;bottom:6px;left:6px;max-width:calc(100% - 12px);padding:3px 7px;font-size:7.5px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+        .urun-meta{display:flex;flex-direction:column;padding:9px 8px 0;}
+        .urun-code{font-size:8.5px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .urun-baslik{margin:5px 0 6px;font-size:11.5px;line-height:1.25;min-height:calc(1.25em * 3);display:-webkit-box;line-clamp:3;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;}
+        .urun-fiyat{font-size:13.5px;font-weight:650;white-space:nowrap;letter-spacing:0;}
+
+        .urun-meta .product-open{margin-top:6px;font-size:0;text-decoration:none;}
+        .urun-meta .product-open::after{content:'Detaylar ›';font-size:10px;font-weight:600;text-decoration:underline;text-underline-offset:3px;}
+
+        .urun-karti > .satin-al-buton{margin:8px;padding:9px 4px;font-size:0;line-height:1;}
+        .urun-karti > .satin-al-buton::after{content:'Satın al';font-size:11px;font-weight:700;}
     }
 </style>
 </head>
