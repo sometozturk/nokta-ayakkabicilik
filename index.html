@@ -681,29 +681,182 @@ document.addEventListener('click', function (e) {
             z-index:1;
         }
 
-        /* Mobile product cards */
+        /* Mobile product cards v3 */
         .urun-izgarasi{
             grid-template-columns:repeat(3,minmax(0,1fr));
             gap:8px;
+            align-items:stretch;
         }
-        .urun-karti{border-radius:3px;}
+        .urun-karti{border-radius:4px;}
         .urun-karti:hover{transform:none;}
         .gallery-arrow{display:none;}
 
         .image-wrap{aspect-ratio:1/1;}
-        .product-badge{top:6px;right:6px;padding:3px 6px;font-size:7.5px;letter-spacing:.03em;}
-        .brand-tag{top:auto;bottom:6px;left:6px;max-width:calc(100% - 12px);padding:3px 7px;font-size:7.5px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .product-badge{
+            top:5px;right:5px;
+            padding:3px 6px;
+            font-size:7.5px;
+            letter-spacing:.03em;
+        }
+        .brand-tag{
+            top:auto;bottom:5px;left:5px;
+            max-width:calc(100% - 10px);
+            padding:3px 7px;
+            font-size:7.5px;
+            letter-spacing:.04em;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
 
-        .urun-meta{display:flex;flex-direction:column;padding:9px 8px 0;}
-        .urun-code{font-size:8.5px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-        .urun-baslik{margin:5px 0 6px;font-size:11.5px;line-height:1.25;min-height:calc(1.25em * 3);display:-webkit-box;line-clamp:3;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;}
-        .urun-fiyat{font-size:13.5px;font-weight:650;white-space:nowrap;letter-spacing:0;}
+        .urun-meta{
+            display:flex;
+            flex-direction:column;
+            flex:1 1 auto;
+            padding:9px 8px 0;
+        }
+        .urun-code{
+            font-size:8.5px;
+            line-height:1.2;
+            letter-spacing:.02em;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .urun-baslik{
+            margin:5px 0 8px;
+            font-size:12px;
+            font-weight:560;
+            line-height:1.25;
+            min-height:calc(1.25em * 3);
+            display:-webkit-box;
+            line-clamp:3;
+            -webkit-line-clamp:3;
+            -webkit-box-orient:vertical;
+            overflow:hidden;
+            word-break:break-word;
+            hyphens:auto;
+        }
+        .urun-fiyat{
+            margin-top:auto;
+            font-size:14.5px;
+            font-weight:650;
+            line-height:1.1;
+            white-space:nowrap;
+            letter-spacing:0;
+        }
 
-        .urun-meta .product-open{margin-top:6px;font-size:0;text-decoration:none;}
-        .urun-meta .product-open::after{content:'Detaylar ›';font-size:10px;font-weight:600;text-decoration:underline;text-underline-offset:3px;}
+        .urun-meta .product-open{
+            margin:7px 0 0;
+            padding:0;
+            font-size:9.5px;
+            line-height:1.2;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
 
-        .urun-karti > .satin-al-buton{margin:8px;padding:9px 4px;font-size:0;line-height:1;}
-        .urun-karti > .satin-al-buton::after{content:'Satın al';font-size:11px;font-weight:700;}
+        .urun-karti > .satin-al-buton{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            min-height:38px;
+            margin:8px;
+            padding:6px 4px;
+            font-size:10px;
+            font-weight:700;
+            line-height:1.2;
+            letter-spacing:0;
+            border-radius:3px;
+            background:#191715;
+            color:#f8f4ec;
+            border-color:#191715;
+        }
+        .urun-karti > .satin-al-buton:hover{
+            background:var(--accent);
+            border-color:var(--accent);
+            color:#fff;
+            transform:none;
+        }
+    }
+
+    @media (max-width:360px){
+        .urun-izgarasi{gap:6px;}
+        .urun-baslik{font-size:11px;}
+        .urun-fiyat{font-size:13px;}
+        .urun-karti > .satin-al-buton{font-size:9.5px;min-height:36px;margin:6px;}
+    }
+
+    /* ---------- mobile shoe ribbon v2 ---------- */
+    @keyframes noktaRibbonLeft{
+        from{transform:translateX(0);}
+        to{transform:translateX(-50%);}
+    }
+
+    @media (max-width:640px){
+        .shoe-ribbon{
+            position:relative;
+            z-index:1;
+            width:100%;
+            margin:20px 0 22px;
+            padding:4px 0;
+            overflow:hidden;
+            -webkit-mask-image:none;
+            mask-image:none;
+        }
+        .shoe-ribbon-arrow{display:none;}
+
+        .shoe-ribbon-viewport{
+            display:block;
+            width:100%;
+            overflow:hidden;
+            overflow:clip;
+            -webkit-mask-image:none;
+            mask-image:none;
+        }
+
+        .shoe-ribbon-track{
+            display:flex;
+            width:max-content;
+            animation:noktaRibbonLeft 40s linear infinite;
+            animation-play-state:running !important;
+            will-change:transform;
+        }
+        .shoe-ribbon-group{
+            display:flex;
+            flex:0 0 auto;
+            gap:8px;
+            padding-right:8px;
+        }
+
+        .shoe-ribbon-card{
+            flex:0 0 clamp(104px,30vw,128px);
+            width:clamp(104px,30vw,128px);
+            height:clamp(82px,23.5vw,100px);
+            aspect-ratio:auto;
+        }
+        .shoe-ribbon-card img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
+        .shoe-ribbon-card span{
+            padding:14px 8px 6px;
+            font-size:9px;
+        }
+    }
+
+    @supports not (overflow:clip){
+        @media (max-width:640px){
+            .shoe-ribbon-track{animation-name:shoeRibbonRight;}
+        }
+    }
+
+    @media (max-width:640px) and (prefers-reduced-motion:reduce){
+        .shoe-ribbon-viewport{overflow-x:auto;overflow-y:hidden;}
+        .shoe-ribbon-track{animation:none !important;}
+        .shoe-ribbon-arrow{display:grid;}
     }
 </style>
 </head>
