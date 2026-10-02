@@ -494,6 +494,13 @@ document.addEventListener('click', function (e) {
         .hero-collage{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:24px;}
         .toolbar-controls{padding:0;background:transparent;border:0;}
         .search,.sort{background:#242424;border:1px solid var(--line);}
+        .brand-filter-row{grid-template-columns:minmax(0,1.15fr) repeat(2,minmax(0,1fr));gap:6px;padding:8px 0;}
+        .brand-filter-row .brand-filters{grid-column:1/-1;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;padding:1px 0 4px;}
+        .brand-filter-row .brand-filters::-webkit-scrollbar{display:none;}
+        .brand-filter-row .brand-filters .brand-filter{flex:0 0 auto;width:auto;min-width:0;padding:7px 11px;font-size:10px;line-height:1.1;white-space:nowrap;}
+        .brand-filter-row .search-wrap,.brand-filter-row .sort{width:100%;min-width:0;flex:initial;}
+        .search,.sort{width:100%;min-width:0;min-height:36px;padding:8px 6px;font-size:10px;}
+        .search{padding-left:9px;}
         .trust-inner{padding:14px 0;gap:10px 18px;}
         .urun-izgarasi{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
         .urun-meta{padding:14px 14px 0;}
@@ -505,6 +512,10 @@ document.addEventListener('click', function (e) {
         .hero-logo-display .shoe-frame[src$="frame-001.webp"]{visibility:hidden;}
         .hero-logo-display .hero-center-logo{display:none;}
         .shoe-progress{right:0;bottom:18%;font-size:9px;}
+    }
+    @media (max-width:360px){
+        .brand-filter-row{grid-template-columns:repeat(2,minmax(0,1fr));}
+        .brand-filter-row .search-wrap{grid-column:1/-1;}
     }
 
     /* ---------- storefront tools ---------- */
