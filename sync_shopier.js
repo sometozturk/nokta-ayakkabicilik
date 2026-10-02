@@ -93,7 +93,8 @@ async function main() {
         image: live.image || previous.image || '',
         images: live.images?.length ? live.images : (previous.images || (previous.image ? [previous.image] : [])),
         filename: previous.filename || `${item.id}.jpeg`,
-        url: item.url
+        url: item.url,
+        category: previous.category || (/çocuk/i.test(live.title) ? 'Çocuk Sneakers' : '')
       });
       console.log(`Synced ${item.id}: ${live.title} - ${live.price}`);
     } catch (error) {

@@ -696,7 +696,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         </div>
         <h2 class="collection-heading">Sneaker ve günlük ayakkabı modelleri</h2>
         <div class="brand-filter-row">
-            <div id="brand-filters" class="brand-filters" aria-label="Marka filtreleri"></div>
+            <div id="brand-filters" class="brand-filters" aria-label="Marka ve kategori filtreleri"></div>
             <div class="search-wrap">
                 <input class="search" id="search" type="search" placeholder="Model ara..." aria-label="Model ara" autocomplete="off" aria-controls="search-suggestions" aria-autocomplete="list">
                 <ul class="search-suggestions" id="search-suggestions" role="listbox" hidden></ul>
@@ -2072,7 +2072,8 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             image: safeImage,
             images: safeImages,
             filename: product.filename || `${fallbackId || 0}.jpeg`,
-            url: product.url || 'https://shopier.com/noktaayakkabi'
+            url: product.url || 'https://shopier.com/noktaayakkabi',
+            category: product.category || ''
         };
     };
 
@@ -2132,6 +2133,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 card.style.animationDelay = `${Math.min(i, 8) * 40}ms`;
                 card.dataset.title = title.toLocaleLowerCase('tr-TR');
                 card.dataset.brand = brand.toLocaleLowerCase('tr-TR');
+                card.dataset.category = product.category === 'Çocuk Sneakers' ? 'cocuk-sneakers' : '';
                 card.dataset.size = sizeRange.toLocaleLowerCase('tr-TR');
                 card.dataset.price = parseFloat(String(product.price).replace(',', '.')) || 0;
                 card.productData = product;
@@ -2277,7 +2279,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             const closeModalButton = document.getElementById('modal-close');
             const backModalButton = document.getElementById('modal-back');
             let currentProductInModal = null;
-            const brands = [...new Set(cards.map(card => card.dataset.brand))].sort((a, b) => {
+            const brands = [...new Set(cards.filter(card => card.dataset.category !== 'cocuk-sneakers').map(card => card.dataset.brand))].sort((a, b) => {
                 if(a === 'nike') return -1;
                 if(b === 'nike') return 1;
                 return a.localeCompare(b, 'tr-TR');
@@ -2406,6 +2408,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 createBrandControl(brandFilters, brandLabel(brand), brand);
                 createBrandControl(footerBrands, brandLabel(brand), brand, true);
             });
+            createBrandControl(brandFilters, 'Çocuk Sneakers', '__children__');
             selectBrand('');
 
             function filterProducts(){
@@ -2417,7 +2420,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 cards.forEach(card => {
                     const cardPrice = parseFloat(card.dataset.price) || 0;
                     const matches = (!query || card.dataset.title.includes(query))
-                        && (!activeBrand || card.dataset.brand === activeBrand)
+                        && (!activeBrand || (activeBrand === '__children__' ? card.dataset.category === 'cocuk-sneakers' : card.dataset.brand === activeBrand))
                         && (!priceRange || (cardPrice >= priceRange[0] && cardPrice < priceRange[1]));
                     card.hidden = !matches;
                     if(matches){ visible++; visibleCards.push(card); }
@@ -2468,6 +2471,10 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             function applySort(visibleCards, query){
                 const mode = sortSelect.value;
                 const sorted = [...visibleCards].sort((a, b) => {
+                    const categoryPriorityA = a.dataset.category === 'cocuk-sneakers' && activeBrand !== '__children__' ? 1 : 0;
+                    const categoryPriorityB = b.dataset.category === 'cocuk-sneakers' && activeBrand !== '__children__' ? 1 : 0;
+                    if(categoryPriorityA !== categoryPriorityB) return categoryPriorityA - categoryPriorityB;
+
                     if(mode === 'default'){
                         const brandPriorityA = (a.dataset.brand || '') === 'nike' ? 0 : 1;
                         const brandPriorityB = (b.dataset.brand || '') === 'nike' ? 0 : 1;
