@@ -658,6 +658,44 @@ document.addEventListener('click', function (e) {
         .floating-contact .ig-icon{width:18px;height:18px;}
         .floating-contact .ig-icon svg{width:10px;height:10px;}
     }
+
+    /* ---------- mobile layout fixes ---------- */
+    @media (max-width:640px){
+        .hero-logo-display{
+            height:auto;
+            min-height:0;
+            aspect-ratio:16/9;
+            overflow:hidden;
+            margin-top:18px;
+            margin-bottom:0;
+        }
+        .hero-logo-display .shoe-frame{
+            width:100%;
+            margin-left:0;
+        }
+        .shoe-description{display:none;}
+
+        .shoe-ribbon{
+            margin:20px 0 22px;
+            padding:8px 0 12px;
+            z-index:1;
+        }
+
+        .urun-izgarasi{
+            grid-template-columns:repeat(3,minmax(0,1fr));
+            gap:8px;
+        }
+        .urun-karti{border-radius:3px;}
+        .brand-tag{top:6px;left:6px;padding:3px 6px;font-size:7px;letter-spacing:.04em;}
+        .product-badge{top:6px;right:6px;padding:3px 6px;font-size:7px;}
+        .gallery-arrow{display:none;}
+        .urun-meta{padding:8px 8px 0;}
+        .urun-code{font-size:8.5px;letter-spacing:.02em;}
+        .urun-baslik{font-size:12px;line-height:1.2;min-height:44px;margin:5px 0 6px;}
+        .urun-fiyat{font-size:13px;}
+        .product-open{font-size:9.5px;margin-top:6px;}
+        .satin-al-buton{margin:8px;padding:9px 4px;font-size:9.5px;line-height:1.25;}
+    }
 </style>
 </head>
 <body>
