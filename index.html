@@ -858,6 +858,41 @@ document.addEventListener('click', function (e) {
         .shoe-ribbon-track{animation:none !important;}
         .shoe-ribbon-arrow{display:grid;}
     }
+
+    @media (max-width:640px){
+        .hero{
+            min-height:calc(100svh - 220px);
+            row-gap:20px;
+        }
+        .hero-eyebrow{margin-bottom:10px;}
+        h1{font-size:42px;}
+        .hero-copy{margin:12px 0 16px;font-size:14px;line-height:1.5;}
+
+        .shoe-ribbon-viewport{
+            overflow:hidden !important;
+            overflow:clip !important;
+            touch-action:pan-y;
+        }
+        .shoe-ribbon-track{
+            animation:noktaRibbonLeft 40s linear infinite !important;
+            animation-play-state:running !important;
+        }
+        .shoe-ribbon-arrow{display:none !important;}
+    }
+
+    @media (max-width:360px){
+        .hero{
+            padding-top:30px;
+            row-gap:10px;
+        }
+        .hero-eyebrow{margin-bottom:8px;}
+        h1{font-size:32px;}
+        .hero-copy{margin:8px 0 12px;font-size:12.5px;line-height:1.35;}
+        .hero-ctas{gap:8px;}
+        .btn-primary{padding:11px 14px;font-size:12px;}
+        .hero-count{font-size:13px;}
+        .hero-logo-display{margin-top:10px;}
+    }
 </style>
 </head>
 <body>
