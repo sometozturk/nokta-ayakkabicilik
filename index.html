@@ -222,6 +222,20 @@ document.addEventListener('click', function (e) {
     .hero-count strong{color:var(--ink);font-size:17px;}
 
     .hero-collage{position:relative;height:min(58vw,420px);min-height:280px;}
+    .shoe-ribbon{position:relative;z-index:1;width:100%;margin:-12px 0 34px;padding:12px 0 24px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);}
+    .shoe-ribbon-track{display:flex;width:max-content;animation:shoeRibbonRight 42s linear infinite;will-change:transform;}
+    .shoe-ribbon:hover .shoe-ribbon-track{animation-play-state:paused;}
+    .shoe-ribbon-group{display:flex;flex:0 0 auto;gap:12px;padding-right:12px;}
+    .shoe-ribbon-card{position:relative;display:block;flex:0 0 clamp(148px,19vw,240px);aspect-ratio:1.28;overflow:hidden;background:#252321;border:1px solid rgba(245,239,228,.16);}
+    .shoe-ribbon-card img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s ease;}
+    .shoe-ribbon-card:hover img{transform:scale(1.06);}
+    .shoe-ribbon-card span{position:absolute;inset:auto 0 0;padding:24px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    @keyframes shoeRibbonRight{from{transform:translateX(-50%);}to{transform:translateX(0);}}
+    @media (prefers-reduced-motion:reduce){
+        .shoe-ribbon{overflow-x:auto;scrollbar-width:none;mask-image:none;}
+        .shoe-ribbon-track{animation:none;will-change:auto;}
+        .shoe-ribbon-group[aria-hidden="true"]{display:none;}
+    }
     .hero-collage img{position:absolute;object-fit:cover;background:#e9e3d4;border:6px solid var(--surface);box-shadow:0 18px 40px rgba(27,23,18,.16);}
     .hero-collage .c1{width:62%;aspect-ratio:1/1.05;left:0;top:6%;z-index:2;}
     .hero-collage .c2{width:46%;aspect-ratio:1/1.05;right:0;bottom:4%;z-index:3;}
@@ -367,13 +381,35 @@ document.addEventListener('click', function (e) {
     .btn-primary:hover{background:#f05a43;border-color:#f05a43;}
     .hero-count{color:var(--muted);}
     .hero-count strong{color:var(--ink);}
+        .shoe-ribbon{position:relative;z-index:2;width:100%;margin:-12px 0 34px;padding:12px 0 24px;}
+        .shoe-ribbon-viewport{width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);}
+        .shoe-ribbon-viewport::-webkit-scrollbar{display:none;}
+        .shoe-ribbon-track{display:flex;width:max-content;animation:shoeRibbonRight 42s linear infinite;will-change:transform;}
+        .shoe-ribbon:hover .shoe-ribbon-track{animation-play-state:paused;}
+        .shoe-ribbon-group{display:flex;flex:0 0 auto;gap:12px;padding-right:12px;}
+        .shoe-ribbon-card{position:relative;display:block;flex:0 0 clamp(148px,19vw,240px);aspect-ratio:1.28;overflow:hidden;background:#252321;border:1px solid rgba(245,239,228,.16);}
+        .shoe-ribbon-card img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s ease;}
+        .shoe-ribbon-card:hover img{transform:scale(1.06);}
+        .shoe-ribbon-card span{position:absolute;inset:auto 0 0;padding:24px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .shoe-ribbon-arrow{position:absolute;top:50%;z-index:3;display:grid;place-items:center;width:42px;height:42px;border:1px solid rgba(245,239,228,.45);border-radius:50%;background:rgba(21,21,21,.88);color:#f5efe4;cursor:pointer;transform:translateY(-50%);transition:background .2s ease,border-color .2s ease,transform .2s ease;}
+        .shoe-ribbon-arrow:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-50%) scale(1.06);}
+        .shoe-ribbon-arrow:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+        .shoe-ribbon-arrow svg{width:18px;height:18px;}
+        .shoe-ribbon-arrow-prev{left:18px;}
+        .shoe-ribbon-arrow-next{right:18px;}
+        @keyframes shoeRibbonRight{from{transform:translateX(0);}to{transform:translateX(50%);}}
+        @media (prefers-reduced-motion:reduce){
+            .shoe-ribbon-viewport{scroll-behavior:auto;mask-image:none;}
+            .shoe-ribbon-track{animation:none;will-change:auto;}
+            .shoe-ribbon-group[aria-hidden="true"]{display:none;}
+        }
     .hero-collage img{background:#282828;border:1px solid rgba(245,239,228,.48);box-shadow:0 22px 44px rgba(0,0,0,.34);}
     .hero-collage{height:auto;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch;}
     .hero-collage img{position:relative;inset:auto;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;border:1px solid rgba(245,239,228,.48);box-shadow:0 18px 30px rgba(0,0,0,.25);transform:none!important;}
     .hero-collage .c1,.hero-collage .c2,.hero-collage .c3{width:100%;left:auto;right:auto;top:auto;bottom:auto;z-index:auto;}
     .hero-logo-display{min-height:360px;display:flex;align-items:center;justify-content:center;}
     .hero-logo-display .hero-logo{width:min(82%,420px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:invert(1);}
-    .hero{position:relative;height:auto;min-height:100vh;align-items:start;}
+    .hero{position:relative;height:auto;min-height:calc(100svh - 160px);align-items:start;}
     .hero > div:first-child{position:relative;top:auto;padding-top:64px;transform:none;}
     .hero-logo-display{position:relative;top:auto;min-height:320px;height:320px;overflow:visible;perspective:1200px;transform:none;}
     .hero-logo-display{display:flex;grid-template-columns:none;align-items:center;justify-content:center;}
@@ -452,6 +488,7 @@ document.addEventListener('click', function (e) {
         .wordmark img{filter:none;}
         .header-links a{color:#191715;}
         .header-links .ig{color:#655b52;}
+        .auth-button-secondary{color:#191715;}
         .hero{padding-top:46px;padding-bottom:48px;}
         h1{font-size:clamp(42px,12vw,62px);}
         .hero-collage{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:24px;}
@@ -461,9 +498,9 @@ document.addEventListener('click', function (e) {
         .urun-izgarasi{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
         .urun-meta{padding:14px 14px 0;}
         .satin-al-buton{margin:14px;padding:12px 8px;}
-        .hero{padding-top:46px;padding-bottom:0;height:auto;min-height:100vh;}
+        .hero{padding-top:46px;padding-bottom:0;height:auto;min-height:calc(100svh - 150px);}
         .hero > div:first-child{position:relative;top:auto;height:auto;padding-top:0;transform:none;}
-        .hero-logo-display{position:relative;top:auto;min-height:56vh;height:56vh;margin-top:34px;transform:none;}
+        .hero-logo-display{position:relative;top:auto;min-height:min(22svh,190px);height:min(22svh,190px);margin-top:18px;transform:none;}
         .hero-logo-display .shoe-frame{width:94%;margin-left:0;background:transparent;}
         .hero-logo-display .shoe-frame[src$="frame-001.webp"]{visibility:hidden;}
         .hero-logo-display .hero-center-logo{display:none;}
@@ -688,6 +725,18 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             <button class="try-on-button" id="try-on-open" type="button">Kombininde Dene</button>
             <span class="shoe-progress" aria-hidden="true">birleşiyor</span>
         </div>
+    </section>
+
+    <section class="shoe-ribbon" aria-label="Koleksiyondan ayakkabı modelleri">
+        <button class="shoe-ribbon-arrow shoe-ribbon-arrow-prev" type="button" aria-label="Önceki ayakkabılar">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="shoe-ribbon-viewport" id="shoe-ribbon-viewport">
+            <div class="shoe-ribbon-track" id="shoe-ribbon-track"></div>
+        </div>
+        <button class="shoe-ribbon-arrow shoe-ribbon-arrow-next" type="button" aria-label="Sonraki ayakkabılar">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
     </section>
 
     <div class="container" id="urunler">
@@ -1962,7 +2011,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         const renderShoe = () => {
             frameRequest = 0;
             const heroStart = hero.getBoundingClientRect().top + window.scrollY;
-            const range = Math.max(hero.offsetHeight - window.innerHeight, 1);
+            const range = Math.max(hero.offsetHeight - window.innerHeight, window.innerHeight * .16);
             const progress = Math.min(1, Math.max(0, (window.scrollY - heroStart) / range));
             hero.style.setProperty('--shoe-progress', progress.toFixed(3));
             const introProgress = ease(Math.min(1, progress / .24));
@@ -2084,6 +2133,65 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             return Array.isArray(data) ? data.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean) : FALLBACK_PRODUCTS;
         })
         .catch(() => FALLBACK_PRODUCTS.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean));
+
+    const ribbonTrack = document.getElementById('shoe-ribbon-track');
+    const ribbon = document.getElementById('shoe-ribbon-viewport');
+    if (ribbonTrack && ribbon) {
+        const ribbonProducts = PRODUCTS.filter(product => product.image).slice(0, 16);
+        [false, true].forEach(isDuplicate => {
+            const group = document.createElement('div');
+            group.className = 'shoe-ribbon-group';
+            group.setAttribute('aria-hidden', String(isDuplicate));
+            ribbonProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'shoe-ribbon-card';
+                const image = document.createElement('img');
+                image.src = product.image;
+                image.alt = isDuplicate ? '' : product.title;
+                image.loading = 'lazy';
+                image.decoding = 'async';
+                const title = document.createElement('span');
+                title.textContent = product.title;
+                card.append(image, title);
+                group.append(card);
+            });
+            ribbonTrack.append(group);
+        });
+        const ribbonSection = ribbon.closest('.shoe-ribbon');
+        const ribbonGroup = ribbonTrack.querySelector('.shoe-ribbon-group');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const ribbonCycleWidth = ribbonGroup.getBoundingClientRect().width;
+        ribbon.scrollLeft = reducedMotion.matches ? 0 : ribbonCycleWidth;
+        const moveRibbon = direction => {
+            ribbonTrack.style.animationPlayState = 'paused';
+            const card = ribbonTrack.querySelector('.shoe-ribbon-card');
+            const gap = parseFloat(getComputedStyle(ribbonGroup).gap) || 12;
+            ribbon.scrollBy({
+                left: direction * ((card ? card.getBoundingClientRect().width : 148) + gap),
+                behavior: reducedMotion.matches ? 'auto' : 'smooth'
+            });
+            if (!ribbonSection.matches(':hover')) {
+                window.setTimeout(() => { ribbonTrack.style.animationPlayState = ''; }, 700);
+            }
+        };
+
+        ribbonSection.addEventListener('mouseleave', () => {
+            ribbonTrack.style.animationPlayState = '';
+        });
+        ribbon.addEventListener('pointerdown', () => {
+            ribbonTrack.style.animationPlayState = 'paused';
+        });
+        ribbon.addEventListener('pointerup', event => {
+            if (event.pointerType === 'touch') {
+                window.setTimeout(() => { ribbonTrack.style.animationPlayState = ''; }, 700);
+            }
+        });
+        ribbonSection.querySelector('.shoe-ribbon-arrow-prev').addEventListener('click', () => moveRibbon(-1));
+        ribbonSection.querySelector('.shoe-ribbon-arrow-next').addEventListener('click', () => moveRibbon(1));
+        reducedMotion.addEventListener('change', event => {
+            ribbon.scrollLeft = event.matches ? 0 : ribbonCycleWidth;
+        });
+    }
 
     let productsById = {};
     let productsByFilename = {};
