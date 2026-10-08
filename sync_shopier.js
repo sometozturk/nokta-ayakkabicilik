@@ -53,12 +53,29 @@ function extractProduct(html, url) {
 }
 
 async function discoverUrls(page) {
-  const html = await fetchHtml(page, shopUrl);
+  await fetchHtml(page, shopUrl);
+  let previousCount = 0;
+  let stableCount = 0;
+
+  for (let attempt = 0; attempt < 20 && stableCount < 3; attempt += 1) {
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    const count = await page.evaluate(() => new Set(
+      [...document.querySelectorAll('a[href]')]
+        .map((element) => new URL(element.href, window.location.href).href)
+        .filter((url) => /\/noktaayakkabi\/\d+$/.test(url))
+    ).size);
+
+    stableCount = count === previousCount ? stableCount + 1 : 0;
+    previousCount = count;
+  }
+
+  const html = await page.content();
   const $ = cheerio.load(html);
-  return $('a[href]')
+  return [...new Set($('a[href]')
     .map((_, element) => absoluteUrl($(element).attr('href')))
     .get()
-    .filter((url) => /\/noktaayakkabi\/\d+$/.test(url));
+    .filter((url) => /\/noktaayakkabi\/\d+$/.test(url)))];
 }
 
 async function main() {
@@ -81,8 +98,13 @@ async function main() {
     }
   }
 
+  const discoveredSet = new Set(discovered);
+  const orderedItems = [
+    ...discovered.map((url) => byUrl.get(url)),
+    ...known.filter((item) => !discoveredSet.has(item.url))
+  ];
   const products = [];
-  for (const item of byUrl.values()) {
+  for (const item of orderedItems) {
     const previous = existing.find((product) => product.url === item.url) || {};
     try {
       const live = extractProduct(await fetchHtml(page, item.url), item.url);
@@ -103,7 +125,6 @@ async function main() {
     }
   }
 
-  products.sort((a, b) => a.id - b.id);
   const syncedUrls = products.map(({ id, url }) => ({ id, url }));
   fs.writeFileSync(productsFile, `${JSON.stringify(products, null, 2)}\n`);
   fs.writeFileSync(urlsFile, `${JSON.stringify(syncedUrls, null, 2)}\n`);
