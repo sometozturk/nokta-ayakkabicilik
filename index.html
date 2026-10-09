@@ -315,13 +315,17 @@ document.addEventListener('click', function (e) {
 
     /* ---------- footer ---------- */
     footer{border-top:1px solid var(--line);background:var(--surface);}
-    .footer-inner{width:min(1240px,calc(100% - 40px));margin:auto;padding:48px 0 30px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;}
+    .footer-inner{width:min(1240px,calc(100% - 40px));margin:auto;padding:48px 0 30px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;}
     .footer-brand .wordmark img{height:28px;}
     .footer-brand p{max-width:320px;color:var(--muted);font-size:13.5px;line-height:1.7;margin:16px 0 0;}
     .footer-col h4{font-family:'Fraunces',serif;font-size:14px;margin:0 0 14px;}
     .footer-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;}
     .footer-col a{font-size:13px;color:var(--muted);text-decoration:none;}
     .footer-col a:hover{color:var(--accent);}
+    .catalog-link{display:flex;flex-direction:column;gap:7px;width:100%;padding:14px 16px;border:1px solid var(--line);transition:border-color .2s ease,transform .2s ease;}
+    .catalog-link:hover{border-color:var(--accent);transform:translateY(-2px);}
+    .catalog-link strong{font-family:'Fraunces',serif;font-size:17px;color:var(--ink);}
+    .catalog-link span{font-size:12px;color:var(--muted);}
     .footer-bottom{border-top:1px solid var(--line);padding:18px 0;}
     .footer-bottom div{width:min(1240px,calc(100% - 40px));margin:auto;display:flex;justify-content:space-between;gap:20px;font-size:12px;color:var(--muted);}
 
@@ -331,6 +335,7 @@ document.addEventListener('click', function (e) {
         .urun-izgarasi{grid-template-columns:repeat(2,minmax(0,1fr));}
         .footer-inner{grid-template-columns:1fr 1fr;}
         .footer-brand{grid-column:1/-1;}
+        .footer-brands{grid-column:1/-1;}
     }
     @media (max-width:640px){
         .nav,.hero,.container,.trust-inner,.footer-inner,.footer-bottom div{width:min(100% - 20px,1240px);}
@@ -351,7 +356,8 @@ document.addEventListener('click', function (e) {
         .urun-meta{padding:12px 12px 0;}
         .urun-baslik{font-size:14.5px;min-height:52px;}
         .satin-al-buton{margin:12px 12px 12px;}
-        .footer-inner{grid-template-columns:1fr;padding:36px 0 20px;}
+        .footer-inner{grid-template-columns:1fr 1fr;padding:36px 0 20px;gap:28px 16px;}
+        .footer-brand,.footer-brands{grid-column:1/-1;}
         .footer-bottom div{flex-direction:column;gap:6px;}
     }
 
@@ -1048,11 +1054,11 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             <a class="wordmark" href="#top"><img src="logo-transparent.png" alt="Nokta Ayakkabıcılık"></a>
             <p>Nokta Ayakkabıcılık, seçili sneaker ve günlük ayakkabı modellerini Shopier üzerinden güvenle sizlere ulaştırır. Sorularınız için Instagram üzerinden bize ulaşabilirsiniz.</p>
         </div>
-        <div class="footer-col">
+        <div class="footer-col footer-brands">
             <h4>Markalar</h4>
             <ul id="footer-brands"></ul>
         </div>
-        <div class="footer-col">
+        <div class="footer-col footer-contact">
             <h4>İletişim</h4>
             <ul>
                 <li><a href="https://www.instagram.com/nokta.ayakkabicilik/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
@@ -1063,6 +1069,13 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 <a href="bilgilendirme.html#iade">İade ve değişim</a>
                 <a href="bilgilendirme.html#kvkk">KVKK ve gizlilik</a>
             </div>
+        </div>
+        <div class="footer-col footer-collection">
+            <h4>Koleksiyon</h4>
+            <a class="catalog-link" href="katalog.html">
+                <strong>90 modeli incele</strong>
+                <span>Tüm ayakkabılar · tek sayfada</span>
+            </a>
         </div>
     </div>
     <div class="footer-bottom">

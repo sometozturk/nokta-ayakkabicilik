@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nokta Ayakkabıcılık koleksiyonundaki 90 modeli inceleyin.">
+    <meta name="theme-color" content="#0d0d0d">
+    <title>Nokta Katalog | Tüm Modeller</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.shopier.app">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+    <style>
+        :root{color-scheme:dark;--bg:#0d0d0d;--card:#151515;--text:#f5efe4;--muted:#a9a096;--accent:#e34b35;--border:#2a2a2a;}
+        *{box-sizing:border-box;}
+        body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;}
+        a{color:inherit;}
+        .header{padding:30px 20px;border-bottom:1px solid var(--border);background:#000;}
+        .header-inner{width:min(1400px,100%);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+        .brand{font-family:'Fraunces',serif;font-size:20px;text-decoration:none;letter-spacing:.04em;}
+        .back-link{color:var(--muted);font-size:13px;text-decoration:none;}
+        .back-link:hover{color:var(--accent);}
+        main{width:min(1400px,calc(100% - 40px));margin:0 auto;padding:52px 0 72px;}
+        .intro{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px;}
+        h1{margin:0 0 8px;font-family:'Fraunces',serif;font-size:clamp(34px,5vw,52px);font-weight:400;}
+        .intro p{margin:0;color:var(--muted);font-size:14px;}
+        .count{flex:0 0 auto;color:var(--muted);font-size:14px;}
+        .count strong{color:var(--text);}
+        .toolbar{display:flex;gap:12px;margin-bottom:24px;}
+        .search,.brand-filter{min-height:46px;padding:0 14px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--text);font:inherit;}
+        .search{flex:1;min-width:0;}
+        .search::placeholder{color:#777;}
+        .brand-filter{min-width:190px;}
+        .search:focus,.brand-filter:focus{outline:2px solid var(--accent);outline-offset:2px;}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}
+        .card{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:7px;background:var(--card);transition:transform .2s ease,border-color .2s ease;}
+        .card:hover{transform:translateY(-4px);border-color:#555;}
+        .card[hidden]{display:none;}
+        .card img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:#fff;}
+        .card-info{display:flex;flex:1;flex-direction:column;padding:16px;}
+        .card-title{margin:0 0 8px;color:#fff;font-size:14px;line-height:1.5;}
+        .card-code{margin-bottom:8px;color:var(--muted);font-size:11px;}
+        .card-price{margin-top:auto;padding:4px 0 14px;color:var(--accent);font-family:'Fraunces',serif;font-size:19px;}
+        .card-btn{display:block;padding:11px;text-align:center;border-radius:4px;background:#fff;color:#000;font-size:12px;font-weight:700;letter-spacing:.06em;text-decoration:none;}
+        .card-btn:hover{background:var(--accent);color:#fff;}
+        .status{padding:50px 20px;text-align:center;color:var(--muted);}
+        .status[hidden]{display:none;}
+        @media(max-width:640px){
+            .header{padding:20px 14px;}
+            main{width:calc(100% - 28px);padding:36px 0 52px;}
+            .intro{align-items:start;flex-direction:column;gap:10px;}
+            .toolbar{flex-direction:column;}
+            .brand-filter{width:100%;}
+            .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+            .card-info{padding:12px;}
+            .card-title{font-size:13px;}
+            .card-price{font-size:17px;}
+        }
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;}}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a class="brand" href="index.html">NOKTA KOLEKSİYON</a>
+            <a class="back-link" href="index.html#iletisim">İletişim bölümüne dön</a>
+        </div>
+    </header>
+    <main>
+        <section class="intro" aria-labelledby="catalog-title">
+            <div>
+                <h1 id="catalog-title">Tüm modeller</h1>
+                <p>Koleksiyondaki modelleri inceleyin ve Shopier'den güvenle satın alın.</p>
+            </div>
+            <div class="count" id="product-count" aria-live="polite">Modeller yükleniyor...</div>
+        </section>
+        <div class="toolbar">
+            <input class="search" id="search" type="search" placeholder="Model ara..." aria-label="Model ara">
+            <select class="brand-filter" id="brand-filter" aria-label="Markaya göre filtrele">
+                <option value="">Tüm markalar</option>
+            </select>
+        </div>
+        <div class="grid" id="catalog-grid"></div>
+        <p class="status" id="catalog-status" role="status">Modeller yükleniyor...</p>
+    </main>
+    <script>
+        (() => {
+            const grid = document.getElementById('catalog-grid');
+            const count = document.getElementById('product-count');
+            const status = document.getElementById('catalog-status');
+            const search = document.getElementById('search');
+            const brandFilter = document.getElementById('brand-filter');
+            const brandNames = ['Alexander Mcqueen', 'Calvin Klein', 'Goldengoose', 'Lacoste', 'Lufian', 'Nike', 'Adidas', 'Prada'];
+            const getBrand = title => {
+                const lowerTitle = title.toLocaleLowerCase('tr-TR');
+                return brandNames.find(brand => lowerTitle.startsWith(brand.toLocaleLowerCase('tr-TR'))) || title.split(' ')[0];
+            };
+            const formatPrice = price => {
+                const value = Number(String(price).replace(',', '.'));
+                return Number.isFinite(value) && value > 0 ? `${value.toLocaleString('tr-TR')} ₺` : 'Fiyat bilgisi için Shopier';
+            };
+            const showError = message => {
+                count.textContent = 'Modeller yüklenemedi';
+                status.textContent = message;
+                status.hidden = false;
+            };
+
+            fetch('products.json', { cache: 'no-store' })
+                .then(response => {
+                    if (!response.ok) throw new Error(`Ürün verisi alınamadı (${response.status}).`);
+                    return response.json();
+                })
+                .then(products => {
+                    if (!Array.isArray(products) || products.length !== 90) {
+                        throw new Error(`Katalogda 90 model bekleniyordu; ${Array.isArray(products) ? products.length : 0} model bulundu.`);
+                    }
+                    const validProducts = products.filter(product => product && product.title && product.image && product.url);
+                    if (validProducts.length !== 90) {
+                        throw new Error(`90 model gösterilemedi; gerekli ürün bilgileri eksik olan ${90 - validProducts.length} kayıt var.`);
+                    }
+
+                    const brands = [...new Set(validProducts.map(product => getBrand(product.title)))].sort((a, b) => a.localeCompare(b, 'tr'));
+                    brands.forEach(brand => {
+                        const option = document.createElement('option');
+                        option.value = brand;
+                        option.textContent = brand;
+                        brandFilter.append(option);
+                    });
+
+                    validProducts.forEach((product, index) => {
+                        const card = document.createElement('article');
+                        card.className = 'card';
+                        card.dataset.title = product.title.toLocaleLowerCase('tr-TR');
+                        card.dataset.brand = getBrand(product.title);
+
+                        const image = document.createElement('img');
+                        image.src = product.image;
+                        image.alt = product.title;
+                        image.loading = index < 4 ? 'eager' : 'lazy';
+                        image.decoding = 'async';
+
+                        const info = document.createElement('div');
+                        info.className = 'card-info';
+                        const title = document.createElement('h2');
+                        title.className = 'card-title';
+                        title.textContent = product.title;
+                        const code = document.createElement('div');
+                        code.className = 'card-code';
+                        code.textContent = `Model ${String(product.id || index + 1).padStart(2, '0')}`;
+                        const price = document.createElement('div');
+                        price.className = 'card-price';
+                        price.textContent = formatPrice(product.price);
+                        const link = document.createElement('a');
+                        link.className = 'card-btn';
+                        link.href = product.url;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        link.textContent = "SHOPIER'DE GÖR";
+
+                        info.append(title, code, price, link);
+                        card.append(image, info);
+                        grid.append(card);
+                    });
+
+                    const updateVisibleProducts = () => {
+                        const query = search.value.trim().toLocaleLowerCase('tr-TR');
+                        const selectedBrand = brandFilter.value;
+                        let visible = 0;
+                        grid.querySelectorAll('.card').forEach(card => {
+                            const matches = card.dataset.title.includes(query) && (!selectedBrand || card.dataset.brand === selectedBrand);
+                            card.hidden = !matches;
+                            if (matches) visible++;
+                        });
+                        count.textContent = `${visible} / ${validProducts.length} model`;
+                        status.hidden = visible > 0;
+                        if (!visible) status.textContent = 'Aramanızla eşleşen model bulunamadı.';
+                    };
+
+                    search.addEventListener('input', updateVisibleProducts);
+                    brandFilter.addEventListener('change', updateVisibleProducts);
+                    status.hidden = true;
+                    updateVisibleProducts();
+                })
+                .catch(error => {
+                    console.error('[Katalog] Modeller yüklenemedi:', error);
+                    showError(error.message || 'Katalog yüklenirken beklenmeyen bir hata oluştu.');
+                });
+        })();
+    </script>
+</body>
+</html>
