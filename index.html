@@ -229,7 +229,7 @@ document.addEventListener('click', function (e) {
     @media (prefers-reduced-motion:no-preference){
         .hero-scene > .hero{position:sticky;top:var(--hero-sticky-top,0px);z-index:2;}
     }
-    .shoe-ribbon{position:relative;z-index:1;width:100%;margin:-12px 0 34px;padding:12px 0 24px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);}
+    .shoe-ribbon{position:relative;z-index:1;width:100%;margin:-112px 0 34px;padding:12px 0 24px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);}
     .shoe-ribbon-track{display:flex;width:max-content;animation:shoeRibbonRight 42s linear infinite;will-change:transform;}
     .shoe-ribbon:hover .shoe-ribbon-track{animation-play-state:paused;}
     .shoe-ribbon-group{display:flex;flex:0 0 auto;gap:12px;padding-right:12px;}
@@ -283,6 +283,9 @@ document.addEventListener('click', function (e) {
     .brand-filter-row .search-wrap{flex:0 1 180px;min-width:150px;}
     .brand-filter-row .search{width:100%;}
     .brand-filter-row .sort{flex:0 1 155px;min-width:140px;}
+    @media (min-width:641px){
+        .brand-filter-row .sort{flex-basis:125px;min-width:118px;padding:8px;font-size:11px;}
+    }
     .brand-filter{flex:0 0 auto;border:1px solid var(--line);padding:10px 17px;color:var(--muted);background:var(--surface);font:600 12px 'DM Sans',sans-serif;cursor:pointer;transition:transform .2s ease,border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;border-radius:4px;}
     .brand-filter:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-2px);box-shadow:0 6px 14px rgba(27,23,18,.08);}
     .brand-filter.active{border-color:var(--ink);color:var(--paper);background:var(--ink);}
@@ -393,7 +396,7 @@ document.addEventListener('click', function (e) {
     .header-links a{color:var(--ink);}
     .header-links .ig{color:var(--muted);}
     .header-links a:hover,.header-links .ig:hover{color:var(--accent);border-color:var(--accent);}
-    .hero{grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);padding-top:76px;padding-bottom:88px;}
+    .hero{grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);padding-top:44px;padding-bottom:88px;}
     .hero-eyebrow{color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-size:11px;}
     .hero-eyebrow .dot{background:var(--accent);}
     h1{color:var(--ink);font-size:clamp(44px,6vw,78px);line-height:.98;}
@@ -402,7 +405,7 @@ document.addEventListener('click', function (e) {
     .btn-primary:hover{background:#f05a43;border-color:#f05a43;}
     .hero-count{color:var(--muted);}
     .hero-count strong{color:var(--ink);}
-        .shoe-ribbon{position:relative;z-index:2;width:100%;margin:-12px 0 34px;padding:12px 0 24px;}
+        .shoe-ribbon{position:relative;z-index:2;width:100%;margin:-112px 0 34px;padding:12px 0 24px;}
         .shoe-ribbon-viewport{width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);}
         .shoe-ribbon-viewport::-webkit-scrollbar{display:none;}
         .shoe-ribbon-track{display:flex;width:max-content;animation:shoeRibbonRight 42s linear infinite;will-change:transform;}
@@ -431,7 +434,7 @@ document.addEventListener('click', function (e) {
     .hero-logo-display{min-height:360px;display:flex;align-items:center;justify-content:center;}
     .hero-logo-display .hero-logo{width:min(82%,420px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:invert(1);}
     .hero{position:relative;height:auto;min-height:calc(100svh - 280px);align-items:start;}
-    .hero > div:first-child{position:relative;top:auto;padding-top:64px;transform:none;}
+    .hero > div:first-child{position:relative;top:auto;padding-top:40px;transform:none;}
     .hero-logo-display{position:relative;top:auto;min-height:320px;height:320px;overflow:visible;perspective:1200px;transform:none;}
     .hero-logo-display{display:flex;grid-template-columns:none;align-items:center;justify-content:center;}
     .hero-logo-display .shoe-frame{position:relative;inset:auto;display:block;width:min(100%,470px);height:auto;aspect-ratio:16/9;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:none;transform:translateY(190px) scale(.82)!important;opacity:0;}
@@ -547,7 +550,6 @@ document.addEventListener('click', function (e) {
         .hero > div:first-child{position:relative;top:auto;height:auto;padding-top:0;transform:none;}
         .hero-logo-display{position:relative;top:auto;min-height:min(22svh,190px);height:min(22svh,190px);margin-top:18px;transform:none;}
         .hero-logo-display .shoe-frame{width:94%;margin-left:0;background:transparent;}
-        .hero-logo-display .shoe-frame[src$="frame-001.webp"]{visibility:hidden;}
         .hero-logo-display .hero-center-logo{display:none;}
         .shoe-progress{right:0;bottom:18%;font-size:9px;}
     }
@@ -694,6 +696,7 @@ document.addEventListener('click', function (e) {
 
     /* ---------- mobile layout fixes ---------- */
     @media (max-width:640px){
+        .hero-scene > .hero{position:relative;top:auto;}
         .hero-logo-display{
             height:auto;
             min-height:0;
@@ -1018,7 +1021,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                     <span id="shoe-caption-state">parçalar ayrık</span>
                 </div>
                 <button class="try-on-button" id="try-on-open" type="button">Kombininde Dene</button>
-                <span class="shoe-progress" aria-hidden="true">birleşiyor</span>
+                <span class="shoe-progress">birleşiyor</span>
             </div>
         </section>
     </div>
@@ -2304,7 +2307,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         if(!hero || !frameImage) return;
         const syncHeroScene = () => {
             if(!heroScene) return;
-            if(reducedMotion.matches){
+            if(reducedMotion.matches || window.matchMedia('(max-width: 640px)').matches){
                 heroScene.style.removeProperty('height');
                 hero.style.removeProperty('--hero-sticky-top');
                 return;
@@ -2327,6 +2330,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         const ease = value => value * value * (3 - 2 * value);
         const renderShoe = () => {
             frameRequest = 0;
+            const mobileLayout = window.matchMedia('(max-width: 640px)').matches;
             const heroStart = reducedMotion.matches
                 ? hero.getBoundingClientRect().top + window.scrollY
                 : (heroScene || hero).getBoundingClientRect().top + window.scrollY
@@ -2347,7 +2351,12 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             }
             const assemblyComplete = assemblyProgress >= .995;
             if(captionState) captionState.textContent = assemblyComplete ? 'birleştirildi' : assemblyProgress > 0 ? 'birleşiyor' : 'parçalar ayrık';
-            if(shoeProgress) shoeProgress.textContent = assemblyComplete ? 'birleştirildi' : 'birleşiyor';
+            if(shoeProgress){
+                shoeProgress.textContent = mobileLayout && progress < .02
+                    ? 'Aşağı kaydır'
+                    : assemblyComplete ? 'birleştirildi' : 'birleşiyor';
+                shoeProgress.style.opacity = mobileLayout || entranceProgress > 0 ? '1' : '0';
+            }
             if(centerLogo){
                 centerLogo.style.opacity = (1 - centerProgress).toFixed(3);
                 centerLogo.style.setProperty('transform', `translate(-50%, calc(-50% - ${Math.round(introProgress * 150)}px))`, 'important');
@@ -2355,10 +2364,10 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             if(tryOnOpenButton){
                 tryOnOpenButton.classList.toggle('is-visible', centerProgress > 0);
             }
-            frameImage.style.opacity = centerProgress > 0 ? '1' : '0';
-            frameImage.style.setProperty('transform', `translateY(${Math.round((1 - centerProgress) * 190)}px) scale(1)`, 'important');
+            frameImage.style.opacity = mobileLayout || centerProgress > 0 ? '1' : '0';
+            const shoeEntranceOffset = mobileLayout ? 0 : Math.round((1 - centerProgress) * 190);
+            frameImage.style.setProperty('transform', `translateY(${shoeEntranceOffset}px) scale(1)`, 'important');
             if(shoeCaption) shoeCaption.style.opacity = entranceProgress > 0 ? '1' : '0';
-            if(shoeProgress) shoeProgress.style.opacity = entranceProgress > 0 ? '1' : '0';
             if(shoeDescription){
                 shoeDescription.style.opacity = entranceProgress >= 1 ? '1' : '0';
                 shoeDescription.style.transform = `translateY(${Math.round((1 - entranceProgress) * 24)}px)`;
