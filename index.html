@@ -903,6 +903,37 @@ document.addEventListener('click', function (e) {
         .hero-eyebrow{margin-bottom:10px;}
         h1{font-size:42px;}
         .hero-copy{margin:12px 0 16px;font-size:14px;line-height:1.5;}
+        .collection-heading{display:none;}
+        .brand-filter-row{
+            display:flex;
+            flex-direction:column;
+            align-items:stretch;
+            gap:8px;
+            padding:8px 0;
+            border:0;
+            box-shadow:none;
+        }
+        .brand-filter-row .brand-filters{
+            display:flex;
+            width:100%;
+            flex-wrap:nowrap;
+            gap:6px;
+            overflow-x:auto;
+            overscroll-behavior-x:contain;
+            padding:0 0 3px;
+            scrollbar-width:none;
+        }
+        .brand-filter-row .brand-filters::-webkit-scrollbar{display:none;}
+        .brand-filter-row .brand-filters .brand-filter{
+            flex:0 0 auto;
+            width:auto;
+            min-width:0;
+            padding:6px 9px;
+            font-size:9px;
+            line-height:1.1;
+            white-space:nowrap;
+        }
+        .brand-filter-row .search-wrap{width:100%;}
 
         .shoe-ribbon-viewport{
             overflow:hidden !important;
