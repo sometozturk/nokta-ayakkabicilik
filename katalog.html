@@ -215,7 +215,19 @@
                         const series = [...new Set(brandProducts
                             .map(product => getSeries(product.title, brand))
                             .filter(Boolean))]
-                            .sort((a, b) => a.localeCompare(b, 'tr'));
+                            .sort((a, b) => {
+                                if (brand === 'Nike') {
+                                    const nikeSeriesOrder = ['Dunk', 'Air Force', 'Air'];
+                                    const aIndex = nikeSeriesOrder.indexOf(a);
+                                    const bIndex = nikeSeriesOrder.indexOf(b);
+                                    if (aIndex !== -1 || bIndex !== -1) {
+                                        if (aIndex === -1) return 1;
+                                        if (bIndex === -1) return -1;
+                                        return aIndex - bIndex;
+                                    }
+                                }
+                                return a.localeCompare(b, 'tr');
+                            });
                         if (!series.length) series.push('');
 
                         const group = document.createElement('div');
