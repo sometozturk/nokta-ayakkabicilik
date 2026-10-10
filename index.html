@@ -2444,6 +2444,30 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             ],
             filename: '4.jpeg',
             url: 'https://www.shopier.com/noktaayakkabi/50517164'
+        },
+        {
+            id: 22,
+            title: 'Adidas Spezial Black (36-44)',
+            price: '1750',
+            image: 'https://cdn.shopier.app/pictures_large/noktaayakkabi_eb92b317772225946a915bf5088748ee.jpeg',
+            filename: '22.jpeg',
+            url: 'https://www.shopier.com/noktaayakkabi/41171904'
+        },
+        {
+            id: 14,
+            title: 'Adidas Spezial Blue (36-40)',
+            price: '1750',
+            image: 'https://cdn.shopier.app/pictures_large/noktaayakkabi_04d73a44160bd1b96b2a4c49fea81a44.png',
+            filename: '14.jpeg',
+            url: 'https://www.shopier.com/noktaayakkabi/41689744'
+        },
+        {
+            id: 51,
+            title: 'Vans Knu Skool (36-45)',
+            price: '2350',
+            image: 'https://cdn.shopier.app/pictures_large/noktaayakkabi_6f0e405255d1aa522972f17f6ac67610.jpeg',
+            localImage: '',
+            url: 'https://www.shopier.com/noktaayakkabi/50852879'
         }
     ];
 
@@ -2461,6 +2485,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             image: safeImage,
             images: safeImages,
             filename: product.filename || `${fallbackId || 0}.jpeg`,
+            localImage: product.localImage ?? product.filename ?? '',
             url: product.url || 'https://shopier.com/noktaayakkabi',
             category: product.category || ''
         };
@@ -2497,15 +2522,33 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
     const renderRibbon = (products, useLocalImages = false) => {
         if (!ribbonTrack || !ribbon) return;
         ribbonTrack.replaceChildren();
-        const ribbonProducts = products.filter(product => product.image).slice(0, 16);
+        const ribbonProducts = products.filter(product => product.image);
+        const brandOrder = ['nike', 'goldengoose', 'spezial', 'vans', 'other'];
+        const brandBuckets = new Map(brandOrder.map(brand => [brand, []]));
+        ribbonProducts.forEach(product => {
+            const title = product.title.toLocaleLowerCase('tr-TR');
+            const brand = /golden\s*goose|goldengoose/.test(title) ? 'goldengoose'
+                : /adidas\s+spezial/.test(title) ? 'spezial'
+                    : /\bvans\b/.test(title) ? 'vans'
+                        : /\bnike\b/.test(title) ? 'nike' : 'other';
+            brandBuckets.get(brand).push(product);
+        });
+        const selectedProducts = [];
+        while (selectedProducts.length < 16 && brandOrder.some(brand => brandBuckets.get(brand).length)) {
+            brandOrder.forEach(brand => {
+                const product = brandBuckets.get(brand).shift();
+                if (product && selectedProducts.length < 16) selectedProducts.push(product);
+            });
+        }
+        const ribbonProductsToRender = selectedProducts;
         const group = document.createElement('div');
         group.className = 'shoe-ribbon-group';
         group.setAttribute('aria-hidden', 'false');
-        ribbonProducts.forEach((product, index) => {
+        ribbonProductsToRender.forEach((product, index) => {
             const card = document.createElement('div');
             card.className = 'shoe-ribbon-card';
             const image = document.createElement('img');
-            image.src = useLocalImages ? product.filename : product.image;
+            image.src = useLocalImages && product.localImage ? product.localImage : product.image;
             image.alt = product.title;
             image.loading = index < 6 ? 'eager' : 'lazy';
             image.decoding = 'async';
