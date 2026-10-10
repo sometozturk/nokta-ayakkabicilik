@@ -183,6 +183,8 @@ document.addEventListener('click', function (e) {
     .header-links .ig{display:flex;align-items:center;gap:7px;color:var(--muted);}
     .header-links .ig:hover{color:var(--accent);}
     .header-links .ig svg{width:16px;height:16px;flex:0 0 auto;}
+    .header-links .catalog-nav{display:inline-flex;align-items:center;justify-content:center;padding:9px 14px;border:1px solid var(--accent);border-radius:999px;background:var(--accent);color:#fff;font-size:12px;font-weight:700;white-space:nowrap;}
+    .header-links .catalog-nav:hover{border-color:#c83c29;background:#c83c29;color:#fff;}
     .nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto;position:relative;}
     .auth-button{appearance:none;border:1px solid transparent;border-radius:999px;padding:10px 16px;background:transparent;color:var(--ink);font:700 12px 'DM Sans',sans-serif;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .2s ease,color .2s ease;}
     .auth-button:hover{transform:translateY(-1px);}
@@ -341,8 +343,9 @@ document.addEventListener('click', function (e) {
         .nav,.hero,.container,.trust-inner,.footer-inner,.footer-bottom div{width:min(100% - 20px,1240px);}
         .nav{flex-wrap:wrap;justify-content:space-between;gap:10px;padding:10px 0;}
         .header-links{flex-wrap:wrap;justify-content:flex-end;gap:8px 12px;}
-        .header-links a:not(.ig){display:none;}
+        .header-links a:not(.ig):not(.catalog-nav){display:none;}
         .header-links .ig{font-size:11px;}
+        .header-links .catalog-nav{padding:8px 11px;font-size:11px;}
         h1{letter-spacing:-.3px;}
         .toolbar{flex-direction:column;align-items:stretch;}
         .toolbar-controls{flex-direction:column;}
@@ -936,6 +939,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
                 @nokta.ayakkabicilik
             </a>
+            <a class="catalog-nav" href="katalog.html">Kataloğu Gör</a>
         </div>
         <div class="nav-actions" aria-label="Üye menüsü">
             <div class="auth-user-menu" id="auth-user-menu" aria-live="polite">
