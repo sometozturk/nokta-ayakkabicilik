@@ -225,6 +225,10 @@ document.addEventListener('click', function (e) {
     .hero-count strong{color:var(--ink);font-size:17px;}
 
     .hero-collage{position:relative;height:min(58vw,420px);min-height:280px;}
+    .hero-scene{position:relative;}
+    @media (prefers-reduced-motion:no-preference){
+        .hero-scene > .hero{position:sticky;top:var(--hero-sticky-top,0px);z-index:2;}
+    }
     .shoe-ribbon{position:relative;z-index:1;width:100%;margin:-12px 0 34px;padding:12px 0 24px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);}
     .shoe-ribbon-track{display:flex;width:max-content;animation:shoeRibbonRight 42s linear infinite;will-change:transform;}
     .shoe-ribbon:hover .shoe-ribbon-track{animation-play-state:paused;}
@@ -990,32 +994,34 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
 </header>
 
 <main id="top">
-    <section class="hero">
-        <div>
-            <p class="hero-eyebrow"><span class="dot"></span>2026 koleksiyonu</p>
-            <h1>Attığın her adım<br>bir tercih.</h1>
-            <p class="hero-copy">Nike'tan Adidas'a, Lacoste'tan Goldengoose'a — şehrin temposuna uyum sağlayan, tek tek seçilmiş sneaker ve günlük ayakkabı modelleri.</p>
-            <div class="hero-ctas">
-                <a class="btn-primary" href="#urunler">Koleksiyonu gör</a>
-                <span class="hero-count"><strong id="hero-count">50</strong> model stokta</span>
+    <div class="hero-scene" id="hero-scene">
+        <section class="hero">
+            <div>
+                <p class="hero-eyebrow"><span class="dot"></span>2026 koleksiyonu</p>
+                <h1>Attığın her adım<br>bir tercih.</h1>
+                <p class="hero-copy">Nike'tan Adidas'a, Lacoste'tan Goldengoose'a — şehrin temposuna uyum sağlayan, tek tek seçilmiş sneaker ve günlük ayakkabı modelleri.</p>
+                <div class="hero-ctas">
+                    <a class="btn-primary" href="#urunler">Koleksiyonu gör</a>
+                    <span class="hero-count"><strong id="hero-count">50</strong> model stokta</span>
+                </div>
             </div>
-        </div>
-        <div class="hero-collage hero-logo-display" aria-label="Scroll ile birleşen beyaz Air Force 1">
-            <div class="shoe-description" id="shoe-description" aria-hidden="true">
-                <strong>Air Force 1<br>White.</strong>
-                <span>Temiz çizgiler, ikonik Swoosh ve her adımda zamansız bir siluet.</span>
+            <div class="hero-collage hero-logo-display" aria-label="Scroll ile birleşen beyaz Air Force 1">
+                <div class="shoe-description" id="shoe-description" aria-hidden="true">
+                    <strong>Air Force 1<br>White.</strong>
+                    <span>Temiz çizgiler, ikonik Swoosh ve her adımda zamansız bir siluet.</span>
+                </div>
+                <img class="shoe-frame" id="shoe-frame" src="assets/air-force-sharp-webp/ezgif-frame-001.webp" alt="Scroll ile birleşen beyaz Air Force 1">
+                <img class="hero-center-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık">
+                <div class="shoe-caption" aria-hidden="true">
+                    <strong>NIKE / AIR FORCE 1</strong>
+                    <em>01</em>
+                    <span id="shoe-caption-state">parçalar ayrık</span>
+                </div>
+                <button class="try-on-button" id="try-on-open" type="button">Kombininde Dene</button>
+                <span class="shoe-progress" aria-hidden="true">birleşiyor</span>
             </div>
-            <img class="shoe-frame" id="shoe-frame" src="assets/air-force-sharp-webp/ezgif-frame-001.webp" alt="Scroll ile birleşen beyaz Air Force 1">
-            <img class="hero-center-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık">
-            <div class="shoe-caption" aria-hidden="true">
-                <strong>NIKE / AIR FORCE 1</strong>
-                <em>01</em>
-                <span id="shoe-caption-state">parçalar ayrık</span>
-            </div>
-            <button class="try-on-button" id="try-on-open" type="button">Kombininde Dene</button>
-            <span class="shoe-progress" aria-hidden="true">birleşiyor</span>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <section class="shoe-ribbon" aria-label="Koleksiyondan ayakkabı modelleri">
         <button class="shoe-ribbon-arrow shoe-ribbon-arrow-prev" type="button" aria-label="Önceki ayakkabılar">
@@ -2285,6 +2291,8 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
 <script>
     (() => {
         const hero = document.querySelector('.hero');
+        const heroScene = document.getElementById('hero-scene');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
         const frameImage = document.getElementById('shoe-frame');
         const captionState = document.getElementById('shoe-caption-state');
         const shoeDescription = document.getElementById('shoe-description');
@@ -2294,6 +2302,18 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         const shoeProgress = document.querySelector('.shoe-progress');
         const collection = document.getElementById('urunler');
         if(!hero || !frameImage) return;
+        const syncHeroScene = () => {
+            if(!heroScene) return;
+            if(reducedMotion.matches){
+                heroScene.style.removeProperty('height');
+                hero.style.removeProperty('--hero-sticky-top');
+                return;
+            }
+            const range = Math.max(hero.offsetHeight - window.innerHeight, window.innerHeight * .16);
+            const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+            hero.style.setProperty('--hero-sticky-top', `${headerHeight}px`);
+            heroScene.style.height = `${hero.offsetHeight + range}px`;
+        };
         const frameCount = 121;
         const framePath = index => `assets/air-force-sharp-webp/ezgif-frame-${String(index).padStart(3, '0')}.webp`;
         const preloadedFrames = [];
@@ -2307,7 +2327,10 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         const ease = value => value * value * (3 - 2 * value);
         const renderShoe = () => {
             frameRequest = 0;
-            const heroStart = hero.getBoundingClientRect().top + window.scrollY;
+            const heroStart = reducedMotion.matches
+                ? hero.getBoundingClientRect().top + window.scrollY
+                : (heroScene || hero).getBoundingClientRect().top + window.scrollY
+                    - (document.querySelector('header')?.offsetHeight || 0);
             const range = Math.max(hero.offsetHeight - window.innerHeight, window.innerHeight * .16);
             const progress = Math.min(1, Math.max(0, (window.scrollY - heroStart) / range));
             hero.style.setProperty('--shoe-progress', progress.toFixed(3));
@@ -2350,10 +2373,21 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             if(frameRequest) return;
             frameRequest = window.requestAnimationFrame(renderShoe);
         };
+        syncHeroScene();
         window.addEventListener('scroll', updateShoe, { passive: true });
-        window.addEventListener('resize', updateShoe);
+        window.addEventListener('resize', () => {
+            syncHeroScene();
+            updateShoe();
+        });
+        reducedMotion.addEventListener('change', () => {
+            syncHeroScene();
+            updateShoe();
+        });
         renderShoe();
-        window.addEventListener('load', updateShoe, { once: true });
+        window.addEventListener('load', () => {
+            syncHeroScene();
+            updateShoe();
+        }, { once: true });
     })();
 </script>
 
