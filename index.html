@@ -237,7 +237,7 @@ document.addEventListener('click', function (e) {
     .shoe-ribbon-card img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s ease;}
     .shoe-ribbon-card:hover img{transform:scale(1.06);}
     .shoe-ribbon-card span{position:absolute;inset:auto 0 0;padding:24px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    @keyframes shoeRibbonRight{from{transform:translateX(-50%);}to{transform:translateX(0);}}
+    @keyframes shoeRibbonRight{from{transform:translateX(0);}to{transform:translateX(var(--shoe-ribbon-offset,-50%));}}
     @media (prefers-reduced-motion:reduce){
         .shoe-ribbon{overflow-x:auto;scrollbar-width:none;mask-image:none;}
         .shoe-ribbon-track{animation:none;will-change:auto;}
@@ -418,7 +418,7 @@ document.addEventListener('click', function (e) {
         .shoe-ribbon-arrow svg{width:18px;height:18px;}
         .shoe-ribbon-arrow-prev{left:18px;}
         .shoe-ribbon-arrow-next{right:18px;}
-        @keyframes shoeRibbonRight{from{transform:translateX(0);}to{transform:translateX(50%);}}
+        @keyframes shoeRibbonRight{from{transform:translateX(0);}to{transform:translateX(var(--shoe-ribbon-offset,-50%));}}
         @media (prefers-reduced-motion:reduce){
             .shoe-ribbon-viewport{scroll-behavior:auto;mask-image:none;}
             .shoe-ribbon-track{animation:none;will-change:auto;}
@@ -430,7 +430,7 @@ document.addEventListener('click', function (e) {
     .hero-collage .c1,.hero-collage .c2,.hero-collage .c3{width:100%;left:auto;right:auto;top:auto;bottom:auto;z-index:auto;}
     .hero-logo-display{min-height:360px;display:flex;align-items:center;justify-content:center;}
     .hero-logo-display .hero-logo{width:min(82%,420px);height:auto;aspect-ratio:auto;object-fit:contain;background:transparent;border:0;box-shadow:none;filter:invert(1);}
-    .hero{position:relative;height:auto;min-height:calc(100svh - 160px);align-items:start;}
+    .hero{position:relative;height:auto;min-height:calc(100svh - 280px);align-items:start;}
     .hero > div:first-child{position:relative;top:auto;padding-top:64px;transform:none;}
     .hero-logo-display{position:relative;top:auto;min-height:320px;height:320px;overflow:visible;perspective:1200px;transform:none;}
     .hero-logo-display{display:flex;grid-template-columns:none;align-items:center;justify-content:center;}
@@ -824,7 +824,7 @@ document.addEventListener('click', function (e) {
     /* ---------- mobile shoe ribbon v2 ---------- */
     @keyframes noktaRibbonLeft{
         from{transform:translateX(0);}
-        to{transform:translateX(-50%);}
+        to{transform:translateX(var(--shoe-ribbon-offset,-50%));}
     }
 
     @media (max-width:640px){
@@ -2461,35 +2461,61 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
     const ribbon = document.getElementById('shoe-ribbon-viewport');
     const ribbonSection = ribbon && ribbon.closest('.shoe-ribbon');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const syncRibbonGroups = () => {
+        if (!ribbonTrack || !ribbon) return;
+        const firstGroup = ribbonTrack.querySelector('.shoe-ribbon-group');
+        if (!firstGroup) return;
+
+        const groupWidth = firstGroup.getBoundingClientRect().width;
+        if (!groupWidth) return;
+
+        const groupCount = Math.max(2, Math.ceil(ribbon.clientWidth / groupWidth) + 1);
+        while (ribbonTrack.children.length < groupCount) {
+            const duplicate = firstGroup.cloneNode(true);
+            duplicate.setAttribute('aria-hidden', 'true');
+            duplicate.querySelectorAll('img').forEach(image => {
+                image.alt = '';
+                image.loading = 'lazy';
+                image.removeAttribute('fetchpriority');
+            });
+            ribbonTrack.append(duplicate);
+        }
+        while (ribbonTrack.children.length > groupCount) {
+            ribbonTrack.lastElementChild.remove();
+        }
+        ribbonTrack.style.setProperty('--shoe-ribbon-offset', `${-groupWidth}px`);
+    };
     const renderRibbon = (products, useLocalImages = false) => {
         if (!ribbonTrack || !ribbon) return;
         ribbonTrack.replaceChildren();
         const ribbonProducts = products.filter(product => product.image).slice(0, 16);
-        [false, true].forEach(isDuplicate => {
-            const group = document.createElement('div');
-            group.className = 'shoe-ribbon-group';
-            group.setAttribute('aria-hidden', String(isDuplicate));
-            ribbonProducts.forEach((product, index) => {
-                const card = document.createElement('div');
-                card.className = 'shoe-ribbon-card';
-                const image = document.createElement('img');
-                image.src = useLocalImages ? product.filename : product.image;
-                image.alt = isDuplicate ? '' : product.title;
-                image.loading = !isDuplicate && index < 6 ? 'eager' : 'lazy';
-                image.decoding = 'async';
-                if (!isDuplicate && index < 6) image.fetchPriority = 'high';
-                const title = document.createElement('span');
-                title.textContent = product.title;
-                card.append(image, title);
-                group.append(card);
-            });
-            ribbonTrack.append(group);
+        const group = document.createElement('div');
+        group.className = 'shoe-ribbon-group';
+        group.setAttribute('aria-hidden', 'false');
+        ribbonProducts.forEach((product, index) => {
+            const card = document.createElement('div');
+            card.className = 'shoe-ribbon-card';
+            const image = document.createElement('img');
+            image.src = useLocalImages ? product.filename : product.image;
+            image.alt = product.title;
+            image.loading = index < 6 ? 'eager' : 'lazy';
+            image.decoding = 'async';
+            if (index < 6) image.fetchPriority = 'high';
+            const title = document.createElement('span');
+            title.textContent = product.title;
+            card.append(image, title);
+            group.append(card);
         });
+        ribbonTrack.append(group);
+        syncRibbonGroups();
+        const ribbonAnimation = ribbonTrack.getAnimations()[0];
+        if (ribbonAnimation) ribbonAnimation.currentTime = 0;
         const ribbonCycleWidth = ribbonTrack.querySelector('.shoe-ribbon-group').getBoundingClientRect().width;
         ribbon.scrollLeft = reducedMotion.matches ? 0 : ribbonCycleWidth;
     };
 
     renderRibbon(FALLBACK_PRODUCTS.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean), true);
+    window.addEventListener('resize', syncRibbonGroups, { passive: true });
 
     const PRODUCTS = await fetch('products.json', { cache: 'no-store' })
         .then(async (response) => {
