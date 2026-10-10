@@ -20,18 +20,25 @@
         .brand{font-family:'Fraunces',serif;font-size:20px;text-decoration:none;letter-spacing:.04em;}
         .back-link{color:var(--muted);font-size:13px;text-decoration:none;}
         .back-link:hover{color:var(--accent);}
-        main{width:min(1400px,calc(100% - 40px));margin:0 auto;padding:52px 0 72px;}
+        main{width:min(1560px,calc(100% - 40px));margin:0 auto;padding:52px 0 72px;}
+        .catalog-layout{display:grid;grid-template-columns:230px minmax(0,1fr);align-items:start;gap:36px;}
+        .sidebar{position:sticky;top:24px;max-height:calc(100vh - 48px);overflow:auto;padding:20px;border:1px solid var(--border);border-radius:7px;background:var(--card);scrollbar-color:#555 transparent;}
+        .brand-nav,.series-nav{display:block;width:100%;text-align:left;font:inherit;cursor:pointer;}
+        .category-group{padding:11px 0;border-top:1px solid var(--border);}
+        .brand-nav{padding:2px 0 7px;border:0;background:none;color:#fff;font-size:14px;font-weight:700;}
+        .brand-nav:hover,.brand-nav[aria-pressed="true"]{color:var(--accent);}
+        .series-nav{padding:5px 0 5px 11px;border:0;border-left:2px solid transparent;background:none;color:var(--muted);font-size:12px;line-height:1.4;}
+        .series-nav:hover,.series-nav[aria-pressed="true"]{border-left-color:var(--accent);color:var(--accent);}
+        .catalog-content{min-width:0;}
+        .catalog-category{margin:0 0 36px;scroll-margin-top:24px;}
+        .catalog-category:last-child{margin-bottom:0;}
+        .category-title{margin:0 0 14px;padding-bottom:9px;border-bottom:1px solid var(--border);font-family:'Fraunces',serif;font-size:23px;font-weight:400;}
+        .brand-title{font-weight:600;}
         .intro{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px;}
         h1{margin:0 0 8px;font-family:'Fraunces',serif;font-size:clamp(34px,5vw,52px);font-weight:400;}
         .intro p{margin:0;color:var(--muted);font-size:14px;}
         .count{flex:0 0 auto;color:var(--muted);font-size:14px;}
         .count strong{color:var(--text);}
-        .toolbar{display:flex;gap:12px;margin-bottom:24px;}
-        .search,.brand-filter{min-height:46px;padding:0 14px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--text);font:inherit;}
-        .search{flex:1;min-width:0;}
-        .search::placeholder{color:#777;}
-        .brand-filter{min-width:190px;}
-        .search:focus,.brand-filter:focus{outline:2px solid var(--accent);outline-offset:2px;}
         .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}
         .card{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:7px;background:var(--card);transition:transform .2s ease,border-color .2s ease;}
         .card:hover{transform:translateY(-4px);border-color:#555;}
@@ -45,6 +52,10 @@
         .card-btn:hover{background:var(--accent);color:#fff;}
         .status{padding:50px 20px;text-align:center;color:var(--muted);}
         .status[hidden]{display:none;}
+        @media(max-width:800px){
+            .catalog-layout{grid-template-columns:1fr;gap:24px;}
+            .sidebar{position:static;max-height:340px;}
+        }
         @media(max-width:640px){
             .header{padding:20px 14px;}
             main{width:calc(100% - 28px);padding:36px 0 52px;}
@@ -67,33 +78,98 @@
         </div>
     </header>
     <main>
-        <section class="intro" aria-labelledby="catalog-title">
-            <div>
-                <h1 id="catalog-title">Tüm modeller</h1>
-                <p>Koleksiyondaki modelleri inceleyin ve Shopier'den güvenle satın alın.</p>
-            </div>
-            <div class="count" id="product-count" aria-live="polite">Modeller yükleniyor...</div>
-        </section>
-        <div class="toolbar">
-            <input class="search" id="search" type="search" placeholder="Model ara..." aria-label="Model ara">
-            <select class="brand-filter" id="brand-filter" aria-label="Markaya göre filtrele">
-                <option value="">Tüm markalar</option>
-            </select>
+        <div class="catalog-layout">
+            <aside class="sidebar" aria-label="Marka ve model kategorileri">
+                <nav id="category-nav"></nav>
+            </aside>
+            <section class="catalog-content" aria-labelledby="catalog-title">
+                <div class="intro">
+                    <div>
+                        <h1 id="catalog-title">Koleksiyon</h1>
+                        <p>Koleksiyondaki modelleri inceleyin ve Shopier'den güvenle satın alın.</p>
+                    </div>
+                    <div class="count" id="product-count" aria-live="polite">Modeller yükleniyor...</div>
+                </div>
+                <div id="catalog-sections"></div>
+                <p class="status" id="catalog-status" role="status">Modeller yükleniyor...</p>
+            </section>
         </div>
-        <div class="grid" id="catalog-grid"></div>
-        <p class="status" id="catalog-status" role="status">Modeller yükleniyor...</p>
     </main>
     <script>
         (() => {
-            const grid = document.getElementById('catalog-grid');
             const count = document.getElementById('product-count');
             const status = document.getElementById('catalog-status');
-            const search = document.getElementById('search');
-            const brandFilter = document.getElementById('brand-filter');
-            const brandNames = ['Alexander Mcqueen', 'Calvin Klein', 'Goldengoose', 'Lacoste', 'Lufian', 'Nike', 'Adidas', 'Prada'];
-            const getBrand = title => {
+            const categoryNav = document.getElementById('category-nav');
+            const catalogSections = document.getElementById('catalog-sections');
+            const brandNames = ['Nike', 'Adidas', 'Alexander Mcqueen', 'Calvin Klein', 'Goldengoose', 'Lacoste', 'Lufian', 'Prada', 'Vans'];
+            const getBrand = (title, category = '') => {
                 const lowerTitle = title.toLocaleLowerCase('tr-TR');
-                return brandNames.find(brand => lowerTitle.startsWith(brand.toLocaleLowerCase('tr-TR'))) || title.split(' ')[0];
+                if (category === 'Çocuk Sneakers' || /^Lacoste\s+White-Purple\b/i.test(title)) return 'Çocuk Sneakers';
+                const brand = brandNames.find(name => lowerTitle.startsWith(name.toLocaleLowerCase('tr-TR')));
+                return brand || (category === 'Çocuk Sneakers' ? category : title.split(' ')[0]);
+            };
+            const getSeries = (title, brand) => {
+                if (brand === 'Çocuk Sneakers' || brand === 'Alexander Mcqueen' || brand === 'Goldengoose') return '';
+                const actualBrand = brandNames.find(name => title.toLocaleLowerCase('tr-TR').startsWith(name.toLocaleLowerCase('tr-TR')));
+                const model = title.slice(actualBrand ? actualBrand.length : 0).trim().replace(/\s*\([^)]*\)/g, '').replace(/\s*Çocuk(?:\s+Sneaker)?/gi, '').trim();
+                const rules = {
+                    'Nike': [
+                        [/^Air\s*force/i, 'Air Force'],
+                        [/^Dunk/i, 'Dunk'],
+                        [/^(?:Air\s*)?Jordan/i, 'Jordan'],
+                        [/^Cherry/i, 'Cherry'],
+                        [/^Court/i, 'Court'],
+                        [/^P[\s-]*6000/i, 'P-6000'],
+                        [/^Initiator/i, 'Initiator'],
+                        [/^(?:Air\s*)?Zoom/i, 'Zoom'],
+                        [/^Zoom/i, 'Zoom'],
+                        [/^Air(?:270|\s)/i, 'Air'],
+                        [/^TN\b/i, 'TN'],
+                        [/Ortopedik/i, 'Ortopedik'],
+                        [/^530/i, '530'],
+                        [/^Black\s+Full/i, 'Ortopedik'],
+                        [/^Black-White/i, 'Ortopedik']
+                    ],
+                    'Çocuk Sneakers': [
+                        [/^Işıklı/i, 'Işıklı'],
+                        [/^Ortopedik/i, 'Ortopedik']
+                    ],
+                    'Adidas': [
+                        [/^Spezial/i, 'Spezial'],
+                        [/^(?:Süperstar|Superstar)/i, 'Superstar'],
+                        [/^Campus/i, 'Campus'],
+                        [/^Samba/i, 'Samba'],
+                        [/^Neo\s+Entrap/i, 'Entrap'],
+                        [/^Entrap/i, 'Entrap'],
+                        [/^Duramo/i, 'Duramo'],
+                        [/^Terrex/i, 'Terrex']
+                    ],
+                    'Calvin Klein': [
+                        [/^Black-White/i, 'Black-White'],
+                        [/^White-Black/i, 'White-Black'],
+                        [/^White-Gray/i, 'White-Gray']
+                    ],
+                    'Lacoste': [
+                        [/^Black-White/i, 'Black-White'],
+                        [/^Elite/i, 'Elite'],
+                        [/^Full/i, 'Full']
+                    ],
+                    'Lufian': [
+                        [/^Siyah-Beyaz/i, 'Siyah-Beyaz'],
+                        [/^White/i, 'White']
+                    ],
+                    'Prada': [
+                        [/^Elite/i, 'Elite'],
+                        [/^High\s+Taban/i, 'High Taban']
+                    ],
+                    'Vans': [
+                        [/^Knu\s+Skool/i, 'Knu Skool'],
+                        [/^Classic/i, 'Classic'],
+                        [/^Hyl(?:ine|ane)/i, 'Hyline']
+                    ]
+                };
+                const match = (rules[brand] || []).find(([pattern]) => pattern.test(model));
+                return match ? match[1] : 'Diğer modeller';
             };
             const formatPrice = price => {
                 const value = Number(String(price).replace(',', '.'));
@@ -119,67 +195,140 @@
                         throw new Error(`90 model gösterilemedi; gerekli ürün bilgileri eksik olan ${90 - validProducts.length} kayıt var.`);
                     }
 
-                    const brands = [...new Set(validProducts.map(product => getBrand(product.title)))].sort((a, b) => a.localeCompare(b, 'tr'));
-                    brands.forEach(brand => {
-                        const option = document.createElement('option');
-                        option.value = brand;
-                        option.textContent = brand;
-                        brandFilter.append(option);
-                    });
-
-                    validProducts.forEach((product, index) => {
-                        const card = document.createElement('article');
-                        card.className = 'card';
-                        card.dataset.title = product.title.toLocaleLowerCase('tr-TR');
-                        card.dataset.brand = getBrand(product.title);
-
-                        const image = document.createElement('img');
-                        image.src = product.image;
-                        image.alt = product.title;
-                        image.loading = index < 4 ? 'eager' : 'lazy';
-                        image.decoding = 'async';
-
-                        const info = document.createElement('div');
-                        info.className = 'card-info';
-                        const title = document.createElement('h2');
-                        title.className = 'card-title';
-                        title.textContent = product.title;
-                        const code = document.createElement('div');
-                        code.className = 'card-code';
-                        code.textContent = `Model ${String(product.id || index + 1).padStart(2, '0')}`;
-                        const price = document.createElement('div');
-                        price.className = 'card-price';
-                        price.textContent = formatPrice(product.price);
-                        const link = document.createElement('a');
-                        link.className = 'card-btn';
-                        link.href = product.url;
-                        link.target = '_blank';
-                        link.rel = 'noopener noreferrer';
-                        link.textContent = "SHOPIER'DE GÖR";
-
-                        info.append(title, code, price, link);
-                        card.append(image, info);
-                        grid.append(card);
-                    });
-
-                    const updateVisibleProducts = () => {
-                        const query = search.value.trim().toLocaleLowerCase('tr-TR');
-                        const selectedBrand = brandFilter.value;
-                        let visible = 0;
-                        grid.querySelectorAll('.card').forEach(card => {
-                            const matches = card.dataset.title.includes(query) && (!selectedBrand || card.dataset.brand === selectedBrand);
-                            card.hidden = !matches;
-                            if (matches) visible++;
+                    const brands = [...new Set(validProducts.map(product => getBrand(product.title, product.category)))]
+                        .sort((a, b) => {
+                            if (a === 'Çocuk Sneakers') return 1;
+                            if (b === 'Çocuk Sneakers') return -1;
+                            return a.localeCompare(b, 'tr');
                         });
-                        count.textContent = `${visible} / ${validProducts.length} model`;
-                        status.hidden = visible > 0;
-                        if (!visible) status.textContent = 'Aramanızla eşleşen model bulunamadı.';
+                    const categories = [];
+                    brands.forEach(brand => {
+                        const brandProducts = validProducts.filter(product => getBrand(product.title, product.category) === brand);
+                        const series = [...new Set(brandProducts
+                            .map(product => getSeries(product.title, brand))
+                            .filter(Boolean))]
+                            .sort((a, b) => a.localeCompare(b, 'tr'));
+                        if (!series.length) series.push('');
+
+                        const group = document.createElement('div');
+                        group.className = 'category-group';
+                        const brandButton = document.createElement('button');
+                        brandButton.className = 'brand-nav';
+                        brandButton.type = 'button';
+                        brandButton.textContent = brand;
+                        brandButton.dataset.categoryId = '';
+                        brandButton.setAttribute('aria-pressed', 'false');
+                        group.append(brandButton);
+
+                        series.forEach((name, seriesIndex) => {
+                            const categoryProducts = name
+                                ? brandProducts.filter(product => getSeries(product.title, brand) === name)
+                                : brandProducts;
+                            const sectionId = `catalog-category-${categories.length}`;
+                            const section = document.createElement('section');
+                            section.className = 'catalog-category';
+                            section.id = sectionId;
+                            section.dataset.categoryId = sectionId;
+
+                            const heading = document.createElement('h2');
+                            heading.className = `category-title${name ? '' : ' brand-title'}`;
+                            heading.textContent = name || brand;
+                            section.append(heading);
+
+                            const grid = document.createElement('div');
+                            grid.className = 'grid';
+                            categoryProducts.forEach((product, index) => {
+                                const card = document.createElement('article');
+                                card.className = 'card';
+                                const image = document.createElement('img');
+                                image.src = product.image;
+                                image.alt = product.title;
+                                image.loading = categories.length === 0 && index < 4 ? 'eager' : 'lazy';
+                                image.decoding = 'async';
+
+                                const info = document.createElement('div');
+                                info.className = 'card-info';
+                                const title = document.createElement('h3');
+                                title.className = 'card-title';
+                                title.textContent = product.title;
+                                const code = document.createElement('div');
+                                code.className = 'card-code';
+                                code.textContent = `Model ${String(product.id || index + 1).padStart(2, '0')}`;
+                                const price = document.createElement('div');
+                                price.className = 'card-price';
+                                price.textContent = formatPrice(product.price);
+                                const link = document.createElement('a');
+                                link.className = 'card-btn';
+                                link.href = product.url;
+                                link.target = '_blank';
+                                link.rel = 'noopener noreferrer';
+                                link.textContent = "SHOPIER'DE GÖR";
+
+                                info.append(title, code, price, link);
+                                card.append(image, info);
+                                grid.append(card);
+                            });
+                            section.append(grid);
+                            catalogSections.append(section);
+                            categories.push({ brand, series: name, id: sectionId });
+
+                            if (series.length > 1) {
+                                const seriesButton = document.createElement('button');
+                                seriesButton.className = 'series-nav';
+                                seriesButton.type = 'button';
+                                seriesButton.textContent = name;
+                                seriesButton.dataset.categoryId = sectionId;
+                                seriesButton.setAttribute('aria-pressed', 'false');
+                                seriesButton.addEventListener('click', () => section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+                                group.append(seriesButton);
+                            } else {
+                                brandButton.dataset.categoryId = sectionId;
+                                brandButton.addEventListener('click', () => section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+                            }
+                        });
+                        if (series.length > 1) {
+                            brandButton.dataset.categoryId = categories[categories.length - series.length].id;
+                            brandButton.addEventListener('click', () => document.getElementById(brandButton.dataset.categoryId).scrollIntoView({ behavior: 'smooth', block: 'start' }));
+                        }
+                        categoryNav.append(group);
+                    });
+
+                    count.textContent = `${validProducts.length} model`;
+                    status.hidden = true;
+                    const updateActiveCategory = () => {
+                        const threshold = window.innerHeight * 0.35;
+                        const sections = [...catalogSections.querySelectorAll('.catalog-category')];
+                        const current = sections.filter(section => section.getBoundingClientRect().top <= threshold).pop() || sections[0];
+                        if (!current) return;
+                        categoryNav.querySelectorAll('button').forEach(button => {
+                            const isBrand = button.classList.contains('brand-nav');
+                            const hasSeries = Boolean(button.closest('.category-group').querySelector('.series-nav'));
+                            const active = button.dataset.categoryId === current.id && (!isBrand || !hasSeries);
+                            button.setAttribute('aria-pressed', String(active));
+                        });
+                        const activeLink = categoryNav.querySelector('button[aria-pressed="true"]');
+                        if (activeLink) {
+                            const sidebar = document.querySelector('.sidebar');
+                            const linkBounds = activeLink.getBoundingClientRect();
+                            const sidebarBounds = sidebar.getBoundingClientRect();
+                            if (linkBounds.top < sidebarBounds.top || linkBounds.bottom > sidebarBounds.bottom) {
+                                sidebar.scrollTo({
+                                    top: sidebar.scrollTop + linkBounds.top - sidebarBounds.top - (sidebar.clientHeight - linkBounds.height) / 2,
+                                    behavior: 'smooth'
+                                });
+                            }
+                        }
                     };
 
-                    search.addEventListener('input', updateVisibleProducts);
-                    brandFilter.addEventListener('change', updateVisibleProducts);
-                    status.hidden = true;
-                    updateVisibleProducts();
+                    let scrollFrame = 0;
+                    window.addEventListener('scroll', () => {
+                        if (scrollFrame) return;
+                        scrollFrame = window.requestAnimationFrame(() => {
+                            scrollFrame = 0;
+                            updateActiveCategory();
+                        });
+                    }, { passive: true });
+                    updateActiveCategory();
                 })
                 .catch(error => {
                     console.error('[Katalog] Modeller yüklenemedi:', error);
