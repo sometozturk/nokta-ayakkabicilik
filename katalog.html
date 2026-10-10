@@ -195,8 +195,16 @@
                         throw new Error(`90 model gösterilemedi; gerekli ürün bilgileri eksik olan ${90 - validProducts.length} kayıt var.`);
                     }
 
+                    const brandOrder = ['Nike', 'Adidas', 'Vans', 'Alexander Mcqueen', 'Goldengoose', 'Lacoste'];
                     const brands = [...new Set(validProducts.map(product => getBrand(product.title, product.category)))]
                         .sort((a, b) => {
+                            const aIndex = brandOrder.indexOf(a);
+                            const bIndex = brandOrder.indexOf(b);
+                            if (aIndex !== -1 || bIndex !== -1) {
+                                if (aIndex === -1) return 1;
+                                if (bIndex === -1) return -1;
+                                return aIndex - bIndex;
+                            }
                             if (a === 'Çocuk Sneakers') return 1;
                             if (b === 'Çocuk Sneakers') return -1;
                             return a.localeCompare(b, 'tr');
