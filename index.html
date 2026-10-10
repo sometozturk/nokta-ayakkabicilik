@@ -2413,6 +2413,40 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         };
     };
 
+    const ribbonTrack = document.getElementById('shoe-ribbon-track');
+    const ribbon = document.getElementById('shoe-ribbon-viewport');
+    const ribbonSection = ribbon && ribbon.closest('.shoe-ribbon');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const renderRibbon = (products, useLocalImages = false) => {
+        if (!ribbonTrack || !ribbon) return;
+        ribbonTrack.replaceChildren();
+        const ribbonProducts = products.filter(product => product.image).slice(0, 16);
+        [false, true].forEach(isDuplicate => {
+            const group = document.createElement('div');
+            group.className = 'shoe-ribbon-group';
+            group.setAttribute('aria-hidden', String(isDuplicate));
+            ribbonProducts.forEach((product, index) => {
+                const card = document.createElement('div');
+                card.className = 'shoe-ribbon-card';
+                const image = document.createElement('img');
+                image.src = useLocalImages ? product.filename : product.image;
+                image.alt = isDuplicate ? '' : product.title;
+                image.loading = !isDuplicate && index < 6 ? 'eager' : 'lazy';
+                image.decoding = 'async';
+                if (!isDuplicate && index < 6) image.fetchPriority = 'high';
+                const title = document.createElement('span');
+                title.textContent = product.title;
+                card.append(image, title);
+                group.append(card);
+            });
+            ribbonTrack.append(group);
+        });
+        const ribbonCycleWidth = ribbonTrack.querySelector('.shoe-ribbon-group').getBoundingClientRect().width;
+        ribbon.scrollLeft = reducedMotion.matches ? 0 : ribbonCycleWidth;
+    };
+
+    renderRibbon(FALLBACK_PRODUCTS.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean), true);
+
     const PRODUCTS = await fetch('products.json', { cache: 'no-store' })
         .then(async (response) => {
             if (!response.ok) throw new Error('Ürün verisi yüklenemedi');
@@ -2421,34 +2455,9 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         })
         .catch(() => FALLBACK_PRODUCTS.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean));
 
-    const ribbonTrack = document.getElementById('shoe-ribbon-track');
-    const ribbon = document.getElementById('shoe-ribbon-viewport');
     if (ribbonTrack && ribbon) {
-        const ribbonProducts = PRODUCTS.filter(product => product.image).slice(0, 16);
-        [false, true].forEach(isDuplicate => {
-            const group = document.createElement('div');
-            group.className = 'shoe-ribbon-group';
-            group.setAttribute('aria-hidden', String(isDuplicate));
-            ribbonProducts.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'shoe-ribbon-card';
-                const image = document.createElement('img');
-                image.src = product.image;
-                image.alt = isDuplicate ? '' : product.title;
-                image.loading = 'lazy';
-                image.decoding = 'async';
-                const title = document.createElement('span');
-                title.textContent = product.title;
-                card.append(image, title);
-                group.append(card);
-            });
-            ribbonTrack.append(group);
-        });
-        const ribbonSection = ribbon.closest('.shoe-ribbon');
+        renderRibbon(PRODUCTS);
         const ribbonGroup = ribbonTrack.querySelector('.shoe-ribbon-group');
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-        const ribbonCycleWidth = ribbonGroup.getBoundingClientRect().width;
-        ribbon.scrollLeft = reducedMotion.matches ? 0 : ribbonCycleWidth;
         const moveRibbon = direction => {
             ribbonTrack.style.animationPlayState = 'paused';
             const card = ribbonTrack.querySelector('.shoe-ribbon-card');
