@@ -342,10 +342,14 @@ document.addEventListener('click', function (e) {
     }
     @media (max-width:640px){
         .nav,.hero,.container,.trust-inner,.footer-inner,.footer-bottom div{width:min(100% - 20px,1240px);}
-        .nav{flex-wrap:wrap;justify-content:space-between;gap:10px;padding:10px 0;}
-        .header-links{flex-wrap:wrap;justify-content:flex-end;gap:8px 12px;}
+        .nav{flex-wrap:nowrap;justify-content:space-between;gap:8px;padding:8px 0;min-height:52px;}
+        .wordmark img{height:26px;}
+        .header-links{flex-wrap:nowrap;justify-content:flex-end;gap:6px;align-items:center;}
         .header-links a:not(.ig):not(.catalog-nav){display:none;}
-        .header-links .ig{font-size:11px;}
+        .header-links .ig{font-size:0;gap:0;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(25,23,21,.12);border-radius:50%;padding:0;transition:background .2s ease,border-color .2s ease;}
+        .header-links .ig:hover{background:rgba(227,75,53,.08);border-color:var(--accent);}
+        .header-links .ig svg{width:18px;height:18px;}
+        .header-links .ig .ig-text{display:none;}
         .header-links .catalog-nav{font-size:0;gap:0;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(25,23,21,.12);border-radius:50%;padding:0;transition:background .2s ease,border-color .2s ease;}
         .header-links .catalog-nav:hover{background:rgba(227,75,53,.08);border-color:var(--accent);}
         .header-links .catalog-nav svg{width:18px;height:18px;}
@@ -498,10 +502,16 @@ document.addEventListener('click', function (e) {
     }
     @media (max-width:640px){
         header{background:rgba(248,244,236,.96);border-bottom-color:rgba(25,23,21,.14);}
+        .nav > .wordmark{display:flex;}
+        .header-links,.nav-actions{flex:0 0 auto;}
+        .nav-actions{margin-left:0;}
+        .auth-button{white-space:nowrap;}
         .wordmark img{filter:none;}
         .header-links a{color:#191715;}
-        .header-links .ig{color:#655b52;}
+        .header-links .ig{color:#655b52;border-color:rgba(25,23,21,.12);}
         .auth-button-secondary{color:#191715;}
+        .nav-actions{gap:4px;}
+        .auth-button{padding:7px 10px;font-size:11px;}
         .hero{padding-top:46px;padding-bottom:48px;}
         h1{font-size:clamp(42px,12vw,62px);}
         .hero-collage{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:24px;}
@@ -513,12 +523,12 @@ document.addEventListener('click', function (e) {
         .brand-filter-row .brand-filters .brand-filter{flex:0 0 auto;width:auto;min-width:0;padding:7px 11px;font-size:10px;line-height:1.1;white-space:nowrap;}
         .brand-filter-row .search-wrap,.brand-filter-row .sort{width:100%;min-width:0;flex:initial;}
         .search,.sort{width:100%;min-width:0;min-height:36px;padding:8px 6px;font-size:10px;}
+        .search{padding-left:9px;}
         .brand-filter-row{display:grid;grid-template-columns:minmax(0,1fr);}
         .brand-filter-row .brand-filters,.brand-filter-row > .sort{display:none;}
         .brand-filter-row .search-wrap{grid-column:1/-1;width:100%;}
         .brand-filter-row .search{width:100%;font-size:13px;}
         .result-note{display:none;}
-        .search{padding-left:9px;}
         .shoe-ribbon{margin-top:0;}
         .shoe-ribbon-group{gap:8px;padding-right:8px;}
         .shoe-ribbon-card{flex-basis:clamp(76px,24vw,92px);}
@@ -946,7 +956,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             <a href="#iletisim">İletişim</a>
             <a class="ig" href="https://www.instagram.com/nokta.ayakkabicilik/" target="_blank" rel="noopener noreferrer">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
-                @nokta.ayakkabicilik
+                <span class="ig-text">@nokta.ayakkabicilik</span>
             </a>
             <a class="catalog-nav" href="katalog.html" aria-label="Kataloğu Gör" title="Kataloğu Gör">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 5.5v13A2.5 2.5 0 0 1 6.5 16H20"/><path d="M8 7h8M8 10h8"/></svg>
