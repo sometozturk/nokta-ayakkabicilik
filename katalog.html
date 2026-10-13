@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Nokta Ayakkabıcılık koleksiyonundaki 90 modeli inceleyin.">
+    <meta name="description" content="Nokta Ayakkabıcılık ayakkabı ve bot koleksiyonundaki modelleri inceleyin.">
     <meta name="theme-color" content="#0d0d0d">
     <title>Nokta Katalog | Tüm Modeller</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -105,12 +105,21 @@
             const brandNames = ['Nike', 'Adidas', 'Alexander Mcqueen', 'Calvin Klein', 'Goldengoose', 'Lacoste', 'Lufian', 'Prada', 'Vans'];
             const getBrand = (title, category = '') => {
                 const lowerTitle = title.toLocaleLowerCase('tr-TR');
-                if (category === 'Çocuk Sneakers' || /^Lacoste\s+White-Purple\b/i.test(title)) return 'Çocuk Sneakers';
+                if (['Çocuk Sneakers', 'Erkek Bot', 'Kadın Bot'].includes(category) || /^Lacoste\s+White-Purple\b/i.test(title)) return category || 'Çocuk Sneakers';
                 const brand = brandNames.find(name => lowerTitle.startsWith(name.toLocaleLowerCase('tr-TR')));
                 return brand || (category === 'Çocuk Sneakers' ? category : title.split(' ')[0]);
             };
+            const getProductBrands = product => {
+                const categories = Array.isArray(product.categories) ? [...product.categories] : [];
+                if (product.category && !categories.includes(product.category)) categories.push(product.category);
+                const bootCategories = categories.filter(category => category === 'Erkek Bot' || category === 'Kadın Bot');
+                const productBrand = brandNames.find(name => product.title.toLocaleLowerCase('tr-TR').startsWith(name.toLocaleLowerCase('tr-TR')));
+                return bootCategories.length
+                    ? [...new Set([...bootCategories, ...(productBrand ? [productBrand] : [])])]
+                    : [getBrand(product.title, product.category)];
+            };
             const getSeries = (title, brand) => {
-                if (brand === 'Çocuk Sneakers' || brand === 'Alexander Mcqueen' || brand === 'Calvin Klein' || brand === 'Goldengoose' || brand === 'Lufian') return '';
+                if (['Çocuk Sneakers', 'Erkek Bot', 'Kadın Bot', 'Alexander Mcqueen', 'Calvin Klein', 'Goldengoose', 'Lufian', 'Prada'].includes(brand)) return '';
                 const actualBrand = brandNames.find(name => title.toLocaleLowerCase('tr-TR').startsWith(name.toLocaleLowerCase('tr-TR')));
                 const model = title.slice(actualBrand ? actualBrand.length : 0).trim().replace(/\s*\([^)]*\)/g, '').replace(/\s*Çocuk(?:\s+Sneaker)?/gi, '').trim();
                 const rules = {
@@ -158,10 +167,6 @@
                         [/^Siyah-Beyaz/i, 'Siyah-Beyaz'],
                         [/^White/i, 'White']
                     ],
-                    'Prada': [
-                        [/^Elite/i, 'Elite'],
-                        [/^High\s+Taban/i, 'High Taban']
-                    ],
                     'Vans': [
                         [/^Knu\s+Skool/i, 'Knu Skool'],
                         [/^Classic/i, 'Classic'],
@@ -187,17 +192,23 @@
                     return response.json();
                 })
                 .then(products => {
-                    if (!Array.isArray(products) || products.length !== 90) {
-                        throw new Error(`Katalogda 90 model bekleniyordu; ${Array.isArray(products) ? products.length : 0} model bulundu.`);
-                    }
+                    if (!Array.isArray(products)) throw new Error('Ürün verisi geçerli bir model listesi değil.');
                     const validProducts = products.filter(product => product && product.title && product.image && product.url);
-                    if (validProducts.length !== 90) {
-                        throw new Error(`90 model gösterilemedi; gerekli ürün bilgileri eksik olan ${90 - validProducts.length} kayıt var.`);
+                    if (validProducts.length !== products.length) {
+                        throw new Error(`${products.length - validProducts.length} kayıt için gerekli ürün bilgileri eksik.`);
                     }
 
                     const brandOrder = ['Nike', 'Adidas', 'Vans', 'Alexander Mcqueen', 'Goldengoose', 'Lacoste'];
-                    const brands = [...new Set(validProducts.map(product => getBrand(product.title, product.category)))]
+                    const brands = [...new Set(validProducts.flatMap(getProductBrands))]
                         .sort((a, b) => {
+                            const botOrder = ['Erkek Bot', 'Kadın Bot'];
+                            const aBotIndex = botOrder.indexOf(a);
+                            const bBotIndex = botOrder.indexOf(b);
+                            if (aBotIndex !== -1 || bBotIndex !== -1) {
+                                if (aBotIndex === -1) return -1;
+                                if (bBotIndex === -1) return 1;
+                                return aBotIndex - bBotIndex;
+                            }
                             const aIndex = brandOrder.indexOf(a);
                             const bIndex = brandOrder.indexOf(b);
                             if (aIndex !== -1 || bIndex !== -1) {
@@ -211,7 +222,7 @@
                         });
                     const categories = [];
                     brands.forEach(brand => {
-                        const brandProducts = validProducts.filter(product => getBrand(product.title, product.category) === brand);
+                        const brandProducts = validProducts.filter(product => getProductBrands(product).includes(brand));
                         const series = [...new Set(brandProducts
                             .map(product => getSeries(product.title, brand))
                             .filter(Boolean))]

@@ -52,6 +52,20 @@ function extractProduct(html, url) {
   return { title: title.trim(), price: price.trim(), image, images, url };
 }
 
+function getCategory(title, previousCategory = '') {
+  if (previousCategory) return previousCategory;
+  if (/çocuk/i.test(title)) return 'Çocuk Sneakers';
+  if (/\bbot\b|çizme/i.test(title)) {
+    return /kadın|topuklu|çizme|\bugg\b/i.test(title) ? 'Kadın Bot' : 'Erkek Bot';
+  }
+  return '';
+}
+
+function getCategories(title, category, previousCategories = []) {
+  const categories = [...new Set([...previousCategories, category].filter(Boolean))];
+  return categories.length ? categories : (getCategory(title) ? [getCategory(title)] : []);
+}
+
 async function discoverUrls(page) {
   await fetchHtml(page, shopUrl);
   let previousCount = 0;
@@ -108,6 +122,7 @@ async function main() {
     const previous = existing.find((product) => product.url === item.url) || {};
     try {
       const live = extractProduct(await fetchHtml(page, item.url), item.url);
+      const category = getCategory(live.title, previous.category);
       products.push({
         id: Number(item.id),
         title: live.title || previous.title || `Urun ${item.id}`,
@@ -116,7 +131,8 @@ async function main() {
         images: live.images?.length ? live.images : (previous.images || (previous.image ? [previous.image] : [])),
         filename: previous.filename || `${item.id}.jpeg`,
         url: item.url,
-        category: previous.category || (/çocuk/i.test(live.title) ? 'Çocuk Sneakers' : '')
+        category,
+        categories: getCategories(live.title, category, previous.categories)
       });
       console.log(`Synced ${item.id}: ${live.title} - ${live.price}`);
     } catch (error) {

@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nokta Ayakkabıcılık | Nike, Adidas ve Sneaker Modelleri</title>
-<meta name="description" content="Nike, Adidas, Vans, Lacoste ve daha fazla markadan sneaker ve günlük ayakkabı modellerini Nokta Ayakkabıcılık'ta keşfedin. Shopier üzerinden güvenli alışveriş.">
+<title>Nokta Ayakkabıcılık | Ayakkabı ve Bot Modelleri</title>
+<meta name="description" content="Erkek bot, kadın bot, sneaker ve günlük ayakkabı modellerini Nokta Ayakkabıcılık'ta keşfedin. Shopier üzerinden güvenli alışveriş.">
 <meta name="robots" content="index,follow">
 <meta property="og:title" content="Nokta Ayakkabıcılık">
-<meta property="og:description" content="Özenle seçilmiş sneaker ve günlük ayakkabı koleksiyonu.">
+<meta property="og:description" content="Özenle seçilmiş ayakkabı, erkek bot ve kadın bot koleksiyonu.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.noktaayakkabicilik.com/">
 <meta property="og:image" content="logo-transparent.png">
 <meta property="og:site_name" content="Nokta Ayakkabıcılık">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Nokta Ayakkabıcılık | Sneaker ve Ayakkabı Koleksiyonu">
-<meta name="twitter:description" content="Nike, Adidas, Vans ve daha fazla ayakkabı modelini keşfedin.">
+<meta name="twitter:title" content="Nokta Ayakkabıcılık | Ayakkabı ve Bot Koleksiyonu">
+<meta name="twitter:description" content="Sneaker, erkek bot ve kadın bot modellerini Shopier üzerinden güvenle keşfedin.">
 <meta name="twitter:image" content="https://www.noktaayakkabicilik.com/logo-transparent.png">
 <link rel="canonical" href="https://www.noktaayakkabicilik.com/">
 <meta name="theme-color" content="#151515">
@@ -85,7 +85,7 @@ document.addEventListener('click', function (e) {
     "name":"Nokta Ayakkabıcılık",
     "url":"https://www.noktaayakkabicilik.com/",
     "logo":"https://www.noktaayakkabicilik.com/logo-transparent.png",
-    "description":"Nike, Adidas, Vans ve daha fazla markadan sneaker ve günlük ayakkabı koleksiyonu.",
+    "description":"Sneaker, erkek bot, kadın bot ve günlük ayakkabı koleksiyonu.",
     "priceRange":"₺₺",
     "sameAs":["https://www.instagram.com/nokta.ayakkabicilik/","https://shopier.com/noktaayakkabi"]
 }
@@ -1028,7 +1028,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             <div>
                 <p class="hero-eyebrow"><span class="dot"></span>2026 koleksiyonu</p>
                 <h1>Attığın her adım<br>bir tercih.</h1>
-                <p class="hero-copy">Nike'tan Adidas'a, Lacoste'tan Goldengoose'a — şehrin temposuna uyum sağlayan, tek tek seçilmiş sneaker ve günlük ayakkabı modelleri.</p>
+                <p class="hero-copy">Nike'tan Adidas'a, Lacoste'tan Goldengoose'a — şehrin temposuna uyum sağlayan, tek tek seçilmiş ayakkabı ve bot modelleri.</p>
                 <div class="hero-ctas">
                     <a class="btn-primary" href="#urunler">Koleksiyonu gör</a>
                     <span class="hero-count"><strong id="hero-count">50</strong> model stokta</span>
@@ -1113,7 +1113,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
     <div class="footer-inner">
         <div class="footer-brand">
             <a class="wordmark" href="#top"><img src="logo-transparent.png" alt="Nokta Ayakkabıcılık"></a>
-            <p>Nokta Ayakkabıcılık, seçili sneaker ve günlük ayakkabı modellerini Shopier üzerinden güvenle sizlere ulaştırır. Sorularınız için Instagram üzerinden bize ulaşabilirsiniz.</p>
+            <p>Nokta Ayakkabıcılık, seçili ayakkabı, erkek bot ve kadın bot modellerini Shopier üzerinden güvenle sizlere ulaştırır. Sorularınız için Instagram üzerinden bize ulaşabilirsiniz.</p>
         </div>
         <div class="footer-col footer-brands">
             <h4>Markalar</h4>
@@ -1134,8 +1134,8 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         <div class="footer-col footer-collection">
             <h4>Koleksiyon</h4>
             <a class="catalog-link" href="katalog.html">
-                <strong>90 modeli incele</strong>
-                <span>Tüm ayakkabılar · tek sayfada</span>
+                <strong>Tüm modelleri incele</strong>
+                <span>Ayakkabı ve bot modelleri · tek sayfada</span>
             </a>
         </div>
     </div>
@@ -2537,7 +2537,8 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             filename: product.filename || `${fallbackId || 0}.jpeg`,
             localImage: product.localImage ?? product.filename ?? '',
             url: product.url || 'https://shopier.com/noktaayakkabi',
-            category: product.category || ''
+            category: product.category || '',
+            categories: Array.isArray(product.categories) ? product.categories : []
         };
     };
 
@@ -2674,7 +2675,12 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             });
 
             const grid = document.getElementById('urun-izgarasi');
-            const total = PRODUCTS.length;
+            const total = PRODUCTS.reduce((max, product) => Math.max(max, Number(product.id) || 0), 0);
+            const categoryIds = {
+                'Çocuk Sneakers': 'cocuk-sneakers',
+                'Erkek Bot': 'erkek-bot',
+                'Kadın Bot': 'kadin-bot'
+            };
             const knownBrands = ['Nike', 'Adidas', 'Lacoste', 'Lufian', 'Calvin Klein', 'Alexander Mcqueen', 'Goldengoose', 'Prada'];
             function getBrand(title){
                 const normalizedTitle = title.toLocaleLowerCase('tr-TR');
@@ -2709,7 +2715,10 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 card.style.animationDelay = `${Math.min(i, 8) * 40}ms`;
                 card.dataset.title = title.toLocaleLowerCase('tr-TR');
                 card.dataset.brand = brand.toLocaleLowerCase('tr-TR');
-                card.dataset.category = product.category === 'Çocuk Sneakers' ? 'cocuk-sneakers' : '';
+                const productCategories = Array.isArray(product.categories) ? product.categories : [product.category];
+                if (product.category && !productCategories.includes(product.category)) productCategories.push(product.category);
+                card.dataset.categories = [...new Set(productCategories.map(category => categoryIds[category]).filter(Boolean))].join(' ');
+                card.dataset.category = card.dataset.categories.split(' ')[0] || '';
                 card.dataset.size = sizeRange.toLocaleLowerCase('tr-TR');
                 card.dataset.price = parseFloat(String(product.price).replace(',', '.')) || 0;
                 card.productData = product;
@@ -2745,7 +2754,9 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
 
                 const brandTag = document.createElement('span');
                 brandTag.className = 'brand-tag';
-                brandTag.textContent = brand;
+                brandTag.textContent = product.category === 'Erkek Bot' || product.category === 'Kadın Bot'
+                    ? product.category
+                    : brand;
 
                 const numericPrice = parseFloat(String(product.price).replace(',', '.')) || 0;
                 if(Number(product.id) > 50 || numericPrice < 1000){
@@ -2855,7 +2866,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             const closeModalButton = document.getElementById('modal-close');
             const backModalButton = document.getElementById('modal-back');
             let currentProductInModal = null;
-            const brands = [...new Set(cards.filter(card => card.dataset.category !== 'cocuk-sneakers').map(card => card.dataset.brand))].sort((a, b) => {
+            const brands = [...new Set(cards.filter(card => !card.dataset.category).map(card => card.dataset.brand))].sort((a, b) => {
                 if(a === 'nike') return -1;
                 if(b === 'nike') return 1;
                 return a.localeCompare(b, 'tr-TR');
@@ -2985,18 +2996,25 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 createBrandControl(footerBrands, brandLabel(brand), brand, true);
             });
             createBrandControl(brandFilters, 'Çocuk Sneakers', '__children__');
+            createBrandControl(brandFilters, 'Erkek Bot', '__mens-boots__');
+            createBrandControl(brandFilters, 'Kadın Bot', '__womens-boots__');
             selectBrand('');
 
             function filterProducts(){
                 const query = search.value.trim().toLocaleLowerCase('tr-TR');
                 const selectedPrice = priceFilter.value;
                 const priceRange = selectedPrice ? selectedPrice.split('-').map(Number) : null;
+                const selectedCategory = {
+                    '__children__': 'cocuk-sneakers',
+                    '__mens-boots__': 'erkek-bot',
+                    '__womens-boots__': 'kadin-bot'
+                }[activeBrand];
                 let visible = 0;
                 let visibleCards = [];
                 cards.forEach(card => {
                     const cardPrice = parseFloat(card.dataset.price) || 0;
                     const matches = (!query || card.dataset.title.includes(query))
-                        && (!activeBrand || (activeBrand === '__children__' ? card.dataset.category === 'cocuk-sneakers' : card.dataset.brand === activeBrand))
+                        && (!activeBrand || (selectedCategory ? card.dataset.categories.split(' ').includes(selectedCategory) : card.dataset.brand === activeBrand))
                         && (!priceRange || (cardPrice >= priceRange[0] && cardPrice < priceRange[1]));
                     card.hidden = !matches;
                     if(matches){ visible++; visibleCards.push(card); }
@@ -3047,8 +3065,8 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             function applySort(visibleCards, query){
                 const mode = sortSelect.value;
                 const sorted = [...visibleCards].sort((a, b) => {
-                    const categoryPriorityA = a.dataset.category === 'cocuk-sneakers' && activeBrand !== '__children__' ? 1 : 0;
-                    const categoryPriorityB = b.dataset.category === 'cocuk-sneakers' && activeBrand !== '__children__' ? 1 : 0;
+                    const categoryPriorityA = a.dataset.category && !isSelectedCategory(a.dataset.category) ? 1 : 0;
+                    const categoryPriorityB = b.dataset.category && !isSelectedCategory(b.dataset.category) ? 1 : 0;
                     if(categoryPriorityA !== categoryPriorityB) return categoryPriorityA - categoryPriorityB;
 
                     if(mode === 'default'){
@@ -3080,6 +3098,15 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                     return mode === 'price-asc' ? pa - pb : pb - pa;
                 });
                 sorted.forEach(card => grid.appendChild(card));
+            }
+
+            function isSelectedCategory(category){
+                const selectedCategory = {
+                    '__children__': 'cocuk-sneakers',
+                    '__mens-boots__': 'erkek-bot',
+                    '__womens-boots__': 'kadin-bot'
+                }[activeBrand];
+                return selectedCategory ? category.split(' ').includes(selectedCategory) : false;
             }
 
             search.addEventListener('input', () => {
