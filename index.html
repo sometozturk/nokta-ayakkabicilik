@@ -2681,7 +2681,8 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 'Erkek Bot': 'erkek-bot',
                 'Kadın Bot': 'kadin-bot'
             };
-            const knownBrands = ['Nike', 'Adidas', 'Lacoste', 'Lufian', 'Calvin Klein', 'Alexander Mcqueen', 'Goldengoose', 'Prada'];
+            const brandOrder = ['nike', 'adidas', 'alexander mcqueen', 'calvin klein', 'goldengoose', 'lacoste', 'lufian', 'oxford', 'prada', 'vans'];
+            const knownBrands = ['Nike', 'Oxford', 'Adidas', 'Lacoste', 'Lufian', 'Calvin Klein', 'Alexander Mcqueen', 'Goldengoose', 'Prada'];
             function getBrand(title){
                 const normalizedTitle = title.toLocaleLowerCase('tr-TR');
                 return knownBrands.find(brand => normalizedTitle.startsWith(brand.toLocaleLowerCase('tr-TR'))) || title.split(' ')[0];
@@ -2867,8 +2868,13 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             const backModalButton = document.getElementById('modal-back');
             let currentProductInModal = null;
             const brands = [...new Set(cards.filter(card => !card.dataset.category).map(card => card.dataset.brand))].sort((a, b) => {
-                if(a === 'nike') return -1;
-                if(b === 'nike') return 1;
+                const aIndex = brandOrder.indexOf(a);
+                const bIndex = brandOrder.indexOf(b);
+                if(aIndex !== -1 || bIndex !== -1){
+                    if(aIndex === -1) return 1;
+                    if(bIndex === -1) return -1;
+                    return aIndex - bIndex;
+                }
                 return a.localeCompare(b, 'tr-TR');
             });
             const brandLabel = brand => brand.replace(/(^|\s)\S/g, letter => letter.toLocaleUpperCase('tr-TR'));
@@ -3065,14 +3071,18 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             function applySort(visibleCards, query){
                 const mode = sortSelect.value;
                 const sorted = [...visibleCards].sort((a, b) => {
-                    const categoryPriorityA = a.dataset.category && !isSelectedCategory(a.dataset.category) ? 1 : 0;
-                    const categoryPriorityB = b.dataset.category && !isSelectedCategory(b.dataset.category) ? 1 : 0;
-                    if(categoryPriorityA !== categoryPriorityB) return categoryPriorityA - categoryPriorityB;
-
                     if(mode === 'default'){
-                        const brandPriorityA = (a.dataset.brand || '') === 'nike' ? 0 : 1;
-                        const brandPriorityB = (b.dataset.brand || '') === 'nike' ? 0 : 1;
-                        if(brandPriorityA !== brandPriorityB) return brandPriorityA - brandPriorityB;
+                        const getProductPriority = card => {
+                            const productCategories = card.dataset.categories.split(' ');
+                            if(productCategories.includes('cocuk-sneakers')) return brandOrder.length + 3;
+                            if(productCategories.includes('erkek-bot')) return brandOrder.length + 1;
+                            if(productCategories.includes('kadin-bot')) return brandOrder.length + 2;
+                            const brandIndex = brandOrder.indexOf(card.dataset.brand || '');
+                            return brandIndex === -1 ? brandOrder.length : brandIndex;
+                        };
+                        const productPriorityA = getProductPriority(a);
+                        const productPriorityB = getProductPriority(b);
+                        if(productPriorityA !== productPriorityB) return productPriorityA - productPriorityB;
 
                         const modelA = getModelFamily(a.dataset.title || '');
                         const modelB = getModelFamily(b.dataset.title || '');
