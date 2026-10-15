@@ -10,12 +10,15 @@
 <meta property="og:description" content="Özenle seçilmiş ayakkabı, erkek bot ve kadın bot koleksiyonu.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.noktaayakkabicilik.com/">
-<meta property="og:image" content="logo-transparent.png">
+<meta property="og:image" content="https://www.noktaayakkabicilik.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Nokta Ayakkabıcılık logosu">
 <meta property="og:site_name" content="Nokta Ayakkabıcılık">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Nokta Ayakkabıcılık | Ayakkabı ve Bot Koleksiyonu">
 <meta name="twitter:description" content="Sneaker, erkek bot ve kadın bot modellerini Shopier üzerinden güvenle keşfedin.">
-<meta name="twitter:image" content="https://www.noktaayakkabicilik.com/logo-transparent.png">
+<meta name="twitter:image" content="https://www.noktaayakkabicilik.com/og-image.jpg">
 <link rel="canonical" href="https://www.noktaayakkabicilik.com/">
 <meta name="theme-color" content="#151515">
 <!-- Meta Pixel Code -->
@@ -28,9 +31,16 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
+// Çerez onayı verilmeden Pixel olay göndermez (consent.js tercihi yönetir).
+(function () {
+    var granted = false;
+    try { granted = window.localStorage.getItem('nokta-consent') === 'granted'; } catch (e) {}
+    if (!granted) fbq('consent', 'revoke');
+})();
 fbq('init', '1623153919352122');
 fbq('track', 'PageView');
 </script>
+<script src="consent.js" defer></script>
 <!-- End Meta Pixel Code -->
 <script>
 document.addEventListener('click', function (e) {
@@ -960,12 +970,38 @@ document.addEventListener('click', function (e) {
         .hero-count{font-size:13px;}
         .hero-logo-display{margin-top:10px;}
     }
+
+    /* ---------- mobil okunabilirlik ve dokunma alanları (yalnızca ≤640px, masaüstüne dokunmaz) ---------- */
+    @media (max-width:640px){
+        .urun-code{font-size:10px;}
+        .urun-baslik{font-size:13px;}
+        .urun-fiyat{font-size:15px;}
+        .urun-meta .product-open{font-size:11.5px;padding:8px 0;margin:2px 0 0;}
+        .urun-karti > .satin-al-buton{font-size:12px;min-height:44px;}
+        .product-badge,.brand-tag{font-size:9px;}
+        .shoe-ribbon-card span{font-size:10px;}
+        .brand-filter-row .brand-filters .brand-filter{font-size:12px;min-height:40px;padding:8px 14px;}
+        .search,.sort{min-height:44px;font-size:13px;}
+        .auth-button{min-height:40px;padding:9px 8px;font-size:11.5px;}
+        .header-links .ig,.header-links .catalog-nav{width:38px;height:38px;}
+        .legal-links{gap:6px 16px;}
+        .legal-links a,.legal-link-button{font-size:12px;padding:8px 0;}
+        .floating-contact{min-height:44px;}
+    }
+    @media (max-width:360px){
+        .urun-baslik{font-size:12px;}
+        .urun-fiyat{font-size:14px;}
+        .urun-karti > .satin-al-buton{font-size:11px;min-height:42px;}
+        .header-links .ig,.header-links .catalog-nav{width:36px;height:36px;}
+        .auth-button{padding:9px 7px;font-size:11px;}
+    }
+    @media (max-width:340px){
+        /* Çok dar ekranlarda üst çubuk taşıyordu; Instagram zaten yüzen butonda ve altbilgide var. */
+        .header-links .ig{display:none;}
+    }
 </style>
 </head>
 <body>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
-/></noscript>
 
 <div class="opening-screen" aria-label="Nokta Ayakkabıcılık açılışı">
     <div class="curtain curtain-left" aria-hidden="true"><img class="curtain-logo" src="logo.jpeg" alt=""><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i><i class="curtain-fold"></i></div>
@@ -1129,6 +1165,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
                 <a href="bilgilendirme.html#kargo">Kargo ve teslimat</a>
                 <a href="bilgilendirme.html#iade">İade ve değişim</a>
                 <a href="bilgilendirme.html#kvkk">KVKK ve gizlilik</a>
+                <button type="button" class="legal-link-button" data-consent-open>Çerez tercihleri</button>
             </div>
         </div>
         <div class="footer-col footer-collection">
@@ -2546,6 +2583,22 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
     const ribbon = document.getElementById('shoe-ribbon-viewport');
     const ribbonSection = ribbon && ribbon.closest('.shoe-ribbon');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let ribbonGroupWidth = 0;
+    /*
+     * Sonsuz döngü: görünür pencerenin konumu = scrollLeft + animasyonun kaydırması (0..groupWidth).
+     * Pencerenin hiçbir zaman şerit dışına çıkmaması için scrollLeft [0, toplam - görünür - groupWidth]
+     * aralığında kalmalı; bunun için en az ceil(görünür/groupWidth) + 3 kopya gerekir.
+     * İçerik groupWidth periyoduyla tekrar ettiği için scrollLeft'i groupWidth kadar kaydırmak göze görünmez.
+     */
+    const normalizeRibbonScroll = (urgent = false) => {
+        if (!ribbon || !ribbonGroupWidth || reducedMotion.matches) return;
+        const left = ribbon.scrollLeft;
+        const low = ribbonGroupWidth * (urgent ? 0.1 : 0.5);
+        const high = ribbonGroupWidth * (urgent ? 1.9 : 1.5);
+        if (left >= low && left <= high) return;
+        const target = ((left - ribbonGroupWidth * 0.5) % ribbonGroupWidth + ribbonGroupWidth) % ribbonGroupWidth + ribbonGroupWidth * 0.5;
+        if (Math.abs(target - left) > 0.5) ribbon.scrollLeft = target;
+    };
     const syncRibbonGroups = () => {
         if (!ribbonTrack || !ribbon) return;
         const firstGroup = ribbonTrack.querySelector('.shoe-ribbon-group');
@@ -2553,8 +2606,9 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
 
         const groupWidth = firstGroup.getBoundingClientRect().width;
         if (!groupWidth) return;
+        ribbonGroupWidth = groupWidth;
 
-        const groupCount = Math.max(2, Math.ceil(ribbon.clientWidth / groupWidth) + 1);
+        const groupCount = Math.max(3, Math.ceil(ribbon.clientWidth / groupWidth) + 3);
         while (ribbonTrack.children.length < groupCount) {
             const duplicate = firstGroup.cloneNode(true);
             duplicate.setAttribute('aria-hidden', 'true');
@@ -2569,6 +2623,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
             ribbonTrack.lastElementChild.remove();
         }
         ribbonTrack.style.setProperty('--shoe-ribbon-offset', `${-groupWidth}px`);
+        normalizeRibbonScroll();
     };
     const renderRibbon = (products, useLocalImages = false) => {
         if (!ribbonTrack || !ribbon) return;
@@ -2613,12 +2668,21 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         syncRibbonGroups();
         const ribbonAnimation = ribbonTrack.getAnimations()[0];
         if (ribbonAnimation) ribbonAnimation.currentTime = 0;
-        const ribbonCycleWidth = ribbonTrack.querySelector('.shoe-ribbon-group').getBoundingClientRect().width;
-        ribbon.scrollLeft = reducedMotion.matches ? 0 : ribbonCycleWidth;
+        ribbon.scrollLeft = reducedMotion.matches ? 0 : ribbonGroupWidth;
     };
 
-    renderRibbon(FALLBACK_PRODUCTS.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean), true);
+    // Yedek liste de Shopier CDN görselleriyle çizilir; kökteki büyük yerel JPEG'ler artık indirilmiyor.
+    renderRibbon(FALLBACK_PRODUCTS.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean));
     window.addEventListener('resize', syncRibbonGroups, { passive: true });
+    window.addEventListener('load', syncRibbonGroups, { once: true });
+    if (ribbon) {
+        let ribbonScrollTimer = 0;
+        ribbon.addEventListener('scroll', () => {
+            normalizeRibbonScroll(true);
+            window.clearTimeout(ribbonScrollTimer);
+            ribbonScrollTimer = window.setTimeout(() => normalizeRibbonScroll(false), 120);
+        }, { passive: true });
+    }
 
     const PRODUCTS = await fetch('products.json', { cache: 'no-store' })
         .then(async (response) => {
@@ -2658,7 +2722,7 @@ src="https://www.facebook.com/tr?id=1623153919352122&ev=PageView&noscript=1"
         ribbonSection.querySelector('.shoe-ribbon-arrow-prev').addEventListener('click', () => moveRibbon(-1));
         ribbonSection.querySelector('.shoe-ribbon-arrow-next').addEventListener('click', () => moveRibbon(1));
         reducedMotion.addEventListener('change', event => {
-            ribbon.scrollLeft = event.matches ? 0 : ribbonCycleWidth;
+            ribbon.scrollLeft = event.matches ? 0 : ribbonGroupWidth;
         });
     }
 

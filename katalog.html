@@ -3,9 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Nokta Ayakkabıcılık ayakkabı ve bot koleksiyonundaki modelleri inceleyin.">
+    <meta name="description" content="Nokta Ayakkabıcılık ayakkabı ve bot koleksiyonundaki tüm modelleri marka ve seriye göre inceleyin; Shopier üzerinden güvenle satın alın.">
+    <meta name="robots" content="index,follow">
     <meta name="theme-color" content="#0d0d0d">
-    <title>Nokta Katalog | Tüm Modeller</title>
+    <title>Katalog | Tüm Ayakkabı ve Bot Modelleri | Nokta Ayakkabıcılık</title>
+    <link rel="canonical" href="https://www.noktaayakkabicilik.com/katalog.html">
+    <link rel="icon" type="image/png" href="logo-transparent.png">
+    <meta property="og:title" content="Katalog | Nokta Ayakkabıcılık">
+    <meta property="og:description" content="Sneaker, erkek bot ve kadın bot modellerinin tamamı tek sayfada.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.noktaayakkabicilik.com/katalog.html">
+    <meta property="og:image" content="https://www.noktaayakkabicilik.com/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Nokta Ayakkabıcılık">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://www.noktaayakkabicilik.com/og-image.jpg">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    // Çerez onayı verilmeden Pixel olay göndermez (consent.js tercihi yönetir).
+    (function () {
+        var granted = false;
+        try { granted = window.localStorage.getItem('nokta-consent') === 'granted'; } catch (e) {}
+        if (!granted) fbq('consent', 'revoke');
+    })();
+    fbq('init', '1623153919352122');
+    fbq('track', 'PageView');
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest && e.target.closest('a.card-btn');
+        if (!link || typeof fbq !== 'function') return;
+        var card = link.closest('.card');
+        var priceEl = card && card.querySelector('.card-price');
+        fbq('trackCustom', 'ShopierTikla', {
+            content_ids: [String(link.href || '').split('?')[0].replace(/\/$/, '').split('/').pop()],
+            content_type: 'product',
+            value: priceEl ? (Number(String(priceEl.textContent).replace(/[^\d]/g, '')) || 0) : 0,
+            currency: 'TRY'
+        });
+    });
+    </script>
+    <script src="consent.js" defer></script>
+    <!-- End Meta Pixel Code -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.shopier.app">
@@ -69,6 +115,10 @@
             .card-price{font-size:17px;}
         }
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;}}
+        .site-foot{width:min(1560px,calc(100% - 40px));margin:0 auto;padding:24px 0 40px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12px;color:var(--muted);}
+        .site-foot a{color:var(--muted);text-decoration:none;}
+        .site-foot a:hover,.legal-link-button:hover{color:var(--accent);}
+        .legal-link-button{background:none;border:0;padding:0;font:inherit;color:var(--muted);cursor:pointer;}
     </style>
 </head>
 <body>
@@ -96,6 +146,13 @@
             </section>
         </div>
     </main>
+    <footer class="site-foot">
+        <span>© 2026 Nokta Ayakkabıcılık</span>
+        <a href="bilgilendirme.html#kargo">Kargo ve teslimat</a>
+        <a href="bilgilendirme.html#iade">İade ve değişim</a>
+        <a href="bilgilendirme.html#kvkk">KVKK ve gizlilik</a>
+        <button type="button" class="legal-link-button" data-consent-open>Çerez tercihleri</button>
+    </footer>
     <script>
         (() => {
             const count = document.getElementById('product-count');
