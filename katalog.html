@@ -310,9 +310,13 @@
                         group.append(brandButton);
 
                         series.forEach((name, seriesIndex) => {
-                            const categoryProducts = name
+                            let categoryProducts = name
                                 ? brandProducts.filter(product => getSeries(product.title, brand) === name)
                                 : brandProducts;
+                            if (brand === 'Topuklu Nokta Shic') {
+                                const rank = product => /^(Küt Burun Topuklu Bot|Topuklu Çizme)/i.test(product.title) ? 0 : (product.category === 'Topuklu Nokta Shic' ? 1 : 2);
+                                categoryProducts = [...categoryProducts].sort((x, y) => rank(x) - rank(y) || x.id - y.id);
+                            }
                             const sectionId = `catalog-category-${categories.length}`;
                             const section = document.createElement('section');
                             section.className = 'catalog-category';
