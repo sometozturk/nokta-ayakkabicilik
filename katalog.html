@@ -162,21 +162,21 @@
             const brandNames = ['Nike', 'Adidas', 'Alexander Mcqueen', 'Calvin Klein', 'Goldengoose', 'Lacoste', 'Lufian', 'Prada', 'Vans'];
             const getBrand = (title, category = '') => {
                 const lowerTitle = title.toLocaleLowerCase('tr-TR');
-                if (['Çocuk Sneakers', 'Erkek Bot', 'Kadın Bot'].includes(category) || /^Lacoste\s+White-Purple\b/i.test(title)) return category || 'Çocuk Sneakers';
+                if (['Çocuk Sneakers', 'Erkek Bot', 'Kadın Bot', 'Topuklu Nokta Shic'].includes(category) || /^Lacoste\s+White-Purple\b/i.test(title)) return category || 'Çocuk Sneakers';
                 const brand = brandNames.find(name => lowerTitle.startsWith(name.toLocaleLowerCase('tr-TR')));
                 return brand || (category === 'Çocuk Sneakers' ? category : title.split(' ')[0]);
             };
             const getProductBrands = product => {
                 const categories = Array.isArray(product.categories) ? [...product.categories] : [];
                 if (product.category && !categories.includes(product.category)) categories.push(product.category);
-                const bootCategories = categories.filter(category => category === 'Erkek Bot' || category === 'Kadın Bot');
+                const bootCategories = categories.filter(category => ['Erkek Bot', 'Kadın Bot', 'Topuklu Nokta Shic'].includes(category));
                 const productBrand = brandNames.find(name => product.title.toLocaleLowerCase('tr-TR').startsWith(name.toLocaleLowerCase('tr-TR')));
                 return bootCategories.length
                     ? [...new Set([...bootCategories, ...(productBrand ? [productBrand] : [])])]
                     : [getBrand(product.title, product.category)];
             };
             const getSeries = (title, brand) => {
-                if (['Çocuk Sneakers', 'Erkek Bot', 'Kadın Bot', 'Alexander Mcqueen', 'Calvin Klein', 'Goldengoose', 'Lufian', 'Prada'].includes(brand)) return '';
+                if (['Çocuk Sneakers', 'Erkek Bot', 'Kadın Bot', 'Topuklu Nokta Shic', 'Alexander Mcqueen', 'Calvin Klein', 'Goldengoose', 'Lufian', 'Prada'].includes(brand)) return '';
                 const actualBrand = brandNames.find(name => title.toLocaleLowerCase('tr-TR').startsWith(name.toLocaleLowerCase('tr-TR')));
                 const model = title.slice(actualBrand ? actualBrand.length : 0).trim().replace(/\s*\([^)]*\)/g, '').replace(/\s*Çocuk(?:\s+Sneaker)?/gi, '').trim();
                 const rules = {
@@ -258,7 +258,7 @@
                     const brandOrder = ['Nike', 'Adidas', 'Vans', 'Alexander Mcqueen', 'Goldengoose', 'Lacoste'];
                     const brands = [...new Set(validProducts.flatMap(getProductBrands))]
                         .sort((a, b) => {
-                            const botOrder = ['Erkek Bot', 'Kadın Bot'];
+                            const botOrder = ['Erkek Bot', 'Kadın Bot', 'Topuklu Nokta Shic'];
                             const aBotIndex = botOrder.indexOf(a);
                             const bBotIndex = botOrder.indexOf(b);
                             if (aBotIndex !== -1 || bBotIndex !== -1) {

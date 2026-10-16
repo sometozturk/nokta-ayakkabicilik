@@ -2743,7 +2743,8 @@ document.addEventListener('click', function (e) {
             const categoryIds = {
                 'Çocuk Sneakers': 'cocuk-sneakers',
                 'Erkek Bot': 'erkek-bot',
-                'Kadın Bot': 'kadin-bot'
+                'Kadın Bot': 'kadin-bot',
+                'Topuklu Nokta Shic': 'topuklu-nokta-shic'
             };
             const brandOrder = ['nike', 'adidas', 'alexander mcqueen', 'calvin klein', 'goldengoose', 'lacoste', 'lufian', 'oxford', 'prada', 'vans'];
             const knownBrands = ['Nike', 'Oxford', 'Adidas', 'Lacoste', 'Lufian', 'Calvin Klein', 'Alexander Mcqueen', 'Goldengoose', 'Prada'];
@@ -2771,7 +2772,9 @@ document.addEventListener('click', function (e) {
                 if(!product) continue;
 
                 const title = product.title || `Ürün ${i}`;
-                const brand = getBrand(title);
+                const isHeelCategory = product.category === 'Topuklu Nokta Shic'
+                    || (Array.isArray(product.categories) && product.categories.includes('Topuklu Nokta Shic') && !product.category);
+                const brand = isHeelCategory ? 'Nokta Shic' : getBrand(title);
                 const sizeRange = getSizeRange(title);
                 const cleanTitle = title.replace(/\s*\([^)]*\)\s*$/, '').trim();
 
@@ -3068,6 +3071,7 @@ document.addEventListener('click', function (e) {
             createBrandControl(brandFilters, 'Çocuk Sneakers', '__children__');
             createBrandControl(brandFilters, 'Erkek Bot', '__mens-boots__');
             createBrandControl(brandFilters, 'Kadın Bot', '__womens-boots__');
+            createBrandControl(brandFilters, 'Topuklu Nokta Shic', '__topuklu__');
             selectBrand('');
 
             function filterProducts(){
@@ -3077,7 +3081,8 @@ document.addEventListener('click', function (e) {
                 const selectedCategory = {
                     '__children__': 'cocuk-sneakers',
                     '__mens-boots__': 'erkek-bot',
-                    '__womens-boots__': 'kadin-bot'
+                    '__womens-boots__': 'kadin-bot',
+                    '__topuklu__': 'topuklu-nokta-shic'
                 }[activeBrand];
                 let visible = 0;
                 let visibleCards = [];
@@ -3141,6 +3146,7 @@ document.addEventListener('click', function (e) {
                             if(productCategories.includes('cocuk-sneakers')) return brandOrder.length + 3;
                             if(productCategories.includes('erkek-bot')) return brandOrder.length + 1;
                             if(productCategories.includes('kadin-bot')) return brandOrder.length + 2;
+                            if(productCategories.includes('topuklu-nokta-shic')) return brandOrder.length + 4;
                             const brandIndex = brandOrder.indexOf(card.dataset.brand || '');
                             return brandIndex === -1 ? brandOrder.length : brandIndex;
                         };
@@ -3178,7 +3184,8 @@ document.addEventListener('click', function (e) {
                 const selectedCategory = {
                     '__children__': 'cocuk-sneakers',
                     '__mens-boots__': 'erkek-bot',
-                    '__womens-boots__': 'kadin-bot'
+                    '__womens-boots__': 'kadin-bot',
+                    '__topuklu__': 'topuklu-nokta-shic'
                 }[activeBrand];
                 return selectedCategory ? category.split(' ').includes(selectedCategory) : false;
             }
