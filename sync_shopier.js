@@ -125,7 +125,11 @@ async function main() {
       const category = getCategory(live.title, previous.category);
       products.push({
         id: Number(item.id),
-        title: live.title || previous.title || `Urun ${item.id}`,
+        title: (() => {
+          const liveTitle = live.title || previous.title || `Urun ${item.id}`;
+          const prevSize = (previous.title || '').match(/\([^)]+\)\s*$/);
+          return prevSize && !/\([^)]+\)\s*$/.test(liveTitle) ? `${liveTitle.trim()} ${prevSize[0].trim()}` : liveTitle;
+        })(),
         price: live.price || previous.price || '',
         image: live.image || previous.image || '',
         images: live.images?.length ? live.images : (previous.images || (previous.image ? [previous.image] : [])),
