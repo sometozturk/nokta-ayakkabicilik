@@ -3181,7 +3181,7 @@ document.addEventListener('click', function (e) {
                     const cats = card.dataset.categories.split(' ');
                     if(!cats.includes('topuklu-nokta-shic')) return 1;
                     const t = card.dataset.title || '';
-                    if(t.startsWith('küt burun topuklu bot') || t.startsWith('topuklu çizme')) return 0;
+                    if(t.startsWith('kadın tozluklu çıkartılabilir çizme')) return 0;
                     return cats.includes('kadin-bot') ? 2 : 1;
                 };
                 const sorted = [...visibleCards].sort((a, b) => {
