@@ -1000,6 +1000,25 @@ document.addEventListener('click', function (e) {
         .header-links .ig{display:none;}
     }
 </style>
+<style id="mobile-sticky-filters">
+    /* Mobilde marka kategorileri aşağı kaydırırken üstte yapışık kalır. */
+    @media (max-width:640px){
+        .brand-filter-row{display:contents;}
+        .brand-filter-row .brand-filters{position:sticky;top:var(--header-h,57px);z-index:20;width:100%;padding:8px 0;background:var(--paper);box-shadow:0 0 0 100vmax var(--paper);clip-path:inset(0 -100vmax);}
+        .brand-filter-row .search-wrap{margin:0 0 10px;}
+    }
+</style>
+<script>
+    (function(){
+        function setHeaderHeight(){
+            var header = document.querySelector('header');
+            if(header) document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+        }
+        document.addEventListener('DOMContentLoaded', setHeaderHeight);
+        window.addEventListener('resize', setHeaderHeight);
+        window.addEventListener('load', setHeaderHeight);
+    })();
+</script>
 </head>
 <body>
 
@@ -3047,14 +3066,32 @@ document.addEventListener('click', function (e) {
                 button.type = 'button';
                 button.textContent = label;
                 button.dataset.brandFilter = value;
-                button.addEventListener('click', () => selectBrand(value));
+                button.addEventListener('click', () => selectBrand(value, true));
                 container.appendChild(button);
             }
 
-            function selectBrand(value){
+            function selectBrand(value, fromUser){
                 activeBrand = value;
+                // Marka seçilince arama temizlenir; aksi halde eski arama yeni markayla çakışıp liste boş kalır.
+                if(search.value){
+                    search.value = '';
+                    searchSuggestions.hidden = true;
+                    searchSuggestions.replaceChildren();
+                }
                 document.querySelectorAll('[data-brand-filter]').forEach(filter => filter.classList.toggle('active', filter.dataset.brandFilter === activeBrand));
                 filterProducts();
+                if(fromUser) revealResults();
+            }
+
+            // Liste kısalınca sayfa en alta sıkışır; sonuçların başı ekranın üstünde kalıyorsa oraya kaydır.
+            function revealResults(){
+                const header = document.querySelector('header');
+                const mobile = window.matchMedia('(max-width:640px)').matches;
+                const bar = mobile ? brandFilters : brandFilters.closest('.brand-filter-row');
+                const offset = (header ? header.offsetHeight : 0) + (bar ? bar.offsetHeight : 0) + 12;
+                const target = (resultNote && resultNote.offsetHeight > 0) ? resultNote : document.getElementById('urun-izgarasi');
+            const top = target.getBoundingClientRect().top;
+                if(top < offset) window.scrollTo({ top: Math.max(0, window.scrollY + top - offset), behavior: 'instant' });
             }
 
             function clearBrandForSearch(){
@@ -3130,6 +3167,7 @@ document.addEventListener('click', function (e) {
                         clearBrandForSearch();
                         searchSuggestions.hidden = true;
                         filterProducts();
+                        revealResults();
                     });
                     item.appendChild(button);
                     searchSuggestions.appendChild(item);
@@ -3206,13 +3244,14 @@ document.addEventListener('click', function (e) {
                 clearBrandForSearch();
                 filterProducts();
                 updateSearchSuggestions();
+                revealResults();
             });
             search.addEventListener('focus', updateSearchSuggestions);
             document.addEventListener('click', event => {
                 if(!event.target.closest('.search-wrap')) searchSuggestions.hidden = true;
             });
-            sortSelect.addEventListener('change', filterProducts);
-            priceFilter.addEventListener('change', filterProducts);
+            sortSelect.addEventListener('change', () => { filterProducts(); revealResults(); });
+            priceFilter.addEventListener('change', () => { filterProducts(); revealResults(); });
             closeModalButton.addEventListener('click', closeProductModal);
             backModalButton.addEventListener('click', closeProductModal);
             productModal.addEventListener('click', event => {
