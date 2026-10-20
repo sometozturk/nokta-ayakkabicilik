@@ -21,6 +21,15 @@
     <meta name="twitter:image" content="https://www.noktaayakkabicilik.com/og-image.jpg">
     <!-- Meta Pixel Code -->
     <script>
+    // Yerel test adreslerinde (localhost, 127.0.0.1, ağ içi IP, dosyadan açma) Pixel yüklenmez,
+    // böylece geliştirme sırasındaki ziyaretler Meta verilerine karışmaz. fbq çağrıları burada etkisizdir.
+    (function (w) {
+        var h = w.location.hostname || '';
+        var local = w.location.protocol === 'file:' || h === '' || h === 'localhost' || h === '::1' || h === '[::1]' ||
+            /\.localhost$/.test(h) || /\.local$/.test(h) || /^127\./.test(h) || /^10\./.test(h) ||
+            /^192\.168\./.test(h) || /^172\.(1[6-9]|2\d|3[01])\./.test(h);
+        if (local) { w.fbq = function () {}; w.fbq.loaded = true; }
+    })(window);
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
