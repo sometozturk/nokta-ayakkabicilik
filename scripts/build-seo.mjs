@@ -85,6 +85,8 @@ const products = raw
             shopierUrl: p.url,
             shopierId: shopierId(p.url),
             category: p.category || '',
+            stock: Number.isFinite(p.stock) ? p.stock : null,
+            sizeStock: Array.isArray(p.sizeStock) ? p.sizeStock : null,
             generic: !THIRD_PARTY_BRANDS.test(title),
             slug: `${slugify(name)}-${p.id}`,
             t: lower(name)
@@ -101,8 +103,8 @@ const isKids = (p) => p.category === 'Çocuk Sneakers' || /çocuk/.test(p.t);
 // Kategori ve koleksiyon tanımları
 // ---------------------------------------------------------------------------
 const SHIPPING_FAQ = {
-    q: 'Siparişim ne zaman kargoya verilir?',
-    a: 'Saat 17:00\'ye kadar verilen siparişler aynı gün kargoya teslim edilir. 17:00\'den sonraki siparişler genellikle ertesi gün kargoya verilir.'
+    q: 'Kargo ücretli mi, siparişim ne zaman kargoya verilir?',
+    a: 'Tüm siparişler ücretsiz kargo ile gönderilir. Saat 17:00\'ye kadar verilen siparişler aynı gün, sonrakiler genellikle ertesi gün kargoya teslim edilir.'
 };
 const EXCHANGE_FAQ = {
     q: 'Numara uymazsa değişim yapabilir miyim?',
@@ -120,7 +122,7 @@ const CATEGORIES = [
         nav: 'Topuklu',
         h1: 'Kadın Topuklu Ayakkabı Modelleri',
         title: 'Kadın Topuklu Ayakkabı Modelleri ve Fiyatları | Nokta Shic',
-        description: ({ min }) => `Kadeh, kısa, ince ve önü açık topuklu ayakkabı modelleri ${min}'den başlayan fiyatlarla. 17:00'ye kadar siparişte aynı gün kargo, iade ve değişim garantisi.`,
+        description: ({ min }) => `Kadeh, kısa, ince ve önü açık topuklu ayakkabı modelleri ${min}'den başlayan fiyatlarla. Ücretsiz ve aynı gün kargo, iade ve değişim garantisi.`,
         intro: ({ count }) => `Nokta Shic topuklu ayakkabı koleksiyonu; ofis, günlük kullanım ve davetler için ${count} modeli tek sayfada topluyor. Topuk tipine göre aşağıdaki koleksiyonlara da göz atabilirsiniz.`,
         audience: 'female',
         brand: 'Nokta Shic',
@@ -143,7 +145,7 @@ const CATEGORIES = [
         name: 'Kadeh Topuk Ayakkabı',
         h1: 'Kadeh Topuk Ayakkabı Modelleri',
         title: 'Kadeh Topuk Ayakkabı Modelleri ve Fiyatları | Nokta Shic',
-        description: ({ min }) => `Kadeh topuk ayakkabı modelleri ${min}'den başlayan fiyatlarla Nokta Shic'te. 17:00'ye kadar siparişte aynı gün kargo, iade ve değişim garantisi.`,
+        description: ({ min }) => `Kadeh topuk ayakkabı modelleri ${min}'den başlayan fiyatlarla Nokta Shic'te. Ücretsiz ve aynı gün kargo, iade ve değişim garantisi.`,
         intro: ({ count }) => `Kadeh topuk, adını şarap kadehini andıran inceltilmiş formundan alır: ince topuk kadar şık, ondan daha dengeli. Koleksiyondaki ${count} kadeh topuk modelini aşağıda inceleyebilirsiniz.`,
         audience: 'female',
         brand: 'Nokta Shic',
@@ -168,7 +170,7 @@ const CATEGORIES = [
         name: 'Önü Açık Topuklu Ayakkabı',
         h1: 'Önü Açık Topuklu Ayakkabı Modelleri',
         title: 'Önü Açık Topuklu Ayakkabı Modelleri | Nokta Shic',
-        description: ({ min }) => `Kısa ve uzun topuklu, önü açık kadın ayakkabı modelleri ${min}'den başlayan fiyatlarla. Aynı gün kargo, iade ve değişim garantisi.`,
+        description: ({ min }) => `Kısa ve uzun topuklu, önü açık kadın ayakkabı modelleri ${min}'den başlayan fiyatlarla. Ücretsiz ve aynı gün kargo, iade ve değişim garantisi.`,
         intro: ({ count }) => `Burnu açık kesimiyle ayağı hafif gösteren önü açık topuklu ayakkabılar bahar, yaz ve davet sezonunun klasiği. Kısa ve uzun topuklu ${count} modeli inceleyin.`,
         audience: 'female',
         brand: 'Nokta Shic',
@@ -190,7 +192,7 @@ const CATEGORIES = [
         name: 'Kısa Topuklu Ayakkabı',
         h1: 'Kısa Topuklu Ayakkabı Modelleri',
         title: 'Kısa Topuklu Ayakkabı Modelleri ve Fiyatları | Nokta Shic',
-        description: ({ min }) => `Ofis ve günlük kullanım için kısa topuklu kadın ayakkabı modelleri ${min}'den başlayan fiyatlarla. Aynı gün kargo, iade ve değişim garantisi.`,
+        description: ({ min }) => `Ofis ve günlük kullanım için kısa topuklu kadın ayakkabı modelleri ${min}'den başlayan fiyatlarla. Ücretsiz ve aynı gün kargo, iade ve değişim garantisi.`,
         intro: ({ count, min }) => `Topuklu ayakkabının şıklığını gün boyu taşınabilir bir yükseklikle sunan kısa topuklu modeller ofis, okul ve günlük kombinler için ideal. ${count} model, ${min}'den başlayan fiyatlarla.`,
         audience: 'female',
         brand: 'Nokta Shic',
@@ -212,7 +214,7 @@ const CATEGORIES = [
         name: 'Abiye Topuklu Ayakkabı',
         h1: 'Abiye Topuklu Ayakkabı Modelleri',
         title: 'Abiye Ayakkabı: Simli ve Taşlı Topuklu Modeller | Nokta',
-        description: ({ min }) => `Düğün, nişan ve davetler için simli, taşlı ve kurdeleli abiye topuklu ayakkabılar ${min}'den başlayan fiyatlarla. Aynı gün kargo, iade ve değişim garantisi.`,
+        description: ({ min }) => `Davetler için simli, taşlı ve kurdeleli abiye topuklu ayakkabılar ${min}'den başlayan fiyatlarla. Ücretsiz ve aynı gün kargo, iade ve değişim garantisi.`,
         intro: ({ count }) => `Düğün, nişan, mezuniyet ve davetler için simli, taşlı, kurdeleli ve şeffaf detaylı ${count} abiye topuklu ayakkabı modeli tek sayfada.`,
         audience: 'female',
         brand: 'Nokta Shic',
@@ -234,7 +236,7 @@ const CATEGORIES = [
         nav: 'Bot ve Çizme',
         h1: 'Kadın Bot ve Çizme Modelleri',
         title: 'Kadın Bot ve Çizme Modelleri | Nokta Ayakkabıcılık',
-        description: ({ min }) => `Topuklu bot, su geçirmez bot, askeri bot ve çizme modelleri ${min}'den başlayan fiyatlarla. 17:00'ye kadar siparişte aynı gün kargo, iade ve değişim garantisi.`,
+        description: ({ min }) => `Topuklu bot, su geçirmez bot, askeri bot ve çizme modelleri ${min}'den başlayan fiyatlarla. Ücretsiz ve aynı gün kargo, iade ve değişim garantisi.`,
         intro: ({ count }) => `Soğuk ve yağışlı günler için su geçirmez botlardan topuklu çizmelere ${count} kadın bot ve çizme modeli.`,
         audience: 'female',
         match: (p) => p.generic && isWomenBoot(p),
@@ -260,7 +262,7 @@ const CATEGORIES = [
         nav: 'Erkek',
         h1: 'Erkek Klasik Ayakkabı ve Bot Modelleri',
         title: 'Erkek Klasik Ayakkabı ve Bot Modelleri | Nokta Ayakkabıcılık',
-        description: ({ min }) => `Oxford klasik ayakkabı, rugan ayakkabı ve deri erkek bot modelleri ${min}'den başlayan fiyatlarla. Aynı gün kargo, iade ve değişim garantisi.`,
+        description: ({ min }) => `Oxford klasik ayakkabı, rugan ayakkabı ve deri erkek bot modelleri ${min}'den başlayan fiyatlarla. Ücretsiz ve aynı gün kargo, iade ve değişim garantisi.`,
         intro: () => 'Takım elbise için Oxford klasik ayakkabılardan kış boyu giyilecek botlara erkek modelleri.',
         audience: 'male',
         match: (p) => p.generic && isMen(p) && !isKids(p),
@@ -366,13 +368,93 @@ function productDescription(p) {
     return sentences.join(' ');
 }
 
+// Başlıktan okunabilen özellikler (özellik tablosu, meta açıklama ve kombin önerisi için)
+function productAttributes(p) {
+    const t = p.t;
+    const { color, materials } = productFacts(p);
+    const heel = /ince kadeh/.test(t) ? 'İnce kadeh topuk' : /orta kadeh/.test(t) ? 'Orta kadeh topuk' : /kısa kadeh/.test(t) ? 'Kısa kadeh topuk'
+        : /kadeh/.test(t) ? 'Kadeh topuk' : /kısa topuk/.test(t) ? 'Kısa topuk' : /uzun topuk/.test(t) ? 'Uzun topuk'
+            : /yüksek topuk/.test(t) ? 'Yüksek topuk' : /ince topuk/.test(t) ? 'İnce topuk' : /kalın topuk/.test(t) ? 'Kalın topuk'
+                : /topuk/.test(t) ? 'Topuklu' : '';
+    const toe = /önü açık/.test(t) ? 'Önü açık' : /küt burun/.test(t) ? 'Küt burun' : '';
+    const details = [
+        [/çapraz tokalı/, 'Çapraz toka'], [/(?<!çapraz )tokalı/, 'Toka'], [/kurdeleli/, 'Kurdele'], [/taşlı/, 'Taş işleme'],
+        [/simli/, 'Simli doku'], [/gold detaylı/, 'Gold detay'], [/gümüş detaylı/, 'Gümüş detay'], [/altın desenli/, 'Altın desen'],
+        [/lastikli/, 'Lastikli bant'], [/tozluklu|çıkartılabilir/, 'Çıkarılabilir tozluk'], [/su geçirmez/, 'Su geçirmez'],
+        [/yumuşak taban/, 'Yumuşak taban'], [/askeri/, 'Askeri bot kalıbı'], [/ortopedik/, 'Ortopedik taban'], [/ışıklı/, 'Işıklı taban'], [/hafif/, 'Hafif yapı']
+    ].filter(([re]) => re.test(t)).map(([, label]) => label);
+    const kind = isHeel(p) ? (/terlik/.test(t) ? 'topuklu terlik' : 'topuklu kadın ayakkabı')
+        : isKids(p) ? 'çocuk sneaker'
+            : /oxford/.test(t) ? 'Oxford klasik erkek ayakkabı'
+                : `${/unisex/.test(t) ? 'unisex' : /erkek/.test(t) || p.category === 'Erkek Bot' ? 'erkek' : 'kadın'} ${/çizme/.test(t) ? 'çizme' : 'bot'}`;
+    return { color, materials, heel, toe, details, kind };
+}
+
+// Meta açıklama: başlığı tekrar etmeden ürünü özetler (seo-programmatic metadata kontrolü)
+function productPitch(p) {
+    const a = productAttributes(p);
+    const ADJ = {
+        'Çapraz toka': 'çapraz tokalı', 'Toka': 'tokalı', 'Kurdele': 'kurdeleli', 'Taş işleme': 'taşlı', 'Simli doku': 'simli',
+        'Gold detay': 'gold detaylı', 'Gümüş detay': 'gümüş detaylı', 'Altın desen': 'altın desenli', 'Lastikli bant': 'lastikli',
+        'Çıkarılabilir tozluk': 'çıkarılabilir tozluklu', 'Su geçirmez': 'su geçirmez', 'Yumuşak taban': 'yumuşak tabanlı',
+        'Askeri bot kalıbı': 'askeri model', 'Ortopedik taban': 'ortopedik', 'Işıklı taban': 'ışıklı', 'Hafif yapı': 'hafif'
+    };
+    const heelAdj = !a.heel ? '' : a.heel === 'Topuklu' ? (isHeel(p) ? '' : 'topuklu') : `${lower(a.heel)}lu`;
+    const kind = heelAdj && isHeel(p) && !/terlik/.test(p.t) ? 'kadın ayakkabı' : a.kind;
+    const lead = [a.color, a.materials.join(' '), heelAdj].filter(Boolean).join(' ');
+    const extras = [lower(a.toe), ...a.details.map((d) => ADJ[d] || lower(d))].filter(Boolean).slice(0, 3);
+    return capFirst([lead, ...extras].filter(Boolean).join(', ') + ` ${kind}`).trim();
+}
+
+const STYLE_TIPS = {
+    heel: {
+        'siyah': 'Siyah topuklu ayakkabı; siyah elbise, kumaş pantolon ve takımlarla en kolay eşleşen renktir. Gündüz ofiste, akşam davette aynı rahatlıkla kullanılır.',
+        'bej': 'Bej ve ten tonları bacak hattını uzun gösterir. Beyaz pantolon, pastel elbise ve keten parçalarla bahar-yaz kombinlerinde öne çıkar.',
+        'beyaz': 'Beyaz model; nikâh, kına ve yaz davetlerinde beyaz ve pastel kıyafetlerle uyum sağlar, kotla gündüz kombinlerine de taşınabilir.',
+        'gümüş': 'Gümüş tonları siyah, gece mavisi ve gri abiyelerle parlak bir kontrast oluşturur; gümüş takılarla kombini bütünler.',
+        'gold': 'Gold tonları bordo, zümrüt yeşili ve siyah abiyelerle sıcak bir parıltı verir; altın renkli takılarla birlikte kullanıldığında kombin bütünlenir.',
+        'bordo': 'Bordo; siyah, gri ve lacivert kıyafetlerle sonbahar-kış sezonuna uygun bir renk vurgusu yapar.',
+        'kahve': 'Kahve tonları kot, krem ve deve tüyü parçalarla doğal bir uyum sağlar; sonbahar kombinlerinde siyaha göre daha yumuşak bir görünüm verir.',
+        'şeffaf': 'Şeffaf yüzey ayakkabıyı kıyafetin rengine uydurur; desenli ve renkli elbiselerde bile kombini sade tutar.',
+        '': 'Nötr tonlu elbise, etek ve kumaş pantolonlarla kolayca kombinlenir.'
+    },
+    boot: {
+        'siyah': 'Siyah bot; kot, tayt ve kaban ile kış boyunca en çok kombinlenen modeldir.',
+        'kahve': 'Kahve tonlu bot; kot, krem triko ve deve tüyü kabanla sonbahar-kış kombinlerine sıcaklık katar.',
+        'bej': 'Bej bot; açık renk kot ve krem tonlu trikoyla yumuşak bir kış görünümü sağlar.',
+        '': 'Kot pantolon, tayt ve kalın trikolarla sonbahar-kış boyunca kombinlenebilir.'
+    }
+};
+
+function stylingTip(p) {
+    const a = productAttributes(p);
+    const tone = a.color === 'acı kahve' ? 'kahve' : a.color === 'altın' ? 'gold' : a.color;
+    if (isHeel(p)) return STYLE_TIPS.heel[tone] ?? STYLE_TIPS.heel[''];
+    if (isKids(p)) return 'Eşofman, kot ve şortla okul ve oyun günlerinde rahatça kombinlenir.';
+    if (/oxford/.test(p.t)) return a.materials.includes('rugan')
+        ? 'Rugan Oxford; smokin, koyu renk takım elbise ve düğün kombinleri için uygundur.'
+        : 'Deri Oxford; lacivert ve gri takım elbise, kumaş pantolon ve gömlekle iş kombinlerinin temelidir.';
+    const base = STYLE_TIPS.boot[tone] ?? STYLE_TIPS.boot[''];
+    return /çizme/.test(p.t) ? `${base} Çizme; diz altı elbise ve eteklerle bacağı soğuktan korurken şık bir görünüm verir.` : base;
+}
+
+// Shopier her görseli üç boyutta sunar: pictures_small (330), pictures_mid (458), pictures_large (916)
+function shopierSrcset(src) {
+    if (!/\/pictures_large\//.test(src)) return '';
+    return ['small 330w', 'mid 458w', 'large 916w']
+        .map((v) => { const [size, w] = v.split(' '); return `${src.replace('/pictures_large/', `/pictures_${size}/`)} ${w}`; })
+        .join(', ');
+}
+const CARD_SIZES = '(max-width:900px) 33vw, 300px';
+const MAIN_SIZES = '(max-width:900px) calc(100vw - 32px), 640px';
+
 // ---------------------------------------------------------------------------
 // Ortak şablon parçaları
 // ---------------------------------------------------------------------------
 const navLinks = () => MAIN_CATEGORIES.filter((c) => c.items.length)
     .map((c) => `<a href="${c.url}">${esc(c.nav || c.name)}</a>`).join('');
 
-function layout({ title, description, canonical, ogType = 'website', ogImage, ogImageAlt, schema = [], body, bodyAttrs = '', preloadImage = '' }) {
+function layout({ title, description, canonical, ogType = 'website', ogImage, ogImageAlt, schema = [], body, bodyAttrs = '', preloadImage = '', preloadSrcset = '', preloadSizes = '' }) {
     const image = ogImage || `${SITE}/og-image.jpg`;
     return `<!DOCTYPE html>
 <html lang="tr">
@@ -399,7 +481,7 @@ function layout({ title, description, canonical, ogType = 'website', ogImage, og
 <link rel="icon" type="image/png" href="/logo-transparent.png">
 <link rel="apple-touch-icon" href="/logo-transparent.png">
 <link rel="preconnect" href="https://cdn.shopier.app">
-${preloadImage ? `<link rel="preload" as="image" href="${esc(preloadImage)}" fetchpriority="high">\n` : ''}<link rel="preconnect" href="https://fonts.googleapis.com">
+${preloadImage ? `<link rel="preload" as="image" href="${esc(preloadImage)}"${preloadSrcset ? ` imagesrcset="${esc(preloadSrcset)}" imagesizes="${preloadSizes}"` : ''} fetchpriority="high">\n` : ''}<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site-pages.css">
@@ -446,12 +528,12 @@ function footer() {
       <li><a href="${SHOPIER}" target="_blank" rel="noopener noreferrer">Shopier mağazası</a></li>
     </ul></div>
   </div>
-  <div class="sp-wrap sp-footer-bottom"><span>© ${BUILD_DATE.slice(0, 4)} Nokta Ayakkabıcılık</span><span>Güvenli ödeme · 17:00'ye kadar aynı gün kargo · İade ve değişim garantisi</span></div>
+  <div class="sp-wrap sp-footer-bottom"><span>© ${BUILD_DATE.slice(0, 4)} Nokta Ayakkabıcılık</span><span>Ücretsiz kargo · 17:00'ye kadar aynı gün kargoda · İade ve değişim garantisi · Güvenli ödeme</span></div>
 </footer>`;
 }
 
 const trustList = `<ul class="sp-trust">
-  <li><strong>Aynı gün kargo</strong><span>17:00'ye kadar verilen siparişler</span></li>
+  <li><strong>Ücretsiz kargo</strong><span>17:00'ye kadar siparişte aynı gün</span></li>
   <li><strong>İade ve değişim</strong><span>garantisi</span></li>
   <li><strong>Güvenli ödeme</strong><span>Shopier altyapısı</span></li>
   <li><strong>30 yıllık mağaza</strong><span>2 fiziki şube</span></li>
@@ -472,7 +554,7 @@ function breadcrumbs(items) {
 function productCard(p, { eager = false } = {}) {
     return `<li class="sp-card">
   <a href="${p.url}" class="sp-card-link">
-    <span class="sp-card-img"><img src="${esc(p.images[0])}" alt="${esc(p.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="600" height="600"></span>
+    <span class="sp-card-img"><img src="${esc(p.images[0])}"${shopierSrcset(p.images[0]) ? ` srcset="${esc(shopierSrcset(p.images[0]))}" sizes="${CARD_SIZES}"` : ''} alt="${esc(p.name)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" width="600" height="600"></span>
     <span class="sp-card-body"><span class="sp-card-title">${esc(p.name)}</span>${p.sizes ? `<span class="sp-card-size">${esc(p.sizes)} numara</span>` : ''}<span class="sp-card-price">${formatPrice(p.price)}</span></span>
   </a>
 </li>`;
@@ -551,6 +633,55 @@ ${otherMain.length ? `<section class="sp-more"><h2>Diğer kategoriler</h2><div c
     });
 }
 
+// Aynı modelin farklı renkleri: başlıktan renk kelimeleri çıkarılınca aynı kalan ürünler
+const familyOf = new Map();
+function buildFamilies() {
+    // Yalnızca ana rengi (başlıkta ilk geçen renk) çıkarır; "gümüş taşlı" gibi detay renkleri modele aittir.
+    const removeFirst = (text, main) => {
+        const words = text.split(' ');
+        const n = main.split(' ').length;
+        for (let i = 0; i + n <= words.length; i++) {
+            if (lower(words.slice(i, i + n).join(' ')) === main) return [...words.slice(0, i), ...words.slice(i + n)].join(' ').replace(/\s+/g, ' ').trim();
+        }
+        return text;
+    };
+    const strip = (p) => lower(removeFirst(p.name, productFacts(p).color || '\u0000'));
+    const groups = new Map();
+    for (const p of pageProducts) {
+        if (!p.mainCategory) continue;
+        const key = `${p.mainCategory.slug}|${strip(p)}`;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(p);
+    }
+    for (const members of groups.values()) {
+        if (members.length < 2) continue;
+        const first = members[0];
+        const name = removeFirst(first.name, productFacts(first).color || '\u0000');
+        const family = { name: capFirst(name), slug: slugify(name), members };
+        for (const m of members) familyOf.set(m, family);
+    }
+}
+
+function specsTable(p) {
+    const a = productAttributes(p);
+    const rows = [
+        ['Ürün kodu', `NK-${p.id}`],
+        ['Kategori', p.mainCategory ? p.mainCategory.name : isKids(p) ? 'Çocuk ayakkabı' : ''],
+        ['Koleksiyon', isHeel(p) ? 'Nokta Shic' : ''],
+        ['Renk', a.color ? capFirst(a.color) : ''],
+        ['Topuk', a.heel && a.heel !== 'Topuklu' ? a.heel : ''],
+        ['Burun', a.toe],
+        ['Yüzey', a.materials.map(capFirst).join(', ')],
+        ['Detaylar', a.details.join(', ')],
+        ['Numara aralığı', p.sizes],
+        ['Stoktaki numaralar', p.sizeStock ? (p.sizeStock.filter((v) => v.stock > 0).map((v) => v.size).join(', ') || 'Tükendi') : ''],
+        ['Fiyat', formatPrice(p.price)],
+        ['Kargo', "Ücretsiz; 17:00'ye kadar verilen siparişlerde aynı gün"]
+    ].filter(([, value]) => value);
+    return `<table class="sp-specs"><caption class="visually-hidden">${esc(p.name)} özellikleri</caption><tbody>${rows
+        .map(([key, value]) => `<tr><th scope="row">${esc(key)}</th><td>${esc(value)}</td></tr>`).join('')}</tbody></table>`;
+}
+
 function renderProduct(p) {
     const crumbItems = [{ name: 'Ana Sayfa', url: '/' }];
     if (p.mainCategory) crumbItems.push({ name: p.mainCategory.name, url: p.mainCategory.url });
@@ -567,7 +698,11 @@ function renderProduct(p) {
         `${p.name} | Nokta Ayakkabıcılık`,
         `${p.name} | Nokta`
     ].find((candidate) => candidate.length <= 62) || `${p.name} | Nokta`;
-    const metaDescription = truncate(`${p.name}${p.sizes ? `, ${p.sizes} numara` : ''}, ${priceText}. 17:00'ye kadar verilen siparişler aynı gün kargoda. İade ve değişim garantisi, Shopier ile güvenli ödeme.`, 160);
+    const metaDescription = truncate(`${productPitch(p)}${p.sizes ? `, ${p.sizes} numara` : ''}: ${priceText}. Ücretsiz kargo, 17:00'ye kadar siparişte aynı gün kargoda. İade ve değişim garantisi.`, 158);
+    const inStockSizes = p.sizeStock ? p.sizeStock.filter((v) => v.stock > 0).map((v) => v.size) : null;
+    const soldOut = p.stock === 0 || (inStockSizes && p.sizeStock.length > 0 && inStockSizes.length === 0);
+    const family = familyOf.get(p);
+    const siblings = family ? family.members.filter((m) => m !== p && m.name !== p.name) : [];
 
     const audience = p.mainCategory?.audience || (/unisex/.test(p.t) ? 'unisex' : isKids(p) ? null : null);
     const brand = isHeel(p) ? 'Nokta Shic' : null;
@@ -590,44 +725,85 @@ function renderProduct(p) {
             url: pageUrl,
             priceCurrency: 'TRY',
             price: p.price.toFixed(2),
-            availability: 'https://schema.org/InStock',
+            availability: soldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
             itemCondition: 'https://schema.org/NewCondition',
-            seller: organizationRef
+            seller: organizationRef,
+            // Shopier mağazası: "Bu dükkandaki tüm ürünler ücretsiz kargo ile gönderilir."
+            shippingDetails: {
+                '@type': 'OfferShippingDetails',
+                shippingRate: { '@type': 'MonetaryAmount', value: 0, currency: 'TRY' },
+                shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'TR' }
+            }
         }
     };
 
+    // Renk seçenekleri varsa Google'ın varyant yapısı (ProductGroup + hasVariant, çok sayfalı model)
+    let mainSchema = productSchema;
+    if (family) {
+        const { '@context': _ctx, ...variant } = productSchema;
+        mainSchema = {
+            '@context': 'https://schema.org',
+            '@type': 'ProductGroup',
+            '@id': `${SITE}/#grup-${family.slug}`,
+            name: family.name,
+            productGroupID: family.slug,
+            variesBy: ['https://schema.org/color'],
+            ...(brand ? { brand: { '@type': 'Brand', name: brand } } : {}),
+            hasVariant: [
+                { ...variant, inProductGroupWithID: family.slug },
+                ...family.members.filter((m) => m !== p).map((m) => ({ '@type': 'Product', url: `${SITE}${m.url}`, name: m.name }))
+            ]
+        };
+    }
+
     const related = pageProducts
-        .filter((other) => other !== p && p.mainCategory && other.mainCategory === p.mainCategory)
+        .filter((other) => other !== p && !siblings.includes(other) && p.mainCategory && other.mainCategory === p.mainCategory)
         .sort((a, b) => {
             const shared = (x) => x.collections.filter((c) => p.collections.includes(c)).length;
             return shared(b) - shared(a) || Math.abs(a.price - p.price) - Math.abs(b.price - p.price);
         })
         .slice(0, 8);
 
+    const small = (src) => src.replace('/pictures_large/', '/pictures_small/');
     const gallery = p.images.length > 1
-        ? `<div class="sp-thumbs" role="list">${p.images.map((src, i) => `<button type="button" role="listitem" class="sp-thumb${i === 0 ? ' is-active' : ''}" data-src="${esc(src)}" aria-label="${i + 1}. görseli göster"><img src="${esc(src)}" alt="" loading="lazy" width="80" height="80"></button>`).join('')}</div>`
+        ? `<div class="sp-thumbs" role="list">${p.images.map((src, i) => `<button type="button" role="listitem" class="sp-thumb${i === 0 ? ' is-active' : ''}" data-src="${esc(src)}" data-srcset="${esc(shopierSrcset(src))}" aria-label="${i + 1}. görseli göster"><img src="${esc(small(src))}" alt="" loading="lazy" width="80" height="80"></button>`).join('')}</div>`
         : '';
+    const mainSrcset = shopierSrcset(p.images[0]);
+    const variantsBlock = siblings.length ? `<section class="sp-variants" aria-labelledby="renkler">
+  <h2 id="renkler">Bu modelin diğer renkleri</h2>
+  <ul>${siblings.map((m) => {
+        const mc = productFacts(m).color;
+        return `<li><a href="${m.url}"><img src="${esc(small(m.images[0]))}" alt="${esc(m.name)}" width="64" height="64" loading="lazy"><span>${esc(mc ? capFirst(mc) : m.name)}</span><small>${formatPrice(m.price)}</small></a></li>`;
+    }).join('')}</ul>
+</section>` : '';
 
     const body = `<div class="sp-wrap">
 ${crumbs.html}
 <article class="sp-product" data-product-id="${esc(p.shopierId)}" data-product-name="${esc(p.name)}" data-product-price="${p.price}">
   <div class="sp-gallery">
-    <div class="sp-main-img"><img id="sp-main-img" src="${esc(p.images[0])}" alt="${esc(p.name)}${color ? ` – ${color} renk` : ''}" width="900" height="900" fetchpriority="high" decoding="async"></div>
+    <div class="sp-main-img"><img id="sp-main-img" src="${esc(p.images[0])}"${mainSrcset ? ` srcset="${esc(mainSrcset)}" sizes="${MAIN_SIZES}"` : ''} alt="${esc(p.name)}${color ? ` – ${color} renk` : ''}" width="900" height="900" fetchpriority="high" decoding="async"></div>
     ${gallery}
   </div>
   <div class="sp-info">
     ${p.mainCategory ? `<a class="sp-eyebrow" href="${p.mainCategory.url}">${esc(p.mainCategory.name)}</a>` : ''}
     <h1>${esc(p.name)}</h1>
     <p class="sp-price">${priceText}</p>
-    ${p.sizes ? `<p class="sp-sizes"><span>Numara aralığı</span><strong>${esc(p.sizes)}</strong></p>` : ''}
+    ${p.sizeStock && p.sizeStock.length
+        ? `<div class="sp-size-list"><span>${soldOut ? 'Şu an stokta numara yok' : 'Stoktaki numaralar'}</span><ul>${p.sizeStock.map((v) => `<li${v.stock > 0 ? '' : ' class="is-out" title="Tükendi"'}>${esc(v.size)}</li>`).join('')}</ul></div>`
+        : p.sizes ? `<p class="sp-sizes"><span>Numara aralığı</span><strong>${esc(p.sizes)}</strong></p>` : ''}
     <a class="sp-buy" href="${esc(p.shopierUrl)}" target="_blank" rel="noopener" data-shopier="${esc(p.shopierId)}">Shopier'de satın al</a>
     <a class="sp-ask" href="${INSTAGRAM}" target="_blank" rel="noopener noreferrer">Numara veya stok sorusu için Instagram'dan yazın</a>
+    ${variantsBlock}
     ${trustList}
     <section class="sp-desc" aria-labelledby="urun-hakkinda">
       <h2 id="urun-hakkinda">Ürün hakkında</h2>
       <p>${esc(description)}</p>
+      <h2>Ürün özellikleri</h2>
+      ${specsTable(p)}
+      <h2>Nasıl kombinlenir?</h2>
+      <p>${esc(stylingTip(p))}</p>
       <h2>Kargo, iade ve değişim</h2>
-      <p>Saat 17:00'ye kadar verilen siparişler aynı gün, sonrakiler genellikle ertesi gün kargoya teslim edilir. Ödeme Shopier'in güvenli altyapısıyla yapılır; numara uymazsa <a href="/bilgilendirme.html#iade">iade ve değişim</a> için Instagram'dan bize yazabilirsiniz.</p>
+      <p>Tüm siparişler ücretsiz kargo ile gönderilir. Saat 17:00'ye kadar verilen siparişler aynı gün, sonrakiler genellikle ertesi gün kargoya teslim edilir. Ödeme Shopier'in güvenli altyapısıyla yapılır; numara uymazsa <a href="/bilgilendirme.html#iade">iade ve değişim</a> için Instagram'dan bize yazabilirsiniz.</p>
       ${p.collections.length ? `<p class="sp-chips">${p.collections.map((c) => `<a href="${c.url}">${esc(c.name)}</a>`).join('')}</p>` : ''}
     </section>
   </div>
@@ -635,7 +811,7 @@ ${crumbs.html}
 ${related.length ? `<section class="sp-related" aria-labelledby="benzer"><h2 id="benzer">Benzer modeller</h2><ul class="sp-grid">${related.map((r) => productCard(r)).join('')}</ul></section>` : ''}
 </div>
 ${gallery ? `<script>
-document.addEventListener('click',function(e){var b=e.target.closest('.sp-thumb');if(!b)return;var m=document.getElementById('sp-main-img');m.src=b.getAttribute('data-src');document.querySelectorAll('.sp-thumb').forEach(function(x){x.classList.toggle('is-active',x===b);});});
+document.addEventListener('click',function(e){var b=e.target.closest('.sp-thumb');if(!b)return;var m=document.getElementById('sp-main-img');m.srcset=b.getAttribute('data-srcset')||'';m.src=b.getAttribute('data-src');document.querySelectorAll('.sp-thumb').forEach(function(x){x.classList.toggle('is-active',x===b);});});
 </script>` : ''}`;
 
     return layout({
@@ -645,9 +821,11 @@ document.addEventListener('click',function(e){var b=e.target.closest('.sp-thumb'
         ogType: 'product',
         ogImage: p.images[0],
         ogImageAlt: p.name,
-        schema: [productSchema, crumbs.schema],
+        schema: [mainSchema, crumbs.schema],
         body,
-        preloadImage: p.images[0]
+        preloadImage: p.images[0],
+        preloadSrcset: mainSrcset,
+        preloadSizes: MAIN_SIZES
     });
 }
 
@@ -663,6 +841,7 @@ function write(relPath, content) {
 rmSync(join(OUT, 'kategori'), { recursive: true, force: true });
 rmSync(join(OUT, 'urun'), { recursive: true, force: true });
 
+buildFamilies();
 for (const category of activeCategories) write(`kategori/${category.slug}/index.html`, renderCategory(category));
 for (const p of pageProducts) write(`urun/${p.slug}/index.html`, renderProduct(p));
 
@@ -683,6 +862,19 @@ ${[
 </urlset>
 `;
 write('sitemap.xml', sitemap);
+
+// Ana sayfadaki ürün kartlarının başlığı, ürün sayfası olan ürünlerde o sayfaya bağlanır.
+{
+    const indexHtml = readFileSync(join(ROOT, 'index.html'), 'utf8');
+    const map = Object.fromEntries(pageProducts.map((p) => [String(p.id), p.url]));
+    const block = /(<script type="application\/json" id="seo-product-pages">)[\s\S]*?(<\/script>)/;
+    if (block.test(indexHtml)) {
+        const json = JSON.stringify(map).replace(/</g, '\\u003c');
+        write('index.html', indexHtml.replace(block, (_, open, close) => `${open}${json}${close}`));
+    } else {
+        console.warn('Uyarı: index.html içinde seo-product-pages bloğu bulunamadı, ürün bağlantıları güncellenmedi.');
+    }
+}
 
 console.log(`SEO sayfaları üretildi → ${OUT}`);
 console.log(`  Kategori sayfası: ${activeCategories.length} (${activeCategories.map((c) => `${c.slug}:${c.items.length}`).join(', ')})`);

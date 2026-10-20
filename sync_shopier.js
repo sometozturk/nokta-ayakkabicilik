@@ -34,6 +34,44 @@ function extractImages($) {
   return largeImages.length ? largeImages : images;
 }
 
+// Shopier ürün sayfası, ürün durumunu (stok, numara varyasyonları) sayfa içine JSON olarak gömer.
+function extractShopierState(html) {
+  const marker = html.indexOf('{"page":"product"');
+  if (marker < 0) return null;
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  for (let i = marker; i < html.length; i += 1) {
+    const ch = html[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') inString = true;
+    else if (ch === '{') depth += 1;
+    else if (ch === '}') {
+      depth -= 1;
+      if (depth === 0) {
+        try { return JSON.parse(html.slice(marker, i + 1)); } catch { return null; }
+      }
+    }
+  }
+  return null;
+}
+
+function extractStock(html) {
+  const product = extractShopierState(html)?.product;
+  if (!product) return {};
+  const stock = Number.isFinite(Number(product.stock)) ? Number(product.stock) : undefined;
+  const variants = product.variations?.variation_1;
+  const sizeStock = Array.isArray(variants)
+    ? variants.map((variant) => ({ size: String(variant.name).trim(), stock: Number(variant.stock) || 0 })).filter((variant) => variant.size)
+    : undefined;
+  return { stock, sizeStock };
+}
+
 function extractProduct(html, url) {
   const $ = cheerio.load(html);
   const title = $('meta[property="og:title"]').attr('content') || $('title').text().trim();
@@ -49,7 +87,7 @@ function extractProduct(html, url) {
     price = match ? match[0].replace(/TL/i, '').replace(/[.\s]/g, '').replace(',', '.').trim() : '';
   }
 
-  return { title: title.trim(), price: price.trim(), image, images, url };
+  return { title: title.trim(), price: price.trim(), image, images, url, ...extractStock(html) };
 }
 
 function getCategory(title, previousCategory = '') {
@@ -136,7 +174,9 @@ async function main() {
         filename: previous.filename || `${item.id}.jpeg`,
         url: item.url,
         category,
-        categories: getCategories(live.title, category, previous.categories)
+        categories: getCategories(live.title, category, previous.categories),
+        ...(live.stock !== undefined ? { stock: live.stock } : previous.stock !== undefined ? { stock: previous.stock } : {}),
+        ...(live.sizeStock ? { sizeStock: live.sizeStock } : previous.sizeStock ? { sizeStock: previous.sizeStock } : {})
       });
       console.log(`Synced ${item.id}: ${live.title} - ${live.price}`);
     } catch (error) {

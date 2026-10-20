@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -48,3 +50,8 @@ jobs:
       - name: Deploy storefront
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # Bing ve Yandex'e değişen sayfaları anında bildirir; hata yayını durdurmaz.
+      - name: Notify IndexNow
+        continue-on-error: true
+        run: node scripts/indexnow.mjs HEAD~1
