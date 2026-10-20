@@ -133,6 +133,12 @@ const CATEGORIES = [
                 '<strong>Kısa topuk</strong>, ayağın ön kısmına binen yükü yüksek topuklara göre azaltır. Gün boyu ayakta kalınan iş günlerinde ve günlük kombinlerde öne çıkar.',
                 '<strong>Önü açık</strong> modeller bahar, yaz ve davet sezonunun klasiğidir. Bej ve ten tonları bacak hattını uzun gösterir; gümüş ve gold detaylı modeller abiye kombinleri tamamlar.'
             ]],
+            ['Topuk boyu rehberi: 3, 5, 7 ve 10 cm', [
+                '<strong>3-5 cm (kısa topuk):</strong> Gün boyu ayakta kalınan iş günleri, okul ve günlük kullanım için en rahat aralık. Topuklu ayakkabıya yeni başlayanlar için de iyi bir başlangıçtır.',
+                '<strong>5-7 cm (orta ve kadeh topuk):</strong> Ofisten akşam davetine geçilen günlerin dengeli seçimi. Kadeh topuk bu yükseklikte zeminde daha sağlam durur.',
+                '<strong>8-10 cm ve üzeri (ince ve uzun topuk):</strong> Düğün, nişan ve gece davetleri için. Uzun süre ayakta kalınacaksa yedek olarak kısa topuklu bir model taşımak işinizi kolaylaştırır.',
+                'Ürün sayfalarında topuk boyu, modelin topuk tipine göre yaklaşık aralık olarak belirtilir; kesin ölçüyü Instagram\'dan sorabilirsiniz.'
+            ]],
             ['Numara seçerken', [
                 'Topuklu ayakkabıda ayak öne doğru kaydığı için iki numara arasında kalıyorsanız genellikle büyük numara daha rahat eder. Emin değilseniz model adını Instagram\'dan yazarak bize sorabilirsiniz.'
             ]]
@@ -152,7 +158,7 @@ const CATEGORIES = [
         match: (p) => p.generic && isHeel(p) && /kadeh/.test(p.t),
         guide: [
             ['Kadeh topuk kimler için uygun?', [
-                'Yüksek topuğa yeni alışanlar ve aynı gün içinde hem ofiste hem akşam davetinde aynı ayakkabıyı giymek isteyenler için kadeh topuk dengeli bir tercihtir. Kısa ve orta kadeh topuklar günlük kullanımda, kurdeleli ve gümüş detaylı modeller davetlerde öne çıkar.'
+                'Kadeh topuklar çoğunlukla 5-7 cm aralığındadır. Yüksek topuğa yeni alışanlar ve aynı gün içinde hem ofiste hem akşam davetinde aynı ayakkabıyı giymek isteyenler için kadeh topuk dengeli bir tercihtir. Kısa ve orta kadeh topuklar günlük kullanımda, kurdeleli ve gümüş detaylı modeller davetlerde öne çıkar.'
             ]],
             ['Renk seçimi', [
                 'Siyah kadeh topuk ayakkabı ofis ve gece kombinlerine kolayca uyar. Bej ve ten tonları bacak hattını uzatır; gümüş ve beyaz modeller ise abiye ve beyaz elbise altında tercih edilir.'
@@ -191,7 +197,7 @@ const CATEGORIES = [
         parent: 'kadin-topuklu-ayakkabi',
         name: 'Kısa Topuklu Ayakkabı',
         h1: 'Kısa Topuklu Ayakkabı Modelleri',
-        title: 'Kısa Topuklu Ayakkabı Modelleri ve Fiyatları | Nokta Shic',
+        title: 'Kısa Topuklu Ayakkabı (3-5 cm) Modelleri | Nokta Shic',
         description: ({ min }) => `Ofis ve günlük kullanım için kısa topuklu kadın ayakkabı modelleri ${min}'den başlayan fiyatlarla. Ücretsiz ve aynı gün kargo, iade ve değişim garantisi.`,
         intro: ({ count, min }) => `Topuklu ayakkabının şıklığını gün boyu taşınabilir bir yükseklikle sunan kısa topuklu modeller ofis, okul ve günlük kombinler için ideal. ${count} model, ${min}'den başlayan fiyatlarla.`,
         audience: 'female',
@@ -199,7 +205,7 @@ const CATEGORIES = [
         match: (p) => p.generic && isHeel(p) && /kısa topuk/.test(p.t),
         guide: [
             ['Neden kısa topuk?', [
-                'Kısa topuk, ayağın ön kısmına binen yükü yüksek topuklulara göre azaltır; bu yüzden uzun süre ayakta kalınan günlerde tercih edilir. Küt burunlu modeller parmaklara daha geniş alan bırakır, gold ve gümüş detaylı modeller ise sade kombinlere hareket katar.'
+                'Kısa topuk genellikle 3-5 cm aralığındadır ve ayağın ön kısmına binen yükü yüksek topuklulara göre azaltır; bu yüzden uzun süre ayakta kalınan günlerde tercih edilir. Küt burunlu modeller parmaklara daha geniş alan bırakır, gold ve gümüş detaylı modeller ise sade kombinlere hareket katar.'
             ]]
         ],
         faq: [
@@ -390,6 +396,20 @@ function productAttributes(p) {
     return { color, materials, heel, toe, details, kind };
 }
 
+// Topuk tipine göre yaklaşık topuk boyu. Ürün başına ölçülmüş değer değildir; sayfada "yaklaşık" diye
+// gösterilir. Ölçülmüş değer eklenirse (HEEL_CM_OVERRIDES) o kullanılır.
+const HEEL_CM = {
+    'Kısa topuk': '3-5', 'Kısa kadeh topuk': '3-5', 'Orta kadeh topuk': '5-7', 'Kadeh topuk': '5-7',
+    'İnce kadeh topuk': '6-8', 'Kalın topuk': '5-7', 'İnce topuk': '8-10', 'Uzun topuk': '8-10', 'Yüksek topuk': '9-11'
+};
+// Elle ölçülen topuk boyları: { ürün id: 'cm' }, ör. { 118: '6' }
+const HEEL_CM_OVERRIDES = {};
+function heelHeight(p) {
+    if (HEEL_CM_OVERRIDES[p.id]) return { cm: String(HEEL_CM_OVERRIDES[p.id]), exact: true };
+    const { heel } = productAttributes(p);
+    return HEEL_CM[heel] ? { cm: HEEL_CM[heel], exact: false } : null;
+}
+
 // Meta açıklama: başlığı tekrar etmeden ürünü özetler (seo-programmatic metadata kontrolü)
 function productPitch(p) {
     const a = productAttributes(p);
@@ -399,7 +419,8 @@ function productPitch(p) {
         'Çıkarılabilir tozluk': 'çıkarılabilir tozluklu', 'Su geçirmez': 'su geçirmez', 'Yumuşak taban': 'yumuşak tabanlı',
         'Askeri bot kalıbı': 'askeri model', 'Ortopedik taban': 'ortopedik', 'Işıklı taban': 'ışıklı', 'Hafif yapı': 'hafif'
     };
-    const heelAdj = !a.heel ? '' : a.heel === 'Topuklu' ? (isHeel(p) ? '' : 'topuklu') : `${lower(a.heel)}lu`;
+    const hh = heelHeight(p);
+    const heelAdj = !a.heel ? '' : a.heel === 'Topuklu' ? (isHeel(p) ? '' : 'topuklu') : `${lower(a.heel)}lu${hh ? ` (${hh.exact ? '' : '~'}${hh.cm} cm)` : ''}`;
     const kind = heelAdj && isHeel(p) && !/terlik/.test(p.t) ? 'kadın ayakkabı' : a.kind;
     const lead = [a.color, a.materials.join(' '), heelAdj].filter(Boolean).join(' ');
     const extras = [lower(a.toe), ...a.details.map((d) => ADJ[d] || lower(d))].filter(Boolean).slice(0, 3);
@@ -670,6 +691,7 @@ function specsTable(p) {
         ['Koleksiyon', isHeel(p) ? 'Nokta Shic' : ''],
         ['Renk', a.color ? capFirst(a.color) : ''],
         ['Topuk', a.heel && a.heel !== 'Topuklu' ? a.heel : ''],
+        ['Topuk boyu', (() => { const hh = heelHeight(p); return hh ? (hh.exact ? `${hh.cm} cm` : `Yaklaşık ${hh.cm} cm (${lower(a.heel)} sınıfı)`) : ''; })()],
         ['Burun', a.toe],
         ['Yüzey', a.materials.map(capFirst).join(', ')],
         ['Detaylar', a.details.join(', ')],
@@ -800,6 +822,7 @@ ${crumbs.html}
       <p>${esc(description)}</p>
       <h2>Ürün özellikleri</h2>
       ${specsTable(p)}
+      ${heelHeight(p) && !heelHeight(p).exact ? `<p class="sp-note">Topuk boyu, modelin topuk tipine göre verilen yaklaşık bir aralıktır. Kesin ölçü için Instagram'dan model adıyla sorabilirsiniz.</p>` : ''}
       <h2>Nasıl kombinlenir?</h2>
       <p>${esc(stylingTip(p))}</p>
       <h2>Kargo, iade ve değişim</h2>

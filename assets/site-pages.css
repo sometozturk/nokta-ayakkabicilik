@@ -155,3 +155,4 @@ h1,h2{font-family:'Fraunces',Georgia,serif;font-weight:560;letter-spacing:-.01em
 .sp-size-list ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px;}
 .sp-size-list li{min-width:42px;text-align:center;padding:7px 10px;border:1px solid var(--line);border-radius:999px;font-weight:600;font-size:14px;}
 .sp-size-list li.is-out{opacity:.4;text-decoration:line-through;}
+.sp-note{font-size:12.5px;color:var(--muted);margin:-4px 0 14px;}
