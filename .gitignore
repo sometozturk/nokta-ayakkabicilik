@@ -3,6 +3,3 @@ node_modules/
 dist/
 .env
 
-# scripts/build-seo.mjs tarafından yayın sırasında üretilir
-/kategori/
-/urun/

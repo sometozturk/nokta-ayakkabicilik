@@ -7,8 +7,10 @@
  *   /urun/<slug>/       ürün sayfaları (Product + Offer + Breadcrumb schema)
  *   /sitemap.xml        tüm sayfalar + ürün görselleri (image sitemap)
  *
- * Bağımlılık yok (Node 18+). GitHub Actions her yayında çalıştırır; yerelde: npm run build:seo
- * Çıktı klasörleri (kategori/, urun/) git'e eklenmez, her çalıştırmada sıfırdan üretilir.
+ * Bağımlılık yok (Node 18+). Yerelde: npm run build:seo
+ * Çıktı (kategori/, urun/, sitemap.xml) depoya commit edilir; Shopier senkronu ve yayın işi
+ * her çalıştırmada sıfırdan yeniden üretir. Bu klasörleri elle düzenlemeyin, betiği değiştirin.
+ * Çıktı deterministiktir (tarih içermez), ürünler değişmedikçe commit oluşmaz.
  *
  * Not: Başlığında üçüncü taraf marka adı geçen ürünler (Nike, Adidas, Prada vb.) için ayrı
  * SEO sayfası üretilmez. Bu ürünler ana sayfadaki katalogda görünmeye devam eder.
@@ -672,9 +674,9 @@ const urlEntry = (loc, { lastmod, images = [] } = {}) => `  <url>
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${[
-        urlEntry(`${SITE}/`, { lastmod: BUILD_DATE }),
-        urlEntry(`${SITE}/katalog.html`, { lastmod: BUILD_DATE }),
-        ...activeCategories.map((c) => urlEntry(`${SITE}${c.url}`, { lastmod: BUILD_DATE })),
+        urlEntry(`${SITE}/`),
+        urlEntry(`${SITE}/katalog.html`),
+        ...activeCategories.map((c) => urlEntry(`${SITE}${c.url}`)),
         ...pageProducts.map((p) => urlEntry(`${SITE}${p.url}`, { images: p.images.slice(0, 5) })),
         urlEntry(`${SITE}/bilgilendirme.html`)
     ].join('\n')}

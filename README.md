@@ -20,14 +20,14 @@ npm start
 
 ## SEO sayfaları
 
-`scripts/build-seo.mjs`, `products.json`'dan kategori (`/kategori/...`) ve ürün (`/urun/...`) sayfalarını, `sitemap.xml`'i üretir. GitHub Actions her yayında otomatik çalıştırır; Shopier senkronu ürün değiştirdiğinde yayını kendisi tetikler. Yerelde önizleme için:
+`scripts/build-seo.mjs`, `products.json`'dan kategori (`/kategori/...`) ve ürün (`/urun/...`) sayfalarını, `sitemap.xml`'i üretir. Shopier senkronu her çalıştığında sayfaları yeniden üretip commit eder; `products.json`'u elle değiştirirseniz commit öncesi şunu çalıştırın:
 
 ```
 npm run build:seo
 npm start
 ```
 
-Üretilen `kategori/` ve `urun/` klasörleri git'e eklenmez. Başlığında üçüncü taraf marka adı geçen ürünler için ayrı sayfa üretilmez. Kategori metinleri ve kuralları betiğin başındaki `CATEGORIES` listesinde.
+`kategori/` ve `urun/` klasörlerini elle düzenlemeyin; her çalıştırmada sıfırdan üretilir. Başlığında üçüncü taraf marka adı geçen ürünler için ayrı sayfa üretilmez. Kategori metinleri ve kuralları betiğin başındaki `CATEGORIES` listesinde.
 
 ## Try-on backend
 

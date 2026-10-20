@@ -35,12 +35,16 @@ jobs:
       - name: Sync Shopier catalog
         run: node sync_shopier.js
 
+      # Kategori/ürün sayfalarını ve sitemap.xml'i güncel ürünlerle yeniden üretir.
+      - name: Rebuild SEO pages
+        run: node scripts/build-seo.mjs
+
       - name: Commit catalog changes
         id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add products.json shopier-urls.json
+          git add -A products.json shopier-urls.json sitemap.xml kategori urun
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
@@ -49,8 +53,8 @@ jobs:
           fi
           git push
 
-      # Bot'un push'u (GITHUB_TOKEN) yayın işini kendiliğinden başlatmaz; yeni ürünler
-      # ve ürün sayfaları ancak bu adımla siteye yansır.
+      # Bot'un push'u (GITHUB_TOKEN) özel yayın iş akışını kendiliğinden başlatmaz;
+      # Pages kaynağı "GitHub Actions" olsa bile yeni ürünler bu adımla yayına çıkar.
       - name: Publish updated catalog
         if: steps.commit.outputs.changed == 'true'
         env:
