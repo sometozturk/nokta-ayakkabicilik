@@ -5,7 +5,8 @@
   "scripts": {
     "start": "npx live-server --open=./index.html",
     "scrape": "node download_products.js",
-    "apply-edits": "node apply_edits.js"
+    "apply-edits": "node apply_edits.js",
+    "build:seo": "node scripts/build-seo.mjs"
   },
   "dependencies": {
     "@imgly/background-removal-node": "^1.4.5",

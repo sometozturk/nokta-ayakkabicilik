@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+  # Shopier senkronu ürün değiştirdiğinde bu iş oradan tetiklenir (sync-shopier.yml).
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -23,6 +25,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # products.json'dan kategori/ürün sayfalarını ve sitemap.xml'i üretir (bağımlılık yok).
+      - name: Build SEO pages
+        run: node scripts/build-seo.mjs
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

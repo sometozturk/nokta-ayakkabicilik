@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nokta Ayakkabıcılık | Ayakkabı ve Bot Modelleri</title>
-<meta name="description" content="Erkek bot, kadın bot, sneaker ve günlük ayakkabı modellerini Nokta Ayakkabıcılık'ta keşfedin. Shopier üzerinden güvenli alışveriş.">
-<meta name="robots" content="index,follow">
-<meta property="og:title" content="Nokta Ayakkabıcılık">
-<meta property="og:description" content="Özenle seçilmiş ayakkabı, erkek bot ve kadın bot koleksiyonu.">
+<title>Nokta Ayakkabıcılık | Topuklu Ayakkabı, Bot ve Sneaker</title>
+<meta name="description" content="30 yıllık Nokta Ayakkabıcılık'ta kadın topuklu ayakkabı, bot, çizme ve sneaker modelleri. 17:00'ye kadar siparişte aynı gün kargo, iade ve değişim garantisi.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:title" content="Nokta Ayakkabıcılık | Topuklu Ayakkabı, Bot ve Sneaker">
+<meta property="og:description" content="30 yıllık mağazadan topuklu ayakkabı, bot, çizme ve sneaker modelleri. 17:00'ye kadar siparişte aynı gün kargo.">
+<meta property="og:locale" content="tr_TR">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.noktaayakkabicilik.com/">
 <meta property="og:image" content="https://www.noktaayakkabicilik.com/og-image.jpg">
@@ -16,8 +17,8 @@
 <meta property="og:image:alt" content="Nokta Ayakkabıcılık logosu">
 <meta property="og:site_name" content="Nokta Ayakkabıcılık">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Nokta Ayakkabıcılık | Ayakkabı ve Bot Koleksiyonu">
-<meta name="twitter:description" content="Sneaker, erkek bot ve kadın bot modellerini Shopier üzerinden güvenle keşfedin.">
+<meta name="twitter:title" content="Nokta Ayakkabıcılık | Topuklu Ayakkabı, Bot ve Sneaker">
+<meta name="twitter:description" content="30 yıllık mağazadan topuklu ayakkabı, bot, çizme ve sneaker modelleri. 17:00'ye kadar siparişte aynı gün kargo.">
 <meta name="twitter:image" content="https://www.noktaayakkabicilik.com/og-image.jpg">
 <link rel="canonical" href="https://www.noktaayakkabicilik.com/">
 <meta name="theme-color" content="#151515">
@@ -100,22 +101,30 @@ document.addEventListener('click', function (e) {
 <script type="application/ld+json">
 {
     "@context":"https://schema.org",
-    "@type":"Store",
+    "@type":"OnlineStore",
+    "@id":"https://www.noktaayakkabicilik.com/#organization",
     "name":"Nokta Ayakkabıcılık",
+    "alternateName":"Nokta Ayakkabı",
     "url":"https://www.noktaayakkabicilik.com/",
     "logo":"https://www.noktaayakkabicilik.com/logo-transparent.png",
-    "description":"Sneaker, erkek bot, kadın bot ve günlük ayakkabı koleksiyonu.",
-    "priceRange":"₺₺",
-    "sameAs":["https://www.instagram.com/nokta.ayakkabicilik/","https://shopier.com/noktaayakkabi"]
+    "image":"https://www.noktaayakkabicilik.com/og-image.jpg",
+    "description":"30 yıllık mağaza tecrübesi ve 2 fiziki şubesiyle Nokta Ayakkabıcılık; kadın topuklu ayakkabı, bot, çizme, erkek klasik ayakkabı ve sneaker modellerini Shopier üzerinden tüm Türkiye'ye gönderir.",
+    "areaServed":{"@type":"Country","name":"Türkiye"},
+    "brand":{"@type":"Brand","name":"Nokta Shic"},
+    "sameAs":["https://www.instagram.com/nokta.ayakkabicilik/","https://www.instagram.com/noktashic/","https://www.shopier.com/noktaayakkabi"],
+    "hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","merchantReturnLink":"https://www.noktaayakkabicilik.com/bilgilendirme.html#iade"}
 }
 </script>
 <script type="application/ld+json" id="website-schema">
 {
     "@context":"https://schema.org",
     "@type":"WebSite",
+    "@id":"https://www.noktaayakkabicilik.com/#website",
     "name":"Nokta Ayakkabıcılık",
+    "alternateName":"Nokta Ayakkabı",
     "url":"https://www.noktaayakkabicilik.com/",
-    "potentialAction":{"@type":"SearchAction","target":"https://www.noktaayakkabicilik.com/?q={search_term_string}","query-input":"required name=search_term_string"}
+    "inLanguage":"tr-TR",
+    "publisher":{"@id":"https://www.noktaayakkabicilik.com/#organization"}
 }
 </script>
 <script type="application/ld+json" id="faq-schema">
@@ -123,9 +132,11 @@ document.addEventListener('click', function (e) {
     "@context":"https://schema.org",
     "@type":"FAQPage",
     "mainEntity":[
-        {"@type":"Question","name":"Ayakkabı siparişi nereden verilir?","acceptedAnswer":{"@type":"Answer","text":"Ürün kartındaki Shopier'de satın al bağlantısından güvenli sipariş sayfasına geçebilirsiniz."}},
-        {"@type":"Question","name":"Hangi ayakkabı markaları bulunuyor?","acceptedAnswer":{"@type":"Answer","text":"Nike, Adidas, Vans, Lacoste, Lufian, Calvin Klein, Alexander McQueen ve Goldengoose modelleri koleksiyonda yer alıyor."}},
-        {"@type":"Question","name":"Ayakkabı numarası nasıl öğrenilir?","acceptedAnswer":{"@type":"Answer","text":"Her ürün kartında mevcut numara aralığı gösterilir. Sipariş öncesi ürün sayfasındaki bilgileri kontrol edebilirsiniz."}}
+        {"@type":"Question","name":"Siparişim ne zaman kargoya verilir?","acceptedAnswer":{"@type":"Answer","text":"Saat 17:00'ye kadar verilen siparişler aynı gün kargoya teslim edilir. 17:00'den sonraki siparişler genellikle ertesi gün kargoya verilir."}},
+        {"@type":"Question","name":"İade ve değişim yapabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. Nokta Ayakkabıcılık iade ve değişim garantisi sunar; talebinizi sipariş bilgilerinizle Instagram üzerinden iletmeniz yeterlidir."}},
+        {"@type":"Question","name":"Sipariş nasıl verilir, ödeme güvenli mi?","acceptedAnswer":{"@type":"Answer","text":"Ürün kartındaki Shopier'de satın al bağlantısıyla Shopier'in güvenli ödeme sayfasına geçersiniz. Kart bilgileriniz bu siteye iletilmez."}},
+        {"@type":"Question","name":"Doğru ayakkabı numarasını nasıl seçerim?","acceptedAnswer":{"@type":"Answer","text":"Her ürünün numara aralığı ürün adında ve kartında yazar. İki numara arasında kalırsanız model adıyla birlikte Instagram'dan bize yazabilirsiniz."}},
+        {"@type":"Question","name":"Fiziki mağazanız var mı?","acceptedAnswer":{"@type":"Answer","text":"Evet. Nokta Ayakkabıcılık 30 yıldır hizmet veren, 2 fiziki şubesi bulunan bir ayakkabı mağazasıdır. Online siparişler Shopier üzerinden tüm Türkiye'ye gönderilir."}}
     ]
 }
 </script>
@@ -134,10 +145,6 @@ document.addEventListener('click', function (e) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.shopier.app">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,450;9..144,560;9..144,650&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/heic2any@0.1.4/dist/heic2any.min.js"></script>
 <style>
     :root{
         --ink:#1b1712;
@@ -1009,6 +1016,18 @@ document.addEventListener('click', function (e) {
         .header-links .ig{display:none;}
     }
 </style>
+<style id="seo-sections">
+    .category-links{margin:70px 0 0;padding-top:28px;border-top:1px solid var(--line);}
+    .category-links h2{margin:0 0 16px;font:560 26px/1.15 'Fraunces',serif;}
+    .category-links ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px;}
+    .category-links a{display:inline-block;padding:9px 14px;border:1px solid var(--line);border-radius:999px;font-size:13px;font-weight:600;text-decoration:none;color:var(--ink);transition:border-color .2s ease,color .2s ease;}
+    .category-links a:hover{border-color:var(--accent);color:var(--accent);}
+    .category-links + .faq-section{margin-top:44px;}
+    .faq-item{background:rgba(255,255,255,.04);}
+    .faq-item p{color:var(--muted);}
+    .footer-category-links{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;}
+    @media (max-width:640px){.category-links h2{font-size:22px;}.category-links a{font-size:12px;padding:8px 12px;}}
+</style>
 <style id="mobile-sticky-filters">
     /* Mobilde marka kategorileri aşağı kaydırırken üstte yapışık kalır. */
     @media (max-width:640px){
@@ -1092,7 +1111,7 @@ document.addEventListener('click', function (e) {
             <div>
                 <p class="hero-eyebrow"><span class="dot"></span>2026 koleksiyonu</p>
                 <h1>Attığın her adım<br>bir tercih.</h1>
-                <p class="hero-copy">Nike'tan Adidas'a, Lacoste'tan Goldengoose'a — şehrin temposuna uyum sağlayan, tek tek seçilmiş ayakkabı ve bot modelleri.</p>
+                <p class="hero-copy">30 yıllık mağaza tecrübesiyle tek tek seçilmiş sneaker, bot ve topuklu ayakkabı modelleri. 17:00'ye kadar verilen siparişler aynı gün kargoda.</p>
                 <div class="hero-ctas">
                     <a class="btn-primary" href="#urunler">Koleksiyonu gör</a>
                     <span class="hero-count"><strong id="hero-count">50</strong> model stokta</span>
@@ -1103,7 +1122,7 @@ document.addEventListener('click', function (e) {
                     <strong>Air Force 1<br>White.</strong>
                     <span>Temiz çizgiler, ikonik Swoosh ve her adımda zamansız bir siluet.</span>
                 </div>
-                <img class="shoe-frame" id="shoe-frame" src="assets/air-force-sharp-webp/ezgif-frame-001.webp" alt="Scroll ile birleşen beyaz Air Force 1">
+                <img class="shoe-frame" id="shoe-frame" src="assets/air-force-sharp-webp/ezgif-frame-001.webp" alt="Scroll ile birleşen beyaz Air Force 1" fetchpriority="high">
                 <img class="hero-center-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık">
                 <div class="shoe-caption" aria-hidden="true">
                     <strong>NIKE / AIR FORCE 1</strong>
@@ -1132,7 +1151,7 @@ document.addEventListener('click', function (e) {
         <div class="toolbar">
             <div class="toolbar-label"><strong id="product-count">50 ürün</strong> · Shopier üzerinden güvenli alışveriş</div>
         </div>
-        <h2 class="collection-heading">Sneaker ve günlük ayakkabı modelleri</h2>
+        <h2 class="collection-heading">Sneaker, bot ve topuklu ayakkabı modelleri</h2>
         <div class="brand-filter-row">
             <div id="brand-filters" class="brand-filters" aria-label="Marka ve kategori filtreleri"></div>
             <div class="search-wrap">
@@ -1153,20 +1172,40 @@ document.addEventListener('click', function (e) {
         </div>
             <p class="result-note" id="result-note">Modelleri marka, numara ve fiyat aralığına göre filtreleyin.</p>
         <div id="urun-izgarasi" class="urun-izgarasi"></div>
+        <nav class="category-links" aria-labelledby="category-links-heading">
+            <h2 id="category-links-heading">Kategoriye göre alışveriş</h2>
+            <ul>
+                <li><a href="/kategori/kadin-topuklu-ayakkabi/">Kadın topuklu ayakkabı</a></li>
+                <li><a href="/kategori/kadeh-topuk-ayakkabi/">Kadeh topuk ayakkabı</a></li>
+                <li><a href="/kategori/kisa-topuklu-ayakkabi/">Kısa topuklu ayakkabı</a></li>
+                <li><a href="/kategori/onu-acik-topuklu-ayakkabi/">Önü açık topuklu ayakkabı</a></li>
+                <li><a href="/kategori/abiye-topuklu-ayakkabi/">Abiye topuklu ayakkabı</a></li>
+                <li><a href="/kategori/kadin-bot-ve-cizme/">Kadın bot ve çizme</a></li>
+                <li><a href="/kategori/erkek-ayakkabi-ve-bot/">Erkek klasik ayakkabı ve bot</a></li>
+            </ul>
+        </nav>
         <section class="faq-section" aria-labelledby="faq-heading">
             <h2 id="faq-heading">Ayakkabı alışverişi hakkında</h2>
             <div class="faq-list">
                 <article class="faq-item">
-                    <h3>Ayakkabı siparişi nereden verilir?</h3>
-                    <p>Beğendiğiniz ürünün kartındaki Shopier'de satın al bağlantısından güvenli sipariş sayfasına geçebilirsiniz.</p>
+                    <h3>Siparişim ne zaman kargoya verilir?</h3>
+                    <p>Saat 17:00'ye kadar verilen siparişler aynı gün kargoya teslim edilir. 17:00'den sonraki siparişler genellikle ertesi gün kargoya verilir.</p>
                 </article>
                 <article class="faq-item">
-                    <h3>Hangi ayakkabı markaları bulunuyor?</h3>
-                    <p>Nike, Adidas, Vans, Lacoste, Lufian, Calvin Klein, Alexander McQueen ve Goldengoose modelleri koleksiyonda yer alıyor.</p>
+                    <h3>İade ve değişim yapabilir miyim?</h3>
+                    <p>Evet. Nokta Ayakkabıcılık iade ve değişim garantisi sunar; talebinizi sipariş bilgilerinizle Instagram üzerinden iletmeniz yeterlidir.</p>
                 </article>
                 <article class="faq-item">
-                    <h3>Ayakkabı numarası nasıl öğrenilir?</h3>
-                    <p>Her ürün kartında mevcut numara aralığı gösterilir. Sipariş öncesi ürün sayfasındaki bilgileri kontrol edebilirsiniz.</p>
+                    <h3>Sipariş nasıl verilir, ödeme güvenli mi?</h3>
+                    <p>Ürün kartındaki Shopier'de satın al bağlantısıyla Shopier'in güvenli ödeme sayfasına geçersiniz. Kart bilgileriniz bu siteye iletilmez.</p>
+                </article>
+                <article class="faq-item">
+                    <h3>Doğru ayakkabı numarasını nasıl seçerim?</h3>
+                    <p>Her ürünün numara aralığı ürün adında ve kartında yazar. İki numara arasında kalırsanız model adıyla birlikte Instagram'dan bize yazabilirsiniz.</p>
+                </article>
+                <article class="faq-item">
+                    <h3>Fiziki mağazanız var mı?</h3>
+                    <p>Evet. Nokta Ayakkabıcılık 30 yıldır hizmet veren, 2 fiziki şubesi bulunan bir ayakkabı mağazasıdır. Online siparişler Shopier üzerinden tüm Türkiye'ye gönderilir.</p>
                 </article>
             </div>
         </section>
@@ -1177,7 +1216,7 @@ document.addEventListener('click', function (e) {
     <div class="footer-inner">
         <div class="footer-brand">
             <a class="wordmark" href="#top"><img src="logo-transparent.png" alt="Nokta Ayakkabıcılık"></a>
-            <p>Nokta Ayakkabıcılık, seçili ayakkabı, erkek bot ve kadın bot modellerini Shopier üzerinden güvenle sizlere ulaştırır. Sorularınız için Instagram üzerinden bize ulaşabilirsiniz.</p>
+            <p>Nokta Ayakkabıcılık; 30 yıllık mağaza tecrübesi ve 2 fiziki şubesiyle seçtiği sneaker, bot ve topuklu ayakkabı modellerini Shopier üzerinden tüm Türkiye'ye güvenle ulaştırır. 17:00'ye kadar verilen siparişler aynı gün kargoda. Sorularınız için Instagram üzerinden bize ulaşabilirsiniz.</p>
         </div>
         <div class="footer-col footer-brands">
             <h4>Markalar</h4>
@@ -1187,6 +1226,7 @@ document.addEventListener('click', function (e) {
             <h4>İletişim</h4>
             <ul>
                 <li><a href="https://www.instagram.com/nokta.ayakkabicilik/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                <li><a href="https://www.instagram.com/noktashic/" target="_blank" rel="noopener noreferrer">Instagram @noktashic</a></li>
                 <li><a href="https://shopier.com/noktaayakkabi" target="_blank" rel="noopener noreferrer">Shopier mağazası</a></li>
             </ul>
             <div class="legal-links">
@@ -1202,6 +1242,11 @@ document.addEventListener('click', function (e) {
                 <strong>Tüm modelleri incele</strong>
                 <span>Ayakkabı ve bot modelleri · tek sayfada</span>
             </a>
+            <ul class="footer-category-links">
+                <li><a href="/kategori/kadin-topuklu-ayakkabi/">Kadın topuklu ayakkabı</a></li>
+                <li><a href="/kategori/kadin-bot-ve-cizme/">Kadın bot ve çizme</a></li>
+                <li><a href="/kategori/erkek-ayakkabi-ve-bot/">Erkek klasik ayakkabı ve bot</a></li>
+            </ul>
         </div>
     </div>
     <div class="footer-bottom">
@@ -1332,6 +1377,10 @@ document.addEventListener('click', function (e) {
     </section>
 </div>
 
+<!-- Firebase (üyelik ve Kombininde Dene) içerik çizildikten sonra yüklenir; <head> içinde sayfanın açılmasını bekletiyordu. -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"></script>
 <script>
     (() => {
         const firebaseConfig = {
@@ -2080,8 +2129,27 @@ document.addEventListener('click', function (e) {
             return fileType.startsWith('image/') || /\.(jpe?g|png|gif|bmp|webp|heic|heif|avif)$/i.test(safeName);
         };
 
+        // heic2any yalnızca iPhone HEIC fotoğrafı seçildiğinde yüklenir (≈1,3 MB). Eski etiket
+        // var olmayan 0.1.4 sürümünü istiyordu ve her açılışta boşuna 404 dönüyordu.
+        let heic2anyLoader = null;
+        const loadHeic2any = () => {
+            if (typeof window.heic2any === 'function') return Promise.resolve();
+            if (!heic2anyLoader) {
+                heic2anyLoader = new Promise(resolve => {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
+                    script.async = true;
+                    script.onload = () => resolve();
+                    script.onerror = () => { heic2anyLoader = null; resolve(); };
+                    document.head.appendChild(script);
+                });
+            }
+            return heic2anyLoader;
+        };
+
         const convertHeicBlob = async file => {
             if (!isHeicLikeFile(file)) return file;
+            await loadHeic2any();
             const converters = [
                 { toType: 'image/jpeg', label: 'JPEG' },
                 { toType: 'image/png', label: 'PNG' }

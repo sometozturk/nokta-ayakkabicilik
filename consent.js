@@ -59,7 +59,7 @@
         box.hidden = true;
         box.innerHTML =
             '<p>Reklam ölçümü için Meta Pixel (çerez) kullanıyoruz. Kabul ederseniz ürün ilgisi ve reklam performansı ölçülür; ' +
-            'reddederseniz bu ölçüm yapılmaz. <a href="bilgilendirme.html#kvkk">Ayrıntılar</a></p>' +
+            'reddederseniz bu ölçüm yapılmaz. <a href="/bilgilendirme.html#kvkk">Ayrıntılar</a></p>' +
             '<div class="nk-consent-actions">' +
             '<button type="button" data-nk="deny">Reddet</button>' +
             '<button type="button" data-nk="grant">Kabul et</button>' +

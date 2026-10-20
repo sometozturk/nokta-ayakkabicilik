@@ -2,3 +2,7 @@ node_modules/
 .DS_Store
 dist/
 .env
+
+# scripts/build-seo.mjs tarafından yayın sırasında üretilir
+/kategori/
+/urun/

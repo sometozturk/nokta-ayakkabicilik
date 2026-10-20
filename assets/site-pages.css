@@ -1,0 +1,137 @@
+/* Nokta Ayakkabıcılık – kategori ve ürün sayfaları (scripts/build-seo.mjs üretir) */
+:root{
+    --ink:#f5efe4;
+    --paper:#151515;
+    --surface:#f8f4ec;
+    --surface-ink:#191715;
+    --line:rgba(245,239,228,.16);
+    --muted:#a9a096;
+    --accent:#e34b35;
+    --radius:4px;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 'DM Sans',system-ui,sans-serif;}
+a{color:inherit;}
+img{max-width:100%;display:block;}
+h1,h2{font-family:'Fraunces',Georgia,serif;font-weight:560;letter-spacing:-.01em;}
+.skip-link{position:absolute;left:-999px;top:8px;background:var(--accent);color:#fff;padding:8px 12px;z-index:50;}
+.skip-link:focus{left:8px;}
+.sp-wrap{width:min(1240px,calc(100% - 32px));margin:0 auto;}
+
+/* header */
+.sp-header{position:sticky;top:0;z-index:30;background:rgba(21,21,21,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+.sp-header-inner{display:flex;align-items:center;gap:24px;min-height:68px;}
+.sp-logo img{height:32px;width:auto;filter:invert(1);}
+.sp-nav{display:flex;gap:20px;flex:1;}
+.sp-nav a,.sp-ig{font-size:13px;font-weight:600;text-decoration:none;color:var(--ink);border-bottom:1px solid transparent;padding-bottom:2px;}
+.sp-nav a:hover,.sp-ig:hover{color:var(--accent);border-color:var(--accent);}
+.sp-ig{color:var(--muted);}
+
+/* breadcrumb */
+.sp-crumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:22px 0 0;padding:0;font-size:12px;color:var(--muted);}
+.sp-crumbs li+li::before{content:'/';margin-right:6px;opacity:.6;}
+.sp-crumbs a{text-decoration:none;}
+.sp-crumbs a:hover{color:var(--accent);}
+
+/* category hero */
+.sp-hero{padding:26px 0 30px;border-bottom:1px solid var(--line);margin-bottom:28px;}
+.sp-hero h1{font-size:clamp(34px,5.4vw,64px);line-height:1;margin:0 0 16px;}
+.sp-lead{max-width:720px;color:var(--muted);font-size:16px;margin:0 0 12px;}
+.sp-meta{font-size:13px;color:var(--muted);margin:0;}
+.sp-meta strong{color:var(--ink);}
+.sp-chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;}
+.sp-chips a{font-size:12px;font-weight:600;text-decoration:none;padding:8px 13px;border:1px solid var(--line);border-radius:999px;color:var(--ink);transition:border-color .2s,color .2s;}
+.sp-chips a:hover{border-color:var(--accent);color:var(--accent);}
+
+/* product grid */
+.sp-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;}
+.sp-card-link{display:flex;flex-direction:column;height:100%;background:var(--surface);color:var(--surface-ink);text-decoration:none;border-radius:var(--radius);overflow:hidden;box-shadow:0 18px 36px rgba(0,0,0,.2);transition:transform .25s ease,box-shadow .25s ease;}
+.sp-card-link:hover{transform:translateY(-3px);box-shadow:0 26px 48px rgba(0,0,0,.34);}
+.sp-card-img{display:block;aspect-ratio:1/1.12;background:#e8e0d4;overflow:hidden;}
+.sp-card-img img{width:100%;height:100%;object-fit:cover;}
+.sp-card-body{display:flex;flex-direction:column;gap:4px;padding:14px 14px 16px;flex:1;}
+.sp-card-title{font-family:'Fraunces',Georgia,serif;font-weight:560;font-size:16px;line-height:1.25;}
+.sp-card-size{font-size:11px;color:#7c7268;font-weight:600;letter-spacing:.03em;}
+.sp-card-price{margin-top:auto;padding-top:6px;font-family:'Fraunces',Georgia,serif;font-weight:650;font-size:18px;}
+
+/* trust */
+.sp-trust{list-style:none;margin:30px 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);}
+.sp-trust li{background:var(--paper);padding:14px 16px;display:flex;flex-direction:column;gap:2px;}
+.sp-trust strong{font-size:13px;}
+.sp-trust span{font-size:12px;color:var(--muted);}
+
+/* guide + faq */
+.sp-guide{max-width:760px;margin:40px 0 0;}
+.sp-guide h2,.sp-faq h2,.sp-more h2,.sp-related h2,.sp-desc h2{font-size:24px;margin:28px 0 10px;}
+.sp-guide p{color:var(--muted);margin:0 0 12px;}
+.sp-guide strong{color:var(--ink);}
+.sp-faq{max-width:760px;margin:36px 0 0;}
+.sp-faq details{border-top:1px solid var(--line);padding:14px 0;}
+.sp-faq details:last-child{border-bottom:1px solid var(--line);}
+.sp-faq summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:16px;}
+.sp-faq summary::-webkit-details-marker{display:none;}
+.sp-faq summary::after{content:'+';color:var(--accent);font-size:18px;line-height:1;}
+.sp-faq details[open] summary::after{content:'–';}
+.sp-faq p{margin:10px 0 0;color:var(--muted);}
+.sp-more{margin:40px 0 0;}
+
+/* product page */
+.sp-product{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:44px;padding:24px 0 10px;}
+.sp-main-img{background:var(--surface);border-radius:var(--radius);overflow:hidden;aspect-ratio:1/1;}
+.sp-main-img img{width:100%;height:100%;object-fit:contain;}
+.sp-thumbs{display:flex;gap:8px;margin-top:10px;overflow-x:auto;}
+.sp-thumb{flex:0 0 72px;height:72px;padding:0;border:2px solid transparent;border-radius:var(--radius);background:var(--surface);cursor:pointer;overflow:hidden;}
+.sp-thumb img{width:100%;height:100%;object-fit:cover;}
+.sp-thumb.is-active{border-color:var(--accent);}
+.sp-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);text-decoration:none;margin-bottom:12px;}
+.sp-info h1{font-size:clamp(28px,3.6vw,44px);line-height:1.05;margin:0 0 14px;}
+.sp-price{font-family:'Fraunces',Georgia,serif;font-weight:650;font-size:30px;margin:0 0 14px;}
+.sp-sizes{display:flex;align-items:center;gap:10px;margin:0 0 20px;font-size:13px;color:var(--muted);}
+.sp-sizes strong{color:var(--ink);font-size:15px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;}
+.sp-buy{display:block;text-align:center;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:16px;border-radius:2px;transition:filter .2s,transform .2s;}
+.sp-buy:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.sp-ask{display:block;text-align:center;margin-top:10px;font-size:13px;color:var(--muted);}
+.sp-ask:hover{color:var(--accent);}
+.sp-info .sp-trust{grid-template-columns:repeat(2,minmax(0,1fr));margin:24px 0;}
+.sp-desc p{color:var(--muted);margin:0 0 12px;}
+.sp-desc a{color:var(--ink);}
+.sp-related{margin:46px 0 10px;}
+
+/* footer */
+.sp-footer{margin-top:70px;background:#101010;border-top:1px solid var(--line);}
+.sp-footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;padding:44px 0 26px;}
+.sp-footer h2{font-size:14px;margin:0 0 12px;}
+.sp-footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+.sp-footer a,.sp-footer p{font-size:13px;color:var(--muted);text-decoration:none;}
+.sp-footer p{max-width:320px;line-height:1.7;}
+.sp-footer a:hover{color:var(--accent);}
+.sp-footer-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding:16px 0 24px;font-size:12px;color:var(--muted);}
+.legal-link-button{background:none;border:0;padding:0;font:inherit;font-size:13px;color:var(--muted);cursor:pointer;}
+.legal-link-button:hover{color:var(--accent);}
+
+@media (max-width:900px){
+    .sp-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .sp-product{grid-template-columns:1fr;gap:24px;}
+    .sp-footer-grid{grid-template-columns:1fr 1fr;}
+    .sp-trust{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (max-width:640px){
+    body{font-size:14px;}
+    .sp-header-inner{flex-wrap:wrap;gap:4px 16px;min-height:0;padding:10px 0 0;}
+    .sp-logo img{height:26px;}
+    .sp-nav{order:3;flex-basis:100%;overflow-x:auto;scrollbar-width:none;gap:18px;padding:8px 0 10px;}
+    .sp-nav::-webkit-scrollbar{display:none;}
+    .sp-nav a{white-space:nowrap;}
+    .sp-ig{margin-left:auto;}
+    .sp-grid{gap:8px;}
+    .sp-card-body{padding:8px 8px 10px;gap:2px;}
+    .sp-card-title{font-size:12px;line-height:1.25;}
+    .sp-card-size{font-size:9.5px;}
+    .sp-card-price{font-size:13px;padding-top:4px;}
+    .sp-hero{padding:18px 0 22px;margin-bottom:20px;}
+    .sp-lead{font-size:14.5px;}
+    .sp-footer-grid{grid-template-columns:1fr;gap:24px;}
+    .sp-guide h2,.sp-faq h2,.sp-more h2,.sp-related h2,.sp-desc h2{font-size:20px;}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
