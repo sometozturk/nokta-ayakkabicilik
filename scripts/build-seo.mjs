@@ -886,6 +886,63 @@ ${[
 `;
 write('sitemap.xml', sitemap);
 
+// Google Merchant Center ürün dosyası (ücretsiz listeler). Merchant Center bu adresi her gün
+// "planlanmış getirme" ile okur: https://www.noktaayakkabicilik.com/merchant-feed.xml
+// Yalnızca ürün sayfası olan (başka marka adı taşımayan) ürünler girer; her numara ayrı satırdır.
+{
+    const variantSizes = (p) => {
+        if (p.sizeStock && p.sizeStock.length) return p.sizeStock.map((v) => ({ size: v.size, inStock: v.stock > 0 }));
+        const nums = String(p.sizes || '').split('-').map((n) => Number(n)).filter((n) => Number.isInteger(n) && n > 0);
+        const list = nums.length === 2 && nums[1] > nums[0] && nums[1] - nums[0] <= 15
+            ? Array.from({ length: nums[1] - nums[0] + 1 }, (_, i) => nums[0] + i)
+            : nums;
+        return list.map((n) => ({ size: String(n), inStock: p.stock !== 0 }));
+    };
+    const tag = (name, value) => (value === undefined || value === null || value === '' ? '' : `\n      <g:${name}>${esc(value)}</g:${name}>`);
+    const items = [];
+    for (const p of pageProducts) {
+        const a = productAttributes(p);
+        const gender = /unisex/.test(p.t) || isKids(p) ? 'unisex' : p.mainCategory?.audience === 'male' ? 'male' : 'female';
+        const common = [
+            tag('title', p.name),
+            tag('description', productDescription(p)),
+            tag('link', `${SITE}${p.url}`),
+            tag('image_link', p.images[0]),
+            ...p.images.slice(1, 11).map((src) => tag('additional_image_link', src)),
+            tag('price', `${p.price.toFixed(2)} TRY`),
+            tag('condition', 'new'),
+            tag('brand', isHeel(p) ? 'Nokta Shic' : 'Nokta Ayakkabıcılık'),
+            tag('identifier_exists', 'no'),
+            tag('google_product_category', '187'),
+            tag('product_type', isHeel(p) ? 'Ayakkabı > Kadın > Topuklu Ayakkabı' : isWomenBoot(p) ? 'Ayakkabı > Kadın > Bot ve Çizme' : isKids(p) ? 'Ayakkabı > Çocuk' : 'Ayakkabı > Erkek'),
+            tag('gender', gender),
+            tag('age_group', isKids(p) ? 'kids' : 'adult'),
+            tag('color', a.color ? capFirst(a.color) : ''),
+            tag('material', a.materials.map(capFirst).join('/')),
+            `\n      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>`
+        ].join('');
+        const sizes = variantSizes(p);
+        if (!sizes.length) {
+            items.push(`    <item>${tag('id', `NK-${p.id}`)}${common}${tag('availability', p.stock === 0 ? 'out_of_stock' : 'in_stock')}\n    </item>`);
+            continue;
+        }
+        for (const v of sizes) {
+            items.push(`    <item>${tag('id', `NK-${p.id}-${v.size}`)}${tag('item_group_id', `NK-${p.id}`)}${common}${tag('size', v.size)}${tag('size_system', 'EU')}${tag('availability', v.inStock ? 'in_stock' : 'out_of_stock')}\n    </item>`);
+        }
+    }
+    write('merchant-feed.xml', `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+  <channel>
+    <title>Nokta Ayakkabıcılık</title>
+    <link>${SITE}/</link>
+    <description>Nokta Ayakkabıcılık ürün listesi</description>
+${items.join('\n')}
+  </channel>
+</rss>
+`);
+    console.log(`  merchant-feed.xml: ${items.length} satır (${pageProducts.length} ürün)`);
+}
+
 // Ana sayfadaki ürün kartlarının başlığı, ürün sayfası olan ürünlerde o sayfaya bağlanır.
 {
     const indexHtml = readFileSync(join(ROOT, 'index.html'), 'utf8');
