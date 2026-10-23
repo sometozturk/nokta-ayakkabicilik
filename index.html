@@ -1067,14 +1067,25 @@ document.addEventListener('click', function (e) {
     .vitrin-copy > *{pointer-events:auto;}
     .vitrin-eyebrow{display:none;margin:0 0 16px;font:700 12px/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#6b645c;align-items:center;gap:10px;}
     .vitrin-eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--accent,#c1291f);display:block;}
-    .vitrin-tabs{display:inline-flex;gap:2px;padding:4px;border-radius:999px;background:rgba(255,255,255,.62);border:1px solid rgba(27,23,18,.1);backdrop-filter:blur(8px);}
-    .vitrin-tab{min-height:40px;padding:0 16px;border:0;border-radius:999px;background:transparent;color:#6b645c;font:600 14px 'DM Sans',sans-serif;cursor:pointer;transition:background-color .2s ease,color .2s ease;}
-    .vitrin-tab[aria-selected="true"]{background:#1b1712;color:#fff;}
+    .vitrin-tabs{display:flex;gap:6px;margin:0 calc(-1 * var(--vx));padding:2px var(--vx) 4px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--vx),#000 calc(100% - var(--vx)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--vx),#000 calc(100% - var(--vx)),transparent 100%);}
+    .vitrin-tabs::-webkit-scrollbar{display:none;}
+    .vitrin-tab{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 14px;border:1px solid rgba(27,23,18,.12);border-radius:999px;background:rgba(255,255,255,.66);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#4a443d;font:600 13.5px/1 'DM Sans',sans-serif;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .16s ease-out;}
+    .vitrin-tab:active{transform:scale(.97);}
+    .vitrin-tab-count{font:700 11px/1 'DM Sans',sans-serif;color:#8a8279;font-variant-numeric:tabular-nums;transition:color .2s ease;}
+    .vitrin-tab[aria-selected="true"]{background:#1b1712;border-color:#1b1712;color:#fff;}
+    .vitrin-tab[aria-selected="true"] .vitrin-tab-count{color:rgba(255,255,255,.62);}
+    @media (hover:hover){.vitrin-tab:hover{border-color:rgba(27,23,18,.4);}}
     .vitrin-tab:focus-visible,.vitrin-btn:focus-visible,.vitrin-thumb:focus-visible{outline:2px solid var(--accent,#c1291f);outline-offset:2px;}
     .vitrin-info{margin-top:18px;}
     .vitrin-info p{margin:0;}
-    .vitrin-count{display:flex;gap:12px;font:700 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#6b645c;}
+    .vitrin-count{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;font:700 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#6b645c;}
+    .vitrin-all{margin-left:auto;display:inline-flex;align-items:center;gap:4px;min-height:28px;font:600 12.5px/1 'DM Sans',sans-serif;letter-spacing:0;text-transform:none;color:#1b1712;text-decoration:underline;text-decoration-color:rgba(27,23,18,.3);text-underline-offset:4px;pointer-events:auto;}
+    .vitrin-all svg{width:14px;height:14px;}
+    .vitrin-all:hover{color:var(--accent,#c1291f);}
+    .vitrin-all:focus-visible{outline:2px solid var(--accent,#c1291f);outline-offset:2px;border-radius:4px;}
     .vitrin-name{margin-top:10px !important;max-width:12ch;font:700 clamp(30px,8.2vw,78px)/.95 'DM Sans',sans-serif;letter-spacing:-.03em;text-transform:uppercase;color:#1b1712;}
+    .vitrin-name.is-long{font-size:clamp(26px,6.6vw,62px);max-width:14ch;}
+    .vitrin-name.is-xlong{font-size:clamp(22px,5.5vw,50px);max-width:17ch;}
     .vitrin-variant{margin-top:6px !important;font-size:15px;color:#6b645c;}
     .vitrin-price{margin-top:10px !important;font:600 clamp(22px,5.4vw,36px)/1.1 'Fraunces',serif;color:#1b1712;}
     .vitrin-info.is-swap .vitrin-name,.vitrin-info.is-swap .vitrin-variant,.vitrin-info.is-swap .vitrin-price{animation:vitrinSwap .42s cubic-bezier(.23,1,.32,1);}
@@ -1090,19 +1101,25 @@ document.addEventListener('click', function (e) {
     .vitrin-progress{position:absolute;right:14px;top:30%;height:40%;width:2px;border-radius:2px;background:rgba(27,23,18,.12);}
     .vitrin-progress i{display:block;width:100%;height:0;border-radius:2px;background:#1b1712;}
     .vitrin-hint{position:absolute;right:26px;bottom:90px;margin:0;writing-mode:vertical-rl;font:700 11px/1 'DM Sans',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#6b645c;transition:opacity .3s ease;}
-    .vitrin-thumbs{position:absolute;left:0;right:0;bottom:0;display:flex;gap:8px;padding:26px var(--vx) 14px;overflow-x:auto;scrollbar-width:none;background:linear-gradient(180deg,rgba(236,234,230,0),rgba(236,234,230,.94) 46%);}
+    .vitrin-thumbs{position:absolute;left:0;right:0;bottom:0;display:flex;gap:8px;padding:26px var(--vx) 14px;overflow-x:auto;scrollbar-width:none;background:linear-gradient(180deg,rgba(236,234,230,0),rgba(236,234,230,.97) 36%);}
     body.vitrin-active .floating-contact{opacity:0;pointer-events:none;transition:opacity .25s ease;}
     .vitrin-thumbs::-webkit-scrollbar{display:none;}
     .vitrin-thumb{flex:none;width:62px;height:48px;padding:5px;border-radius:12px;border:1px solid rgba(27,23,18,.12);background:rgba(255,255,255,.55);cursor:pointer;transition:transform .16s ease-out,background-color .2s ease,border-color .2s ease;}
     .vitrin-thumb img{display:block;width:100%;height:100%;object-fit:contain;}
+    .vitrin-item img.is-fallback,.vitrin-thumb img.is-fallback{border-radius:14px;mix-blend-mode:multiply;}
     .vitrin-thumb.is-active{background:#fff;border:1.5px solid #1b1712;}
     .vitrin-thumb:active{transform:scale(.96);}
     @media (min-width:901px){
         .vitrin{--vx:max(40px,calc((100vw - 1240px) / 2));}
         .vitrin-copy{top:50%;transform:translateY(-56%);}
         .vitrin-eyebrow{display:flex;}
-        .vitrin-info{margin-top:30px;}
+        .vitrin-info{margin-top:26px;}
+        .vitrin-copy{width:min(520px,calc(100% - 2 * var(--vx)));}
+        .vitrin-tabs{flex-wrap:wrap;margin:0;padding:0;overflow:visible;-webkit-mask-image:none;mask-image:none;}
+        .vitrin-tab{min-height:34px;padding:0 13px;font-size:13px;}
         .vitrin-name{font-size:clamp(48px,5.2vw,82px);}
+        .vitrin-name.is-long{font-size:clamp(40px,4.2vw,64px);}
+        .vitrin-name.is-xlong{font-size:clamp(32px,3.3vw,50px);max-width:18ch;}
         .vitrin-variant{font-size:18px;}
         .vitrin-actions{margin-top:26px;}
         .vitrin-btn{min-height:52px;padding:0 24px;font-size:15px;}
@@ -1212,16 +1229,27 @@ document.addEventListener('click', function (e) {
             </div>
             <div class="vitrin-ui">
                 <div class="vitrin-copy">
-                    <h2 class="vitrin-eyebrow" id="vitrin-title"><span class="dot" aria-hidden="true"></span>Vitrin · Öne çıkan modeller</h2>
-                    <div class="vitrin-tabs" role="tablist" aria-label="Vitrin kategorisi">
-                        <button class="vitrin-tab" type="button" role="tab" aria-selected="true" data-vitrin-tab="sneaker">Sneaker</button>
-                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" data-vitrin-tab="bot">Bot</button>
-                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" data-vitrin-tab="topuklu">Topuklu</button>
+                    <h2 class="vitrin-eyebrow" id="vitrin-title"><span class="dot" aria-hidden="true"></span><span id="vitrin-title-text">Vitrin · 159 model</span></h2>
+                    <div class="vitrin-tabs" id="vitrin-tabs" role="tablist" aria-label="Vitrin markaları ve kategorileri">
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="true" lang="en">Nike</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" lang="en">Adidas</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" lang="en">Alexander Mcqueen</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" lang="en">Calvin Klein</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" lang="en">Goldengoose</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" lang="en">Lacoste</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false">Lufian</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false">Oxford</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" lang="en">Prada</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" lang="en">Vans</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false">Çocuk Sneakers</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false">Erkek Bot</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false">Kadın Bot</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false">Topuklu Nokta Shic</button>
                     </div>
                     <div class="vitrin-info" id="vitrin-info" aria-live="polite">
-                        <p class="vitrin-count"><span id="vitrin-count">01 / 10</span><span id="vitrin-brand">Nike</span></p>
-                        <p class="vitrin-name" id="vitrin-name">Air Force 1</p>
-                        <p class="vitrin-variant" id="vitrin-variant">White / Black Swoosh</p>
+                        <p class="vitrin-count"><span id="vitrin-count">01 / 37</span><span id="vitrin-brand" lang="en">Nike</span><a class="vitrin-all" id="vitrin-all" href="#urunler">Tümünü listele<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+                        <p class="vitrin-name" id="vitrin-name" lang="en">Air Force 1</p>
+                        <p class="vitrin-variant" id="vitrin-variant">White / Black Swoosh · 36–45 numara</p>
                         <p class="vitrin-price" id="vitrin-price">1.400 TL</p>
                     </div>
                     <div class="vitrin-actions">
@@ -3450,11 +3478,13 @@ document.addEventListener('click', function (e) {
     if (!section) return;
     const pin = section.querySelector('.vitrin-pin');
     const rack = document.getElementById('vitrin-rack');
+    const tabsBox = document.getElementById('vitrin-tabs');
     const stringPath = document.getElementById('vitrin-string-path');
     const stringSvg = section.querySelector('.vitrin-string');
     const thumbsBox = document.getElementById('vitrin-thumbs');
     const info = document.getElementById('vitrin-info');
     const el = {
+        title: document.getElementById('vitrin-title-text'),
         count: document.getElementById('vitrin-count'),
         brand: document.getElementById('vitrin-brand'),
         name: document.getElementById('vitrin-name'),
@@ -3462,91 +3492,196 @@ document.addEventListener('click', function (e) {
         price: document.getElementById('vitrin-price'),
         detail: document.getElementById('vitrin-detail'),
         shopier: document.getElementById('vitrin-shopier'),
+        all: document.getElementById('vitrin-all'),
         bar: document.getElementById('vitrin-progress-bar'),
         hint: document.getElementById('vitrin-hint')
     };
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    // Curated showcase: product id, display name, variant, image aspect (w/h). Prices come from products.json.
-    const SHELVES = {
-        sneaker: [
-            { id: 45, b: 'Nike', n: 'Air Force 1', s: 'White / Black Swoosh', ar: 1.958 },
-            { id: 28, b: 'Nike', n: 'Air Force 1', s: 'Triple White', ar: 2.017 },
-            { id: 32, b: 'Nike', n: 'Dunk Low', s: 'Panda', ar: 1.988 },
-            { id: 29, b: 'Nike', n: 'Dunk Low', s: 'Red / White', ar: 2.062 },
-            { id: 89, b: 'Nike', n: 'Dunk Low', s: 'White Shine', ar: 2.028 },
-            { id: 6, b: 'Nike', n: 'Jordan 1 Low', s: 'Dark Red / Black', ar: 2.111 },
-            { id: 8, b: 'Nike', n: 'Jordan 1 Low', s: 'Pembe', ar: 1.979 },
-            { id: 4, b: 'Nike', n: 'P-6000', s: 'Silver', ar: 2.098 },
-            { id: 34, b: 'Adidas', n: 'Samba', s: 'White', ar: 2.47 },
-            { id: 22, b: 'Adidas', n: 'Spezial', s: 'Black', ar: 2.198 }
-        ],
-        bot: [
-            { id: 96, b: 'Kadın Bot', n: 'Cat Bot', s: 'Taba', ar: 1.54 },
-            { id: 102, b: 'Kadın Bot', n: 'Cat Bot', s: 'Siyah', ar: 1.444 },
-            { id: 95, b: 'Kadın Bot', n: 'Yüksek Topuk Bot', s: 'Siyah', ar: 1.24 },
-            { id: 98, b: 'Kadın Bot', n: 'Askeri Bot', s: 'Siyah', ar: 0.828 },
-            { id: 103, b: 'Kadın Bot', n: 'Tozluklu Çizme', s: 'Siyah', ar: 0.632 },
-            { id: 104, b: 'Kadın Bot', n: 'Tozluklu Çizme', s: 'Acı Kahve', ar: 0.632 },
-            { id: 94, b: 'Kadın Bot', n: 'İnce Topuklu Bot', s: 'Siyah', ar: 1.342 },
-            { id: 91, b: 'Unisex', n: 'Dağ Botu', s: 'Su geçirmez', ar: 1.322 },
-            { id: 105, b: 'Erkek Bot', n: 'Deri Bot', s: 'Siyah', ar: 1.602 }
-        ],
-        topuklu: [
-            { id: 114, b: 'Nokta Shic', n: 'Classic Topuklu', s: 'Bordo', ar: 1.628 },
-            { id: 124, b: 'Nokta Shic', n: 'Simli Topuklu', s: 'Gold', ar: 1.496 },
-            { id: 125, b: 'Nokta Shic', n: 'Simli Topuklu', s: 'Gümüş', ar: 1.349 },
-            { id: 120, b: 'Nokta Shic', n: 'Kurdeleli Kadeh Topuk', s: 'Gümüş', ar: 1.259 },
-            { id: 129, b: 'Nokta Shic', n: 'Gold Tokalı Topuklu', s: 'Beyaz', ar: 1.535 },
-            { id: 133, b: 'Nokta Shic', n: 'Çapraz Tokalı Topuklu', s: 'Bordo', ar: 1.531 },
-            { id: 139, b: 'Nokta Shic', n: 'Süet İnce Topuk', s: 'Bej', ar: 1.34 },
-            { id: 147, b: 'Nokta Shic', n: 'Gold Detaylı Kısa Topuk', s: 'Siyah', ar: 2.153 }
-        ]
+    /* Tabs follow the catalogue filters below: brand chips for uncategorised products, then the four categories. */
+    const BRAND_ORDER = ['Nike', 'Adidas', 'Alexander Mcqueen', 'Calvin Klein', 'Goldengoose', 'Lacoste', 'Lufian', 'Oxford', 'Prada', 'Vans'];
+    const KNOWN_BRANDS = ['Nike', 'Oxford', 'Adidas', 'Lacoste', 'Lufian', 'Calvin Klein', 'Alexander Mcqueen', 'Goldengoose', 'Prada'];
+    const CATEGORIES = [
+        ['Çocuk Sneakers', '__children__'],
+        ['Erkek Bot', '__mens-boots__'],
+        ['Kadın Bot', '__womens-boots__'],
+        ['Topuklu Nokta Shic', '__topuklu__']
+    ];
+    const CATEGORY_NAMES = CATEGORIES.map(c => c[0]);
+    /* Brands whose model names are English: uppercase them with English rules (AIR, not AİR). */
+    const LATIN = new Set(['Nike', 'Adidas', 'Alexander Mcqueen', 'Calvin Klein', 'Goldengoose', 'Lacoste', 'Prada', 'Vans']);
+    /* Hand-written names for the best sellers; everything else is named from its title. */
+    const CURATED = {
+        45: ['Air Force 1', 'White / Black Swoosh'], 28: ['Air Force 1', 'Triple White'], 32: ['Dunk Low', 'Panda'],
+        29: ['Dunk Low', 'Red / White'], 89: ['Dunk Low', 'White Shine'], 6: ['Jordan 1 Low', 'Dark Red / Black'],
+        8: ['Jordan 1 Low', 'Pembe'], 4: ['P-6000', 'Silver'], 34: ['Samba', 'White'], 22: ['Spezial', 'Black'],
+        96: ['Cat Bot', 'Taba'], 102: ['Cat Bot', 'Siyah'], 95: ['Yüksek Topuk Bot', 'Siyah'], 98: ['Askeri Bot', 'Siyah'],
+        103: ['Tozluklu Çizme', 'Siyah'], 104: ['Tozluklu Çizme', 'Acı Kahve'], 94: ['İnce Topuklu Bot', 'Siyah'],
+        91: ['Dağ Botu', 'Su geçirmez'], 105: ['Deri Bot', 'Siyah'], 114: ['Classic Topuklu', 'Bordo'],
+        124: ['Simli Topuklu', 'Gold'], 125: ['Simli Topuklu', 'Gümüş'], 120: ['Kurdeleli Kadeh Topuk', 'Gümüş'],
+        129: ['Gold Tokalı Topuklu', 'Beyaz'], 133: ['Çapraz Tokalı Topuklu', 'Bordo'], 139: ['Süet İnce Topuk', 'Bej'],
+        147: ['Gold Detaylı Kısa Topuk', 'Siyah']
     };
-    const FALLBACK_PRICES = { 45: 1400, 28: 1400, 32: 1249, 29: 1249, 89: 1560, 6: 1400, 8: 1400, 4: 2099, 34: 1500, 22: 1750, 96: 1999, 102: 1999, 95: 2450, 98: 2450, 103: 3250, 104: 3250, 94: 2990, 91: 2650, 105: 3400, 114: 2560, 124: 1650, 125: 1650, 120: 1450, 129: 1300, 133: 1650, 139: 1900, 147: 1490 };
-    let productsById = {};
-    const priceText = id => {
-        const p = productsById[id];
-        const n = parseFloat(String(p ? p.price : FALLBACK_PRICES[id]).replace(',', '.'));
-        return isNaN(n) ? '' : `${n.toLocaleString('tr-TR')} TL`;
-    };
-    const urlFor = id => (productsById[id] && productsById[id].url) || 'https://www.shopier.com/noktaayakkabi';
+    const LEAD = [45, 28, 32, 29, 89, 6, 8, 4, 34, 22, 96, 102, 95, 98, 103, 104, 94, 91, 105, 114, 124, 125, 120, 129, 133, 139, 147];
+    /* Cut-out aspect ratios (width / height) so boxes are right before the images arrive. */
+    const AR = {"1":1.857,"2":1.5,"3":2.015,"4":2.104,"5":2.227,"6":2.111,"7":2.065,"8":1.979,"9":2.082,"10":2.302,"11":2.095,"12":2.117,"13":2.287,"14":2.384,"15":2.215,"16":2.156,"17":2.117,"18":2.041,"19":2.158,"20":2.114,"21":2.209,"22":2.217,"23":2.274,"24":2.117,"25":2.1,"26":2.05,"27":2.046,"28":2.017,"29":2.057,"30":2.094,"31":1.997,"32":1.99,"33":1.99,"34":2.477,"35":2.227,"36":2.387,"37":2.197,"38":2.227,"39":1.919,"40":2.048,"41":2.145,"42":2.199,"43":1.921,"44":1.935,"45":1.96,"46":2.076,"47":1.997,"48":1.997,"49":2.24,"50":2.089,"51":1.365,"52":1.303,"53":1.319,"54":1.316,"55":2.017,"56":2.029,"57":1.267,"58":1.949,"59":1.605,"60":2.005,"61":2.144,"62":1.967,"63":2.11,"64":2.093,"65":2.01,"66":1.985,"67":1.663,"68":1.706,"69":2.181,"70":2.098,"71":2.077,"72":1.972,"73":2.182,"74":1.938,"75":1.92,"76":1.971,"77":1.889,"78":1.749,"79":1.801,"80":1.963,"81":1.889,"82":2.069,"83":1.829,"84":2.038,"85":2.03,"86":1.91,"87":1.893,"88":1.953,"89":2.029,"90":2.155,"91":1.323,"92":1.33,"93":1.181,"94":1.34,"95":1.238,"96":1.541,"97":1.199,"98":0.825,"99":1.605,"100":1.472,"101":1.324,"102":1.448,"103":0.629,"104":0.629,"105":1.595,"106":1.726,"107":1.667,"108":1.644,"109":1.656,"110":0.586,"111":0.691,"112":2.345,"113":2.301,"114":1.639,"115":1.663,"116":1.525,"117":1.576,"118":1.319,"119":1.371,"120":1.26,"121":1.121,"122":1.329,"123":1.585,"124":1.5,"125":1.345,"126":1.713,"127":1.381,"128":1.599,"129":1.538,"130":1.392,"131":1.373,"132":1.534,"133":1.532,"134":1.559,"135":1.158,"136":1.447,"137":1.35,"138":1.327,"139":1.346,"140":1.277,"141":1.486,"142":1.566,"143":1.275,"144":1.429,"145":1.344,"146":1.18,"147":2.161,"148":2.163,"149":1.46,"150":1.457,"151":1.115,"152":1.332,"153":1.79,"154":1.618,"155":1.663,"156":1.752,"157":1.72,"158":1.665,"159":1.364};
+    const COLORS = new Set(['white', 'black', 'blue', 'red', 'pink', 'brown', 'purple', 'green', 'gray', 'grey', 'silver', 'bej', 'beige',
+        'siyah', 'beyaz', 'bordo', 'kahve', 'gümüş', 'gold', 'şeffaf', 'pembe', 'taba', 'lacivert', 'gri', 'yeşil', 'kırmızı', 'mavi', 'mor']);
+    const LEAD_MODS = new Set(['full', 'triple', 'acı', 'dark']);
+    const DROP = new Set(['kadın', 'erkek', 'unisex', 'çocuk', 'sneaker']);
 
-    let shelf = 'sneaker';
-    let items = SHELVES[shelf];
-    let nodes = [];
-    let thumbs = [];
-    let geo = { W: 390, H: 700, X0: 210, AMP: 50, Y0: 450, GAP: 190, BASE: 300, STEP: 240, top: 0 };
-    let target = 0, shown = 0, active = -1, raf = 0;
+    const low = s => s.toLocaleLowerCase('tr-TR');
+    const isColor = w => { const parts = low(w).split('-').filter(Boolean); return parts.length > 0 && COLORS.has(parts[0]); };
+    const brandOf = title => KNOWN_BRANDS.find(b => low(title).startsWith(low(b))) || title.split(' ')[0];
+    const sizeOf = title => { const m = title.match(/\(([^)]+)\)/); return m ? m[1].replace(/\s*-\s*/g, '–') : ''; };
+    const tidy = s => s.replace(/\s*-\s*/g, ' / ').replace(/\s{2,}/g, ' ').trim();
+
+    /* "Nike Dunk Low Pro Black-White (36-45)" -> name "Dunk Low Pro", colour "Black / White".
+       Turkish titles ("Siyah Kısa Topuk Gümüş Taşlı") lift out one colour word and keep the rest as the name. */
+    const FEATURE = new Set(['detaylı', 'taşlı', 'tokalı', 'kurdeleli', 'desenli']);
+    function describe(title, brand, isHeel, latin) {
+        let words = title.replace(/\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
+        if (brand && low(words.slice(0, brand.split(' ').length).join(' ')) === low(brand)) words = words.slice(brand.split(' ').length);
+        const unisex = words.some(w => low(w) === 'unisex');
+        words = words.filter(w => !DROP.has(low(w)));
+        let heelWord = false;
+        if (isHeel && words.length > 1 && low(words[words.length - 1]) === 'ayakkabı' && low(words[words.length - 2]) === 'topuklu') {
+            words = words.slice(0, -2);
+            heelWord = true;
+        }
+        let name = words, color = [];
+        if (latin) {
+            if (words.length && (isColor(words[0]) || (LEAD_MODS.has(low(words[0])) && words[1] && isColor(words[1])))) {
+                const n = LEAD_MODS.has(low(words[0])) ? 2 : 1;
+                color = words.slice(0, n); name = words.slice(n);
+            } else {
+                let at = words.findIndex((w, i) => i > 0 && isColor(w));
+                if (at > 1 && LEAD_MODS.has(low(words[at - 1]))) at -= 1;
+                if (at > 0) { name = words.slice(0, at); color = words.slice(at); }
+            }
+        } else {
+            for (let i = 0; i < words.length; i++) {
+                const w = low(words[i]), next = low(words[i + 1] || '');
+                let k = 0;
+                if (w === 'acı' && next === 'kahve') k = 2;
+                else if (isColor(words[i]) && !FEATURE.has(next)) k = next === 'mat' ? 2 : 1;
+                if (k) { color = words.slice(i, i + k); name = [...words.slice(0, i), ...words.slice(i + k)]; break; }
+            }
+        }
+        if (!name.length) { name = color; color = []; }
+        let n = tidy(name.join(' '));
+        if (heelWord && !/topuk/i.test(n)) n = `${n} Topuklu`;
+        return { name: n || title, color: tidy(color.join(' ')), unisex };
+    }
+    const priceText = p => { const n = parseFloat(String(p.price).replace(',', '.')); return isNaN(n) ? '' : `${n.toLocaleString('tr-TR')} TL`; };
+
+    let shelves = {}, order = [], shelf = '', items = [], nodes = [], thumbs = [], tabs = [];
+    let geo = { W: 390, H: 700, X0: 195, AMP: 50, Y0: 450, GAP: 190, BASE: 300, STEP: 210, top: 0 };
+    let target = 0, shown = 0, active = -1, raf = 0, ready = false;
+
+    function makeItem(p, idx, tab) {
+        const id = Number(p.id);
+        const title = String(p.title || '');
+        const cats = [...new Set([...(Array.isArray(p.categories) ? p.categories : []), p.category].filter(Boolean))];
+        const isHeel = cats.includes('Topuklu Nokta Shic') && (p.category === 'Topuklu Nokta Shic' || !p.category);
+        const known = KNOWN_BRANDS.find(b => low(title).startsWith(low(b)));
+        const isCat = CATEGORY_NAMES.includes(tab);
+        const brand = isCat ? (known || (tab === 'Topuklu Nokta Shic' ? 'Nokta Shic' : tab === 'Çocuk Sneakers' ? 'Çocuk' : tab)) : tab;
+        const latin = LATIN.has(known || brandOf(title));
+        const d = describe(title, known || (isCat ? '' : brandOf(title)), isHeel, latin);
+        const cur = CURATED[id];
+        const size = sizeOf(title);
+        const variant = [cur ? cur[1] : d.color, d.unisex ? 'Unisex' : '', size ? `${size} numara` : ''].filter(Boolean).join(' · ');
+        return {
+            id, p, idx,
+            b: brand,
+            n: cur ? cur[0] : d.name,
+            s: variant,
+            latin,
+            primary: !isCat || p.category === tab || (!p.category && cats[0] === tab),
+            ar: AR[id] || 0,
+            loaded: false
+        };
+    }
+
+    function group(list) {
+        const byLabel = {};
+        list.forEach((p, idx) => {
+            if (!p || p.id == null) return;
+            const cats = [...new Set([...(Array.isArray(p.categories) ? p.categories : []), p.category].filter(Boolean))].filter(c => CATEGORY_NAMES.includes(c));
+            const labels = cats.length ? cats : [brandOf(String(p.title || ''))];
+            labels.forEach(label => (byLabel[label] = byLabel[label] || []).push(makeItem(p, idx, label)));
+        });
+        Object.values(byLabel).forEach(arr => arr.sort((a, b) => {
+            if (a.primary !== b.primary) return a.primary ? -1 : 1;
+            const la = LEAD.indexOf(a.id), lb = LEAD.indexOf(b.id);
+            if (la !== -1 || lb !== -1) return (la === -1 ? 1e3 : la) - (lb === -1 ? 1e3 : lb);
+            return a.idx - b.idx;
+        }));
+        const rank = l => { const b = BRAND_ORDER.indexOf(l), c = CATEGORY_NAMES.indexOf(l); return c !== -1 ? 200 + c : b !== -1 ? b : 100; };
+        const labels = Object.keys(byLabel).sort((a, b) => rank(a) - rank(b) || a.localeCompare(b, 'tr-TR'));
+        return { byLabel, labels, total: list.filter(p => p && p.id != null).length };
+    }
 
     function measure() {
         const header = document.querySelector('header');
         const top = header ? Math.round(header.getBoundingClientRect().height) : 0;
         section.style.setProperty('--vitrin-top', `${top}px`);
         const W = pin.clientWidth, H = pin.clientHeight;
-        const desk = W >= 901;
-        geo = desk
-            ? { W, H, X0: W * 0.64, AMP: W * 0.085, Y0: H * 0.5, GAP: H * 0.34, BASE: Math.min(W * 0.36, 600), STEP: Math.max(260, H * 0.42), top }
-            : { W, H, X0: W * 0.5, AMP: W * 0.13, Y0: H * 0.655, GAP: H * 0.27, BASE: Math.min(W * 0.76, 340), STEP: Math.max(220, H * 0.36), top };
-        section.style.height = `${pin.clientHeight + (items.length - 1) * geo.STEP}px`;
+        const long = items.length > 14;
+        geo = W >= 901
+            ? { W, H, X0: W * 0.64, AMP: W * 0.085, Y0: H * 0.5, GAP: H * 0.34, BASE: Math.min(W * 0.36, 600), STEP: long ? Math.max(170, H * 0.24) : Math.max(220, H * 0.36), top }
+            : { W, H, X0: W * 0.5, AMP: W * 0.13, Y0: H * 0.665, GAP: H * 0.27, BASE: Math.min(W * 0.76, 340), STEP: long ? Math.max(150, H * 0.22) : Math.max(180, H * 0.3), top };
+        section.style.height = `${pin.clientHeight + Math.max(0, items.length - 1) * geo.STEP}px`;
         stringSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     }
 
-    function build() {
+    function buildTabs() {
+        tabsBox.replaceChildren();
+        tabs = order.map(label => {
+            const t = document.createElement('button');
+            t.type = 'button';
+            t.className = 'vitrin-tab';
+            t.setAttribute('role', 'tab');
+            t.setAttribute('aria-selected', String(label === shelf));
+            t.lang = LATIN.has(label) ? 'en' : 'tr';
+            t.append(label);
+            const c = document.createElement('span');
+            c.className = 'vitrin-tab-count';
+            c.textContent = shelves[label].length;
+            t.appendChild(c);
+            t.addEventListener('click', () => selectShelf(label, true));
+            tabsBox.appendChild(t);
+            return t;
+        });
+    }
+
+    function setSrc(img, it, small) {
+        img.addEventListener('error', () => {
+            if (it.p.image && img.src !== it.p.image) { img.src = it.p.image; img.classList.add('is-fallback'); }
+        }, { once: true });
+        img.src = small ? `assets/vitrin/t/${it.id}.webp` : `assets/vitrin/${it.id}.webp`;
+    }
+
+    function buildRack() {
         rack.replaceChildren();
         thumbsBox.replaceChildren();
         nodes = items.map((it, i) => {
+            it.loaded = false;
             const b = document.createElement('button');
             b.type = 'button';
             b.className = 'vitrin-item';
             b.tabIndex = -1;
             b.setAttribute('aria-hidden', 'true');
+            b.style.visibility = 'hidden';
             const img = document.createElement('img');
-            img.src = `assets/vitrin/${it.id}.webp`;
             img.alt = '';
             img.decoding = 'async';
-            img.loading = i < 3 ? 'eager' : 'lazy';
-            img.style.animationDelay = `-${(i * 0.7).toFixed(1)}s`;
+            img.draggable = false;
+            img.style.animationDelay = `-${((i % 7) * 0.7).toFixed(1)}s`;
+            img.addEventListener('load', () => {
+                if (!it.ar && img.naturalWidth) { it.ar = img.naturalWidth / img.naturalHeight; render(); }
+            });
             b.appendChild(img);
             b.addEventListener('click', () => openDetail(it));
             rack.appendChild(b);
@@ -3556,16 +3691,18 @@ document.addEventListener('click', function (e) {
             const t = document.createElement('button');
             t.type = 'button';
             t.className = 'vitrin-thumb';
-            t.setAttribute('aria-label', `${it.b} ${it.n} ${it.s} göster`);
+            t.setAttribute('aria-label', `${it.b} ${it.n} göster`);
             const img = document.createElement('img');
-            img.src = `assets/vitrin/${it.id}.webp`;
             img.alt = '';
             img.loading = 'lazy';
+            img.decoding = 'async';
+            setSrc(img, it, true);
             t.appendChild(img);
             t.addEventListener('click', () => goTo(i));
             thumbsBox.appendChild(t);
             return t;
         });
+        thumbsBox.scrollLeft = 0;
         active = -1;
     }
 
@@ -3573,15 +3710,18 @@ document.addEventListener('click', function (e) {
     const pathY = d => geo.Y0 + d * geo.GAP;
 
     function render() {
+        if (!ready) return;
         const p = shown;
         nodes.forEach((node, i) => {
             const it = items[i];
             const d = i - p, ad = Math.abs(d);
-            if (ad > 2.7) { node.style.visibility = 'hidden'; return; }
+            if (ad < 3.6 && !it.loaded) { it.loaded = true; setSrc(node.firstChild, it, false); }
+            if (ad > 2.7) { if (node.style.visibility !== 'hidden') node.style.visibility = 'hidden'; return; }
             node.style.visibility = 'visible';
+            const ar = it.ar || 2;
             const sc = 1 - 0.46 * Math.min(ad, 1.45);
             const boxW = geo.BASE * sc;
-            const hk = it.ar < 1 ? 0.95 : it.ar < 1.45 ? 0.74 : it.ar < 1.8 ? 0.66 : 0.58;
+            const hk = ar < 1 ? 0.95 : ar < 1.45 ? 0.74 : ar < 1.8 ? 0.66 : 0.58;
             const boxH = geo.BASE * sc * hk;
             const rot = Math.max(-14, Math.min(14, -d * 9)) - 3;
             const op = Math.max(0, 1 - (d < 0 ? 0.72 : 0.42) * ad);
@@ -3605,15 +3745,17 @@ document.addEventListener('click', function (e) {
         const first = active === -1;
         active = a;
         const it = items[a];
+        if (!it) return;
         el.count.textContent = `${String(a + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
-        const latin = it.b === 'Nike' || it.b === 'Adidas';
-        el.brand.lang = latin ? 'en' : 'tr';
-        el.name.lang = latin ? 'en' : 'tr';
+        el.brand.lang = it.latin ? 'en' : 'tr';
+        el.name.lang = it.latin ? 'en' : 'tr';
         el.brand.textContent = it.b;
         el.name.textContent = it.n;
+        el.name.classList.toggle('is-long', it.n.length > 15 && it.n.length <= 24);
+        el.name.classList.toggle('is-xlong', it.n.length > 24);
         el.variant.textContent = it.s;
-        el.price.textContent = priceText(it.id);
-        el.shopier.href = urlFor(it.id);
+        el.price.textContent = priceText(it.p);
+        el.shopier.href = it.p.url || 'https://www.shopier.com/noktaayakkabi';
         thumbs.forEach((t, i) => t.classList.toggle('is-active', i === a));
         if (!first) {
             info.classList.remove('is-swap');
@@ -3623,14 +3765,16 @@ document.addEventListener('click', function (e) {
         const t = thumbs[a];
         if (t) {
             const box = thumbsBox.getBoundingClientRect(), r = t.getBoundingClientRect();
-            if (r.left < box.left + 10 || r.right > box.right - 10) thumbsBox.scrollTo({ left: thumbsBox.scrollLeft + r.left - box.left - box.width / 2 + r.width / 2, behavior: 'smooth' });
+            if (r.left < box.left + 10 || r.right > box.right - 10) {
+                thumbsBox.scrollTo({ left: thumbsBox.scrollLeft + r.left - box.left - box.width / 2 + r.width / 2, behavior: reduced.matches ? 'auto' : 'smooth' });
+            }
         }
     }
 
     function readScroll() {
         const rect = section.getBoundingClientRect();
         const raw = (geo.top - rect.top) / geo.STEP;
-        target = Math.max(0, Math.min(items.length - 1, raw));
+        target = Math.max(0, Math.min(Math.max(0, items.length - 1), raw));
         document.body.classList.toggle('vitrin-active', rect.top <= geo.top + 2 && rect.bottom >= window.innerHeight - 2);
     }
 
@@ -3649,40 +3793,66 @@ document.addEventListener('click', function (e) {
 
     function openDetail(it) {
         if (window.NoktaOpenProduct && window.NoktaOpenProduct(it.id)) return;
-        window.open(urlFor(it.id), '_blank', 'noopener');
+        window.open(it.p.url || 'https://www.shopier.com/noktaayakkabi', '_blank', 'noopener');
     }
-    el.detail.addEventListener('click', () => { if (active >= 0) openDetail(items[active]); });
+    el.detail.addEventListener('click', () => { if (active >= 0 && items[active]) openDetail(items[active]); });
 
-    section.querySelectorAll('[data-vitrin-tab]').forEach(tab => {
-        tab.addEventListener('click', () => {
-            const key = tab.dataset.vitrinTab;
-            if (key === shelf || !SHELVES[key]) return;
-            section.querySelectorAll('[data-vitrin-tab]').forEach(t => t.setAttribute('aria-selected', String(t === tab)));
-            const inside = section.getBoundingClientRect().top <= geo.top + 1;
-            shelf = key; items = SHELVES[key];
-            build(); measure();
-            if (inside) window.scrollTo({ top: sectionStart() + 1, behavior: 'auto' });
-            target = shown = 0;
-            readScroll(); shown = target; render();
-        });
+    /* "Hepsini listele": pick the same chip in the catalogue below and jump there. */
+    el.all.addEventListener('click', event => {
+        event.preventDefault();
+        const cat = CATEGORIES.find(c => c[0] === shelf);
+        const value = cat ? cat[1] : low(shelf);
+        const chip = [...document.querySelectorAll('#brand-filters [data-brand-filter]')].find(b => b.dataset.brandFilter === value);
+        if (chip) chip.click();
+        const grid = document.getElementById('urunler');
+        if (!grid) return;
+        const header = document.querySelector('header');
+        const top = window.scrollY + grid.getBoundingClientRect().top - (header ? header.offsetHeight : 0) - 8;
+        window.scrollTo({ top, behavior: reduced.matches ? 'auto' : 'smooth' });
     });
 
-    const useProducts = list => {
-        if (!Array.isArray(list)) return;
-        productsById = Object.fromEntries(list.filter(p => p && p.id != null).map(p => [Number(p.id), p]));
-        if (active >= 0) { const a = active; active = -1; setActive(a); }
-    };
-    document.addEventListener('nokta:products', e => useProducts(e.detail));
-    if (Array.isArray(window.NoktaProducts)) useProducts(window.NoktaProducts);
-    else setTimeout(() => {
-        if (Object.keys(productsById).length) return;
-        fetch('products.json').then(r => r.ok ? r.json() : null).then(useProducts).catch(() => {});
+    function selectShelf(label, fromUser) {
+        if (!shelves[label] || (label === shelf && fromUser)) return;
+        const inside = section.getBoundingClientRect().top <= geo.top + 1;
+        shelf = label;
+        items = shelves[label];
+        tabs.forEach((t, i) => t.setAttribute('aria-selected', String(order[i] === label)));
+        const tab = tabs[order.indexOf(label)];
+        if (tab) {
+            const box = tabsBox.getBoundingClientRect(), r = tab.getBoundingClientRect();
+            if (r.left < box.left || r.right > box.right) tabsBox.scrollTo({ left: tabsBox.scrollLeft + r.left - box.left - box.width / 2 + r.width / 2, behavior: fromUser && !reduced.matches ? 'smooth' : 'auto' });
+        }
+        buildRack();
+        measure();
+        if (inside && fromUser) window.scrollTo({ top: sectionStart() + 1, behavior: 'auto' });
+        readScroll();
+        shown = target;
+        render();
+    }
+
+    function init(list) {
+        if (ready || !Array.isArray(list) || !list.length) return;
+        const g = group(list);
+        shelves = g.byLabel;
+        order = g.labels;
+        if (el.title) el.title.textContent = `Vitrin · ${g.total} model`;
+        ready = true;
+        shelf = '';
+        const first = order.includes('Nike') ? 'Nike' : order[0];
+        buildTabs();
+        selectShelf(first, false);
+    }
+
+    document.addEventListener('nokta:products', e => init(e.detail));
+    if (Array.isArray(window.NoktaProducts)) init(window.NoktaProducts);
+    setTimeout(() => {
+        if (!ready) fetch('products.json').then(r => (r.ok ? r.json() : null)).then(init).catch(() => {});
     }, 2500);
 
-    build(); measure(); readScroll(); shown = target; render();
-    window.addEventListener('scroll', () => { readScroll(); schedule(); }, { passive: true });
-    window.addEventListener('resize', () => { measure(); readScroll(); shown = target; render(); });
-    window.addEventListener('load', () => { measure(); readScroll(); shown = target; render(); }, { once: true });
+    measure();
+    window.addEventListener('scroll', () => { if (!ready) return; readScroll(); schedule(); }, { passive: true });
+    window.addEventListener('resize', () => { if (!ready) return; measure(); readScroll(); shown = target; render(); });
+    window.addEventListener('load', () => { if (!ready) return; measure(); readScroll(); shown = target; render(); }, { once: true });
 })();
 </script>
 </body>
