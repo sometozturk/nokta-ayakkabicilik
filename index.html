@@ -607,7 +607,7 @@ document.addEventListener('click', function (e) {
     .modal-gallery-dots .gallery-dot{background:rgba(245,239,228,.5);}
     .modal-gallery-dots .gallery-dot.active{background:#fff;}
     .modal-content{padding:38px;display:flex;flex-direction:column;justify-content:center;}
-    .modal-close{position:absolute;right:14px;top:12px;width:34px;height:34px;border:1px solid rgba(25,23,21,.18);border-radius:50%;background:#fff;color:#191715;font-size:22px;line-height:1;cursor:pointer;}
+    .modal-close{position:absolute;z-index:5;right:12px;top:12px;width:42px;height:42px;border:1px solid rgba(25,23,21,.18);border-radius:50%;background:#fff;color:#191715;font-size:22px;line-height:1;cursor:pointer;}
     .auth-modal-backdrop{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(17,14,12,.52);backdrop-filter:blur(5px);opacity:0;pointer-events:none;transition:opacity .25s ease;}
     .auth-modal-backdrop.is-open{display:flex;opacity:1;pointer-events:auto;}
     .auth-modal{position:relative;width:min(420px,100%);max-height:min(82vh,720px);overflow:auto;background:linear-gradient(180deg,#fbf7f1 0%,#f4efe8 100%);color:#191715;box-shadow:0 28px 90px rgba(0,0,0,.26),0 10px 26px rgba(0,0,0,.12);padding:28px 22px 22px;border:1px solid rgba(25,23,21,.10);border-radius:24px;transform:translateY(16px) scale(.97);opacity:0;transition:transform .25s ease,opacity .25s ease;}
@@ -1049,6 +1049,73 @@ document.addEventListener('click', function (e) {
         window.addEventListener('load', setHeaderHeight);
     })();
 </script>
+<style id="vitrin-styles">
+    /* ---------- vitrin: kayan ayakkabı rafı ---------- */
+    .vitrin{position:relative;background:#eceae6;color:#1b1712;--vx:20px;--vitrin-top:0px;}
+    .vitrin-pin{position:sticky;top:var(--vitrin-top);height:calc(100vh - var(--vitrin-top));overflow:hidden;background-color:#eceae6;background-image:repeating-radial-gradient(circle at 112% 42%,rgba(27,23,18,0) 0 30px,rgba(27,23,18,.055) 30px 31px);}
+    @supports (height:100svh){.vitrin-pin{height:calc(100svh - var(--vitrin-top));}}
+    .vitrin-stage{position:absolute;inset:0;}
+    .vitrin-string{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;}
+    .vitrin-string path{fill:none;stroke:rgba(27,23,18,.26);stroke-width:1;}
+    .vitrin-rack{position:absolute;inset:0;}
+    .vitrin-item{position:absolute;left:0;top:0;padding:0;margin:0;border:0;background:none;cursor:pointer;will-change:transform,opacity;-webkit-tap-highlight-color:transparent;}
+    .vitrin-item img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 24px 20px rgba(27,23,18,.18));animation:vitrinBob 4.4s ease-in-out infinite;}
+    @keyframes vitrinBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+    .vitrin-ui{position:absolute;inset:0;pointer-events:none;}
+    .vitrin-ui > *{pointer-events:auto;}
+    .vitrin-copy{position:absolute;left:var(--vx);top:18px;width:min(440px,calc(100% - 2 * var(--vx)));pointer-events:none;}
+    .vitrin-copy > *{pointer-events:auto;}
+    .vitrin-eyebrow{display:none;margin:0 0 16px;font:700 12px/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#6b645c;align-items:center;gap:10px;}
+    .vitrin-eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--accent,#c1291f);display:block;}
+    .vitrin-tabs{display:inline-flex;gap:2px;padding:4px;border-radius:999px;background:rgba(255,255,255,.62);border:1px solid rgba(27,23,18,.1);backdrop-filter:blur(8px);}
+    .vitrin-tab{min-height:40px;padding:0 16px;border:0;border-radius:999px;background:transparent;color:#6b645c;font:600 14px 'DM Sans',sans-serif;cursor:pointer;transition:background-color .2s ease,color .2s ease;}
+    .vitrin-tab[aria-selected="true"]{background:#1b1712;color:#fff;}
+    .vitrin-tab:focus-visible,.vitrin-btn:focus-visible,.vitrin-thumb:focus-visible{outline:2px solid var(--accent,#c1291f);outline-offset:2px;}
+    .vitrin-info{margin-top:18px;}
+    .vitrin-info p{margin:0;}
+    .vitrin-count{display:flex;gap:12px;font:700 12px/1 'DM Sans',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#6b645c;}
+    .vitrin-name{margin-top:10px !important;max-width:12ch;font:700 clamp(30px,8.2vw,78px)/.95 'DM Sans',sans-serif;letter-spacing:-.03em;text-transform:uppercase;color:#1b1712;}
+    .vitrin-variant{margin-top:6px !important;font-size:15px;color:#6b645c;}
+    .vitrin-price{margin-top:10px !important;font:600 clamp(22px,5.4vw,36px)/1.1 'Fraunces',serif;color:#1b1712;}
+    .vitrin-info.is-swap .vitrin-name,.vitrin-info.is-swap .vitrin-variant,.vitrin-info.is-swap .vitrin-price{animation:vitrinSwap .42s cubic-bezier(.23,1,.32,1);}
+    @keyframes vitrinSwap{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+    .vitrin-actions{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px;}
+    .vitrin-btn{min-height:44px;padding:0 18px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;font:700 14px 'DM Sans',sans-serif;text-decoration:none;cursor:pointer;transition:transform .16s ease-out,background-color .2s ease,color .2s ease;}
+    .vitrin-btn:active{transform:scale(.97);}
+    .vitrin-btn svg{width:16px;height:16px;}
+    .vitrin-btn-primary{border:0;background:#1b1712;color:#fff;}
+    .vitrin-btn-primary:hover{background:var(--accent,#c1291f);}
+    .vitrin-btn-ghost{border:1.5px solid #1b1712;background:transparent;color:#1b1712;}
+    .vitrin-btn-ghost:hover{background:#1b1712;color:#fff;}
+    .vitrin-progress{position:absolute;right:14px;top:30%;height:40%;width:2px;border-radius:2px;background:rgba(27,23,18,.12);}
+    .vitrin-progress i{display:block;width:100%;height:0;border-radius:2px;background:#1b1712;}
+    .vitrin-hint{position:absolute;right:26px;bottom:90px;margin:0;writing-mode:vertical-rl;font:700 11px/1 'DM Sans',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#6b645c;transition:opacity .3s ease;}
+    .vitrin-thumbs{position:absolute;left:0;right:0;bottom:0;display:flex;gap:8px;padding:26px var(--vx) 14px;overflow-x:auto;scrollbar-width:none;background:linear-gradient(180deg,rgba(236,234,230,0),rgba(236,234,230,.94) 46%);}
+    body.vitrin-active .floating-contact{opacity:0;pointer-events:none;transition:opacity .25s ease;}
+    .vitrin-thumbs::-webkit-scrollbar{display:none;}
+    .vitrin-thumb{flex:none;width:62px;height:48px;padding:5px;border-radius:12px;border:1px solid rgba(27,23,18,.12);background:rgba(255,255,255,.55);cursor:pointer;transition:transform .16s ease-out,background-color .2s ease,border-color .2s ease;}
+    .vitrin-thumb img{display:block;width:100%;height:100%;object-fit:contain;}
+    .vitrin-thumb.is-active{background:#fff;border:1.5px solid #1b1712;}
+    .vitrin-thumb:active{transform:scale(.96);}
+    @media (min-width:901px){
+        .vitrin{--vx:max(40px,calc((100vw - 1240px) / 2));}
+        .vitrin-copy{top:50%;transform:translateY(-56%);}
+        .vitrin-eyebrow{display:flex;}
+        .vitrin-info{margin-top:30px;}
+        .vitrin-name{font-size:clamp(48px,5.2vw,82px);}
+        .vitrin-variant{font-size:18px;}
+        .vitrin-actions{margin-top:26px;}
+        .vitrin-btn{min-height:52px;padding:0 24px;font-size:15px;}
+        .vitrin-thumbs{bottom:0;gap:10px;padding:30px var(--vx) 30px;}
+        .vitrin-thumb{width:78px;height:58px;padding:6px;border-radius:14px;}
+        .vitrin-progress{right:var(--vx);}
+        .vitrin-hint{right:calc(var(--vx) + 20px);bottom:auto;top:calc(70% + 20px);}
+    }
+    @media (prefers-reduced-motion:reduce){
+        .vitrin-item img{animation:none;}
+        .vitrin-info.is-swap .vitrin-name,.vitrin-info.is-swap .vitrin-variant,.vitrin-info.is-swap .vitrin-price{animation:none;}
+    }
+</style>
 </head>
 <body>
 
@@ -1137,16 +1204,38 @@ document.addEventListener('click', function (e) {
         </section>
     </div>
 
-    <section class="shoe-ribbon" aria-label="Koleksiyondan ayakkabı modelleri">
-        <button class="shoe-ribbon-arrow shoe-ribbon-arrow-prev" type="button" aria-label="Önceki ayakkabılar">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div class="shoe-ribbon-viewport" id="shoe-ribbon-viewport">
-            <div class="shoe-ribbon-track" id="shoe-ribbon-track"></div>
+    <section class="vitrin" id="vitrin" aria-labelledby="vitrin-title">
+        <div class="vitrin-pin">
+            <div class="vitrin-stage">
+                <svg class="vitrin-string" aria-hidden="true" focusable="false"><path id="vitrin-string-path" d=""></path></svg>
+                <div class="vitrin-rack" id="vitrin-rack"></div>
+            </div>
+            <div class="vitrin-ui">
+                <div class="vitrin-copy">
+                    <h2 class="vitrin-eyebrow" id="vitrin-title"><span class="dot" aria-hidden="true"></span>Vitrin · Öne çıkan modeller</h2>
+                    <div class="vitrin-tabs" role="tablist" aria-label="Vitrin kategorisi">
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="true" data-vitrin-tab="sneaker">Sneaker</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" data-vitrin-tab="bot">Bot</button>
+                        <button class="vitrin-tab" type="button" role="tab" aria-selected="false" data-vitrin-tab="topuklu">Topuklu</button>
+                    </div>
+                    <div class="vitrin-info" id="vitrin-info" aria-live="polite">
+                        <p class="vitrin-count"><span id="vitrin-count">01 / 10</span><span id="vitrin-brand">Nike</span></p>
+                        <p class="vitrin-name" id="vitrin-name">Air Force 1</p>
+                        <p class="vitrin-variant" id="vitrin-variant">White / Black Swoosh</p>
+                        <p class="vitrin-price" id="vitrin-price">1.400 TL</p>
+                    </div>
+                    <div class="vitrin-actions">
+                        <button class="vitrin-btn vitrin-btn-primary" type="button" id="vitrin-detail">Detayları gör
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <a class="vitrin-btn vitrin-btn-ghost" id="vitrin-shopier" href="https://www.shopier.com/noktaayakkabi" target="_blank" rel="noopener noreferrer">Shopier'de gör</a>
+                    </div>
+                </div>
+                <div class="vitrin-progress" aria-hidden="true"><i id="vitrin-progress-bar"></i></div>
+                <p class="vitrin-hint" id="vitrin-hint" aria-hidden="true">Kaydır</p>
+                <div class="vitrin-thumbs" id="vitrin-thumbs" aria-label="Vitrindeki modeller"></div>
+            </div>
         </div>
-        <button class="shoe-ribbon-arrow shoe-ribbon-arrow-next" type="button" aria-label="Sonraki ayakkabılar">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
     </section>
 
     <div class="container" id="urunler">
@@ -1416,6 +1505,8 @@ document.addEventListener('click', function (e) {
                 document.body.style.overflow = '';
             }
         };
+        // Ürün penceresi (ayrı script) aynı kilit sayacını kullansın
+        window.NoktaScrollLock = { lock: lockBodyScroll, unlock: unlockBodyScroll };
 
         const modalBackdrop = document.getElementById('auth-modal-backdrop');
         const authClose = document.getElementById('auth-close');
@@ -2804,6 +2895,11 @@ document.addEventListener('click', function (e) {
             return Array.isArray(data) ? data.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean) : FALLBACK_PRODUCTS;
         })
         .catch(() => FALLBACK_PRODUCTS.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean));
+    // Kaydırma kilidi giriş script'inde tanımlı; burada güvenli köprü
+    const lockBodyScroll = () => { if (window.NoktaScrollLock) window.NoktaScrollLock.lock(); else document.body.style.overflow = 'hidden'; };
+    const unlockBodyScroll = () => { if (window.NoktaScrollLock) window.NoktaScrollLock.unlock(); else document.body.style.overflow = ''; };
+    window.NoktaProducts = PRODUCTS;
+    document.dispatchEvent(new CustomEvent('nokta:products', { detail: PRODUCTS }));
 
     if (ribbonTrack && ribbon) {
         renderRibbon(PRODUCTS);
@@ -3124,6 +3220,17 @@ document.addEventListener('click', function (e) {
                 unlockBodyScroll();
             }
 
+            // Vitrin rafından ürün detayını açmak için
+            window.NoktaOpenProduct = (id) => {
+                const product = (PRODUCTS || []).find(item => item && Number(item.id) === Number(id));
+                if (!product) return false;
+                const title = product.title || '';
+                const isHeel = product.category === 'Topuklu Nokta Shic'
+                    || (Array.isArray(product.categories) && product.categories.includes('Topuklu Nokta Shic') && !product.category);
+                openProductModal(product, product.image, isHeel ? 'Nokta Shic' : getBrand(title), getSizeRange(title));
+                return true;
+            };
+
             function createBrandControl(container, label, value, isFooter){
                 if(isFooter){
                     const li = document.createElement('li');
@@ -3337,5 +3444,246 @@ document.addEventListener('click', function (e) {
         })();
     </script>
 
+<script id="vitrin-script">
+(() => {
+    const section = document.getElementById('vitrin');
+    if (!section) return;
+    const pin = section.querySelector('.vitrin-pin');
+    const rack = document.getElementById('vitrin-rack');
+    const stringPath = document.getElementById('vitrin-string-path');
+    const stringSvg = section.querySelector('.vitrin-string');
+    const thumbsBox = document.getElementById('vitrin-thumbs');
+    const info = document.getElementById('vitrin-info');
+    const el = {
+        count: document.getElementById('vitrin-count'),
+        brand: document.getElementById('vitrin-brand'),
+        name: document.getElementById('vitrin-name'),
+        variant: document.getElementById('vitrin-variant'),
+        price: document.getElementById('vitrin-price'),
+        detail: document.getElementById('vitrin-detail'),
+        shopier: document.getElementById('vitrin-shopier'),
+        bar: document.getElementById('vitrin-progress-bar'),
+        hint: document.getElementById('vitrin-hint')
+    };
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // Curated showcase: product id, display name, variant, image aspect (w/h). Prices come from products.json.
+    const SHELVES = {
+        sneaker: [
+            { id: 45, b: 'Nike', n: 'Air Force 1', s: 'White / Black Swoosh', ar: 1.958 },
+            { id: 28, b: 'Nike', n: 'Air Force 1', s: 'Triple White', ar: 2.017 },
+            { id: 32, b: 'Nike', n: 'Dunk Low', s: 'Panda', ar: 1.988 },
+            { id: 29, b: 'Nike', n: 'Dunk Low', s: 'Red / White', ar: 2.062 },
+            { id: 89, b: 'Nike', n: 'Dunk Low', s: 'White Shine', ar: 2.028 },
+            { id: 6, b: 'Nike', n: 'Jordan 1 Low', s: 'Dark Red / Black', ar: 2.111 },
+            { id: 8, b: 'Nike', n: 'Jordan 1 Low', s: 'Pembe', ar: 1.979 },
+            { id: 4, b: 'Nike', n: 'P-6000', s: 'Silver', ar: 2.098 },
+            { id: 34, b: 'Adidas', n: 'Samba', s: 'White', ar: 2.47 },
+            { id: 22, b: 'Adidas', n: 'Spezial', s: 'Black', ar: 2.198 }
+        ],
+        bot: [
+            { id: 96, b: 'Kadın Bot', n: 'Cat Bot', s: 'Taba', ar: 1.54 },
+            { id: 102, b: 'Kadın Bot', n: 'Cat Bot', s: 'Siyah', ar: 1.444 },
+            { id: 95, b: 'Kadın Bot', n: 'Yüksek Topuk Bot', s: 'Siyah', ar: 1.24 },
+            { id: 98, b: 'Kadın Bot', n: 'Askeri Bot', s: 'Siyah', ar: 0.828 },
+            { id: 103, b: 'Kadın Bot', n: 'Tozluklu Çizme', s: 'Siyah', ar: 0.632 },
+            { id: 104, b: 'Kadın Bot', n: 'Tozluklu Çizme', s: 'Acı Kahve', ar: 0.632 },
+            { id: 94, b: 'Kadın Bot', n: 'İnce Topuklu Bot', s: 'Siyah', ar: 1.342 },
+            { id: 91, b: 'Unisex', n: 'Dağ Botu', s: 'Su geçirmez', ar: 1.322 },
+            { id: 105, b: 'Erkek Bot', n: 'Deri Bot', s: 'Siyah', ar: 1.602 }
+        ],
+        topuklu: [
+            { id: 114, b: 'Nokta Shic', n: 'Classic Topuklu', s: 'Bordo', ar: 1.628 },
+            { id: 124, b: 'Nokta Shic', n: 'Simli Topuklu', s: 'Gold', ar: 1.496 },
+            { id: 125, b: 'Nokta Shic', n: 'Simli Topuklu', s: 'Gümüş', ar: 1.349 },
+            { id: 120, b: 'Nokta Shic', n: 'Kurdeleli Kadeh Topuk', s: 'Gümüş', ar: 1.259 },
+            { id: 129, b: 'Nokta Shic', n: 'Gold Tokalı Topuklu', s: 'Beyaz', ar: 1.535 },
+            { id: 133, b: 'Nokta Shic', n: 'Çapraz Tokalı Topuklu', s: 'Bordo', ar: 1.531 },
+            { id: 139, b: 'Nokta Shic', n: 'Süet İnce Topuk', s: 'Bej', ar: 1.34 },
+            { id: 147, b: 'Nokta Shic', n: 'Gold Detaylı Kısa Topuk', s: 'Siyah', ar: 2.153 }
+        ]
+    };
+    const FALLBACK_PRICES = { 45: 1400, 28: 1400, 32: 1249, 29: 1249, 89: 1560, 6: 1400, 8: 1400, 4: 2099, 34: 1500, 22: 1750, 96: 1999, 102: 1999, 95: 2450, 98: 2450, 103: 3250, 104: 3250, 94: 2990, 91: 2650, 105: 3400, 114: 2560, 124: 1650, 125: 1650, 120: 1450, 129: 1300, 133: 1650, 139: 1900, 147: 1490 };
+    let productsById = {};
+    const priceText = id => {
+        const p = productsById[id];
+        const n = parseFloat(String(p ? p.price : FALLBACK_PRICES[id]).replace(',', '.'));
+        return isNaN(n) ? '' : `${n.toLocaleString('tr-TR')} TL`;
+    };
+    const urlFor = id => (productsById[id] && productsById[id].url) || 'https://www.shopier.com/noktaayakkabi';
+
+    let shelf = 'sneaker';
+    let items = SHELVES[shelf];
+    let nodes = [];
+    let thumbs = [];
+    let geo = { W: 390, H: 700, X0: 210, AMP: 50, Y0: 450, GAP: 190, BASE: 300, STEP: 240, top: 0 };
+    let target = 0, shown = 0, active = -1, raf = 0;
+
+    function measure() {
+        const header = document.querySelector('header');
+        const top = header ? Math.round(header.getBoundingClientRect().height) : 0;
+        section.style.setProperty('--vitrin-top', `${top}px`);
+        const W = pin.clientWidth, H = pin.clientHeight;
+        const desk = W >= 901;
+        geo = desk
+            ? { W, H, X0: W * 0.64, AMP: W * 0.085, Y0: H * 0.5, GAP: H * 0.34, BASE: Math.min(W * 0.36, 600), STEP: Math.max(260, H * 0.42), top }
+            : { W, H, X0: W * 0.5, AMP: W * 0.13, Y0: H * 0.655, GAP: H * 0.27, BASE: Math.min(W * 0.76, 340), STEP: Math.max(220, H * 0.36), top };
+        section.style.height = `${pin.clientHeight + (items.length - 1) * geo.STEP}px`;
+        stringSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    }
+
+    function build() {
+        rack.replaceChildren();
+        thumbsBox.replaceChildren();
+        nodes = items.map((it, i) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'vitrin-item';
+            b.tabIndex = -1;
+            b.setAttribute('aria-hidden', 'true');
+            const img = document.createElement('img');
+            img.src = `assets/vitrin/${it.id}.webp`;
+            img.alt = '';
+            img.decoding = 'async';
+            img.loading = i < 3 ? 'eager' : 'lazy';
+            img.style.animationDelay = `-${(i * 0.7).toFixed(1)}s`;
+            b.appendChild(img);
+            b.addEventListener('click', () => openDetail(it));
+            rack.appendChild(b);
+            return b;
+        });
+        thumbs = items.map((it, i) => {
+            const t = document.createElement('button');
+            t.type = 'button';
+            t.className = 'vitrin-thumb';
+            t.setAttribute('aria-label', `${it.b} ${it.n} ${it.s} göster`);
+            const img = document.createElement('img');
+            img.src = `assets/vitrin/${it.id}.webp`;
+            img.alt = '';
+            img.loading = 'lazy';
+            t.appendChild(img);
+            t.addEventListener('click', () => goTo(i));
+            thumbsBox.appendChild(t);
+            return t;
+        });
+        active = -1;
+    }
+
+    const pathX = d => geo.X0 + geo.AMP * (Math.sin(d * 0.95 + 0.6) - Math.sin(0.6));
+    const pathY = d => geo.Y0 + d * geo.GAP;
+
+    function render() {
+        const p = shown;
+        nodes.forEach((node, i) => {
+            const it = items[i];
+            const d = i - p, ad = Math.abs(d);
+            if (ad > 2.7) { node.style.visibility = 'hidden'; return; }
+            node.style.visibility = 'visible';
+            const sc = 1 - 0.46 * Math.min(ad, 1.45);
+            const boxW = geo.BASE * sc;
+            const hk = it.ar < 1 ? 0.95 : it.ar < 1.45 ? 0.74 : it.ar < 1.8 ? 0.66 : 0.58;
+            const boxH = geo.BASE * sc * hk;
+            const rot = Math.max(-14, Math.min(14, -d * 9)) - 3;
+            const op = Math.max(0, 1 - (d < 0 ? 0.72 : 0.42) * ad);
+            node.style.width = `${boxW.toFixed(1)}px`;
+            node.style.height = `${boxH.toFixed(1)}px`;
+            node.style.transform = `translate(${pathX(d).toFixed(1)}px,${pathY(d).toFixed(1)}px) translate(-50%,-50%) rotate(${rot.toFixed(2)}deg)`;
+            node.style.opacity = op.toFixed(3);
+            node.style.zIndex = String(100 - Math.round(ad * 10));
+        });
+        let dStr = '';
+        for (let k = -3; k <= 3.0001; k += 0.1) dStr += `${dStr ? ' L' : 'M'}${pathX(k).toFixed(1)} ${pathY(k).toFixed(1)}`;
+        stringPath.setAttribute('d', dStr);
+        const n = items.length;
+        el.bar.style.height = `${(100 * (Math.min(p, n - 1) + 1) / n).toFixed(2)}%`;
+        el.hint.style.opacity = p < 0.3 ? '1' : '0';
+        const a = Math.max(0, Math.min(n - 1, Math.round(p)));
+        if (a !== active) setActive(a);
+    }
+
+    function setActive(a) {
+        const first = active === -1;
+        active = a;
+        const it = items[a];
+        el.count.textContent = `${String(a + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
+        const latin = it.b === 'Nike' || it.b === 'Adidas';
+        el.brand.lang = latin ? 'en' : 'tr';
+        el.name.lang = latin ? 'en' : 'tr';
+        el.brand.textContent = it.b;
+        el.name.textContent = it.n;
+        el.variant.textContent = it.s;
+        el.price.textContent = priceText(it.id);
+        el.shopier.href = urlFor(it.id);
+        thumbs.forEach((t, i) => t.classList.toggle('is-active', i === a));
+        if (!first) {
+            info.classList.remove('is-swap');
+            void info.offsetWidth;
+            info.classList.add('is-swap');
+        }
+        const t = thumbs[a];
+        if (t) {
+            const box = thumbsBox.getBoundingClientRect(), r = t.getBoundingClientRect();
+            if (r.left < box.left + 10 || r.right > box.right - 10) thumbsBox.scrollTo({ left: thumbsBox.scrollLeft + r.left - box.left - box.width / 2 + r.width / 2, behavior: 'smooth' });
+        }
+    }
+
+    function readScroll() {
+        const rect = section.getBoundingClientRect();
+        const raw = (geo.top - rect.top) / geo.STEP;
+        target = Math.max(0, Math.min(items.length - 1, raw));
+        document.body.classList.toggle('vitrin-active', rect.top <= geo.top + 2 && rect.bottom >= window.innerHeight - 2);
+    }
+
+    function tick() {
+        raf = 0;
+        const diff = target - shown;
+        if (reduced.matches || Math.abs(diff) < 0.002) shown = target;
+        else shown += diff * 0.2;
+        render();
+        if (shown !== target) raf = requestAnimationFrame(tick);
+    }
+    function schedule() { if (!raf) raf = requestAnimationFrame(tick); }
+
+    function sectionStart() { return window.scrollY + section.getBoundingClientRect().top - geo.top; }
+    function goTo(i) { window.scrollTo({ top: sectionStart() + i * geo.STEP + 1, behavior: reduced.matches ? 'auto' : 'smooth' }); }
+
+    function openDetail(it) {
+        if (window.NoktaOpenProduct && window.NoktaOpenProduct(it.id)) return;
+        window.open(urlFor(it.id), '_blank', 'noopener');
+    }
+    el.detail.addEventListener('click', () => { if (active >= 0) openDetail(items[active]); });
+
+    section.querySelectorAll('[data-vitrin-tab]').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const key = tab.dataset.vitrinTab;
+            if (key === shelf || !SHELVES[key]) return;
+            section.querySelectorAll('[data-vitrin-tab]').forEach(t => t.setAttribute('aria-selected', String(t === tab)));
+            const inside = section.getBoundingClientRect().top <= geo.top + 1;
+            shelf = key; items = SHELVES[key];
+            build(); measure();
+            if (inside) window.scrollTo({ top: sectionStart() + 1, behavior: 'auto' });
+            target = shown = 0;
+            readScroll(); shown = target; render();
+        });
+    });
+
+    const useProducts = list => {
+        if (!Array.isArray(list)) return;
+        productsById = Object.fromEntries(list.filter(p => p && p.id != null).map(p => [Number(p.id), p]));
+        if (active >= 0) { const a = active; active = -1; setActive(a); }
+    };
+    document.addEventListener('nokta:products', e => useProducts(e.detail));
+    if (Array.isArray(window.NoktaProducts)) useProducts(window.NoktaProducts);
+    else setTimeout(() => {
+        if (Object.keys(productsById).length) return;
+        fetch('products.json').then(r => r.ok ? r.json() : null).then(useProducts).catch(() => {});
+    }, 2500);
+
+    build(); measure(); readScroll(); shown = target; render();
+    window.addEventListener('scroll', () => { readScroll(); schedule(); }, { passive: true });
+    window.addEventListener('resize', () => { measure(); readScroll(); shown = target; render(); });
+    window.addEventListener('load', () => { measure(); readScroll(); shown = target; render(); }, { once: true });
+})();
+</script>
 </body>
 </html>
