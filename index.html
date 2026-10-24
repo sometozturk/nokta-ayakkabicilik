@@ -2113,7 +2113,10 @@ document.addEventListener('click', function (e) {
             const ratio = Math.min(1, Math.max(9 / 16, width / height));
             modal.style.setProperty('--tryon-ratio', String(ratio));
         };
-        preview.addEventListener('load', () => setTryOnRatio(preview.naturalWidth, preview.naturalHeight));
+        preview.addEventListener('load', () => {
+            // Sonuç geldiyse kutu sonucun oranında kalsın.
+            if (!resultFrame.classList.contains('has-result')) setTryOnRatio(preview.naturalWidth, preview.naturalHeight);
+        });
         const status = document.getElementById('tryon-status');
         const download = document.getElementById('tryon-download');
         const tryOnTitle = document.getElementById('tryon-title');
