@@ -29,6 +29,32 @@ const INSTAGRAM = 'https://www.instagram.com/nokta.ayakkabicilik/';
 const INSTAGRAM_SHIC = 'https://www.instagram.com/noktashic/';
 const SHOPIER = 'https://www.shopier.com/noktaayakkabi';
 
+// Google ürün sonuçlarında gösterilen kargo süresi ve iade politikası. Değerler değişirse yalnızca burayı güncelleyin.
+// handling: kargoya veriliş (17:00'ye kadar aynı gün, sonrası ertesi gün); transit: kargonun yolda geçirdiği süre.
+const DELIVERY = { cutoff: '17:00:00+03:00', handling: [0, 1], transit: [1, 3] };
+// Mesafeli satışta yasal cayma süresi 14 gündür; mağaza daha uzun süre tanıyorsa artırın.
+const RETURN_DAYS = 14;
+const RETURN_POLICY = {
+    '@type': 'MerchantReturnPolicy',
+    applicableCountry: 'TR',
+    returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+    merchantReturnDays: RETURN_DAYS,
+    returnMethod: 'https://schema.org/ReturnByMail',
+    merchantReturnLink: `${SITE}/bilgilendirme.html#iade`
+};
+const SHIPPING_DETAILS = {
+    '@type': 'OfferShippingDetails',
+    // Shopier mağazası: "Bu dükkandaki tüm ürünler ücretsiz kargo ile gönderilir."
+    shippingRate: { '@type': 'MonetaryAmount', value: 0, currency: 'TRY' },
+    shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'TR' },
+    deliveryTime: {
+        '@type': 'ShippingDeliveryTime',
+        cutoffTime: DELIVERY.cutoff,
+        handlingTime: { '@type': 'QuantitativeValue', minValue: DELIVERY.handling[0], maxValue: DELIVERY.handling[1], unitCode: 'DAY' },
+        transitTime: { '@type': 'QuantitativeValue', minValue: DELIVERY.transit[0], maxValue: DELIVERY.transit[1], unitCode: 'DAY' }
+    }
+};
+
 // Başlıkta geçtiğinde ürünün SEO sayfası üretilmeyen üçüncü taraf marka ve model adları.
 const THIRD_PARTY_BRANDS = /\b(nike|adidas|vans|lacoste|lufian|calvin|klein|mc ?queen|golden ?goose|prada|ugg|cat|caterpillar|harley|davidson|jordan|air ?force|airforce|air ?max|air270|dunk|samba|spezial|campus|s[uü]perstar|terrex|duramo|entrap|xstep|converse|puma|new ?balance|skechers|timberland|martens|balenciaga|gucci|vuitton|dior|chanel|herm[eè]s|asics|reebok|fila|hummel|kinetix|polaris|lumberjack|polo|tommy|hilfiger|guess|michael ?kors|steve ?madden|zara|bershka|mango|tn|p6000|initiator|court ?borough|zoom|cherry|travis)\b/i;
 
@@ -160,12 +186,21 @@ const CATEGORIES = [
             ['Kadeh topuk kimler için uygun?', [
                 'Kadeh topuklar çoğunlukla 5-7 cm aralığındadır. Yüksek topuğa yeni alışanlar ve aynı gün içinde hem ofiste hem akşam davetinde aynı ayakkabıyı giymek isteyenler için kadeh topuk dengeli bir tercihtir. Kısa ve orta kadeh topuklar günlük kullanımda, kurdeleli ve gümüş detaylı modeller davetlerde öne çıkar.'
             ]],
+            ['Kadeh topuk rahat mı?', [
+                'Kadeh topuğun üst kısmı geniş olduğu için ağırlık topuğa ince topuklulara göre daha geniş bir yüzeyden biner; bu da yürürken bileğin daha az yalpalamasını sağlar. Yine de rahatlığı en çok topuk boyu belirler: gün boyu giyilecekse kısa ve orta kadeh topuk (3-7 cm), birkaç saatlik davetler için ince kadeh topuk modeller tercih edilir.',
+                'Taban ile topuk arasındaki eğim arttıkça ayağın ön kısmına binen yük de artar. İlk kez kadeh topuk alıyorsanız orta yükseklikte, kapalı burunlu veya bilek bantlı bir modelle başlamak iyi bir fikirdir.'
+            ]],
             ['Renk seçimi', [
                 'Siyah kadeh topuk ayakkabı ofis ve gece kombinlerine kolayca uyar. Bej ve ten tonları bacak hattını uzatır; gümüş ve beyaz modeller ise abiye ve beyaz elbise altında tercih edilir.'
+            ]],
+            ['Kadeh topuk ayakkabı nasıl kombinlenir?', [
+                'Kumaş pantolon ve blazer ceketle ofiste, midi elbise veya pileli etekle akşam yemeklerinde, saten elbiseyle düğün ve nişanlarda kullanılır. Bilek bantlı ve kurdeleli modeller elbiseyle, sade ve küt burunlu modeller pantolonla daha iyi görünür.'
             ]]
         ],
         faq: [
             { q: 'Kadeh topuk ile ince topuk arasındaki fark nedir?', a: 'İnce (stiletto) topuk boydan boya incedir. Kadeh topuk ise üstte geniş başlayıp aşağıda incelir, bu yüzden zeminde daha dengeli durur.' },
+            { q: 'Kadeh topuk kaç cm olur?', a: 'Kadeh topuklar çoğunlukla 3 ile 8 cm arasındadır. Kısa kadeh 3-5 cm, orta kadeh 5-7 cm, ince kadeh topuk 6-8 cm civarındadır. Modelin topuk boyunu ürün sayfasındaki özellik tablosunda görebilirsiniz.' },
+            { q: 'Kadeh topuk ayakkabı rahat mı?', a: 'Üst kısmı geniş olduğu için ince topuklu modellere göre daha dengeli ve rahattır. Gün boyu kullanım için kısa ve orta kadeh topuk modelleri öneririz.' },
             SHIPPING_FAQ,
             EXCHANGE_FAQ
         ]
@@ -250,6 +285,12 @@ const CATEGORIES = [
             ['Kış için bot seçimi', [
                 'Yağmur ve karda su geçirmez ya da kalın tabanlı modeller ayağı kuru tutar. Şehir ve ofis kullanımında topuklu ve küt burun botlar pantolon ve eteklerle uyum sağlar; çizmeler ise elbise ve tayt kombinlerinde bacağı soğuktan korur.'
             ]],
+            ['Bot mu, çizme mi?', [
+                'Bot bileği ya da bileğin hemen üstünü kapatır; pantolon ve kotla en kolay kombinlenen modeldir. Çizme baldıra veya dize kadar uzanır; elbise, etek ve taytla bacağı soğuktan korur. Hem bot hem çizme isteyenler için tozluklu modeller iki görünümü tek üründe birleştirir.'
+            ]],
+            ['Tozluklu bot nedir?', [
+                'Tozluklu botlarda bilek üstündeki örme veya kumaş tozluk bölümü çıkarılabilir. Tozluk takılıyken çizme, çıkarıldığında bot olarak giyilir; böylece aynı ayakkabı hem elbise hem pantolon kombinlerinde kullanılır.'
+            ]],
             ['Numara ve kalıp', [
                 'Botu kalın çorapla giyecekseniz ve iki numara arasında kalıyorsanız genellikle büyük numara daha rahat eder. Kararsız kaldığınız modeli Instagram\'dan bize sorabilirsiniz.'
             ]]
@@ -258,6 +299,10 @@ const CATEGORIES = [
             (items) => items.some((p) => /su geçirmez/.test(p.t))
                 ? { q: 'Su geçirmez kadın bot modeliniz var mı?', a: 'Evet. Su geçirmez kadın ve unisex bot modellerimiz bu sayfada listelenir; ürün adında "Su Geçirmez" ifadesi yer alır.' }
                 : null,
+            (items) => items.some((p) => /tozluklu/.test(p.t))
+                ? { q: 'Tozluklu botun tozluğu çıkarılabiliyor mu?', a: 'Evet. Tozluklu modellerimizde tozluk bölümü çıkarılabilir; takılıyken çizme, çıkarıldığında bot olarak kullanabilirsiniz.' }
+                : null,
+            { q: 'Bot ile çizme arasındaki fark nedir?', a: 'Bot bileği veya bileğin biraz üstünü kapatır, çizme ise baldıra ya da dize kadar uzanır. Pantolonla bot, elbise ve etekle çizme daha çok tercih edilir.' },
             SHIPPING_FAQ,
             EXCHANGE_FAQ
         ]
@@ -275,9 +320,15 @@ const CATEGORIES = [
         guide: [
             ['Klasik ayakkabı mı, bot mu?', [
                 'Oxford ayakkabılar takım elbise ve kumaş pantolonla resmi kombinlerin temelidir. Rugan modeller düğün ve davetlerde, mat deri modeller iş günlerinde öne çıkar. Botlar ise kot ve kargo pantolonla kış boyunca günlük kullanım içindir.'
+            ]],
+            ['Erkek klasik bot nasıl seçilir?', [
+                'Klasik erkek botunda deri yüzey hem dayanıklılık hem de şık görünüm sağlar; kahve ve siyah tonlar kumaş pantolonla iş günlerinde, kotla hafta sonlarında kullanılır. Yağmurlu ve karlı günlerde kalın, kaymaz tabanlı modeller ayağı kuru ve sabit tutar.',
+                'Botu kalın çorapla giyecekseniz ve iki numara arasında kalıyorsanız büyük numarayı seçmek genellikle daha rahattır.'
             ]]
         ],
-        faq: [SHIPPING_FAQ, EXCHANGE_FAQ, PAYMENT_FAQ]
+        faq: [
+            { q: 'Erkek klasik bot takım elbiseyle giyilir mi?', a: 'Sade, ince tabanlı deri botlar kumaş pantolon ve gündelik takımlarla kullanılabilir. Resmi davetlerde ise Oxford klasik ayakkabı daha uygun bir tercihtir.' },
+            SHIPPING_FAQ, EXCHANGE_FAQ, PAYMENT_FAQ]
     }
 ];
 
@@ -674,7 +725,16 @@ function buildFamilies() {
         if (!groups.has(key)) groups.set(key, []);
         groups.get(key).push(p);
     }
-    for (const members of groups.values()) {
+    for (const all of groups.values()) {
+        // Gruplar renge göre değişir (variesBy color); rengi başlıktan okunamayan ürün gruba girmez,
+        // aynı renkten iki ürün varsa ilki kalır. Aksi halde Google "color alanı eksik" hatası verir.
+        const seen = new Set();
+        const members = all.filter((m) => {
+            const c = productFacts(m).color;
+            if (!c || seen.has(c)) return false;
+            seen.add(c);
+            return true;
+        });
         if (members.length < 2) continue;
         const first = members[0];
         const name = removeFirst(first.name, productFacts(first).color || '\u0000');
@@ -727,7 +787,8 @@ function renderProduct(p) {
     const siblings = family ? family.members.filter((m) => m !== p && m.name !== p.name) : [];
 
     const audience = p.mainCategory?.audience || (/unisex/.test(p.t) ? 'unisex' : isKids(p) ? null : null);
-    const brand = isHeel(p) ? 'Nokta Shic' : null;
+    // Merchant feed ile aynı marka: Shic koleksiyonu "Nokta Shic", diğerleri mağazanın kendi markası.
+    const brand = isHeel(p) ? 'Nokta Shic' : 'Nokta Ayakkabıcılık';
     const productSchema = {
         '@context': 'https://schema.org',
         '@type': 'Product',
@@ -736,9 +797,10 @@ function renderProduct(p) {
         description,
         image: p.images,
         sku: String(p.id),
+        mpn: `NK-${p.id}`,
         url: pageUrl,
         category: isHeel(p) ? 'Ayakkabı > Kadın > Topuklu Ayakkabı' : isWomenBoot(p) ? 'Ayakkabı > Kadın > Bot ve Çizme' : isKids(p) ? 'Ayakkabı > Çocuk' : 'Ayakkabı > Erkek',
-        ...(brand ? { brand: { '@type': 'Brand', name: brand } } : {}),
+        brand: { '@type': 'Brand', name: brand },
         ...(color ? { color: capFirst(color) } : {}),
         ...(materials.length ? { material: materials.map(capFirst).join(', ') } : {}),
         ...(audience ? { audience: { '@type': 'PeopleAudience', suggestedGender: /unisex/.test(p.t) ? 'unisex' : audience } } : {}),
@@ -750,12 +812,8 @@ function renderProduct(p) {
             availability: soldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
             itemCondition: 'https://schema.org/NewCondition',
             seller: organizationRef,
-            // Shopier mağazası: "Bu dükkandaki tüm ürünler ücretsiz kargo ile gönderilir."
-            shippingDetails: {
-                '@type': 'OfferShippingDetails',
-                shippingRate: { '@type': 'MonetaryAmount', value: 0, currency: 'TRY' },
-                shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'TR' }
-            }
+            shippingDetails: SHIPPING_DETAILS,
+            hasMerchantReturnPolicy: RETURN_POLICY
         }
     };
 
@@ -769,11 +827,13 @@ function renderProduct(p) {
             '@id': `${SITE}/#grup-${family.slug}`,
             name: family.name,
             productGroupID: family.slug,
+            description: `${family.name} modelinin ${family.members.map((m) => productFacts(m).color).join(', ')} renk seçenekleri. ${description}`,
+            url: pageUrl,
             variesBy: ['https://schema.org/color'],
-            ...(brand ? { brand: { '@type': 'Brand', name: brand } } : {}),
+            brand: { '@type': 'Brand', name: brand },
             hasVariant: [
                 { ...variant, inProductGroupWithID: family.slug },
-                ...family.members.filter((m) => m !== p).map((m) => ({ '@type': 'Product', url: `${SITE}${m.url}`, name: m.name }))
+                ...family.members.filter((m) => m !== p).map((m) => ({ '@type': 'Product', url: `${SITE}${m.url}`, name: m.name, color: capFirst(productFacts(m).color) }))
             ]
         };
     }
