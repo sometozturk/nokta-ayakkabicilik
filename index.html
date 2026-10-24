@@ -1084,8 +1084,8 @@ document.addEventListener('click', function (e) {
     .vitrin-all:hover{color:var(--accent,#c1291f);}
     .vitrin-all:focus-visible{outline:2px solid var(--accent,#c1291f);outline-offset:2px;border-radius:4px;}
     .vitrin-name{margin-top:10px !important;max-width:12ch;font:700 clamp(30px,8.2vw,78px)/.95 'DM Sans',sans-serif;letter-spacing:-.03em;text-transform:uppercase;color:#1b1712;}
-    .vitrin-name.is-long{font-size:clamp(26px,6.6vw,62px);max-width:14ch;}
-    .vitrin-name.is-xlong{font-size:clamp(22px,5.5vw,50px);max-width:17ch;}
+    .vitrin-name.is-long{font-size:clamp(26px,6.6vw,62px);max-width:16ch;}
+    .vitrin-name.is-xlong{font-size:clamp(22px,5.5vw,50px);max-width:20ch;}
     .vitrin-variant{margin-top:6px !important;font-size:15px;color:#6b645c;}
     .vitrin-price{margin-top:10px !important;font:600 clamp(22px,5.4vw,36px)/1.1 'Fraunces',serif;color:#1b1712;}
     .vitrin-info.is-swap .vitrin-name,.vitrin-info.is-swap .vitrin-variant,.vitrin-info.is-swap .vitrin-price{animation:vitrinSwap .42s cubic-bezier(.23,1,.32,1);}
@@ -1109,8 +1109,47 @@ document.addEventListener('click', function (e) {
     .vitrin-item img.is-fallback,.vitrin-thumb img.is-fallback{border-radius:14px;mix-blend-mode:multiply;}
     .vitrin-thumb.is-active{background:#fff;border:1.5px solid #1b1712;}
     .vitrin-thumb:active{transform:scale(.96);}
+    .vitrin-thumb{position:relative;}
+    .vitrin-thumb-n{position:absolute;right:3px;top:3px;min-width:15px;height:15px;padding:0 4px;border-radius:999px;background:#1b1712;color:#fff;font:700 9px/15px 'DM Sans',sans-serif;text-align:center;}
+    /* badge, colours, sizes, actions */
+    .vitrin-badge{display:inline-flex;align-items:center;min-height:20px;padding:0 8px;border-radius:999px;background:var(--accent,#c1291f);color:#fff;font:700 10px/1 'DM Sans',sans-serif;letter-spacing:.1em;}
+    .vitrin-badge.is-hot{background:#1b1712;}
+    .vitrin-badge[hidden]{display:none;}
+    .vitrin-buy{margin-top:10px;display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;}
+    .vitrin-buy .vitrin-price{margin-top:0 !important;}
+    .vitrin-colors{display:flex;gap:6px;max-width:100%;overflow-x:auto;scrollbar-width:none;padding:2px;}
+    .vitrin-colors::-webkit-scrollbar,.vitrin-sizes::-webkit-scrollbar{display:none;}
+    .vitrin-colors[hidden],.vitrin-sizes[hidden]{display:none;}
+    .vitrin-color{flex:none;width:42px;height:32px;padding:3px;border-radius:10px;border:1px solid rgba(27,23,18,.14);background:rgba(255,255,255,.7);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .2s ease,background-color .2s ease,transform .16s ease-out;}
+    .vitrin-color img{display:block;width:100%;height:100%;object-fit:contain;}
+    .vitrin-color[aria-pressed="true"]{border:1.5px solid #1b1712;background:#fff;}
+    .vitrin-color:active,.vitrin-size:active{transform:scale(.95);}
+    .vitrin-sizes{margin:12px calc(-1 * var(--vx)) 0;padding:2px var(--vx);display:flex;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--vx),#000 calc(100% - var(--vx)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--vx),#000 calc(100% - var(--vx)),transparent 100%);}
+    .vitrin-size{position:relative;flex:none;min-width:42px;height:38px;padding:0 9px;border-radius:11px;border:1px solid rgba(27,23,18,.16);background:rgba(255,255,255,.7);color:#1b1712;font:600 14px/1 'DM Sans',sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .16s ease-out;}
+    .vitrin-size[aria-pressed="true"]{background:#1b1712;border-color:#1b1712;color:#fff;}
+    .vitrin-size.is-last::after{content:"son 1";position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);padding:1px 4px;border-radius:4px;background:var(--accent,#c1291f);color:#fff;font:700 8px/1.2 'DM Sans',sans-serif;white-space:nowrap;}
+    .vitrin-actions{flex-wrap:nowrap;gap:8px;}
+    .vitrin-btn-try{border:1.5px solid var(--accent,#c1291f);background:rgba(255,255,255,.7);color:var(--accent,#c1291f);}
+    .vitrin-btn-try:hover{background:var(--accent,#c1291f);color:#fff;}
+    .vitrin-btn-icon{width:44px;padding:0;justify-content:center;flex:none;border:1.5px solid rgba(27,23,18,.22);background:rgba(255,255,255,.7);color:#1b1712;}
+    .vitrin-btn-icon:hover{border-color:#1b1712;}
+    .vitrin-btn-icon svg{width:20px;height:20px;}
+    .vitrin-btn-try:focus-visible,.vitrin-color:focus-visible,.vitrin-size:focus-visible{outline:2px solid var(--accent,#c1291f);outline-offset:2px;}
+    .vitrin-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;}
+    .vitrin-item{transform-style:preserve-3d;}
+    .vitrin-item img.is-switch{animation:vitrinSwitch .5s cubic-bezier(.23,1,.32,1),vitrinBob 4.4s ease-in-out infinite;}
+    @keyframes vitrinSwitch{from{opacity:0;filter:blur(6px) drop-shadow(0 24px 20px rgba(27,23,18,.18));}to{opacity:1;filter:drop-shadow(0 24px 20px rgba(27,23,18,.18));}}
+    .vitrin-btn{white-space:nowrap;flex:none;}
+    @media (max-width:900px){
+        .vitrin-btn{min-height:44px;padding:0 13px;gap:6px;font-size:13.5px;}
+        .vitrin-btn-try svg{display:none;}
+        .vitrin-btn-icon{padding:0;}
+    }
     @media (min-width:901px){
         .vitrin{--vx:max(40px,calc((100vw - 1240px) / 2));}
+        .vitrin-sizes{margin:16px 0 0;padding:2px 0 8px;flex-wrap:wrap;overflow:visible;-webkit-mask-image:none;mask-image:none;max-width:520px;}
+        .vitrin-btn.vitrin-btn-icon{width:52px;padding:0;}
+        .vitrin-color{width:50px;height:38px;}
         .vitrin-copy{top:50%;transform:translateY(-56%);}
         .vitrin-eyebrow{display:flex;}
         .vitrin-info{margin-top:26px;}
@@ -1129,9 +1168,29 @@ document.addEventListener('click', function (e) {
         .vitrin-hint{right:calc(var(--vx) + 20px);bottom:auto;top:calc(70% + 20px);}
     }
     @media (prefers-reduced-motion:reduce){
-        .vitrin-item img{animation:none;}
+        .vitrin-item img,.vitrin-item img.is-switch{animation:none;}
         .vitrin-info.is-swap .vitrin-name,.vitrin-info.is-swap .vitrin-variant,.vitrin-info.is-swap .vitrin-price{animation:none;}
     }
+    /* ---------- son yola çıkan siparişler ---------- */
+    .yola-cikanlar{margin:64px 0 16px;color:var(--ink,#1b1712);}
+    .yola-eyebrow{display:flex;align-items:center;gap:8px;margin:0 0 10px;font:700 11px/1 'DM Sans',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--muted,#8a8073);}
+    .yola-dot{width:8px;height:8px;border-radius:50%;background:#1f9d55;box-shadow:0 0 0 0 rgba(31,157,85,.45);animation:yolaPulse 2.2s ease-out infinite;}
+    @keyframes yolaPulse{0%{box-shadow:0 0 0 0 rgba(31,157,85,.45);}70%{box-shadow:0 0 0 9px rgba(31,157,85,0);}100%{box-shadow:0 0 0 0 rgba(31,157,85,0);}}
+    .yola-cikanlar h2{margin:0;font:600 clamp(26px,4vw,40px)/1.1 'Fraunces',serif;letter-spacing:-.01em;}
+    .yola-sub{margin:10px 0 0;max-width:560px;font-size:15px;line-height:1.6;color:var(--muted,#8a8073);}
+    .yola-track{margin:24px -20px 0;padding:0 20px 8px;display:grid;grid-auto-flow:column;grid-auto-columns:min(60vw,236px);gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding:0 20px;scrollbar-width:none;}
+    .yola-track::-webkit-scrollbar{display:none;}
+    .yola-track:focus-visible{outline:2px solid var(--accent,#c1291f);outline-offset:4px;border-radius:12px;}
+    .yola-card{margin:0;scroll-snap-align:start;}
+    .yola-media{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;border-radius:18px;background:#e9e2d4;}
+    .yola-card figcaption{margin-top:10px;display:flex;flex-direction:column;gap:3px;}
+    .yola-card strong{font-size:14px;font-weight:700;}
+    .yola-card span{font-size:12px;color:var(--muted,#8a8073);}
+    .yola-note{margin:14px 0 0;font-size:12px;color:var(--muted,#8a8073);}
+    @media (min-width:901px){
+        .yola-track{margin:28px 0 0;padding:0;grid-auto-flow:row;grid-template-columns:repeat(5,1fr);grid-auto-columns:auto;overflow:visible;}
+    }
+    @media (prefers-reduced-motion:reduce){.yola-dot{animation:none;}}
 </style>
 </head>
 <body>
@@ -1246,17 +1305,28 @@ document.addEventListener('click', function (e) {
                         <button class="vitrin-tab" type="button" role="tab" aria-selected="false">Kadın Bot</button>
                         <button class="vitrin-tab" type="button" role="tab" aria-selected="false">Topuklu Nokta Shic</button>
                     </div>
-                    <div class="vitrin-info" id="vitrin-info" aria-live="polite">
-                        <p class="vitrin-count"><span id="vitrin-count">01 / 37</span><span id="vitrin-brand" lang="en">Nike</span><a class="vitrin-all" id="vitrin-all" href="#urunler">Tümünü listele<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+                    <div class="vitrin-info" id="vitrin-info">
+                        <p class="vitrin-count"><span id="vitrin-count">01 / 37</span><span id="vitrin-brand" lang="en">Nike</span><span class="vitrin-badge" id="vitrin-badge" hidden></span><a class="vitrin-all" id="vitrin-all" href="#urunler">Tümünü listele<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
                         <p class="vitrin-name" id="vitrin-name" lang="en">Air Force 1</p>
-                        <p class="vitrin-variant" id="vitrin-variant">White / Black Swoosh · 36–45 numara</p>
-                        <p class="vitrin-price" id="vitrin-price">1.400 TL</p>
+                        <p class="vitrin-variant" id="vitrin-variant">White / Black Swoosh</p>
+                        <div class="vitrin-buy">
+                            <p class="vitrin-price" id="vitrin-price">1.400 TL</p>
+                            <div class="vitrin-colors" id="vitrin-colors" role="group" aria-label="Renk seç" hidden></div>
+                        </div>
+                        <div class="vitrin-sizes" id="vitrin-sizes" role="group" aria-label="Numara seç" hidden></div>
                     </div>
+                    <span class="vitrin-sr" id="vitrin-live" aria-live="polite"></span>
                     <div class="vitrin-actions">
-                        <button class="vitrin-btn vitrin-btn-primary" type="button" id="vitrin-detail">Detayları gör
+                        <a class="vitrin-btn vitrin-btn-primary" id="vitrin-shopier" href="https://www.shopier.com/noktaayakkabi" target="_blank" rel="noopener noreferrer"><span id="vitrin-shopier-text">Shopier'de al</span>
                             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
+                        <button class="vitrin-btn vitrin-btn-try" type="button" id="vitrin-tryon">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z M18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9z" fill="currentColor"/></svg>
+                            Kombininde Dene
                         </button>
-                        <a class="vitrin-btn vitrin-btn-ghost" id="vitrin-shopier" href="https://www.shopier.com/noktaayakkabi" target="_blank" rel="noopener noreferrer">Shopier'de gör</a>
+                        <button class="vitrin-btn vitrin-btn-icon" type="button" id="vitrin-detail" aria-label="Detayları gör" title="Detayları gör">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        </button>
                     </div>
                 </div>
                 <div class="vitrin-progress" aria-hidden="true"><i id="vitrin-progress-bar"></i></div>
@@ -1291,6 +1361,36 @@ document.addEventListener('click', function (e) {
         </div>
             <p class="result-note" id="result-note">Modelleri marka, numara ve fiyat aralığına göre filtreleyin.</p>
         <div id="urun-izgarasi" class="urun-izgarasi"></div>
+        <section class="yola-cikanlar" aria-labelledby="yola-cikanlar-title">
+            <div class="yola-head">
+                <p class="yola-eyebrow"><span class="yola-dot" aria-hidden="true"></span>Mağazadan canlı</p>
+                <h2 id="yola-cikanlar-title">Son yola çıkan siparişler</h2>
+                <p class="yola-sub">Her sipariş mağazada tek tek kontrol edilip paketleniyor. 17:00'ye kadar verilen siparişler aynı gün kargoda.</p>
+            </div>
+            <div class="yola-track" tabindex="0" aria-label="Paketlenen ve kargoya verilen siparişler">
+                <figure class="yola-card">
+                    <video class="yola-media" poster="assets/kargo/hazirlaniyor-1.jpg" muted loop playsinline preload="none" aria-label="Kutusunda hazırlanan Nike Dunk"><source src="assets/kargo/hazirlaniyor-1.webm" type="video/webm"><source src="assets/kargo/hazirlaniyor-1.mp4" type="video/mp4"></video>
+                    <figcaption><strong>Kutusunda hazırlanıyor</strong><span>Mağaza · 23 Ekim</span></figcaption>
+                </figure>
+                <figure class="yola-card">
+                    <img class="yola-media" src="assets/kargo/paketler.webp" alt="Mağaza tezgahında hediye paketine konmuş siparişler" loading="lazy" decoding="async" width="720" height="960">
+                    <figcaption><strong>Paketler hazır</strong><span>Mağaza · 23 Ekim</span></figcaption>
+                </figure>
+                <figure class="yola-card">
+                    <video class="yola-media" poster="assets/kargo/hazirlaniyor-2.jpg" muted loop playsinline preload="none" aria-label="Paketlenmeyi bekleyen ayakkabı kutuları"><source src="assets/kargo/hazirlaniyor-2.webm" type="video/webm"><source src="assets/kargo/hazirlaniyor-2.mp4" type="video/mp4"></video>
+                    <figcaption><strong>Siparişler kontrol ediliyor</strong><span>Mağaza · 23 Ekim</span></figcaption>
+                </figure>
+                <figure class="yola-card">
+                    <img class="yola-media" src="assets/kargo/etiketli-paket.webp" alt="Kargo etiketi yapıştırılmış sipariş paketi" loading="lazy" decoding="async" width="720" height="960">
+                    <figcaption><strong>Etiketlendi</strong><span>Yurtiçi Kargo · 23 Ekim</span></figcaption>
+                </figure>
+                <figure class="yola-card">
+                    <img class="yola-media" src="assets/kargo/kargo-subesi.webp" alt="Yurtiçi Kargo şubesinde teslim edilen sipariş" loading="lazy" decoding="async" width="720" height="960">
+                    <figcaption><strong>Kargoya teslim edildi</strong><span>Yurtiçi Kargo · 23 Ekim</span></figcaption>
+                </figure>
+            </div>
+            <p class="yola-note">Müşterilerimizin gizliliği için kargo etiketleri ve yüzler bulanıklaştırıldı.</p>
+        </section>
         <nav class="category-links" aria-labelledby="category-links-heading">
             <h2 id="category-links-heading">Kategoriye göre alışveriş</h2>
             <ul>
@@ -3487,11 +3587,17 @@ document.addEventListener('click', function (e) {
         title: document.getElementById('vitrin-title-text'),
         count: document.getElementById('vitrin-count'),
         brand: document.getElementById('vitrin-brand'),
+        badge: document.getElementById('vitrin-badge'),
         name: document.getElementById('vitrin-name'),
         variant: document.getElementById('vitrin-variant'),
         price: document.getElementById('vitrin-price'),
+        colors: document.getElementById('vitrin-colors'),
+        sizes: document.getElementById('vitrin-sizes'),
+        live: document.getElementById('vitrin-live'),
         detail: document.getElementById('vitrin-detail'),
         shopier: document.getElementById('vitrin-shopier'),
+        shopierText: document.getElementById('vitrin-shopier-text'),
+        tryon: document.getElementById('vitrin-tryon'),
         all: document.getElementById('vitrin-all'),
         bar: document.getElementById('vitrin-progress-bar'),
         hint: document.getElementById('vitrin-hint')
@@ -3529,12 +3635,30 @@ document.addEventListener('click', function (e) {
         'siyah', 'beyaz', 'bordo', 'kahve', 'gümüş', 'gold', 'şeffaf', 'pembe', 'taba', 'lacivert', 'gri', 'yeşil', 'kırmızı', 'mavi', 'mor']);
     const LEAD_MODS = new Set(['full', 'triple', 'acı', 'dark']);
     const DROP = new Set(['kadın', 'erkek', 'unisex', 'çocuk', 'sneaker']);
+    /* Optional hand-set labels ("Çok satan", "Son 3 çift") live in etiketler.json: { "45": "Çok satan" }. */
+    let TAGS = {};
+    /* In-stock sizes per product, copied from the Shopier product pages: { "45": { "36": 3, "42": 1 } }. */
+    let STOCK = {};
 
     const low = s => s.toLocaleLowerCase('tr-TR');
     const isColor = w => { const parts = low(w).split('-').filter(Boolean); return parts.length > 0 && COLORS.has(parts[0]); };
     const brandOf = title => KNOWN_BRANDS.find(b => low(title).startsWith(low(b))) || title.split(' ')[0];
-    const sizeOf = title => { const m = title.match(/\(([^)]+)\)/); return m ? m[1].replace(/\s*-\s*/g, '–') : ''; };
     const tidy = s => s.replace(/\s*-\s*/g, ' / ').replace(/\s{2,}/g, ' ').trim();
+    const priceNum = p => parseFloat(String(p.price).replace(',', '.'));
+    const priceText = p => { const n = priceNum(p); return isNaN(n) ? '' : `${n.toLocaleString('tr-TR')} TL`; };
+
+    /* "(36-45)" -> 36…45, "(45-46-47)" -> 45, 46, 47 */
+    function sizesOf(title) {
+        const m = title.match(/\(([^)]+)\)/);
+        if (!m) return [];
+        const nums = m[1].split(/\s*[-–]\s*/).map(Number).filter(n => n > 0);
+        if (nums.length === 2 && nums[1] > nums[0] && nums[1] - nums[0] <= 14) {
+            const out = [];
+            for (let k = nums[0]; k <= nums[1]; k++) out.push(k);
+            return out;
+        }
+        return nums;
+    }
 
     /* "Nike Dunk Low Pro Black-White (36-45)" -> name "Dunk Low Pro", colour "Black / White".
        Turkish titles ("Siyah Kısa Topuk Gümüş Taşlı") lift out one colour word and keep the rest as the name. */
@@ -3573,11 +3697,11 @@ document.addEventListener('click', function (e) {
         if (heelWord && !/topuk/i.test(n)) n = `${n} Topuklu`;
         return { name: n || title, color: tidy(color.join(' ')), unisex };
     }
-    const priceText = p => { const n = parseFloat(String(p.price).replace(',', '.')); return isNaN(n) ? '' : `${n.toLocaleString('tr-TR')} TL`; };
 
-    let shelves = {}, order = [], shelf = '', items = [], nodes = [], thumbs = [], tabs = [];
+    let shelves = {}, order = [], shelf = '', groups = [], nodes = [], thumbs = [], tabs = [];
     let geo = { W: 390, H: 700, X0: 195, AMP: 50, Y0: 450, GAP: 190, BASE: 300, STEP: 210, top: 0 };
-    let target = 0, shown = 0, active = -1, raf = 0, ready = false;
+    let target = 0, shown = 0, active = -1, raf = 0, ready = false, pickedSize = null;
+    const cur = g => g.opts[g.sel];
 
     function makeItem(p, idx, tab) {
         const id = Number(p.id);
@@ -3589,19 +3713,34 @@ document.addEventListener('click', function (e) {
         const brand = isCat ? (known || (tab === 'Topuklu Nokta Shic' ? 'Nokta Shic' : tab === 'Çocuk Sneakers' ? 'Çocuk' : tab)) : tab;
         const latin = LATIN.has(known || brandOf(title));
         const d = describe(title, known || (isCat ? '' : brandOf(title)), isHeel, latin);
-        const cur = CURATED[id];
-        const size = sizeOf(title);
-        const variant = [cur ? cur[1] : d.color, d.unisex ? 'Unisex' : '', size ? `${size} numara` : ''].filter(Boolean).join(' · ');
+        const c = CURATED[id];
+        const color = c ? c[1] : d.color;
         return {
             id, p, idx,
             b: brand,
-            n: cur ? cur[0] : d.name,
-            s: variant,
+            n: c ? c[0] : d.name,
+            key: low(d.name).replace(/[\s/.-]+/g, ''),
+            color,
+            s: [color, d.unisex ? 'Unisex' : ''].filter(Boolean).join(' · '),
+            sizes: sizesOf(title),
             latin,
             primary: !isCat || p.category === tab || (!p.category && cats[0] === tab),
-            ar: AR[id] || 0,
-            loaded: false
+            ar: AR[id] || 0
         };
+    }
+
+    /* One shoe on the rack per model; its colours become swatches. */
+    function bundle(items) {
+        const byKey = new Map(), out = [];
+        items.forEach(it => {
+            const k = `${it.primary ? 1 : 0}:${it.key}`;
+            let g = byKey.get(k);
+            if (!g) { g = { opts: [], sel: 0, loaded: false }; byKey.set(k, g); out.push(g); }
+            g.opts.push(it);
+        });
+        /* every colour carries the model name of the first (best-known) one */
+        out.forEach(g => { const n = g.opts[0].n; g.opts.forEach(o => { o.n = n; }); });
+        return out;
     }
 
     function group(list) {
@@ -3612,15 +3751,20 @@ document.addEventListener('click', function (e) {
             const labels = cats.length ? cats : [brandOf(String(p.title || ''))];
             labels.forEach(label => (byLabel[label] = byLabel[label] || []).push(makeItem(p, idx, label)));
         });
-        Object.values(byLabel).forEach(arr => arr.sort((a, b) => {
-            if (a.primary !== b.primary) return a.primary ? -1 : 1;
-            const la = LEAD.indexOf(a.id), lb = LEAD.indexOf(b.id);
-            if (la !== -1 || lb !== -1) return (la === -1 ? 1e3 : la) - (lb === -1 ? 1e3 : lb);
-            return a.idx - b.idx;
-        }));
+        const out = {}, counts = {};
+        Object.entries(byLabel).forEach(([label, arr]) => {
+            arr.sort((a, b) => {
+                if (a.primary !== b.primary) return a.primary ? -1 : 1;
+                const la = LEAD.indexOf(a.id), lb = LEAD.indexOf(b.id);
+                if (la !== -1 || lb !== -1) return (la === -1 ? 1e3 : la) - (lb === -1 ? 1e3 : lb);
+                return a.idx - b.idx;
+            });
+            counts[label] = arr.length;
+            out[label] = bundle(arr);
+        });
         const rank = l => { const b = BRAND_ORDER.indexOf(l), c = CATEGORY_NAMES.indexOf(l); return c !== -1 ? 200 + c : b !== -1 ? b : 100; };
-        const labels = Object.keys(byLabel).sort((a, b) => rank(a) - rank(b) || a.localeCompare(b, 'tr-TR'));
-        return { byLabel, labels, total: list.filter(p => p && p.id != null).length };
+        const labels = Object.keys(out).sort((a, b) => rank(a) - rank(b) || a.localeCompare(b, 'tr-TR'));
+        return { byLabel: out, counts, labels, total: list.filter(p => p && p.id != null).length };
     }
 
     function measure() {
@@ -3628,15 +3772,16 @@ document.addEventListener('click', function (e) {
         const top = header ? Math.round(header.getBoundingClientRect().height) : 0;
         section.style.setProperty('--vitrin-top', `${top}px`);
         const W = pin.clientWidth, H = pin.clientHeight;
-        const long = items.length > 14;
+        const long = groups.length > 14;
+        const short = H < 700;
         geo = W >= 901
             ? { W, H, X0: W * 0.64, AMP: W * 0.085, Y0: H * 0.5, GAP: H * 0.34, BASE: Math.min(W * 0.36, 600), STEP: long ? Math.max(170, H * 0.24) : Math.max(220, H * 0.36), top }
-            : { W, H, X0: W * 0.5, AMP: W * 0.13, Y0: H * 0.665, GAP: H * 0.27, BASE: Math.min(W * 0.76, 340), STEP: long ? Math.max(150, H * 0.22) : Math.max(180, H * 0.3), top };
-        section.style.height = `${pin.clientHeight + Math.max(0, items.length - 1) * geo.STEP}px`;
+            : { W, H, X0: W * 0.5, AMP: W * 0.13, Y0: H * (short ? 0.71 : 0.68), GAP: H * 0.27, BASE: Math.min(W * (short ? 0.64 : 0.74), 340), STEP: long ? Math.max(150, H * 0.22) : Math.max(180, H * 0.3), top };
+        section.style.height = `${pin.clientHeight + Math.max(0, groups.length - 1) * geo.STEP}px`;
         stringSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     }
 
-    function buildTabs() {
+    function buildTabs(counts) {
         tabsBox.replaceChildren();
         tabs = order.map(label => {
             const t = document.createElement('button');
@@ -3648,7 +3793,7 @@ document.addEventListener('click', function (e) {
             t.append(label);
             const c = document.createElement('span');
             c.className = 'vitrin-tab-count';
-            c.textContent = shelves[label].length;
+            c.textContent = counts[label];
             t.appendChild(c);
             t.addEventListener('click', () => selectShelf(label, true));
             tabsBox.appendChild(t);
@@ -3657,17 +3802,19 @@ document.addEventListener('click', function (e) {
     }
 
     function setSrc(img, it, small) {
-        img.addEventListener('error', () => {
+        img.onerror = () => {
+            img.onerror = null;
             if (it.p.image && img.src !== it.p.image) { img.src = it.p.image; img.classList.add('is-fallback'); }
-        }, { once: true });
+        };
+        img.classList.remove('is-fallback');
         img.src = small ? `assets/vitrin/t/${it.id}.webp` : `assets/vitrin/${it.id}.webp`;
     }
 
     function buildRack() {
         rack.replaceChildren();
         thumbsBox.replaceChildren();
-        nodes = items.map((it, i) => {
-            it.loaded = false;
+        nodes = groups.map((g, i) => {
+            g.loaded = false;
             const b = document.createElement('button');
             b.type = 'button';
             b.className = 'vitrin-item';
@@ -3680,24 +3827,31 @@ document.addEventListener('click', function (e) {
             img.draggable = false;
             img.style.animationDelay = `-${((i % 7) * 0.7).toFixed(1)}s`;
             img.addEventListener('load', () => {
+                const it = cur(g);
                 if (!it.ar && img.naturalWidth) { it.ar = img.naturalWidth / img.naturalHeight; render(); }
             });
             b.appendChild(img);
-            b.addEventListener('click', () => openDetail(it));
+            b.addEventListener('click', () => openDetail(cur(g)));
             rack.appendChild(b);
             return b;
         });
-        thumbs = items.map((it, i) => {
+        thumbs = groups.map((g, i) => {
             const t = document.createElement('button');
             t.type = 'button';
             t.className = 'vitrin-thumb';
-            t.setAttribute('aria-label', `${it.b} ${it.n} göster`);
+            t.setAttribute('aria-label', `${cur(g).b} ${cur(g).n} göster`);
             const img = document.createElement('img');
             img.alt = '';
             img.loading = 'lazy';
             img.decoding = 'async';
-            setSrc(img, it, true);
+            setSrc(img, cur(g), true);
             t.appendChild(img);
+            if (g.opts.length > 1) {
+                const n = document.createElement('span');
+                n.className = 'vitrin-thumb-n';
+                n.textContent = g.opts.length;
+                t.appendChild(n);
+            }
             t.addEventListener('click', () => goTo(i));
             thumbsBox.appendChild(t);
             return t;
@@ -3708,14 +3862,15 @@ document.addEventListener('click', function (e) {
 
     const pathX = d => geo.X0 + geo.AMP * (Math.sin(d * 0.95 + 0.6) - Math.sin(0.6));
     const pathY = d => geo.Y0 + d * geo.GAP;
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
     function render() {
         if (!ready) return;
         const p = shown;
         nodes.forEach((node, i) => {
-            const it = items[i];
+            const g = groups[i], it = cur(g);
             const d = i - p, ad = Math.abs(d);
-            if (ad < 3.6 && !it.loaded) { it.loaded = true; setSrc(node.firstChild, it, false); }
+            if (ad < 3.6 && !g.loaded) { g.loaded = true; setSrc(node.firstChild, it, false); }
             if (ad > 2.7) { if (node.style.visibility !== 'hidden') node.style.visibility = 'hidden'; return; }
             node.style.visibility = 'visible';
             const ar = it.ar || 2;
@@ -3723,30 +3878,46 @@ document.addEventListener('click', function (e) {
             const boxW = geo.BASE * sc;
             const hk = ar < 1 ? 0.95 : ar < 1.45 ? 0.74 : ar < 1.8 ? 0.66 : 0.58;
             const boxH = geo.BASE * sc * hk;
-            const rot = Math.max(-14, Math.min(14, -d * 9)) - 3;
-            const op = Math.max(0, 1 - (d < 0 ? 0.72 : 0.42) * ad);
+            const rot = clamp(-d * 9, -14, 14) - 3;
+            /* turn the shoe a little in depth as it travels: away on the way in, square-on at the centre */
+            const turn = reduced.matches ? 0 : clamp(d * -26, -34, 34);
+            const tilt = reduced.matches ? 0 : clamp(ad * 7, 0, 10);
+            const op = Math.max(0, 1 - (d < 0 ? 0.9 : 0.42) * ad);
             node.style.width = `${boxW.toFixed(1)}px`;
             node.style.height = `${boxH.toFixed(1)}px`;
-            node.style.transform = `translate(${pathX(d).toFixed(1)}px,${pathY(d).toFixed(1)}px) translate(-50%,-50%) rotate(${rot.toFixed(2)}deg)`;
+            node.style.transform = `translate(${pathX(d).toFixed(1)}px,${pathY(d).toFixed(1)}px) translate(-50%,-50%) perspective(900px) rotateY(${turn.toFixed(2)}deg) rotateX(${tilt.toFixed(2)}deg) rotate(${rot.toFixed(2)}deg)`;
             node.style.opacity = op.toFixed(3);
             node.style.zIndex = String(100 - Math.round(ad * 10));
         });
         let dStr = '';
         for (let k = -3; k <= 3.0001; k += 0.1) dStr += `${dStr ? ' L' : 'M'}${pathX(k).toFixed(1)} ${pathY(k).toFixed(1)}`;
         stringPath.setAttribute('d', dStr);
-        const n = items.length;
+        const n = groups.length;
         el.bar.style.height = `${(100 * (Math.min(p, n - 1) + 1) / n).toFixed(2)}%`;
         el.hint.style.opacity = p < 0.3 ? '1' : '0';
-        const a = Math.max(0, Math.min(n - 1, Math.round(p)));
+        const a = clamp(Math.round(p), 0, n - 1);
         if (a !== active) setActive(a);
     }
 
-    function setActive(a) {
-        const first = active === -1;
-        active = a;
-        const it = items[a];
-        if (!it) return;
-        el.count.textContent = `${String(a + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
+    function badgeFor(p) {
+        const tag = TAGS[String(p.id)];
+        if (tag) return tag;
+        /* same rule as the catalogue cards below */
+        const price = priceNum(p) || 0;
+        if (Number(p.id) > 50) return 'Yeni';
+        if (price < 1000) return 'Fırsat';
+        return '';
+    }
+
+    function shopierLink(it) {
+        const base = it.p.url || 'https://www.shopier.com/noktaayakkabi';
+        return base;
+    }
+
+    function paintProduct(swap) {
+        const g = groups[active];
+        if (!g) return;
+        const it = cur(g);
         el.brand.lang = it.latin ? 'en' : 'tr';
         el.name.lang = it.latin ? 'en' : 'tr';
         el.brand.textContent = it.b;
@@ -3755,13 +3926,104 @@ document.addEventListener('click', function (e) {
         el.name.classList.toggle('is-xlong', it.n.length > 24);
         el.variant.textContent = it.s;
         el.price.textContent = priceText(it.p);
-        el.shopier.href = it.p.url || 'https://www.shopier.com/noktaayakkabi';
-        thumbs.forEach((t, i) => t.classList.toggle('is-active', i === a));
-        if (!first) {
+        const badge = badgeFor(it.p);
+        el.badge.textContent = badge;
+        el.badge.hidden = !badge;
+        el.badge.classList.toggle('is-hot', !!TAGS[String(it.id)]);
+        if (pickedSize != null && !sizeList(it).some(x => x.n === pickedSize)) pickedSize = null;
+        paintSizes(it);
+        paintColors(g);
+        el.shopier.href = shopierLink(it);
+        el.live.textContent = `${it.b} ${it.n}${it.color ? `, ${it.color}` : ''}, ${priceText(it.p)}`;
+        if (swap) {
             info.classList.remove('is-swap');
             void info.offsetWidth;
             info.classList.add('is-swap');
         }
+    }
+
+    /* Shopier stock when we have it (only sizes with stock), otherwise the range written in the title. */
+    function sizeList(it) {
+        const st = STOCK[String(it.id)];
+        if (st) {
+            return Object.keys(st).map(Number).filter(n => n > 0 && st[n] > 0).sort((a, b) => a - b).map(n => ({ n, last: st[n] === 1 }));
+        }
+        return it.sizes.map(n => ({ n, last: false }));
+    }
+
+    function paintSizes(it) {
+        el.sizes.replaceChildren();
+        const list = sizeList(it);
+        el.sizes.hidden = !list.length;
+        list.forEach(({ n, last }) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = last ? 'vitrin-size is-last' : 'vitrin-size';
+            b.textContent = n;
+            b.setAttribute('aria-label', last ? `${n} numara, son 1 çift` : `${n} numara`);
+            b.setAttribute('aria-pressed', String(n === pickedSize));
+            b.addEventListener('click', () => {
+                pickedSize = pickedSize === n ? null : n;
+                paintSizes(it);
+                updateBuyLabel();
+            });
+            el.sizes.appendChild(b);
+        });
+        updateBuyLabel();
+    }
+
+    function updateBuyLabel() {
+        el.shopierText.textContent = pickedSize != null ? `${pickedSize} · Shopier'de al` : "Shopier'de al";
+        el.shopier.setAttribute('aria-label', pickedSize != null ? `${pickedSize} numara için Shopier'de satın al` : "Shopier'de satın al");
+    }
+
+    function paintColors(g) {
+        el.colors.replaceChildren();
+        el.colors.hidden = g.opts.length < 2;
+        if (g.opts.length < 2) return;
+        g.opts.forEach((it, j) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'vitrin-color';
+            b.setAttribute('aria-pressed', String(j === g.sel));
+            b.setAttribute('aria-label', it.color || `Renk ${j + 1}`);
+            b.title = it.color || '';
+            const img = document.createElement('img');
+            img.alt = '';
+            img.loading = 'lazy';
+            setSrc(img, it, true);
+            b.appendChild(img);
+            b.addEventListener('click', () => pickColor(g, j));
+            el.colors.appendChild(b);
+        });
+    }
+
+    function pickColor(g, j) {
+        if (g.sel === j) return;
+        g.sel = j;
+        const i = groups.indexOf(g);
+        const node = nodes[i];
+        if (node) {
+            const img = node.firstChild;
+            setSrc(img, cur(g), false);
+            img.classList.remove('is-switch');
+            void img.offsetWidth;
+            img.classList.add('is-switch');
+            g.loaded = true;
+        }
+        const t = thumbs[i];
+        if (t) setSrc(t.firstChild, cur(g), true);
+        render();
+        paintProduct(true);
+    }
+
+    function setActive(a) {
+        const first = active === -1;
+        active = a;
+        if (!groups[a]) return;
+        el.count.textContent = `${String(a + 1).padStart(2, '0')} / ${String(groups.length).padStart(2, '0')}`;
+        thumbs.forEach((t, i) => t.classList.toggle('is-active', i === a));
+        paintProduct(!first);
         const t = thumbs[a];
         if (t) {
             const box = thumbsBox.getBoundingClientRect(), r = t.getBoundingClientRect();
@@ -3774,7 +4036,7 @@ document.addEventListener('click', function (e) {
     function readScroll() {
         const rect = section.getBoundingClientRect();
         const raw = (geo.top - rect.top) / geo.STEP;
-        target = Math.max(0, Math.min(Math.max(0, items.length - 1), raw));
+        target = clamp(raw, 0, Math.max(0, groups.length - 1));
         document.body.classList.toggle('vitrin-active', rect.top <= geo.top + 2 && rect.bottom >= window.innerHeight - 2);
     }
 
@@ -3795,9 +4057,15 @@ document.addEventListener('click', function (e) {
         if (window.NoktaOpenProduct && window.NoktaOpenProduct(it.id)) return;
         window.open(it.p.url || 'https://www.shopier.com/noktaayakkabi', '_blank', 'noopener');
     }
-    el.detail.addEventListener('click', () => { if (active >= 0 && items[active]) openDetail(items[active]); });
+    el.detail.addEventListener('click', () => { if (groups[active]) openDetail(cur(groups[active])); });
+    el.tryon.addEventListener('click', () => {
+        const g = groups[active];
+        if (!g) return;
+        if (window.NoktaTryOn && typeof window.NoktaTryOn.open === 'function') window.NoktaTryOn.open(cur(g).p);
+        else openDetail(cur(g));
+    });
 
-    /* "Hepsini listele": pick the same chip in the catalogue below and jump there. */
+    /* "Tümünü listele": pick the same chip in the catalogue below and jump there. */
     el.all.addEventListener('click', event => {
         event.preventDefault();
         const cat = CATEGORIES.find(c => c[0] === shelf);
@@ -3815,7 +4083,7 @@ document.addEventListener('click', function (e) {
         if (!shelves[label] || (label === shelf && fromUser)) return;
         const inside = section.getBoundingClientRect().top <= geo.top + 1;
         shelf = label;
-        items = shelves[label];
+        groups = shelves[label];
         tabs.forEach((t, i) => t.setAttribute('aria-selected', String(order[i] === label)));
         const tab = tabs[order.indexOf(label)];
         if (tab) {
@@ -3839,9 +4107,25 @@ document.addEventListener('click', function (e) {
         ready = true;
         shelf = '';
         const first = order.includes('Nike') ? 'Nike' : order[0];
-        buildTabs();
+        buildTabs(g.counts);
         selectShelf(first, false);
     }
+
+    fetch('numaralar.json', { cache: 'no-cache' })
+        .then(r => (r.ok ? r.json() : {}))
+        .then(data => {
+            Object.entries(data || {}).forEach(([k, v]) => { if (/^\d+$/.test(k) && v && typeof v === 'object') STOCK[k] = v; });
+            if (ready) paintProduct(false);
+        })
+        .catch(() => {});
+
+    fetch('etiketler.json', { cache: 'no-cache' })
+        .then(r => (r.ok ? r.json() : {}))
+        .then(data => {
+            Object.entries(data || {}).forEach(([k, v]) => { if (/^\d+$/.test(k) && typeof v === 'string' && v.trim()) TAGS[k] = v.trim(); });
+            if (ready) paintProduct(false);
+        })
+        .catch(() => {});
 
     document.addEventListener('nokta:products', e => init(e.detail));
     if (Array.isArray(window.NoktaProducts)) init(window.NoktaProducts);
@@ -3853,6 +4137,23 @@ document.addEventListener('click', function (e) {
     window.addEventListener('scroll', () => { if (!ready) return; readScroll(); schedule(); }, { passive: true });
     window.addEventListener('resize', () => { if (!ready) return; measure(); readScroll(); shown = target; render(); });
     window.addEventListener('load', () => { if (!ready) return; measure(); readScroll(); shown = target; render(); }, { once: true });
+})();
+
+/* "Son yola çıkan siparişler": play the short clips only while they are on screen. */
+(() => {
+    const vids = [...document.querySelectorAll('.yola-cikanlar video')];
+    if (!vids.length) return;
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+        const v = e.target;
+        if (e.isIntersecting && !still.matches) {
+            if (v.preload === 'none') v.preload = 'auto';
+            const p = v.play();
+            if (p && p.catch) p.catch(() => {});
+        } else v.pause();
+    }), { threshold: 0.35 });
+    vids.forEach(v => io.observe(v));
 })();
 </script>
 </body>

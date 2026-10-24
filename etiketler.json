@@ -1,0 +1,3 @@
+{
+  "_aciklama": "Vitrinde görünecek elle eklenen etiketler. Anahtar ürün numarası (products.json id), değer etiket yazısı. Örnek: \"45\": \"Çok satan\". Boş bırakılırsa sitedeki Yeni / Fırsat kuralı kullanılır."
+}
