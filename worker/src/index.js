@@ -238,9 +238,10 @@ async function handleTryOn(request, env, ctx) {
           // Ayakkabı görselini FASHN kendisi indiriyor (Shopier adresi, yukarıda doğrulandı).
           product_image: product.image,
           model_image: personImage,
-          prompt: `Place the exact selected shoe, ${selectedShoe}, naturally on the person's visible feet. Match the product image precisely, including its silhouette, colorway and details. Estimate the person's foot length and width from the visible feet, ankles, legs and perspective, then scale the shoe to fit the foot naturally. The shoe must sit inside the foot outline, follow the foot angle and perspective, and never look oversized, floating or wider than the foot. Keep both shoes at a consistent realistic scale. Do not replace it with an Air Force 1 or any other shoe. Preserve the person's identity, pose, lighting, shadows and the rest of the outfit.`,
+          // FASHN: istem isteğe bağlı ve kısa olmalı; uzun talimatlar kişiyi silebiliyor.
+          prompt: `Wear the ${selectedShoe} shoes. Keep the person, face, pose, outfit and background unchanged.`,
           resolution: '1k',
-          generation_mode: 'fast',
+          generation_mode: 'balanced',
           num_images: 1,
           output_format: 'png',
           return_base64: true
