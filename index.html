@@ -1065,6 +1065,10 @@ document.addEventListener('click', function (e) {
     .vitrin-ui > *{pointer-events:auto;}
     .vitrin-copy{position:absolute;left:var(--vx);top:18px;width:min(440px,calc(100% - 2 * var(--vx)));pointer-events:none;}
     .vitrin-copy > *{pointer-events:auto;}
+    .hero-scene[hidden]{display:none !important;}
+    .vitrin-h1{margin:0 0 12px;font:600 21px/1.15 'Fraunces',serif;letter-spacing:-.01em;color:#1b1712;}
+    .vitrin-lead{display:none;margin:-4px 0 18px;font-size:15px;line-height:1.5;color:#6b645c;}
+    @media (max-width:900px) and (max-height:720px){.vitrin-h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;margin:0;}}
     .vitrin-eyebrow{display:none;margin:0 0 16px;font:700 12px/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#6b645c;align-items:center;gap:10px;}
     .vitrin-eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--accent,#c1291f);display:block;}
     .vitrin-tabs{display:flex;gap:6px;margin:0 calc(-1 * var(--vx));padding:2px var(--vx) 4px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--vx),#000 calc(100% - var(--vx)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--vx),#000 calc(100% - var(--vx)),transparent 100%);}
@@ -1150,13 +1154,15 @@ document.addEventListener('click', function (e) {
         .vitrin-sizes{margin:16px 0 0;padding:2px 0 8px;flex-wrap:wrap;overflow:visible;-webkit-mask-image:none;mask-image:none;max-width:520px;}
         .vitrin-btn.vitrin-btn-icon{width:52px;padding:0;}
         .vitrin-color{width:50px;height:38px;}
-        .vitrin-copy{top:50%;transform:translateY(-56%);}
+        .vitrin-copy{top:50%;transform:translateY(-54%);}
         .vitrin-eyebrow{display:flex;}
-        .vitrin-info{margin-top:26px;}
+        .vitrin-h1{margin:0 0 8px;font-size:clamp(28px,2.4vw,36px);line-height:1.1;white-space:nowrap;}
+        .vitrin-lead{display:block;}
+        .vitrin-info{margin-top:20px;}
         .vitrin-copy{width:min(520px,calc(100% - 2 * var(--vx)));}
         .vitrin-tabs{flex-wrap:wrap;margin:0;padding:0;overflow:visible;-webkit-mask-image:none;mask-image:none;}
         .vitrin-tab{min-height:34px;padding:0 13px;font-size:13px;}
-        .vitrin-name{font-size:clamp(48px,5.2vw,82px);}
+        .vitrin-name{font-size:clamp(44px,4.4vw,72px);}
         .vitrin-name.is-long{font-size:clamp(40px,4.2vw,64px);}
         .vitrin-name.is-xlong{font-size:clamp(32px,3.3vw,50px);max-width:18ch;}
         .vitrin-variant{font-size:18px;}
@@ -1251,11 +1257,12 @@ document.addEventListener('click', function (e) {
 </header>
 
 <main id="top">
-    <div class="hero-scene" id="hero-scene">
-        <section class="hero">
+    <!-- Eski açılış ekranı: site artık doğrudan vitrinle açılıyor. Elemanlar diğer betikler (sayaç, deneme butonu) için DOM'da duruyor. -->
+    <div class="hero-scene" id="hero-scene" hidden>
+        <section class="hero" aria-hidden="true">
             <div>
                 <p class="hero-eyebrow"><span class="dot"></span>2026 koleksiyonu</p>
-                <h1>Attığın her adım <br>bir tercih.</h1>
+                <p class="hero-title">Attığın her adım <br>bir tercih.</p>
                 <p class="hero-copy">30 yıllık mağaza tecrübesiyle tek tek seçilmiş sneaker, bot ve topuklu ayakkabı modelleri. Ücretsiz kargo, 17:00'ye kadar verilen siparişler aynı gün kargoda.</p>
                 <div class="hero-ctas">
                     <a class="btn-primary" href="#urunler">Koleksiyonu gör</a>
@@ -1267,8 +1274,8 @@ document.addEventListener('click', function (e) {
                     <strong>Air Force 1<br>White.</strong>
                     <span>Temiz çizgiler, ikonik Swoosh ve her adımda zamansız bir siluet.</span>
                 </div>
-                <img class="shoe-frame" id="shoe-frame" src="assets/air-force-sharp-webp/ezgif-frame-001.webp" alt="Scroll ile birleşen beyaz Air Force 1" fetchpriority="high">
-                <img class="hero-center-logo" src="logo-transparent.png" alt="Nokta Ayakkabıcılık">
+                <img class="shoe-frame" id="shoe-frame" src="assets/air-force-sharp-webp/ezgif-frame-001.webp" alt="" loading="lazy">
+                <img class="hero-center-logo" src="logo-transparent.png" alt="" loading="lazy">
                 <div class="shoe-caption" aria-hidden="true">
                     <strong>NIKE / AIR FORCE 1</strong>
                     <em>01</em>
@@ -1288,7 +1295,9 @@ document.addEventListener('click', function (e) {
             </div>
             <div class="vitrin-ui">
                 <div class="vitrin-copy">
-                    <h2 class="vitrin-eyebrow" id="vitrin-title"><span class="dot" aria-hidden="true"></span><span id="vitrin-title-text">Vitrin · 159 model</span></h2>
+                    <h1 class="vitrin-h1">Attığın her adım bir tercih.</h1>
+                    <p class="vitrin-lead">Ücretsiz kargo · 17:00'ye kadar verilen siparişler aynı gün kargoda</p>
+                    <p class="vitrin-eyebrow" id="vitrin-title"><span class="dot" aria-hidden="true"></span><span id="vitrin-title-text">Vitrin · 159 model</span></p>
                     <div class="vitrin-tabs" id="vitrin-tabs" role="tablist" aria-label="Vitrin markaları ve kategorileri">
                         <button class="vitrin-tab" type="button" role="tab" aria-selected="true" lang="en">Nike</button>
                         <button class="vitrin-tab" type="button" role="tab" aria-selected="false" lang="en">Adidas</button>
@@ -2685,6 +2694,10 @@ document.addEventListener('click', function (e) {
         const shoeProgress = document.querySelector('.shoe-progress');
         const collection = document.getElementById('urunler');
         if(!hero || !frameImage) return;
+        if(heroScene && heroScene.hidden){
+            if(collection){ collection.style.setProperty('--collection-lift', '0px'); collection.style.setProperty('--collection-opacity', '1'); }
+            return;
+        }
         const syncHeroScene = () => {
             if(!heroScene) return;
             if(reducedMotion.matches || window.matchMedia('(max-width: 640px)').matches){
@@ -3729,18 +3742,9 @@ document.addEventListener('click', function (e) {
         };
     }
 
-    /* One shoe on the rack per model; its colours become swatches. */
+    /* One shoe on the rack per product (every colour is its own shoe). */
     function bundle(items) {
-        const byKey = new Map(), out = [];
-        items.forEach(it => {
-            const k = `${it.primary ? 1 : 0}:${it.key}`;
-            let g = byKey.get(k);
-            if (!g) { g = { opts: [], sel: 0, loaded: false }; byKey.set(k, g); out.push(g); }
-            g.opts.push(it);
-        });
-        /* every colour carries the model name of the first (best-known) one */
-        out.forEach(g => { const n = g.opts[0].n; g.opts.forEach(o => { o.n = n; }); });
-        return out;
+        return items.map(it => ({ opts: [it], sel: 0, loaded: false }));
     }
 
     function group(list) {
