@@ -1,0 +1,8 @@
+{
+  "name": "nokta-tryon-worker",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "wrangler dev", "deploy": "wrangler deploy", "build": "wrangler deploy --dry-run --outdir dist" },
+  "dependencies": { "jose": "^5.9.6" },
+  "devDependencies": { "wrangler": "^4.40.0" }
+}

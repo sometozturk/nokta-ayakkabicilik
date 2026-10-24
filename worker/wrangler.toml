@@ -1,0 +1,19 @@
+name = "nokta-tryon"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[vars]
+REGISTERED_DAILY_LIMIT = "2"
+DEVICE_DAILY_CAP = "3"
+ANON_IP_DAILY_CAP = "3"
+GLOBAL_DAILY_CAP = "14"
+GLOBAL_TOTAL_CAP = "100"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nokta-tryon"
+database_id = "REPLACE_WITH_D1_ID"
+
+[observability]
+enabled = true
