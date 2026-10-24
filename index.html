@@ -2123,6 +2123,9 @@ document.addEventListener('click', function (e) {
             { pattern: /(lacoste|calvin klein|goldengoose|prada|new balance|yeezy|lufian)/i, asset: 'assets/air-force-clean/ezgif-frame-121.webp', placement: { x: .15, y: .68, width: .7, height: .2 }, widthScale: 1.22, minWidth: .34, maxWidth: .84 }
         ];
         const tryOnEndpoint = 'https://tryon-wgqkwujteq-uc.a.run.app';
+        // Servis kapalıyken (faturalandırma, dağıtım hatası, ağ kopması) tarayıcı yalnızca
+        // "Failed to fetch" verir; müşteriye teknik hata yerine bunu gösteriyoruz.
+        const tryOnServiceDownMessage = 'Kombin servisine şu an ulaşılamıyor. Birkaç dakika sonra tekrar dene.';
         let photoUrl = '';
         let activeTryOnProduct = { ...defaultTryOnProduct };
         let activeTryOnProfile = tryOnProfiles[0];
@@ -2570,14 +2573,20 @@ document.addEventListener('click', function (e) {
                 productId: activeTryOnProduct.id
             };
             const idToken = await user.getIdToken();
-            const response = await fetch(tryOnEndpoint, {
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json',
-                    'Authorization':`Bearer ${idToken}`
-                },
-                body:JSON.stringify(payload)
-            });
+            let response;
+            try {
+                response = await fetch(tryOnEndpoint, {
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json',
+                        'Authorization':`Bearer ${idToken}`
+                    },
+                    body:JSON.stringify(payload)
+                });
+            } catch (error) {
+                console.error('[TryOn] Service unreachable', error);
+                throw new Error(tryOnServiceDownMessage);
+            }
             const result = await response.json().catch(() => ({}));
             if(!response.ok) {
                 if (response.status === 401 || response.status === 403) {
@@ -2593,6 +2602,9 @@ document.addEventListener('click', function (e) {
                         throw new Error('Ücretsiz deneme hakkınız kullanıldı. Devam etmek için giriş yapın veya kayıt olun.');
                     }
                     throw new Error('Kullanım sınırına ulaştın. Daha sonra tekrar dene.');
+                }
+                if (response.status >= 500) {
+                    throw new Error(tryOnServiceDownMessage);
                 }
                 throw new Error('AI servisi şu anda isteği tamamlayamadı.');
             }
@@ -2725,7 +2737,8 @@ document.addEventListener('click', function (e) {
                     const message = error && error.message ? error.message : 'Bilinmeyen bir hata oluştu.';
                     const exactQuotaMessages = [
                         'Bugünkü ücretsiz deneme kontenjanı doldu, yarın tekrar dene. Alışveriş için ürünlere göz atabilirsin.',
-                        'AI deneme kontenjanı şu an dolu. Ürünleri incelemeye devam edebilirsin.'
+                        'AI deneme kontenjanı şu an dolu. Ürünleri incelemeye devam edebilirsin.',
+                        tryOnServiceDownMessage
                     ];
                     status.textContent = exactQuotaMessages.includes(message)
                         ? message
