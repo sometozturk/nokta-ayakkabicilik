@@ -887,7 +887,10 @@ texLoader.load('logo-transparent.png', t => {
     t.colorSpace = THREE.SRGBColorSpace;
     const ar = t.image.height / t.image.width;
     const logo = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 2.4 * ar), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false }));
-    logo.position.set(0, ROOM.h - .55, ROOM.z1 - .12); logo.rotation.y = Math.PI; scene.add(logo);
+    logo.position.set(0, ROOM.h - .6, ROOM.z1 - .15); logo.rotation.y = Math.PI; scene.add(logo);
+    // Logo koyu cephede kaybolmasın: arkasına krem pano
+    const backing = new THREE.Mesh(new THREE.PlaneGeometry(3.0, 2.4 * ar + .28), new THREE.MeshBasicMaterial({ color: '#efe7da', toneMapped: false }));
+    backing.position.set(0, ROOM.h - .6, ROOM.z1 - .13); backing.rotation.y = Math.PI; scene.add(backing);
 });
 const slogan = new THREE.Mesh(new THREE.PlaneGeometry(3.4, .5), new THREE.MeshBasicMaterial({ map: signTex('Ayakkabıcılıkta son nokta', null, { panel: '#5a3d27', accent: '#c9a35c', text: '#f6ead9' }, 1024, 150), toneMapped: false }));
 
@@ -963,7 +966,7 @@ async function build() {
     counter(4.6, 6.4);
     plant(-7.2, 8.2); plant(7.2, 8.2); plant(-7.2, -8.3); plant(6.6, -8.4);
     // Slogan giriş duvarında, logonun altında (müşteri dönüp bakınca görür)
-    slogan.position.set(0, ROOM.h - 1.15, ROOM.z1 - .12); slogan.rotation.y = Math.PI; scene.add(slogan);
+    slogan.position.set(0, ROOM.h - 1.55, ROOM.z1 - .12); slogan.rotation.y = Math.PI; scene.add(slogan);
 }
 
 /* =========================================================
