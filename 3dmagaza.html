@@ -164,6 +164,13 @@
         .checkout-note{font-size:12px;line-height:1.55;color:var(--muted);background:var(--paper);border-radius:9px;padding:10px 12px;margin-bottom:6px;}
         .checkout-note b{color:var(--ink);}
 
+        .pick{display:grid;grid-template-columns:64px 1fr 22px;gap:12px;align-items:center;width:100%;padding:10px;margin-bottom:8px;border:1px solid var(--line);border-radius:10px;background:#fff;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
+        .pick:hover{border-color:var(--ink);}
+        .pick[aria-checked="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset;}
+        .pick img{width:64px;height:52px;object-fit:contain;border-radius:8px;background:#f1ebe0;}
+        .pick-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);}
+        .pick[aria-checked="true"] .pick-dot{border-color:var(--ink);background:radial-gradient(circle,var(--ink) 0 45%,transparent 50%);}
+        .tryon-lead{font-size:13px;line-height:1.55;color:var(--muted);margin:0 0 14px;}
         .toast{position:fixed;z-index:45;left:50%;top:calc(var(--bar) + 16px);transform:translate(-50%,-10px);padding:11px 18px;border-radius:999px;background:var(--ink);color:#fff;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;white-space:nowrap;}
         .toast.show{opacity:1;transform:translate(-50%,0);}
         .fly{position:fixed;z-index:50;pointer-events:none;object-fit:contain;transition:transform .7s cubic-bezier(.5,-.2,.3,1),opacity .7s ease;}
@@ -221,6 +228,7 @@
         <button class="zone-btn" type="button" data-zone="kadinbot"><span class="zone-dot" style="background:#a8794f"></span>Kadın Bot</button>
         <button class="zone-btn" type="button" data-zone="erkekbot"><span class="zone-dot" style="background:#7d8f9e"></span>Erkek Bot</button>
         <button class="zone-btn" type="button" data-zone="cocuk"><span class="zone-dot" style="background:#3f9bd6"></span>Çocuk</button>
+        <button class="zone-btn" type="button" data-zone="ayna"><span class="zone-dot" style="background:#c9a35c"></span>Kombininde Dene</button>
     </nav>
 </main>
 
@@ -255,6 +263,15 @@
         <button class="primary need-size" id="pp-add" type="button">Sepete ekle</button>
         <a class="secondary" id="pp-shopier" href="#" target="_blank" rel="noopener">Ürünü Shopier'de incele →</a>
     </div>
+</aside>
+
+<aside class="panel" id="tryon-panel" aria-labelledby="tryon-title" aria-hidden="true">
+    <div class="panel-head">
+        <h2 id="tryon-title">Kombininde Dene</h2>
+        <button class="close-btn" type="button" data-close aria-label="Kapat">×</button>
+    </div>
+    <div class="panel-body" id="tryon-body"></div>
+    <div class="panel-foot" id="tryon-foot"></div>
 </aside>
 
 <aside class="panel" id="cart-panel" aria-labelledby="cart-title" aria-hidden="true">
@@ -322,25 +339,26 @@ let checkoutMode = false;
    Arayüz yardımcıları
    ========================================================= */
 const $ = id => document.getElementById(id);
-const scrim = $('scrim'), productPanel = $('product-panel'), cartPanel = $('cart-panel');
+const scrim = $('scrim'), productPanel = $('product-panel'), cartPanel = $('cart-panel'), tryonPanel = $('tryon-panel');
+const PANELS = () => [productPanel, cartPanel, tryonPanel];
 let toastTimer;
 function toast(msg) {
     const t = $('toast'); t.textContent = msg; t.classList.add('show');
     clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 function openPanel(panel) {
-    [productPanel, cartPanel].forEach(p => { if (p !== panel) { p.classList.remove('open'); p.setAttribute('aria-hidden', 'true'); } });
+    PANELS().forEach(p => { if (p !== panel) { p.classList.remove('open'); p.setAttribute('aria-hidden', 'true'); } });
     panel.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
     if (window.matchMedia('(max-width:640px)').matches) scrim.classList.add('show');
 }
 function closePanels() {
-    [productPanel, cartPanel].forEach(p => { p.classList.remove('open'); p.setAttribute('aria-hidden', 'true'); });
+    PANELS().forEach(p => { p.classList.remove('open'); p.setAttribute('aria-hidden', 'true'); });
     scrim.classList.remove('show');
 }
 scrim.addEventListener('click', closePanels);
 document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closePanels));
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanels(); });
-const panelOpen = () => productPanel.classList.contains('open') || cartPanel.classList.contains('open');
+const panelOpen = () => PANELS().some(p => p.classList.contains('open'));
 
 /* ---------- ürün paneli ---------- */
 let current = null, chosenSize = null;
@@ -512,6 +530,42 @@ function startCheckout() {
     checkoutMode = true; saveCart(); renderCart();
 }
 $('bag-btn').addEventListener('click', () => { renderCart(); openPanel(cartPanel); });
+
+/* ---------- ayna: Kombininde Dene ---------- */
+let tryonPick = null;
+function openTryonPanel() {
+    const body = $('tryon-body'), foot = $('tryon-foot');
+    body.innerHTML = ''; foot.innerHTML = '';
+    const items = [];
+    cart.forEach(i => { if (productById.has(i.id) && !items.some(x => x.id === i.id)) items.push(productById.get(i.id)); });
+    if (!items.length) {
+        body.innerHTML = '<div class="cart-empty">Sepetin boş.<br>Önce reyonlardan bir ayakkabıyı sepete ekle, sonra aynaya gelip kombininde dene.</div>';
+        openPanel(tryonPanel); return;
+    }
+    if (!items.some(p => p.id === tryonPick)) tryonPick = items[0].id;
+    const lead = document.createElement('p'); lead.className = 'tryon-lead';
+    lead.textContent = 'Sepetindeki ayakkabılardan birini seç, kendi fotoğrafının üzerinde nasıl duracağını gör.';
+    body.appendChild(lead);
+    items.forEach(p => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'pick';
+        b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(p.id === tryonPick));
+        b.innerHTML = `<img src="assets/vitrin/${p.id}.webp" alt=""><span class="ci-title"></span><span class="pick-dot" aria-hidden="true"></span>`;
+        b.querySelector('.ci-title').textContent = p.title;
+        b.addEventListener('click', () => { tryonPick = p.id; body.querySelectorAll('.pick').forEach(x => x.setAttribute('aria-checked', String(x === b))); });
+        body.appendChild(b);
+    });
+    const go = document.createElement('button'); go.type = 'button'; go.className = 'primary';
+    go.textContent = 'Kombininde Dene';
+    go.addEventListener('click', () => {
+        if (typeof fbq === 'function') fbq('trackCustom', 'KombinDene3D', { content_ids: [String(productById.get(tryonPick).shopierId)] });
+        window.location.href = 'index.html?kombin=' + encodeURIComponent(tryonPick);
+    });
+    foot.appendChild(go);
+    const note = document.createElement('div'); note.className = 'secondary';
+    note.textContent = 'Sepetin kaybolmaz, 3D mağazaya geri dönebilirsin.';
+    foot.appendChild(note);
+    openPanel(tryonPanel);
+}
 
 /* =========================================================
    3D sahne
@@ -799,9 +853,20 @@ function plant(x, z) {
 function mirror(x, z) {
     const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = -Math.PI / 2; scene.add(g);
     box(1.1, 2.1, .06, M.brass, 0, 1.25, .03, g, false);
-    const glass = new THREE.Mesh(new THREE.PlaneGeometry(1, 2), new THREE.MeshStandardMaterial({ color: '#dfe6e6', roughness: .08, metalness: .9 }));
+    const glassTex = canvasTex(256, 512, (c, w, h) => {
+        const gr = c.createLinearGradient(0, 0, w, h);
+        gr.addColorStop(0, '#eef3f3'); gr.addColorStop(.45, '#c9d4d6'); gr.addColorStop(.55, '#e4ebec'); gr.addColorStop(1, '#b7c3c6');
+        c.fillStyle = gr; c.fillRect(0, 0, w, h);
+        c.globalAlpha = .35; c.fillStyle = '#fff';
+        c.beginPath(); c.moveTo(w * .15, 0); c.lineTo(w * .45, 0); c.lineTo(w * .05, h * .6); c.lineTo(0, h * .6); c.closePath(); c.fill();
+    });
+    const glass = new THREE.Mesh(new THREE.PlaneGeometry(1, 2), new THREE.MeshBasicMaterial({ map: glassTex, toneMapped: false }));
     glass.position.set(0, 1.25, .065); g.add(glass);
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(1.15, .26), new THREE.MeshBasicMaterial({ map: signTex('Kombininde Dene', 'Aynaya dokun', { panel: '#1b1712', accent: '#c9a35c', text: '#f6ead9' }, 768, 174), toneMapped: false }));
+    sign.position.set(0, 2.5, .07); g.add(sign);
     box(1.4, .45, .5, M.velvet, 0, .225, .9, g);
+    const hit = new THREE.Mesh(new THREE.BoxGeometry(1.3, 2.5, .3), new THREE.MeshBasicMaterial({ visible: false }));
+    hit.position.set(0, 1.35, .2); hit.userData.tryon = true; g.add(hit); clickable.push(hit);
     obstacles.push([x - 1.2, z - .75, x, z + .75]);
 }
 function counter(x, z) {
@@ -910,6 +975,7 @@ const VIEWS = {
     topuklu: { x: .4,   z: -4.4, yaw: 0,              pitch: -.1 },
     kadinbot: { x: 4.2, z: -5.3, yaw: -Math.PI / 2,   pitch: -.1 },
     erkekbot: { x: 4.6, z: -.45, yaw: -Math.PI / 2,   pitch: -.1 },
+    ayna:     { x: 4.9, z: 2.2,  yaw: -Math.PI / 2,   pitch: -.04 },
     cocuk:   { x: 5.0,  z: 5.35, yaw: -Math.PI / 2,   pitch: -.16 },
 };
 // Dikey (telefon) ekranda tavan çok görünmesin diye bakışı biraz aşağı eğ
@@ -962,7 +1028,7 @@ function pick(clientX, clientY, withFloor) {
     ndc.set(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ndc, camera);
     const hits = ray.intersectObjects(withFloor ? [...clickable, floor] : clickable, false);
-    return hits.find(h => h.object === floor || h.object.userData.kasa || (h.object.material.map && h.object.material.opacity > 0)) || null;
+    return hits.find(h => h.object === floor || h.object.userData.kasa || h.object.userData.tryon || (h.object.material.map && h.object.material.opacity > 0)) || null;
 }
 canvas.addEventListener('pointerdown', e => {
     if (e.button !== 0 && e.pointerType === 'mouse') return;
@@ -983,7 +1049,7 @@ canvas.addEventListener('pointermove', e => {
     if (e.pointerType !== 'mouse') return;
     const h = pick(e.clientX, e.clientY, false);
     setHover(h && h.object.userData.product ? h.object : null, e);
-    canvas.classList.toggle('pointing', !!(h && (h.object.userData.product || h.object.userData.kasa)));
+    canvas.classList.toggle('pointing', !!(h && (h.object.userData.product || h.object.userData.kasa || h.object.userData.tryon)));
 });
 canvas.addEventListener('pointerleave', () => setHover(null));
 function endDrag(e) {
@@ -995,6 +1061,7 @@ function endDrag(e) {
     hideHint();
     if (h.object.userData.product) { showProduct(h.object.userData.product, h.object.userData.zone); setHover(null); }
     else if (h.object.userData.kasa) { renderCart(); openPanel(cartPanel); }
+    else if (h.object.userData.tryon) { openTryonPanel(); }
     else if (h.object === floor) {
         const [x, z] = collide(h.point.x, h.point.z);
         glide = { x, z };

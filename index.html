@@ -3125,6 +3125,28 @@ document.addEventListener('click', function (e) {
             return Array.isArray(data) ? data.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean) : FALLBACK_PRODUCTS;
         })
         .catch(() => FALLBACK_PRODUCTS.map((product, index) => normalizeProduct(product, index + 1)).filter(Boolean));
+    // 3D mağazadaki aynadan gelen ?kombin=ID: Kombininde Dene'yi o ürünle aç
+    (() => {
+        const params = new URLSearchParams(window.location.search);
+        const kombinId = params.get('kombin');
+        if (!kombinId) return;
+        const product = PRODUCTS.find(item => String(item.id) === String(kombinId)) || null;
+        const cleanUrl = () => { try { params.delete('kombin'); const q = params.toString(); history.replaceState(null, '', window.location.pathname + (q ? '?' + q : '') + window.location.hash); } catch (e) {} };
+        let opened = false;
+        const open = () => {
+            if (opened) return; opened = true; cleanUrl();
+            window.NoktaTryOn.open(product);
+        };
+        const waitReady = (tries = 0) => {
+            const ready = window.NoktaTryOn && typeof window.NoktaTryOn.open === 'function' && typeof firebase !== 'undefined' && firebase.auth;
+            if (!ready) { if (tries < 60) window.setTimeout(() => waitReady(tries + 1), 250); return; }
+            // Oturum geri yüklenmeden açarsak giriş yapmış kullanıcı misafir sayılır; önce oturumu bekle
+            let unsubscribe = () => {};
+            try { unsubscribe = firebase.auth().onAuthStateChanged(() => { unsubscribe(); window.setTimeout(open, 50); }); } catch (e) { open(); }
+            window.setTimeout(open, 4000);
+        };
+        waitReady();
+    })();
     // Kaydırma kilidi giriş script'inde tanımlı; burada güvenli köprü
     const lockBodyScroll = () => { if (window.NoktaScrollLock) window.NoktaScrollLock.lock(); else document.body.style.overflow = 'hidden'; };
     const unlockBodyScroll = () => { if (window.NoktaScrollLock) window.NoktaScrollLock.unlock(); else document.body.style.overflow = ''; };
