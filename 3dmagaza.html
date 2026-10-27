@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Nokta Ayakkabıcılık 3D mağazasında spor ayakkabı, topuklu ve bot reyonlarını gezin; beğendiğiniz modelin numarasını seçip sepete ekleyin, siparişinizi Shopier üzerinden güvenle tamamlayın.">
+    <meta name="description" content="Nokta Ayakkabıcılık 3D mağazasında spor ayakkabı, topuklu, kadın bot, erkek bot ve çocuk reyonlarını gezin; beğendiğiniz modelin numarasını seçip sepete ekleyin, siparişinizi Shopier üzerinden güvenle tamamlayın.">
     <meta name="robots" content="index,follow,max-image-preview:large">
     <meta name="theme-color" content="#1b1712">
     <title>3D Mağaza | Reyonları Gezerek Alışveriş | Nokta Ayakkabıcılık</title>
     <link rel="canonical" href="https://www.noktaayakkabicilik.com/3dmagaza.html">
     <link rel="icon" type="image/png" href="logo-transparent.png">
     <meta property="og:title" content="3D Mağaza | Nokta Ayakkabıcılık">
-    <meta property="og:description" content="Mağazamızı 3D gezin: spor ayakkabı, topuklu ve bot reyonları. Numaranı seç, sepete ekle.">
+    <meta property="og:description" content="Mağazamızı 3D gezin: spor ayakkabı, topuklu, kadın bot, erkek bot ve çocuk reyonları. Numaranı seç, sepete ekle.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.noktaayakkabicilik.com/3dmagaza.html">
     <meta property="og:image" content="https://www.noktaayakkabicilik.com/og-image.jpg">
@@ -218,7 +218,8 @@
         <button class="zone-btn" type="button" data-zone="giris" aria-pressed="true">Giriş</button>
         <button class="zone-btn" type="button" data-zone="spor"><span class="zone-dot" style="background:#e34b35"></span>Spor Ayakkabı</button>
         <button class="zone-btn" type="button" data-zone="topuklu"><span class="zone-dot" style="background:#d98fa0"></span>Topuklu</button>
-        <button class="zone-btn" type="button" data-zone="bot"><span class="zone-dot" style="background:#a8794f"></span>Bot</button>
+        <button class="zone-btn" type="button" data-zone="kadinbot"><span class="zone-dot" style="background:#a8794f"></span>Kadın Bot</button>
+        <button class="zone-btn" type="button" data-zone="erkekbot"><span class="zone-dot" style="background:#7d8f9e"></span>Erkek Bot</button>
         <button class="zone-btn" type="button" data-zone="cocuk"><span class="zone-dot" style="background:#3f9bd6"></span>Çocuk</button>
     </nav>
 </main>
@@ -227,7 +228,7 @@
     <div class="intro-inner">
         <img src="logo-transparent.png" alt="">
         <h1>Mağazamıza hoş geldin</h1>
-        <p>Spor ayakkabı, topuklu, bot ve çocuk reyonlarını gez. Beğendiğin ayakkabıya tıkla, numaranı seç, sepete ekle. Siparişini Shopier'de güvenle tamamla.</p>
+        <p>Spor ayakkabı, topuklu, kadın bot, erkek bot ve çocuk reyonlarını gez. Beğendiğin ayakkabıya tıkla, numaranı seç, sepete ekle. Siparişini Shopier'de güvenle tamamla.</p>
         <div class="progress" aria-hidden="true"><div id="progress"></div></div>
         <button class="enter-btn" id="enter-btn" type="button" disabled>Raflar diziliyor…</button>
         <div class="intro-keys">Bilgisayarda <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> veya ok tuşlarıyla yürü, fareyle sürükleyerek bak.<br>Telefonda soldaki kolla yürü, ekranı kaydırarak bak.</div>
@@ -278,7 +279,8 @@ import * as THREE from 'three';
 const ZONES = {
     spor:    { name: 'Spor Ayakkabı', accent: '#e34b35', panel: '#2c2723', text: '#f6f1e6' },
     topuklu: { name: 'Topuklu',       accent: '#d98fa0', panel: '#ead6cf', text: '#3b2026' },
-    bot:     { name: 'Bot',           accent: '#a8794f', panel: '#4a3426', text: '#f6ead9' },
+    kadinbot: { name: 'Kadın Bot',    accent: '#a8794f', panel: '#4a3426', text: '#f6ead9' },
+    erkekbot: { name: 'Erkek Bot',    accent: '#7d8f9e', panel: '#26303a', text: '#eef2f5' },
     cocuk:   { name: 'Çocuk',         accent: '#3f9bd6', panel: '#dcebf5', text: '#1d3a52' },
     klasik:  { name: 'Klasik',        accent: '#1b1712', panel: '#e9e1d2', text: '#1b1712' }
 };
@@ -288,7 +290,8 @@ let sizeData = {};
 
 function zoneOf(p) {
     if (p.category === 'Topuklu Nokta Shic') return 'topuklu';
-    if (p.category === 'Kadın Bot' || p.category === 'Erkek Bot') return 'bot';
+    if (p.category === 'Kadın Bot') return 'kadinbot';
+    if (p.category === 'Erkek Bot') return 'erkekbot';
     if (p.category === 'Çocuk Sneakers') return 'cocuk';
     if (p.id === 112 || p.id === 113) return 'klasik';
     return 'spor';
@@ -790,7 +793,7 @@ async function build() {
     sizeData = sizes || {};
     try { await Promise.race([document.fonts.load('600 40px Fraunces'), new Promise(r => setTimeout(r, 1500))]); } catch (e) {}
 
-    const groups = { spor: [], topuklu: [], bot: [], cocuk: [], klasik: [] };
+    const groups = { spor: [], topuklu: [], kadinbot: [], erkekbot: [], cocuk: [], klasik: [] };
     products.filter(p => p && p.title && p.url && p.id != null).forEach(p => {
         const item = { ...p, zone: zoneOf(p), shopierId: String(p.url).replace(/\/$/, '').split('/').pop() };
         productById.set(p.id, item); groups[item.zone].push(item);
@@ -806,16 +809,20 @@ async function build() {
     buildWall({ items: groups.topuklu, zone: 'topuklu', cols: topCols, pitch: .92, shoeW: .6,
         tierYs: [.42, .86, 1.3, 1.74, 2.18], pos: new THREE.Vector3(.4, 0, ROOM.z0 + .02), rotY: 0, subtitle: 'Nokta Shic' });
     // Sağ duvar: Bot (4 kat, daha geniş aralık)
-    const botCols = Math.ceil(groups.bot.length / 4);
-    buildWall({ items: groups.bot, zone: 'bot', cols: botCols, pitch: 1.08, shoeW: .72,
-        tierYs: [.42, 1.0, 1.58, 2.16], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -4.2), rotY: -Math.PI / 2, subtitle: 'Kadın & erkek' });
+    // Sağ duvar: Kadın Bot (4 kat) ve yanında Erkek Bot rafı
+    const kbCols = Math.ceil(groups.kadinbot.length / 4);
+    buildWall({ items: groups.kadinbot, zone: 'kadinbot', cols: kbCols, pitch: 1.08, shoeW: .72,
+        tierYs: [.42, 1.0, 1.58, 2.16], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -5.0), rotY: -Math.PI / 2, subtitle: 'Bot & çizme' });
+    const ebCols = Math.max(2, Math.ceil(groups.erkekbot.length / 2));
+    buildWall({ items: groups.erkekbot, zone: 'erkekbot', cols: ebCols, pitch: 1.08, shoeW: .74,
+        tierYs: [.62, 1.32], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -.4), rotY: -Math.PI / 2, subtitle: 'Deri & su geçirmez' });
     // Sağ duvar, giriş tarafı: Çocuk sneaker rafı (4 kat, daha alçak)
     const cocukCols = Math.ceil(groups.cocuk.length / 4);
     buildWall({ items: groups.cocuk, zone: 'cocuk', cols: cocukCols, pitch: .9, shoeW: .56,
         tierYs: [.42, .84, 1.26, 1.68], pos: new THREE.Vector3(ROOM.x1 - .02, 0, 5.6), rotY: -Math.PI / 2, subtitle: 'Sneaker' });
     obstacles.push([ROOM.x1 - .55, 3.3, ROOM.x1, 7.9]);
     // Duvar dipleri yürünmesin
-    obstacles.push([ROOM.x0, -9, ROOM.x0 + .55, 9], [-8, ROOM.z0, 8, ROOM.z0 + .55], [ROOM.x1 - .55, -9, ROOM.x1, .2]);
+    obstacles.push([ROOM.x0, -9, ROOM.x0 + .55, 9], [-8, ROOM.z0, 8, ROOM.z0 + .55], [ROOM.x1 - .55, -9, ROOM.x1, 1.1]);
 
     // Orta sergi masaları: öne çıkanlar + klasik
     const featured = [28, 34, 25, 117, 107].map(id => productById.get(id)).filter(Boolean);
@@ -844,7 +851,8 @@ const VIEWS = {
     giris:   { x: 0,    z: 7.2,  yaw: 0,              pitch: -.06 },
     spor:    { x: -4.4, z: -.4,  yaw: Math.PI / 2,    pitch: -.1 },
     topuklu: { x: .4,   z: -4.4, yaw: 0,              pitch: -.1 },
-    bot:     { x: 4.3,  z: -4.2, yaw: -Math.PI / 2,   pitch: -.1 },
+    kadinbot: { x: 4.2, z: -5.0, yaw: -Math.PI / 2,   pitch: -.1 },
+    erkekbot: { x: 5.0, z: -.4,  yaw: -Math.PI / 2,   pitch: -.12 },
     cocuk:   { x: 5.0,  z: 5.35, yaw: -Math.PI / 2,   pitch: -.16 },
 };
 // Dikey (telefon) ekranda tavan çok görünmesin diye bakışı biraz aşağı eğ
