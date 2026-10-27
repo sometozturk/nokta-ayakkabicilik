@@ -219,6 +219,7 @@
         <button class="zone-btn" type="button" data-zone="spor"><span class="zone-dot" style="background:#e34b35"></span>Spor Ayakkabı</button>
         <button class="zone-btn" type="button" data-zone="topuklu"><span class="zone-dot" style="background:#d98fa0"></span>Topuklu</button>
         <button class="zone-btn" type="button" data-zone="bot"><span class="zone-dot" style="background:#a8794f"></span>Bot</button>
+        <button class="zone-btn" type="button" data-zone="cocuk"><span class="zone-dot" style="background:#3f9bd6"></span>Çocuk</button>
     </nav>
 </main>
 
@@ -226,7 +227,7 @@
     <div class="intro-inner">
         <img src="logo-transparent.png" alt="">
         <h1>Mağazamıza hoş geldin</h1>
-        <p>Spor ayakkabı, topuklu ve bot reyonlarını gez. Beğendiğin ayakkabıya tıkla, numaranı seç, sepete ekle. Siparişini Shopier'de güvenle tamamla.</p>
+        <p>Spor ayakkabı, topuklu, bot ve çocuk reyonlarını gez. Beğendiğin ayakkabıya tıkla, numaranı seç, sepete ekle. Siparişini Shopier'de güvenle tamamla.</p>
         <div class="progress" aria-hidden="true"><div id="progress"></div></div>
         <button class="enter-btn" id="enter-btn" type="button" disabled>Raflar diziliyor…</button>
         <div class="intro-keys">Bilgisayarda <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> veya ok tuşlarıyla yürü, fareyle sürükleyerek bak.<br>Telefonda soldaki kolla yürü, ekranı kaydırarak bak.</div>
@@ -278,6 +279,7 @@ const ZONES = {
     spor:    { name: 'Spor Ayakkabı', accent: '#e34b35', panel: '#2c2723', text: '#f6f1e6' },
     topuklu: { name: 'Topuklu',       accent: '#d98fa0', panel: '#ead6cf', text: '#3b2026' },
     bot:     { name: 'Bot',           accent: '#a8794f', panel: '#4a3426', text: '#f6ead9' },
+    cocuk:   { name: 'Çocuk',         accent: '#3f9bd6', panel: '#dcebf5', text: '#1d3a52' },
     klasik:  { name: 'Klasik',        accent: '#1b1712', panel: '#e9e1d2', text: '#1b1712' }
 };
 const fmt = n => Number(n).toLocaleString('tr-TR') + ' TL';
@@ -287,6 +289,7 @@ let sizeData = {};
 function zoneOf(p) {
     if (p.category === 'Topuklu Nokta Shic') return 'topuklu';
     if (p.category === 'Kadın Bot' || p.category === 'Erkek Bot') return 'bot';
+    if (p.category === 'Çocuk Sneakers') return 'cocuk';
     if (p.id === 112 || p.id === 113) return 'klasik';
     return 'spor';
 }
@@ -787,7 +790,7 @@ async function build() {
     sizeData = sizes || {};
     try { await Promise.race([document.fonts.load('600 40px Fraunces'), new Promise(r => setTimeout(r, 1500))]); } catch (e) {}
 
-    const groups = { spor: [], topuklu: [], bot: [], klasik: [] };
+    const groups = { spor: [], topuklu: [], bot: [], cocuk: [], klasik: [] };
     products.filter(p => p && p.title && p.url && p.id != null).forEach(p => {
         const item = { ...p, zone: zoneOf(p), shopierId: String(p.url).replace(/\/$/, '').split('/').pop() };
         productById.set(p.id, item); groups[item.zone].push(item);
@@ -806,6 +809,11 @@ async function build() {
     const botCols = Math.ceil(groups.bot.length / 4);
     buildWall({ items: groups.bot, zone: 'bot', cols: botCols, pitch: 1.08, shoeW: .72,
         tierYs: [.42, 1.0, 1.58, 2.16], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -4.2), rotY: -Math.PI / 2, subtitle: 'Kadın & erkek' });
+    // Sağ duvar, giriş tarafı: Çocuk sneaker rafı (4 kat, daha alçak)
+    const cocukCols = Math.ceil(groups.cocuk.length / 4);
+    buildWall({ items: groups.cocuk, zone: 'cocuk', cols: cocukCols, pitch: .9, shoeW: .56,
+        tierYs: [.42, .84, 1.26, 1.68], pos: new THREE.Vector3(ROOM.x1 - .02, 0, 5.6), rotY: -Math.PI / 2, subtitle: 'Sneaker' });
+    obstacles.push([ROOM.x1 - .55, 3.3, ROOM.x1, 7.9]);
     // Duvar dipleri yürünmesin
     obstacles.push([ROOM.x0, -9, ROOM.x0 + .55, 9], [-8, ROOM.z0, 8, ROOM.z0 + .55], [ROOM.x1 - .55, -9, ROOM.x1, .2]);
 
@@ -837,6 +845,7 @@ const VIEWS = {
     spor:    { x: -4.4, z: -.4,  yaw: Math.PI / 2,    pitch: -.1 },
     topuklu: { x: .4,   z: -4.4, yaw: 0,              pitch: -.1 },
     bot:     { x: 4.3,  z: -4.2, yaw: -Math.PI / 2,   pitch: -.1 },
+    cocuk:   { x: 5.0,  z: 5.35, yaw: -Math.PI / 2,   pitch: -.16 },
 };
 // Dikey (telefon) ekranda tavan çok görünmesin diye bakışı biraz aşağı eğ
 const portraitTilt = () => (window.innerHeight > window.innerWidth ? -.16 : 0);
