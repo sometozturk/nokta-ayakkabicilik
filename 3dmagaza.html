@@ -343,11 +343,11 @@ const panelOpen = () => productPanel.classList.contains('open') || cartPanel.cla
 
 /* ---------- ürün paneli ---------- */
 let current = null, chosenSize = null;
-function showProduct(p) {
+function showProduct(p, shelfZone) {
     current = p; chosenSize = null;
     $('pp-img').src = `assets/vitrin/${p.id}.webp`;
     $('pp-img').alt = p.title;
-    $('pp-zone').textContent = ZONES[p.zone].name + ' reyonu';
+    $('pp-zone').textContent = ZONES[shelfZone || p.zone].name + ' reyonu' + (p.unisex ? ' · Unisex' : '');
     $('pp-title').textContent = p.title;
     $('pp-price').textContent = fmt(p.price);
     $('pp-shopier').href = p.url;
@@ -715,7 +715,7 @@ function buildWall({ items, zone, cols, tierYs, pitch, shoeW, pos, rotY, subtitl
         const tier = Math.floor(i / cols), col = i % cols;
         if (tier >= tierYs.length) return;
         const offset = (cols - Math.min(cols, items.length - tier * cols)) * pitch / 2;
-        addShoe(g, p, -W / 2 + .25 + (col + .5) * pitch + offset, tierYs[tier], .24, shoeW, maxH);
+        addShoe(g, p, -W / 2 + .25 + (col + .5) * pitch + offset, tierYs[tier], .24, shoeW, maxH).userData.zone = zone;
     });
     return g;
 }
@@ -797,6 +797,8 @@ async function build() {
     products.filter(p => p && p.title && p.url && p.id != null).forEach(p => {
         const item = { ...p, zone: zoneOf(p), shopierId: String(p.url).replace(/\/$/, '').split('/').pop() };
         productById.set(p.id, item); groups[item.zone].push(item);
+        // 36-44 numaralı unisex botlar erkek rafında da durur
+        if (item.zone === 'kadinbot' && (/unisex/i.test(p.title) || /^cat bot/i.test(p.title))) { item.unisex = true; groups.erkekbot.push(item); }
     });
     renderCart();
 
@@ -808,21 +810,20 @@ async function build() {
     const topCols = Math.ceil(groups.topuklu.length / 5);
     buildWall({ items: groups.topuklu, zone: 'topuklu', cols: topCols, pitch: .92, shoeW: .6,
         tierYs: [.42, .86, 1.3, 1.74, 2.18], pos: new THREE.Vector3(.4, 0, ROOM.z0 + .02), rotY: 0, subtitle: 'Nokta Shic' });
-    // Sağ duvar: Bot (4 kat, daha geniş aralık)
     // Sağ duvar: Kadın Bot (4 kat) ve yanında Erkek Bot rafı
     const kbCols = Math.ceil(groups.kadinbot.length / 4);
     buildWall({ items: groups.kadinbot, zone: 'kadinbot', cols: kbCols, pitch: 1.08, shoeW: .72,
-        tierYs: [.42, 1.0, 1.58, 2.16], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -5.0), rotY: -Math.PI / 2, subtitle: 'Bot & çizme' });
-    const ebCols = Math.max(2, Math.ceil(groups.erkekbot.length / 2));
-    buildWall({ items: groups.erkekbot, zone: 'erkekbot', cols: ebCols, pitch: 1.08, shoeW: .74,
-        tierYs: [.62, 1.32], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -.4), rotY: -Math.PI / 2, subtitle: 'Deri & su geçirmez' });
+        tierYs: [.42, 1.0, 1.58, 2.16], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -5.3), rotY: -Math.PI / 2, subtitle: 'Bot & çizme' });
+    const ebCols = Math.ceil(groups.erkekbot.length / 3);
+    buildWall({ items: groups.erkekbot, zone: 'erkekbot', cols: ebCols, pitch: 1.08, shoeW: .72,
+        tierYs: [.5, 1.12, 1.74], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -.45), rotY: -Math.PI / 2, subtitle: 'Deri & su geçirmez' });
     // Sağ duvar, giriş tarafı: Çocuk sneaker rafı (4 kat, daha alçak)
     const cocukCols = Math.ceil(groups.cocuk.length / 4);
     buildWall({ items: groups.cocuk, zone: 'cocuk', cols: cocukCols, pitch: .9, shoeW: .56,
         tierYs: [.42, .84, 1.26, 1.68], pos: new THREE.Vector3(ROOM.x1 - .02, 0, 5.6), rotY: -Math.PI / 2, subtitle: 'Sneaker' });
     obstacles.push([ROOM.x1 - .55, 3.3, ROOM.x1, 7.9]);
     // Duvar dipleri yürünmesin
-    obstacles.push([ROOM.x0, -9, ROOM.x0 + .55, 9], [-8, ROOM.z0, 8, ROOM.z0 + .55], [ROOM.x1 - .55, -9, ROOM.x1, 1.1]);
+    obstacles.push([ROOM.x0, -9, ROOM.x0 + .55, 9], [-8, ROOM.z0, 8, ROOM.z0 + .55], [ROOM.x1 - .55, -9, ROOM.x1, 1.5]);
 
     // Orta sergi masaları: öne çıkanlar + klasik
     const featured = [28, 34, 25, 117, 107].map(id => productById.get(id)).filter(Boolean);
@@ -839,7 +840,7 @@ async function build() {
     ottoman(0, 1.2);
     mirror(ROOM.x1 - .08, 2.2);
     counter(4.6, 6.4);
-    plant(-7.2, 8.2); plant(7.2, 8.2); plant(-7.2, -8.3); plant(7.3, -8.3);
+    plant(-7.2, 8.2); plant(7.2, 8.2); plant(-7.2, -8.3); plant(6.6, -8.4);
     // Slogan giriş duvarında, logonun altında (müşteri dönüp bakınca görür)
     slogan.position.set(0, ROOM.h - 1.15, ROOM.z1 - .12); slogan.rotation.y = Math.PI; scene.add(slogan);
 }
@@ -851,8 +852,8 @@ const VIEWS = {
     giris:   { x: 0,    z: 7.2,  yaw: 0,              pitch: -.06 },
     spor:    { x: -4.4, z: -.4,  yaw: Math.PI / 2,    pitch: -.1 },
     topuklu: { x: .4,   z: -4.4, yaw: 0,              pitch: -.1 },
-    kadinbot: { x: 4.2, z: -5.0, yaw: -Math.PI / 2,   pitch: -.1 },
-    erkekbot: { x: 5.0, z: -.4,  yaw: -Math.PI / 2,   pitch: -.12 },
+    kadinbot: { x: 4.2, z: -5.3, yaw: -Math.PI / 2,   pitch: -.1 },
+    erkekbot: { x: 4.6, z: -.45, yaw: -Math.PI / 2,   pitch: -.1 },
     cocuk:   { x: 5.0,  z: 5.35, yaw: -Math.PI / 2,   pitch: -.16 },
 };
 // Dikey (telefon) ekranda tavan çok görünmesin diye bakışı biraz aşağı eğ
@@ -936,7 +937,7 @@ function endDrag(e) {
     const h = pick(e.clientX, e.clientY, true);
     if (!h) return;
     hideHint();
-    if (h.object.userData.product) { showProduct(h.object.userData.product); setHover(null); }
+    if (h.object.userData.product) { showProduct(h.object.userData.product, h.object.userData.zone); setHover(null); }
     else if (h.object.userData.kasa) { renderCart(); openPanel(cartPanel); }
     else if (h.object === floor) {
         const [x, z] = collide(h.point.x, h.point.z);
