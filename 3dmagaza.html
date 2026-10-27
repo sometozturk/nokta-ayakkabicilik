@@ -312,6 +312,7 @@ function sizesOf(p) {
    Sepet (tarayıcıda saklanır)
    ========================================================= */
 const CART_KEY = 'nokta-3d-sepet';
+const SHOPIER_BASKET = 'https://www.shopier.com/basket/noktaayakkabi';
 let cart = [];
 try { cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]') || []; } catch (e) { cart = []; }
 const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} };
@@ -423,7 +424,7 @@ function renderCart() {
     if (checkoutMode) {
         const note = document.createElement('div');
         note.className = 'checkout-note';
-        note.innerHTML = 'Ödeme Shopier\'in güvenli sayfasında yapılır. Shopier her modeli kendi sayfasında sattığı için ürünlerini <b>sırayla</b> aç; açılan sayfada <b>aynı numarayı</b> seçip öde.';
+        note.innerHTML = '<b>Tek seferde ödemek için:</b><br>1. Ürünleri sırayla aç, Shopier sayfasında <b>aynı numarayı</b> seç ve <b>“Sepete ekle”</b>ye bas (“Hemen al”a değil).<br>2. Hepsini ekleyince <b>“Shopier sepetime git”</b> ile tüm ürünleri tek ödemede tamamla.';
         body.appendChild(note);
     }
     cart.forEach((i, idx) => {
@@ -438,7 +439,7 @@ function renderCart() {
             const go = document.createElement('a');
             go.className = 'ci-go' + (i.done ? ' done' : '');
             go.href = p.url; go.target = '_blank'; go.rel = 'noopener';
-            go.textContent = i.done ? 'Açıldı ✓' : `${idx + 1}. Shopier'de öde`;
+            go.textContent = i.done ? 'Açıldı ✓' : `${idx + 1}. Aç, sepete ekle`;
             go.addEventListener('click', () => {
                 i.done = true; saveCart();
                 if (typeof fbq === 'function') fbq('trackCustom', 'ShopierTikla', { content_ids: [String(p.shopierId)], content_type: 'product', value: Number(p.price) * i.qty, currency: 'TRY' });
@@ -463,14 +464,27 @@ function renderCart() {
         foot.appendChild(btn);
     } else {
         const next = cart.find(i => !i.done);
+        const opened = cart.filter(i => i.done).length;
         if (next) {
-            btn.textContent = 'Sıradaki ürünü Shopier\'de aç';
+            btn.textContent = `Sıradaki ürünü aç (${opened + 1}/${cart.length})`;
             btn.addEventListener('click', () => openOnShopier(next));
+            foot.appendChild(btn);
         } else {
-            btn.textContent = 'Siparişimi tamamladım, sepeti boşalt';
-            btn.addEventListener('click', () => { cart = []; checkoutMode = false; saveCart(); renderCart(); toast('Teşekkürler! Siparişin bize ulaşınca kargolarız.'); });
+            if (cart.length > 1) {
+                btn.textContent = 'Shopier sepetime git ve öde';
+                btn.addEventListener('click', () => {
+                    window.open(SHOPIER_BASKET, '_blank', 'noopener');
+                    if (typeof fbq === 'function') fbq('trackCustom', 'ShopierSepet', { num_items: count, value: total, currency: 'TRY' });
+                });
+                foot.appendChild(btn);
+            }
+            const done = document.createElement('button'); done.type = 'button';
+            done.className = cart.length > 1 ? 'secondary' : 'primary';
+            if (cart.length > 1) { done.style.border = '0'; done.style.background = 'none'; done.style.cursor = 'pointer'; }
+            done.textContent = 'Siparişimi tamamladım, sepeti boşalt';
+            done.addEventListener('click', () => { cart = []; checkoutMode = false; saveCart(); renderCart(); toast('Teşekkürler! Siparişin bize ulaşınca kargolarız.'); });
+            foot.appendChild(done);
         }
-        foot.appendChild(btn);
         const back = document.createElement('button'); back.type = 'button'; back.className = 'secondary';
         back.style.border = '0'; back.style.background = 'none'; back.style.cursor = 'pointer';
         back.textContent = '← Sepete dön';
