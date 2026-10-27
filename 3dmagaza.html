@@ -587,6 +587,17 @@ function signTex(title, sub, z, w = 1024, h = 192) {
         }
     });
 }
+function brandTex(label, z, aspect) {
+    // Doku oranı tabela oranıyla aynı olsun, yazı uzamasın
+    return canvasTex(Math.max(256, Math.min(2048, Math.round(96 * aspect))), 96, (g, w, h) => {
+        g.fillStyle = '#f6f1e6'; g.fillRect(0, 0, w, h);
+        g.fillStyle = z.accent; g.fillRect(0, h - 6, w, 6);
+        g.fillStyle = '#1b1712'; g.textAlign = 'center'; g.textBaseline = 'middle';
+        let size = 54;
+        do { g.font = `700 ${size}px "DM Sans", Arial, sans-serif`; size -= 2; } while (g.measureText(label.toUpperCase()).width > w - 24 && size > 18);
+        g.fillText(label.toUpperCase(), w / 2, h / 2 - 2);
+    });
+}
 function glowTex() {
     return canvasTex(128, 128, (g) => {
         const r = g.createRadialGradient(64, 64, 0, 64, 64, 64);
@@ -688,7 +699,7 @@ function addShoe(parent, p, x, baseY, z, width, maxH = width * 1.05) {
     return mesh;
 }
 
-function buildWall({ items, zone, cols, tierYs, pitch, shoeW, pos, rotY, subtitle }) {
+function buildWall({ items, zone, cols, tierYs, pitch, shoeW, pos, rotY, subtitle, sections }) {
     const maxH = (tierYs[1] - tierYs[0]) - .07;
     const z = ZONES[zone];
     const g = new THREE.Group(); g.position.copy(pos); g.rotation.y = rotY; scene.add(g);
@@ -706,10 +717,29 @@ function buildWall({ items, zone, cols, tierYs, pitch, shoeW, pos, rotY, subtitl
         wash.position.set(0, y - .3, .065); g.add(wash);
     });
     // tabela
-    const sign = new THREE.Mesh(new THREE.PlaneGeometry(Math.min(W, 6), Math.min(W, 6) * .1875), new THREE.MeshBasicMaterial({ map: signTex(z.name, subtitle, z), toneMapped: false }));
-    sign.position.set(0, top + .55, .09); g.add(sign);
+    const signW = Math.min(W, 4.2), signH = signW * .1875;
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(signW, signH), new THREE.MeshBasicMaterial({ map: signTex(z.name, subtitle, z), toneMapped: false }));
+    sign.position.set(0, Math.min(top + .14 + signH / 2, ROOM.h - .04 - signH / 2), .09); g.add(sign);
     // alt dolap
     box(W, .22, .4, M.darkOak, 0, .11, .2, g);
+    // Markalara bölünmüş raf: her marka kendi sütunlarında, üstünde marka tabelası
+    if (sections) {
+        const T = tierYs.length;
+        const dividerMat = new THREE.MeshBasicMaterial({ color: z.accent });
+        let c0 = 0;
+        sections.forEach((sec, si) => {
+            const x0 = -W / 2 + .25 + c0 * pitch, wSec = sec.cols * pitch;
+            sec.items.forEach((p, k) => {
+                const col = c0 + Math.floor(k / T), tier = T - 1 - (k % T);
+                addShoe(g, p, -W / 2 + .25 + (col + .5) * pitch, tierYs[tier], .24, shoeW, maxH).userData.zone = zone;
+            });
+            const plate = new THREE.Mesh(new THREE.PlaneGeometry(wSec - .06, .17), new THREE.MeshBasicMaterial({ map: brandTex(sec.label, z, (wSec - .06) / .17), toneMapped: false }));
+            plate.position.set(x0 + wSec / 2, top - .04, .1); g.add(plate);
+            if (si > 0) box(.018, top - .3, .02, dividerMat, x0, (top - .3) / 2 + .2, .07, g, false);
+            c0 += sec.cols;
+        });
+        return g;
+    }
     // ayakkabılar
     items.forEach((p, i) => {
         const tier = Math.floor(i / cols), col = i % cols;
@@ -803,9 +833,21 @@ async function build() {
     renderCart();
 
     // Sol duvar: Spor Ayakkabı (5 kat)
-    const sporCols = Math.ceil(groups.spor.length / 5);
-    buildWall({ items: groups.spor, zone: 'spor', cols: sporCols, pitch: Math.min(.86, 15.6 / sporCols), shoeW: .62,
-        tierYs: [.42, .86, 1.3, 1.74, 2.18], pos: new THREE.Vector3(ROOM.x0 + .02, 0, -.4), rotY: Math.PI / 2, subtitle: 'Sneaker koleksiyonu' });
+    // Markalara göre: önce Nike, Adidas, Vans; sonra diğerleri. Marka içinde seriler yan yana.
+    const BRANDS = [['Nike', /^nike/i], ['Adidas', /^adidas/i], ['Vans', /^vans/i], ['Lacoste', /^lacoste/i],
+        ['Calvin Klein', /^calvin/i], ['Alexander McQueen', /^alexander/i], ['Prada', /^prada/i], ['Golden Goose', /^golden/i], ['Lufian', /^lufian/i]];
+    const byBrand = new Map(BRANDS.map(([b]) => [b, []])); byBrand.set('Diğer', []);
+    groups.spor.forEach(p => {
+        const b = BRANDS.find(([, re]) => re.test(p.title.trim()));
+        byBrand.get(b ? b[0] : 'Diğer').push(p);
+    });
+    const sporSections = [...byBrand].filter(([, list]) => list.length).map(([label, list]) => ({
+        label, items: list.sort((a, b) => a.title.localeCompare(b.title, 'tr')), cols: Math.ceil(list.length / 5)
+    }));
+    const sporCols = sporSections.reduce((n, sec) => n + sec.cols, 0);
+    const sporPitch = Math.min(.86, 15.7 / sporCols);
+    buildWall({ items: groups.spor, zone: 'spor', cols: sporCols, pitch: sporPitch, shoeW: Math.min(.62, sporPitch * .76),
+        tierYs: [.42, .86, 1.3, 1.74, 2.18], pos: new THREE.Vector3(ROOM.x0 + .02, 0, -.4), rotY: Math.PI / 2, subtitle: 'Sneaker koleksiyonu', sections: sporSections });
     // Arka duvar: Topuklu (5 kat)
     const topCols = Math.ceil(groups.topuklu.length / 5);
     buildWall({ items: groups.topuklu, zone: 'topuklu', cols: topCols, pitch: .92, shoeW: .6,
