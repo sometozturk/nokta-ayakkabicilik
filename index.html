@@ -212,6 +212,7 @@ document.addEventListener('click', function (e) {
     .header-links .catalog-nav{display:flex;align-items:center;gap:7px;color:var(--muted);}
     .header-links .catalog-nav svg{width:16px;height:16px;flex:0 0 auto;}
     .header-links .catalog-nav:hover{color:var(--accent);}
+    .store3d-badge{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:999px;background:var(--accent);color:#fff;}
     .nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto;position:relative;}
     .auth-button{appearance:none;border:1px solid transparent;border-radius:999px;padding:10px 16px;background:transparent;color:var(--ink);font:700 12px 'DM Sans',sans-serif;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .2s ease,color .2s ease;}
     .auth-button:hover{transform:translateY(-1px);}
@@ -387,6 +388,8 @@ document.addEventListener('click', function (e) {
         .header-links .catalog-nav:hover{background:rgba(227,75,53,.08);border-color:var(--accent);}
         .header-links .catalog-nav svg{width:18px;height:18px;}
         .header-links .catalog-nav span{display:none;}
+        .header-links .store3d-nav{position:relative;}
+        .store3d-badge{position:absolute;top:-6px;right:-8px;font-size:7.5px;padding:1px 4px;}
         h1{letter-spacing:-.3px;}
         .toolbar{flex-direction:column;align-items:stretch;}
         .toolbar-controls{flex-direction:column;}
@@ -1287,6 +1290,11 @@ document.addEventListener('click', function (e) {
             <a class="catalog-nav" href="katalog.html" aria-label="Kataloğu Gör" title="Kataloğu Gör">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 5.5v13A2.5 2.5 0 0 1 6.5 16H20"/><path d="M8 7h8M8 10h8"/></svg>
                 <span>Kataloğu Gör</span>
+            </a>
+            <a class="catalog-nav store3d-nav" href="3dmagaza.html" aria-label="3D Mağaza" title="3D Mağazayı Gez">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 20 7.2v9.6L12 21.2 4 16.8V7.2z"/><path d="M4 7.2 12 11.6l8-4.4M12 11.6v9.6"/></svg>
+                <span>3D Mağaza</span>
+                <em class="store3d-badge">Yeni</em>
             </a>
         </div>
         <div class="nav-actions" aria-label="Üye menüsü">
