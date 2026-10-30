@@ -1063,6 +1063,17 @@ document.addEventListener('click', function (e) {
         .auth-button{padding:7px 9px !important;font-size:10.5px !important;}
     }
 </style>
+<style id="mobile-products-first">
+    /* Mobilde anasayfa doğrudan ürünlerle açılır: açılış perdesi, Air Force sahnesi ve kayan şerit gizli */
+    @media (max-width:640px){
+        .opening-screen,.shoe-ribbon{display:none !important;}
+        body:has(.opening-screen){overflow:auto;}
+        .hero-scene{height:auto !important;}
+        .hero-scene > .hero{display:none !important;}
+        .container#urunler{padding-top:0;transform:none !important;opacity:1 !important;}
+        #urunler .toolbar{padding-top:16px !important;}
+    }
+</style>
 </head>
 <body>
 
