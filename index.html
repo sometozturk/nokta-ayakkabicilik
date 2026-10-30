@@ -1064,10 +1064,9 @@ document.addEventListener('click', function (e) {
     }
 </style>
 <style id="mobile-products-first">
-    /* Mobilde anasayfa doğrudan ürünlerle açılır: açılış perdesi, Air Force sahnesi ve kayan şerit gizli */
+    /* Mobilde açılış perdesinden sonra doğrudan ürünler: Air Force sahnesi ve kayan şerit gizli */
     @media (max-width:640px){
-        .opening-screen,.shoe-ribbon{display:none !important;}
-        body:has(.opening-screen){overflow:auto;}
+        .shoe-ribbon{display:none !important;}
         .hero-scene{height:auto !important;}
         .hero-scene > .hero{display:none !important;}
         .container#urunler{padding-top:0;transform:none !important;opacity:1 !important;}
