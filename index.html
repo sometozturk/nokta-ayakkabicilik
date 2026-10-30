@@ -134,7 +134,7 @@ document.addEventListener('click', function (e) {
     "mainEntity":[
         {"@type":"Question","name":"Kargo ücretli mi, siparişim ne zaman kargoya verilir?","acceptedAnswer":{"@type":"Answer","text":"Tüm siparişler ücretsiz kargo ile gönderilir. Saat 17:00'ye kadar verilen siparişler aynı gün, sonrakiler genellikle ertesi gün kargoya teslim edilir."}},
         {"@type":"Question","name":"İade ve değişim yapabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. Nokta Ayakkabıcılık iade ve değişim garantisi sunar; talebinizi sipariş bilgilerinizle Instagram üzerinden iletmeniz yeterlidir."}},
-        {"@type":"Question","name":"Sipariş nasıl verilir, ödeme güvenli mi?","acceptedAnswer":{"@type":"Answer","text":"Ürün kartındaki Shopier'de satın al bağlantısıyla Shopier'in güvenli ödeme sayfasına geçersiniz. Kart bilgileriniz bu siteye iletilmez."}},
+        {"@type":"Question","name":"Sipariş nasıl verilir, ödeme güvenli mi?","acceptedAnswer":{"@type":"Answer","text":"Ürün kartındaki Satın Al butonuyla Shopier'in güvenli ödeme sayfasına geçersiniz. Kart bilgileriniz bu siteye iletilmez."}},
         {"@type":"Question","name":"Doğru ayakkabı numarasını nasıl seçerim?","acceptedAnswer":{"@type":"Answer","text":"Her ürünün numara aralığı ürün adında ve kartında yazar. İki numara arasında kalırsanız model adıyla birlikte Instagram'dan bize yazabilirsiniz."}},
         {"@type":"Question","name":"Fiziki mağazanız var mı?","acceptedAnswer":{"@type":"Answer","text":"Evet. Nokta Ayakkabıcılık 30 yıldır hizmet veren, 2 fiziki şubesi bulunan bir ayakkabı mağazasıdır. Online siparişler Shopier üzerinden tüm Türkiye'ye gönderilir."}}
     ]
@@ -1232,7 +1232,7 @@ document.addEventListener('click', function (e) {
                 </article>
                 <article class="faq-item">
                     <h3>Sipariş nasıl verilir, ödeme güvenli mi?</h3>
-                    <p>Ürün kartındaki Shopier'de satın al bağlantısıyla Shopier'in güvenli ödeme sayfasına geçersiniz. Kart bilgileriniz bu siteye iletilmez.</p>
+                    <p>Ürün kartındaki Satın Al butonuyla Shopier'in güvenli ödeme sayfasına geçersiniz. Kart bilgileriniz bu siteye iletilmez.</p>
                 </article>
                 <article class="faq-item">
                     <h3>Doğru ayakkabı numarasını nasıl seçerim?</h3>
@@ -1368,7 +1368,7 @@ document.addEventListener('click', function (e) {
             <p class="modal-price" id="modal-price"></p>
             <p class="modal-size" id="modal-size"></p>
             <div class="modal-actions">
-                <a class="satin-al-buton modal-shopier" id="modal-shopier" target="_blank" rel="noopener noreferrer">Shopier'de Gör</a>
+                <a class="satin-al-buton modal-shopier" id="modal-shopier" target="_blank" rel="noopener noreferrer">Satın Al</a>
                 <button class="modal-tryon" id="modal-tryon" type="button">Kombininde Dene</button>
                 <button class="product-open" id="modal-back" type="button">Kapat</button>
             </div>
@@ -3062,7 +3062,7 @@ document.addEventListener('click', function (e) {
 
                 const a = document.createElement('a');
                 a.className = 'satin-al-buton';
-                a.textContent = "Shopier'de Gör";
+                a.textContent = "Satın Al";
                 a.target = '_blank';
                 a.rel = 'noopener noreferrer';
                 a.href = product.url || 'https://shopier.com/noktaayakkabi';

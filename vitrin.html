@@ -1386,7 +1386,7 @@ document.addEventListener('click', function (e) {
                     </div>
                     <span class="vitrin-sr" id="vitrin-live" aria-live="polite"></span>
                     <div class="vitrin-actions">
-                        <a class="vitrin-btn vitrin-btn-primary" id="vitrin-shopier" href="https://www.shopier.com/noktaayakkabi" target="_blank" rel="noopener noreferrer"><span id="vitrin-shopier-text">Shopier'de al</span>
+                        <a class="vitrin-btn vitrin-btn-primary" id="vitrin-shopier" href="https://www.shopier.com/noktaayakkabi" target="_blank" rel="noopener noreferrer"><span id="vitrin-shopier-text">Satın Al</span>
                             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </a>
                         <button class="vitrin-btn vitrin-btn-try" type="button" id="vitrin-tryon">
@@ -1482,7 +1482,7 @@ document.addEventListener('click', function (e) {
                 </article>
                 <article class="faq-item">
                     <h3>Sipariş nasıl verilir, ödeme güvenli mi?</h3>
-                    <p>Ürün kartındaki Shopier'de satın al bağlantısıyla Shopier'in güvenli ödeme sayfasına geçersiniz. Kart bilgileriniz bu siteye iletilmez.</p>
+                    <p>Ürün kartındaki Satın Al butonuyla Shopier'in güvenli ödeme sayfasına geçersiniz. Kart bilgileriniz bu siteye iletilmez.</p>
                 </article>
                 <article class="faq-item">
                     <h3>Doğru ayakkabı numarasını nasıl seçerim?</h3>
@@ -1618,7 +1618,7 @@ document.addEventListener('click', function (e) {
             <p class="modal-price" id="modal-price"></p>
             <p class="modal-size" id="modal-size"></p>
             <div class="modal-actions">
-                <a class="satin-al-buton modal-shopier" id="modal-shopier" target="_blank" rel="noopener noreferrer">Shopier'de Gör</a>
+                <a class="satin-al-buton modal-shopier" id="modal-shopier" target="_blank" rel="noopener noreferrer">Satın Al</a>
                 <button class="modal-tryon" id="modal-tryon" type="button">Kombininde Dene</button>
                 <button class="product-open" id="modal-back" type="button">Kapat</button>
             </div>
@@ -3323,7 +3323,7 @@ document.addEventListener('click', function (e) {
 
                 const a = document.createElement('a');
                 a.className = 'satin-al-buton';
-                a.textContent = "Shopier'de Gör";
+                a.textContent = "Satın Al";
                 a.target = '_blank';
                 a.rel = 'noopener noreferrer';
                 a.href = product.url || 'https://shopier.com/noktaayakkabi';
@@ -4104,7 +4104,7 @@ document.addEventListener('click', function (e) {
     }
 
     function updateBuyLabel() {
-        el.shopierText.textContent = pickedSize != null ? `${pickedSize} · Shopier'de al` : "Shopier'de al";
+        el.shopierText.textContent = pickedSize != null ? `${pickedSize} · Satın Al` : "Satın Al";
         el.shopier.setAttribute('aria-label', pickedSize != null ? `${pickedSize} numara için Shopier'de satın al` : "Shopier'de satın al");
     }
 

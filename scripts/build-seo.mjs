@@ -873,7 +873,7 @@ ${crumbs.html}
     ${p.sizeStock && p.sizeStock.length
         ? `<div class="sp-size-list"><span>${soldOut ? 'Şu an stokta numara yok' : 'Stoktaki numaralar'}</span><ul>${p.sizeStock.map((v) => `<li${v.stock > 0 ? '' : ' class="is-out" title="Tükendi"'}>${esc(v.size)}</li>`).join('')}</ul></div>`
         : p.sizes ? `<p class="sp-sizes"><span>Numara aralığı</span><strong>${esc(p.sizes)}</strong></p>` : ''}
-    <a class="sp-buy" href="${esc(p.shopierUrl)}" target="_blank" rel="noopener" data-shopier="${esc(p.shopierId)}">Shopier'de satın al</a>
+    <a class="sp-buy" href="${esc(p.shopierUrl)}" target="_blank" rel="noopener" data-shopier="${esc(p.shopierId)}">Satın Al</a>
     <a class="sp-ask" href="${INSTAGRAM}" target="_blank" rel="noopener noreferrer">Numara veya stok sorusu için Instagram'dan yazın</a>
     ${variantsBlock}
     ${trustList}
