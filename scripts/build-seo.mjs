@@ -873,6 +873,7 @@ ${crumbs.html}
     ${p.sizeStock && p.sizeStock.length
         ? `<div class="sp-size-list"><span>${soldOut ? 'Şu an stokta numara yok' : 'Stoktaki numaralar'}</span><ul>${p.sizeStock.map((v) => `<li${v.stock > 0 ? '' : ' class="is-out" title="Tükendi"'}>${esc(v.size)}</li>`).join('')}</ul></div>`
         : p.sizes ? `<p class="sp-sizes"><span>Numara aralığı</span><strong>${esc(p.sizes)}</strong></p>` : ''}
+    <p class="buy-trust"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17.5" cy="17.5" r="1.6"/></svg>Ücretsiz kargo</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h11a5 5 0 0 1 0 10H8"/><path d="M8 5 4 9l4 4"/></svg>14 gün iade</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Güvenli ödeme</span></p>
     <a class="sp-buy" href="${esc(p.shopierUrl)}" target="_blank" rel="noopener" data-shopier="${esc(p.shopierId)}">Satın Al</a>
     <a class="sp-ask" href="${INSTAGRAM}" target="_blank" rel="noopener noreferrer">Numara veya stok sorusu için Instagram'dan yazın</a>
     ${variantsBlock}

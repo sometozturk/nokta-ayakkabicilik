@@ -1248,6 +1248,7 @@ document.addEventListener('click', function (e) {
         .auth-button{padding:7px 9px !important;font-size:10.5px !important;}
     }
 </style>
+<style id="buy-trust-style">.buy-trust{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0 0 10px;font:600 12.5px/1.3 "DM Sans",system-ui,sans-serif;color:#5d554c;}.buy-trust span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}.buy-trust svg{width:15px;height:15px;flex:none;color:#2f7d4f;}.modal-trust{width:100%;margin:4px 0 12px;}.vitrin-trust{margin:12px 0 0;}</style>
 </head>
 <body>
 
@@ -1385,6 +1386,7 @@ document.addEventListener('click', function (e) {
                         <div class="vitrin-sizes" id="vitrin-sizes" role="group" aria-label="Numara seç" hidden></div>
                     </div>
                     <span class="vitrin-sr" id="vitrin-live" aria-live="polite"></span>
+                    <p class="buy-trust vitrin-trust"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17.5" cy="17.5" r="1.6"/></svg>Ücretsiz kargo</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h11a5 5 0 0 1 0 10H8"/><path d="M8 5 4 9l4 4"/></svg>14 gün iade</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Güvenli ödeme</span></p>
                     <div class="vitrin-actions">
                         <a class="vitrin-btn vitrin-btn-primary" id="vitrin-shopier" href="https://www.shopier.com/noktaayakkabi" target="_blank" rel="noopener noreferrer"><span id="vitrin-shopier-text">Satın Al</span>
                             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1617,6 +1619,7 @@ document.addEventListener('click', function (e) {
             <h2 class="modal-title" id="modal-title"></h2>
             <p class="modal-price" id="modal-price"></p>
             <p class="modal-size" id="modal-size"></p>
+            <p class="buy-trust modal-trust"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17.5" cy="17.5" r="1.6"/></svg>Ücretsiz kargo</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h11a5 5 0 0 1 0 10H8"/><path d="M8 5 4 9l4 4"/></svg>14 gün iade</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Güvenli ödeme</span></p>
             <div class="modal-actions">
                 <a class="satin-al-buton modal-shopier" id="modal-shopier" target="_blank" rel="noopener noreferrer">Satın Al</a>
                 <button class="modal-tryon" id="modal-tryon" type="button">Kombininde Dene</button>
