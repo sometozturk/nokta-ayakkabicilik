@@ -21,9 +21,9 @@
         s.parentNode.insertBefore(t, s);
     }(w, d, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
-    var granted = false;
-    try { granted = w.localStorage.getItem('nokta-consent') === 'granted'; } catch (e) {}
-    if (!granted) fbq('consent', 'revoke');
+    var denied = false;
+    try { denied = w.localStorage.getItem('nokta-consent') === 'denied'; } catch (e) {}
+    if (denied) fbq('consent', 'revoke');
     fbq('init', '1623153919352122');
     fbq('track', 'PageView');
 

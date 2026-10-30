@@ -1,7 +1,7 @@
 /*
  * Nokta Ayakkabıcılık – çerez / reklam ölçümü tercihi
- * Meta Pixel varsayılan olarak kapalıdır (sayfadaki pixel kodu fbq('consent','revoke') ile başlar).
- * Ziyaretçi "Kabul et" derse fbq('consent','grant') çağrılır; tercih bu tarayıcıda saklanır.
+ * Meta Pixel varsayılan olarak açıktır; ilk ziyarette bildirim gösterilmez.
+ * Ziyaretçi alt bilgideki "Çerez tercihleri"nden "Reddet" derse fbq('consent','revoke') çağrılır; tercih bu tarayıcıda saklanır.
  * Tercih, sayfa altındaki "Çerez tercihleri" bağlantısıyla (data-consent-open) değiştirilebilir.
  */
 (function () {
@@ -96,9 +96,7 @@
             applyPixel(stored);
             return;
         }
-        // İlk ziyaret: açılış perdesi bittikten sonra göster.
-        var delay = document.querySelector('.opening-screen') ? 2900 : 600;
-        window.setTimeout(open, delay);
+        // Bildirim otomatik açılmaz; tercih yalnızca alt bilgideki "Çerez tercihleri"nden değiştirilir.
     }
 
     if (document.readyState === 'loading') {

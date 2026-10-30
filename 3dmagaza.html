@@ -36,11 +36,11 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    // Çerez onayı verilmeden Pixel olay göndermez (consent.js tercihi yönetir).
+    // Pixel varsayılan açık; ziyaretçi alt bilgideki "Çerez tercihleri"nden reddederse durur (consent.js).
     (function () {
-        var granted = false;
-        try { granted = window.localStorage.getItem('nokta-consent') === 'granted'; } catch (e) {}
-        if (!granted) fbq('consent', 'revoke');
+        var denied = false;
+        try { denied = window.localStorage.getItem('nokta-consent') === 'denied'; } catch (e) {}
+        if (denied) fbq('consent', 'revoke');
     })();
     fbq('init', '1623153919352122');
     fbq('track', 'PageView');
