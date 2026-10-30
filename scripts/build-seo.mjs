@@ -559,6 +559,7 @@ ${preloadImage ? `<link rel="preload" as="image" href="${esc(preloadImage)}"${pr
 <link rel="stylesheet" href="/assets/site-pages.css">
 ${schema.map(jsonLd).join('\n')}
 <script src="/assets/nokta-pixel.js" defer></script>
+<script src="/assets/nokta-ga.js" defer></script>
 <script src="/consent.js" defer></script>
 </head>
 <body${bodyAttrs}>
