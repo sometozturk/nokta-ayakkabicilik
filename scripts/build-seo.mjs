@@ -329,8 +329,170 @@ const CATEGORIES = [
         faq: [
             { q: 'Erkek klasik bot takım elbiseyle giyilir mi?', a: 'Sade, ince tabanlı deri botlar kumaş pantolon ve gündelik takımlarla kullanılabilir. Resmi davetlerde ise Oxford klasik ayakkabı daha uygun bir tercihtir.' },
             SHIPPING_FAQ, EXCHANGE_FAQ, PAYMENT_FAQ]
+    },
+    {
+        slug: 'cocuk-sneaker',
+        name: 'Çocuk Sneaker',
+        nav: 'Çocuk',
+        h1: 'Ortopedik Çocuk Sneaker Modelleri',
+        title: 'Ortopedik Çocuk Sneaker ve Spor Ayakkabı | Nokta',
+        description: ({ min }) => `Ortopedik, hafif ve ışıklı çocuk sneaker modelleri ${min}'den başlayan fiyatlarla. Ücretsiz ve aynı gün kargo, iade ve değişim garantisi.`,
+        intro: () => 'Okulda, parkta ve gün boyu oyunda ayağı destekleyen hafif tabanlı ortopedik çocuk sneaker modelleri. Numara seçerken aşağıdaki rehbere göz atmayı unutmayın.',
+        audience: 'unisex',
+        match: (p) => p.generic && isKids(p),
+        guide: [
+            ['Ortopedik çocuk ayakkabısı ne işe yarar?', [
+                'Ortopedik çocuk ayakkabılarında topuğu saran sert bir <strong>topuk çanağı</strong> ve ayak tabanını destekleyen şekilli bir iç taban bulunur. Bu yapı, yürümeyi yeni öğrenen ve hızla büyüyen ayağın ayakkabı içinde kaymadan, dengeli basmasına yardımcı olur.',
+                'Ortopedik ayakkabı bir tedavi aracı değildir. Çocuğunuzun basışında, yürüyüşünde ya da ayak şeklinde dikkatinizi çeken bir durum varsa önce bir çocuk ortopedi uzmanına danışın.'
+            ]],
+            ['İyi bir çocuk sneakerında nelere bakılır?', [
+                '<strong>Hafif taban:</strong> Ağır ayakkabı çocuğu çabuk yorar; elinizde tarttığınızda hafif gelen, ön kısmı kolayca bükülen tabanlar tercih edilir.',
+                '<strong>Kaymaz dış taban:</strong> Okul koridorunda ve ıslak zeminde tutunan kauçuk tabanlar düşme riskini azaltır.',
+                '<strong>Cırtlı kapama:</strong> Bağcık bağlamayı henüz bilmeyen çocuklar ayakkabısını kendisi giyip çıkarabilir, ayakkabı da her seferinde aynı sıkılıkta oturur.',
+                '<strong>Işıklı modeller:</strong> Taban ışıkları akşam saatlerinde çocuğun daha kolay görülmesine yardım eder ve küçükler tarafından çok sevilir.'
+            ]],
+            ['Çocuk ayakkabısında numara seçimi', [
+                'Çocuğun ayağını ayakta, topuğu duvara dayalıyken ölçün ve en uzun parmağın ucuna kadar olan mesafeye yaklaşık 1-1,5 cm pay ekleyin. Bu pay hem yürürken ayağın öne kaymasını hem de birkaç aylık büyümeyi karşılar. Ayrıntılı ölçü tablosu için <a href="/rehber/ayakkabi-numarasi-nasil-secilir/">ayakkabı numarası rehberimize</a> bakabilirsiniz.',
+                'Küçük çocukların ayağı birkaç ayda bir numara büyüyebilir; ayakkabının ucuna basıldığında parmak ile burun arasında başparmak genişliği kadar boşluk kalmıyorsa yeni numaraya geçme zamanı gelmiş demektir.'
+            ]]
+        ],
+        faq: [
+            { q: 'Çocuk ayakkabısı kaç numara büyük alınmalı?', a: 'Ayak uzunluğuna 1-1,5 cm pay eklenmiş numara idealdir. Çok büyük alınan ayakkabı ayağın içeride kaymasına ve takılıp düşmeye yol açabilir.' },
+            { q: 'Ortopedik çocuk ayakkabısı her çocuk için gerekli mi?', a: 'Zorunlu değildir; ancak topuğu saran ve tabanı destekleyen ayakkabılar gün boyu hareketli çocuklarda konforu artırır. Bir ayak sorunu fark ederseniz uzmana danışmanızı öneririz.' },
+            SHIPPING_FAQ,
+            EXCHANGE_FAQ
+        ]
     }
 ];
+
+// ---------------------------------------------------------------------------
+// Rehber yazıları (/rehber/...): markasız, bilgilendirici içerik sayfaları
+// ---------------------------------------------------------------------------
+const GUIDES = [
+    {
+        slug: 'beyaz-sneaker-nasil-temizlenir',
+        title: 'Beyaz Sneaker Nasıl Temizlenir? Adım Adım Rehber',
+        h1: 'Beyaz Sneaker Nasıl Temizlenir?',
+        description: 'Beyaz sneaker ve spor ayakkabı evde nasıl temizlenir? Deri, süet ve file modeller için adım adım temizlik, sararan taban ve kurutma ipuçları.',
+        lead: 'Beyaz sneaker her kombine uyar ama ilk çamurda eski görünmeye başlar. İyi haber şu: doğru yöntemle evdeki malzemelerle 15-20 dakikada ilk günkü görünümüne çok yaklaştırabilirsiniz. Bu rehberde malzemeye göre temizlik adımlarını, sararan tabanı ve en sık yapılan hataları bulacaksınız.',
+        sections: [
+            ['Başlamadan önce: malzemeyi tanıyın', [
+                'Temizlik yöntemi ayakkabının üst yüzeyine göre değişir. Ayakkabının iç etiketine veya ürün açıklamasına bakın:',
+                { list: [
+                    '<strong>Deri ve suni deri:</strong> En kolay temizlenen yüzeydir; ılık su ve yumuşak sabuna dayanıklıdır.',
+                    '<strong>Süet ve nubuk:</strong> Suyu sevmez. Islak temizlik leke ve sertleşme bırakabilir, kuru yöntemler kullanılır.',
+                    '<strong>File, örme ve kanvas:</strong> Kumaş gibi davranır; sabunlu suyla fırçalanabilir ama iyice kurutulması gerekir.'
+                ] }
+            ]],
+            ['Gerekli malzemeler', [
+                { list: [
+                    'Yumuşak bir fırça (eski bir diş fırçası da olur)',
+                    'Ilık su ve sıvı bulaşık deterjanı veya yumuşak sabun',
+                    'Mikrofiber bez',
+                    'Taban için karbonat (kabartma tozu) ve beyaz sabun',
+                    'Süet modeller için süet silgisi veya süet fırçası',
+                    'Kurutma için kâğıt havlu veya gazete'
+                ] }
+            ]],
+            ['Adım adım temizlik', [
+                { ordered: [
+                    '<strong>Bağcıkları ve iç tabanı çıkarın.</strong> Bağcıkları sabunlu ılık suda ayrı bekletip elde yıkayın; iç tabanı nemli bezle silin.',
+                    '<strong>Kuru kiri alın.</strong> Ayakkabılar kuruyken fırçayla tabandaki çamuru ve yüzeydeki tozu silkeleyin. Islak toz çamura döner ve yüzeye işler.',
+                    '<strong>Sabunlu suyu hazırlayın.</strong> Bir kase ılık suya birkaç damla bulaşık deterjanı ekleyin. Sıcak su yapıştırıcıyı yumuşatabileceği için kullanmayın.',
+                    '<strong>Üst yüzeyi fırçalayın.</strong> Fırçayı ıslatıp fazla suyunu silkeleyin, küçük daireler çizerek fırçalayın. Ayakkabıyı suya batırmayın.',
+                    '<strong>Köpüğü bezle alın.</strong> Temiz, nemli mikrofiber bezle yüzeydeki sabunu silin.',
+                    '<strong>Tabanı temizleyin.</strong> Karbonatı az suyla macun kıvamına getirip tabanın kenarlarına sürün, fırçalayın ve nemli bezle silin.',
+                    '<strong>Gölgede kurutun.</strong> İçine kâğıt havlu doldurup oda sıcaklığında, havadar bir yerde kurumaya bırakın.'
+                ] }
+            ]],
+            ['Süet ve nubuk beyaz sneaker', [
+                'Süet yüzeyde ilk tercih kuru temizliktir. Kir ve lekeyi süet silgisiyle hafifçe silin, ardından süet fırçasıyla tüyleri tek yönde tarayın. İnatçı lekelerde fırçayı sadece hafif nemlendirin ve ayakkabıyı ıslatmadan çalışın.',
+                'Temizlikten sonra uygulanan su ve leke itici sprey, yeni kirin yüzeye işlemesini zorlaştırır.'
+            ]],
+            ['Sararan taban nasıl beyazlatılır?', [
+                'Beyaz tabanlarda sararma çoğunlukla kir birikmesi, güneş ışığı ve kauçuğun zamanla oksitlenmesinden kaynaklanır. Kir kaynaklı sararmada karbonatlı macun ve fırça çoğu zaman yeterlidir. Kenar çizgilerinde ve küçük lekelerde melamin sünger (sihirli sünger) iyi sonuç verir.',
+                'Oksitlenmeden kaynaklanan derin sararma ev yöntemleriyle tamamen gitmeyebilir. Bu durumda tabanı aşındırmaya çalışmak yerine düzenli bakımla ilerlemesini durdurmak daha doğrudur.'
+            ]],
+            ['Yapılmaması gerekenler', [
+                { list: [
+                    '<strong>Çamaşır makinesi:</strong> Deri ve süet modellerde biçim bozulmasına ve yapıştırıcı açılmasına yol açabilir.',
+                    '<strong>Çamaşır suyu:</strong> Beyazlatmak yerine sarı lekeler bırakabilir ve dokuyu yıpratır.',
+                    '<strong>Güneşte veya kalorifer üstünde kurutma:</strong> Isı tabanı sarartır, deriyi sertleştirir ve çatlatır.',
+                    '<strong>Sert tel fırça:</strong> Deri yüzeyi çizer, kumaşta tüylenme yapar.'
+                ] }
+            ]],
+            ['Beyaz sneakerın uzun süre beyaz kalması için', [
+                'Her kullanımdan sonra nemli bezle kısa bir silme, kirin birikmesini önler. Ayakkabıları güneş almayan, kuru bir yerde ve içine kâğıt doldurarak saklamak biçimlerini korur. Yağmurlu günlerde beyaz sneaker yerine su geçirmez bir bot tercih etmek de onları uzun ömürlü kılar; <a href="/kategori/kadin-bot-ve-cizme/">bot modellerimize</a> göz atabilirsiniz.'
+            ]]
+        ],
+        faq: [
+            { q: 'Beyaz sneaker çamaşır makinesinde yıkanır mı?', a: 'Deri ve süet modeller makinede yıkanmamalıdır. Kanvas modeller düşük sıcaklıkta yıkanabilir, ancak elde fırçalamak her zaman daha güvenlidir.' },
+            { q: 'Beyaz ayakkabı tabanı nasıl beyazlatılır?', a: 'Karbonatı az suyla macun yapıp tabana sürün, fırçalayın ve nemli bezle silin. İnce lekelerde melamin sünger iyi sonuç verir.' },
+            { q: 'Diş macunu beyaz ayakkabıyı temizler mi?', a: 'Beyaz ve jel olmayan diş macunu tabandaki küçük lekelerde işe yarayabilir; ancak deri yüzeyde iz bırakabileceği için önce görünmeyen bir yerde deneyin.' },
+            { q: 'Islanan ayakkabı nasıl kurutulur?', a: 'İçine kâğıt havlu veya gazete doldurun, ıslandıkça değiştirin ve oda sıcaklığında, güneş ve kalorifer olmayan havadar bir yerde kurutun.' }
+        ]
+    },
+    {
+        slug: 'ayakkabi-numarasi-nasil-secilir',
+        title: 'Ayakkabı Numarası Nasıl Seçilir? Ölçü Tablosu',
+        h1: 'Ayakkabı Numarası Nasıl Seçilir?',
+        description: 'Ayak uzunluğunu evde ölçüp doğru ayakkabı numarasını seçin. Kadın, erkek ve çocuk numara tablosu; sneaker, bot ve topuklu için ipuçları.',
+        lead: 'İnternetten ayakkabı alırken en büyük soru numaradır. Ayağınızı evde bir kâğıt ve cetvelle birkaç dakikada ölçebilir, aşağıdaki tabloyla numaranızı bulabilirsiniz. Ayrıca sneaker, bot ve topuklu ayakkabıda numara seçerken nelere dikkat etmeniz gerektiğini de anlattık.',
+        sections: [
+            ['Ayağınızı evde nasıl ölçersiniz?', [
+                { ordered: [
+                    'Bir A4 kâğıdı duvara dayalı şekilde yere koyun.',
+                    'Çorapla ve ayakta durarak topuğunuzu duvara yaslayın.',
+                    'En uzun parmağınızın ucunu kâğıda kalemle işaretleyin.',
+                    'Duvardan işarete kadar olan mesafeyi santimetre olarak ölçün.',
+                    'İki ayağınızı da ölçün; büyük olan ayağı esas alın.'
+                ] },
+                'Ayak gün içinde hafifçe şiştiği için ölçümü akşam saatlerinde yapmak, gün boyu rahat edeceğiniz numarayı bulmanızı sağlar.'
+            ]],
+            ['Yetişkin numara tablosu', [
+                { table: {
+                    head: ['Ayak uzunluğu', 'Numara (EU)'],
+                    rows: [
+                        ['22,5 cm', '36'], ['23 cm', '36-37'], ['23,5 cm', '37'], ['24 cm', '38'], ['24,5 cm', '39'],
+                        ['25 cm', '39-40'], ['25,5 cm', '40'], ['26 cm', '41'], ['26,5 cm', '42'], ['27 cm', '42-43'],
+                        ['27,5 cm', '43'], ['28 cm', '44'], ['28,5 cm', '45'], ['29 cm', '45-46']
+                    ]
+                } },
+                'Tablo yaklaşık değerler verir; kalıp markaya ve modele göre yarım numara değişebilir. Ölçünüz iki numara arasında kalıyorsa genellikle büyük numara daha rahat eder.'
+            ]],
+            ['Çocuk numara tablosu', [
+                { table: {
+                    head: ['Ayak uzunluğu', 'Numara (EU)'],
+                    rows: [
+                        ['13 cm', '22'], ['13,5 cm', '22-23'], ['14 cm', '23'], ['14,5 cm', '24'], ['15 cm', '25'],
+                        ['16 cm', '26'], ['17 cm', '27-28'], ['18 cm', '29'], ['19 cm', '30-31'], ['20 cm', '32'],
+                        ['21 cm', '33-34'], ['22 cm', '35']
+                    ]
+                } },
+                'Çocuklarda ayak uzunluğuna 1-1,5 cm büyüme payı bırakılması önerilir. <a href="/kategori/cocuk-sneaker/">Ortopedik çocuk sneaker modellerimizi</a> bu ölçüye göre seçebilirsiniz.'
+            ]],
+            ['Sneaker ve spor ayakkabıda numara', [
+                'Spor ayakkabılar genellikle normal numaranızla alınır. Kalın çorapla giyecekseniz, ayağınız geniş veya yüksek taraklıysa ya da ölçünüz iki numara arasında kalıyorsa yarım-bir numara büyüğü daha rahat eder. Doğru numarada başparmağınız ile ayakkabının burnu arasında yaklaşık bir parmak eni boşluk kalır ve topuk yürürken yukarı kaymaz.'
+            ]],
+            ['Botta numara seçimi', [
+                'Bot kışın kalın çorapla giyildiği için ölçünüz sınırdaysa bir numara büyük almak çoğu zaman doğru tercihtir. Bilekte fermuar veya bağcık olan modeller ayağı sabitlediği için hafif büyük numarada bile ayak içeride kaymaz. Kış için <a href="/kategori/kadin-bot-ve-cizme/">kadın bot ve çizme</a> ile <a href="/kategori/erkek-ayakkabi-ve-bot/">erkek bot</a> modellerimize göz atabilirsiniz.'
+            ]],
+            ['Topuklu ayakkabıda numara seçimi', [
+                'Topuk yükseldikçe ayak öne doğru kayar, bu yüzden topuklu ayakkabı burun kısmında sıkıyorsa yarım numara büyüğü daha rahat edebilir. Önü açık modellerde parmakların tabandan taşmaması, kapalı burunlu modellerde ise topuğun ayakkabıdan çıkmaması doğru numaranın işaretidir. <a href="/kategori/kadin-topuklu-ayakkabi/">Topuklu ayakkabı modellerimizi</a> inceleyebilirsiniz.'
+            ]],
+            ['Numara uymazsa ne olur?', [
+                'Nokta Ayakkabıcılık\'tan aldığınız ayakkabının numarası uymazsa değişim yapabilirsiniz. Emin olamadığınız durumlarda ayak ölçünüzü ve beğendiğiniz modeli Instagram\'dan yazmanız yeterli, size uygun numarayı birlikte belirleriz. Ayrıntılar <a href="/bilgilendirme.html#iade">iade ve değişim</a> sayfasında.'
+            ]]
+        ],
+        faq: [
+            { q: 'Ayak ölçüsü iki numara arasında kalırsa hangisi alınmalı?', a: 'Genellikle büyük numara daha rahat eder; özellikle bot ve kalın çorapla giyilecek ayakkabılarda büyük numarayı tercih edin.' },
+            { q: '25 cm ayak kaç numara?', a: '25 cm ayak uzunluğu yaklaşık 39-40 numaraya karşılık gelir. Dar kalıplı modellerde 40 numara daha rahat edebilir.' },
+            { q: 'Çocuk ayakkabısında ne kadar pay bırakılmalı?', a: 'Ayak uzunluğuna 1-1,5 cm pay eklenmelidir. Bu pay hem yürürken ayağın öne kaymasını hem de büyümeyi karşılar.' },
+            EXCHANGE_FAQ
+        ]
+    }
+];
+GUIDES.forEach((g) => { g.url = `/rehber/${g.slug}/`; });
 
 const MAIN_CATEGORIES = CATEGORIES.filter((c) => !c.parent);
 const categoryBySlug = new Map(CATEGORIES.map((c) => [c.slug, c]));
