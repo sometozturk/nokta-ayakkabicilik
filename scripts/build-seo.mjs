@@ -752,6 +752,7 @@ function footer() {
     </div>
     <div><h2>Kategoriler</h2><ul>${cats}<li><a href="/katalog.html">Tüm katalog</a></li></ul></div>
     <div><h2>Yardım</h2><ul>
+      ${GUIDES.map((g) => `<li><a href="${g.url}">${esc(g.h1)}</a></li>`).join('')}
       <li><a href="/bilgilendirme.html#kargo">Kargo ve teslimat</a></li>
       <li><a href="/bilgilendirme.html#iade">İade ve değişim</a></li>
       <li><a href="/bilgilendirme.html#kvkk">KVKK ve gizlilik</a></li>
@@ -864,6 +865,68 @@ ${otherMain.length ? `<section class="sp-more"><h2>Diğer kategoriler</h2><div c
         ogImage: category.items[0]?.images[0],
         ogImageAlt: category.h1,
         schema: [itemList, crumbs.schema, faq.schema].filter(Boolean),
+        body
+    });
+}
+
+// Rehber yazısı. Bölüm içeriği: düz metin (<p>), { list }, { ordered } veya { table: { head, rows } }.
+const GUIDE_DATE = '2026-11-02';
+function renderGuideBlock(block) {
+    if (typeof block === 'string') return `<p>${block}</p>`;
+    if (block.list) return `<ul>${block.list.map((li) => `<li>${li}</li>`).join('')}</ul>`;
+    if (block.ordered) return `<ol>${block.ordered.map((li) => `<li>${li}</li>`).join('')}</ol>`;
+    if (block.table) {
+        const { head, rows } = block.table;
+        return `<table class="sp-size-table"><thead><tr>${head.map((h) => `<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows
+            .map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    }
+    return '';
+}
+
+function renderGuide(g) {
+    const crumbs = breadcrumbs([{ name: 'Ana Sayfa', url: '/' }, { name: g.h1, url: g.url }]);
+    const faq = faqBlock(g.faq);
+    const anchor = (heading) => slugify(heading);
+    const toc = `<nav class="sp-toc" aria-label="İçindekiler"><h2>İçindekiler</h2><ol>${g.sections
+        .map(([heading]) => `<li><a href="#${anchor(heading)}">${esc(heading)}</a></li>`).join('')}</ol></nav>`;
+    const sections = g.sections.map(([heading, blocks]) => `<h2 id="${anchor(heading)}">${esc(heading)}</h2>${blocks.map(renderGuideBlock).join('')}`).join('');
+    const others = GUIDES.filter((o) => o !== g);
+    const cats = activeCategories.filter((c) => !c.parent);
+    const article = {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: g.h1,
+        description: g.description,
+        inLanguage: 'tr-TR',
+        datePublished: GUIDE_DATE,
+        dateModified: GUIDE_DATE,
+        mainEntityOfPage: `${SITE}${g.url}`,
+        image: `${SITE}/og-image.jpg`,
+        author: organizationRef,
+        publisher: { ...organizationRef, logo: { '@type': 'ImageObject', url: `${SITE}/logo-transparent.png` } }
+    };
+    const body = `<div class="sp-wrap">
+${crumbs.html}
+<article class="sp-article">
+<section class="sp-hero">
+  <h1>${esc(g.h1)}</h1>
+  <p class="sp-lead">${esc(g.lead)}</p>
+</section>
+${toc}
+<section class="sp-guide">${sections}</section>
+${faq.html}
+</article>
+${trustList}
+<section class="sp-more"><h2>Kategoriler</h2><div class="sp-chips">${cats.map((c) => `<a href="${c.url}">${esc(c.name)}</a>`).join('')}<a href="/#urunler">Tüm modeller</a></div></section>
+${others.length ? `<section class="sp-more"><h2>Diğer rehberler</h2><div class="sp-chips">${others.map((o) => `<a href="${o.url}">${esc(o.h1)}</a>`).join('')}</div></section>` : ''}
+</div>`;
+    return layout({
+        title: `${g.title} | Nokta Ayakkabıcılık`.length <= 60 ? `${g.title} | Nokta Ayakkabıcılık` : g.title,
+        description: g.description,
+        canonical: `${SITE}${g.url}`,
+        ogType: 'article',
+        ogImageAlt: g.h1,
+        schema: [article, crumbs.schema, faq.schema].filter(Boolean),
         body
     });
 }
@@ -1087,10 +1150,12 @@ function write(relPath, content) {
 
 rmSync(join(OUT, 'kategori'), { recursive: true, force: true });
 rmSync(join(OUT, 'urun'), { recursive: true, force: true });
+rmSync(join(OUT, 'rehber'), { recursive: true, force: true });
 
 buildFamilies();
 for (const category of activeCategories) write(`kategori/${category.slug}/index.html`, renderCategory(category));
 for (const p of pageProducts) write(`urun/${p.slug}/index.html`, renderProduct(p));
+for (const g of GUIDES) write(`rehber/${g.slug}/index.html`, renderGuide(g));
 
 // sitemap.xml (+ görsel sitemap)
 const urlEntry = (loc, { lastmod, images = [] } = {}) => `  <url>
@@ -1104,6 +1169,7 @@ ${[
         urlEntry(`${SITE}/katalog.html`),
         ...activeCategories.map((c) => urlEntry(`${SITE}${c.url}`)),
         ...pageProducts.map((p) => urlEntry(`${SITE}${p.url}`, { images: p.images.slice(0, 5) })),
+        ...GUIDES.map((g) => urlEntry(`${SITE}${g.url}`)),
         urlEntry(`${SITE}/bilgilendirme.html`)
     ].join('\n')}
 </urlset>
@@ -1183,4 +1249,5 @@ ${items.join('\n')}
 console.log(`SEO sayfaları üretildi → ${OUT}`);
 console.log(`  Kategori sayfası: ${activeCategories.length} (${activeCategories.map((c) => `${c.slug}:${c.items.length}`).join(', ')})`);
 console.log(`  Ürün sayfası:     ${pageProducts.length} / ${products.length} ürün (marka adı geçen ${products.length - pageProducts.length} ürün atlandı)`);
-console.log(`  sitemap.xml:      ${2 + activeCategories.length + pageProducts.length + 1} URL`);
+console.log(`  Rehber yazısı:    ${GUIDES.length}`);
+console.log(`  sitemap.xml:      ${2 + activeCategories.length + pageProducts.length + GUIDES.length + 1} URL`);
