@@ -316,6 +316,12 @@ async function handleAdmin(request, env, url) {
     return reply(200, { id: p.id, title: p.title, url: p.url, price: unitPrice(p), stockStatus: p.stockStatus, stockQuantity: p.stockQuantity,
       variants: (p.variants || []).map(v => ({ size: v.selectionTitle, stockQuantity: v.stockQuantity, stockStatus: v.stockStatus })) });
   }
+  if (url.pathname === '/admin/products' && request.method === 'GET') {
+    const page = Math.max(1, Number(url.searchParams.get('page')) || 1);
+    const list = await shopier(env, 'GET', `/products?limit=50&page=${page}`);
+    const items = Array.isArray(list) ? list : (list?.data || list?.items || []);
+    return reply(200, { count: items.length, sample: items.slice(0, 50).map(p => ({ id: p.id, title: p.title, url: p.url, custom: p.customListing })), keys: Array.isArray(list) ? 'array' : Object.keys(list || {}) });
+  }
   if (url.pathname === '/admin/setup-webhook' && request.method === 'POST') {
     const target = `${url.origin}/webhooks/shopier`;
     const list = await shopier(env, 'GET', '/webhooks');
