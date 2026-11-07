@@ -81,4 +81,8 @@ jobs:
         run: |
           if [ -z "$SHOPIER_PAT" ] || [ -z "$CHECKOUT_ADMIN_KEY" ]; then echo "PAT veya admin anahtarı yok; webhook atlandı."; exit 0; fi
           sleep 5
+          echo "--- API ürün okuma testi"
+          curl -sS -H "X-Admin-Key: $CHECKOUT_ADMIN_KEY" "$URL/admin/product?id=51724140" || true
+          echo
+          echo "--- webhook kurulumu"
           curl -sS --fail-with-body -X POST -H "X-Admin-Key: $CHECKOUT_ADMIN_KEY" "$URL/admin/setup-webhook"

@@ -366,6 +366,9 @@ export default {
       return new Response('Nokta checkout', { status: 200 });
     } catch (err) {
       console.error('error', err.code || '', err.message, JSON.stringify(err.detail || {}));
+      if (url.pathname.startsWith('/admin/') && isAdmin(request, env)) {
+        return new Response(JSON.stringify({ error: err.message, status: err.status, detail: err.detail || null }, null, 2), { status: 502, headers: { 'content-type': 'application/json; charset=utf-8' } });
+      }
       const status = err.status && err.code !== 'SHOPIER_API' ? err.status : 502;
       const message = err.code && err.code !== 'SHOPIER_API' ? err.message : 'Sepet şu an oluşturulamadı. Ürünleri tek tek Shopier\'den alabilirsin.';
       return json(request, status, { error: message, code: err.code || 'ERROR' });
