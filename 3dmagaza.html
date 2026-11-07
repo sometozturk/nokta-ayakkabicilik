@@ -481,6 +481,15 @@ function renderCart() {
         btn.textContent = 'Sipariş ver';
         btn.addEventListener('click', startCheckout);
         foot.appendChild(btn);
+        let sentAt = 0;
+        try { sentAt = Number(localStorage.getItem(PAID_FLAG)) || 0; } catch (x) {}
+        if (sentAt && Date.now() - sentAt < 2 * 86400000) {
+            const paid = document.createElement('button'); paid.type = 'button'; paid.className = 'secondary';
+            paid.style.border = '0'; paid.style.background = 'none'; paid.style.cursor = 'pointer';
+            paid.textContent = 'Ödemeyi Shopier\'de tamamladım, sepeti boşalt';
+            paid.addEventListener('click', () => { cart = []; saveCart(); try { localStorage.removeItem(PAID_FLAG); } catch (x) {} renderCart(); toast('Teşekkürler! Siparişin bize ulaşınca kargolarız.'); });
+            foot.appendChild(paid);
+        }
     } else {
         const next = cart.find(i => !i.done);
         const opened = cart.filter(i => i.done).length;
@@ -518,9 +527,50 @@ function openOnShopier(item) {
     if (typeof fbq === 'function') fbq('trackCustom', 'ShopierTikla', { content_ids: [String(p.shopierId)], content_type: 'product', value: Number(p.price) * item.qty, currency: 'TRY' });
     renderCart();
 }
-function startCheckout() {
+// Sepetin tamamını tek Shopier ödeme sayfasına çeviren sunucu (checkout-worker/).
+const CHECKOUT_ENDPOINT = 'https://nokta-checkout.samet1453pro.workers.dev/checkout';
+const PAID_FLAG = 'nokta-3d-odeme';
+let checkoutBusy = false;
+async function startCheckout(e) {
+    if (checkoutBusy) return;
     const { count, total } = cartTotals();
     if (typeof fbq === 'function') fbq('track', 'InitiateCheckout', { content_ids: cart.map(i => String(productById.get(i.id).shopierId)), content_type: 'product', num_items: count, value: total, currency: 'TRY' });
+    const btn = e && e.currentTarget;
+    checkoutBusy = true;
+    if (btn) { btn.disabled = true; btn.textContent = 'Ödeme sayfası hazırlanıyor…'; }
+    try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 15000);
+        const res = await fetch(CHECKOUT_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: cart.map(i => ({ shopierId: String(productById.get(i.id).shopierId), size: String(i.size), qty: i.qty })) }),
+            signal: ctrl.signal
+        });
+        clearTimeout(timer);
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.url) {
+            if (typeof fbq === 'function') fbq('trackCustom', 'SepetOdeme', { num_items: count, value: Number(data.total) || total, currency: 'TRY' });
+            toast('Shopier ödeme sayfası açılıyor…');
+            try { localStorage.setItem(PAID_FLAG, String(Date.now())); } catch (x) {}
+            window.location.href = data.url;
+            return;
+        }
+        // Stok/numara sorunları müşteriye söylenir; sunucu kaynaklı hatalarda eski yönteme dönülür.
+        if (res.status === 409 || res.status === 400 || res.status === 429) {
+            toast(data.error || 'Sepet oluşturulamadı.');
+            if (btn) { btn.disabled = false; btn.textContent = 'Sipariş ver'; }
+            return;
+        }
+        throw new Error(data.error || 'checkout ' + res.status);
+    } catch (err) {
+        legacyCheckout();
+    } finally {
+        checkoutBusy = false;
+    }
+}
+// Yedek: ürünleri sırayla Shopier sepetine ekletip tek ödemede bitirme.
+function legacyCheckout() {
     cart.forEach(i => { i.done = false; });
     if (cart.length === 1) {
         checkoutMode = true;
