@@ -1,0 +1,24 @@
+name = "nokta-checkout"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[vars]
+BUNDLE_TTL_HOURS = "24"
+BUNDLE_REUSE_MINUTES = "120"
+IP_HOURLY_CAP = "12"
+DAILY_CAP = "300"
+# Paket ödendiğinde gerçek ürünlerin numara stoğunu da düşür. Bir üründe test edildikten sonra "on" yapılır.
+STOCK_SYNC = "off"
+
+# Kombininde Dene ile aynı veritabanı; tablolar schema.sql'de.
+[[d1_databases]]
+binding = "DB"
+database_name = "nokta-tryon"
+database_id = "503f7353-6a19-40c5-8803-5f1ef5858d7b"
+
+[triggers]
+crons = ["17 * * * *"]
+
+[observability]
+enabled = true

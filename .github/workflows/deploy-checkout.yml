@@ -1,0 +1,84 @@
+name: Deploy checkout worker
+
+# "Tek ödemede sepet" sunucusunu (checkout-worker/) Cloudflare'e yükler.
+# Gerekli depo sırları (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   Workers ve D1 düzenleme yetkili Cloudflare anahtarı
+#   CLOUDFLARE_ACCOUNT_ID  Cloudflare hesap kimliği
+#   SHOPIER_PAT            Shopier → Hesap Yönetimi → Kişisel Erişim Anahtarı
+#   CHECKOUT_ADMIN_KEY     Rastgele uzun bir parola (yönetim uçları için)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'checkout-worker/**'
+      - '.github/workflows/deploy-checkout.yml'
+
+concurrency:
+  group: checkout-worker
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: checkout-worker
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Test
+        run: npm test
+
+      - name: Check Cloudflare secrets
+        id: cf
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "Cloudflare sırları eklenmemiş; yükleme atlandı."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create tables
+        if: steps.cf.outputs.ready == 'true'
+        run: npx wrangler d1 execute nokta-tryon --remote --file schema.sql
+
+      - name: Deploy
+        id: deploy
+        if: steps.cf.outputs.ready == 'true'
+        run: |
+          npx wrangler deploy | tee deploy.log
+          url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' deploy.log | head -1)
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Set secrets
+        if: steps.cf.outputs.ready == 'true'
+        env:
+          SHOPIER_PAT: ${{ secrets.SHOPIER_PAT }}
+          CHECKOUT_ADMIN_KEY: ${{ secrets.CHECKOUT_ADMIN_KEY }}
+        run: |
+          if [ -n "$SHOPIER_PAT" ]; then printf '%s' "$SHOPIER_PAT" | npx wrangler secret put SHOPIER_PAT; fi
+          if [ -n "$CHECKOUT_ADMIN_KEY" ]; then printf '%s' "$CHECKOUT_ADMIN_KEY" | npx wrangler secret put ADMIN_KEY; fi
+
+      - name: Register Shopier order webhook
+        if: steps.cf.outputs.ready == 'true' && steps.deploy.outputs.url != ''
+        env:
+          CHECKOUT_ADMIN_KEY: ${{ secrets.CHECKOUT_ADMIN_KEY }}
+          SHOPIER_PAT: ${{ secrets.SHOPIER_PAT }}
+          URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          if [ -z "$SHOPIER_PAT" ] || [ -z "$CHECKOUT_ADMIN_KEY" ]; then echo "PAT veya admin anahtarı yok; webhook atlandı."; exit 0; fi
+          sleep 5
+          curl -sS --fail-with-body -X POST -H "X-Admin-Key: $CHECKOUT_ADMIN_KEY" "$URL/admin/setup-webhook"
