@@ -82,7 +82,8 @@ jobs:
           if [ -z "$SHOPIER_PAT" ] || [ -z "$CHECKOUT_ADMIN_KEY" ]; then echo "PAT veya admin anahtarı yok; webhook atlandı."; exit 0; fi
           sleep 5
           echo "--- API ürün okuma testi"
-          curl -sS -H "X-Admin-Key: $CHECKOUT_ADMIN_KEY" "$URL/admin/products?page=1" | head -c 6000 || true
+          # Depo herkese açık: iş akışı kayıtları da açık. Yalnızca HTTP durum kodu yazdırılır.
+          curl -s -o /dev/null -w "ürün listesi: %{http_code}\n" -H "X-Admin-Key: $CHECKOUT_ADMIN_KEY" "$URL/admin/products?page=1" || true
           echo
           echo "--- webhook kurulumu"
-          curl -sS --fail-with-body -X POST -H "X-Admin-Key: $CHECKOUT_ADMIN_KEY" "$URL/admin/setup-webhook"
+          curl -s -o /dev/null -w "webhook kurulumu: %{http_code}\n" --fail -X POST -H "X-Admin-Key: $CHECKOUT_ADMIN_KEY" "$URL/admin/setup-webhook"
