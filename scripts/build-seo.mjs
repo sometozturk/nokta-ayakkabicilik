@@ -120,6 +120,13 @@ const products = raw
     })
     .filter((p) => p.images.length);
 
+// Arama verisine göre ürün sayfası başlığı (title) ve H1 iyileştirmesi. URL (slug) değişmez, sadece görünen başlık.
+// Search Console: "tozluklu bot" ve "tozluklu çizme" aramaları (Kas 2026).
+const SEO_TITLES = {
+    103: { title: 'Tozluklu Çizme Siyah – Çıkarılabilir Tozluklu Bot', h1: 'Tozluklu Çizme – Siyah, Çıkarılabilir Tozluklu Kadın Bot' },
+    104: { title: 'Tozluklu Çizme Acı Kahve – Çıkarılabilir Tozluklu Bot', h1: 'Tozluklu Çizme – Acı Kahve, Çıkarılabilir Tozluklu Kadın Bot' }
+};
+
 const isHeel = (p) => p.category === 'Topuklu Nokta Shic';
 const isWomenBoot = (p) => p.category === 'Kadın Bot';
 const isMen = (p) => p.category === 'Erkek Bot' || /oxford|erkek|unisex/.test(p.t);
@@ -289,7 +296,7 @@ const CATEGORIES = [
                 'Bot bileği ya da bileğin hemen üstünü kapatır; pantolon ve kotla en kolay kombinlenen modeldir. Çizme baldıra veya dize kadar uzanır; elbise, etek ve taytla bacağı soğuktan korur. Hem bot hem çizme isteyenler için tozluklu modeller iki görünümü tek üründe birleştirir.'
             ]],
             ['Tozluklu bot nedir?', [
-                'Tozluklu botlarda bilek üstündeki örme veya kumaş tozluk bölümü çıkarılabilir. Tozluk takılıyken çizme, çıkarıldığında bot olarak giyilir; böylece aynı ayakkabı hem elbise hem pantolon kombinlerinde kullanılır.'
+                'Tozluklu botlarda bilek üstündeki örme veya kumaş tozluk bölümü çıkarılabilir. Tozluk takılıyken çizme, çıkarıldığında bot olarak giyilir; böylece aynı ayakkabı hem elbise hem pantolon kombinlerinde kullanılır. <a href="/kategori/tozluklu-cizme/">Tozluklu çizme modellerimizi</a> ve <a href="/rehber/tozluklu-cizme-nasil-kombinlenir/">kombin rehberimizi</a> inceleyebilirsiniz.'
             ]],
             ['Numara ve kalıp', [
                 'Botu kalın çorapla giyecekseniz ve iki numara arasında kalıyorsanız genellikle büyük numara daha rahat eder. Kararsız kaldığınız modeli Instagram\'dan bize sorabilirsiniz.'
@@ -303,6 +310,40 @@ const CATEGORIES = [
                 ? { q: 'Tozluklu botun tozluğu çıkarılabiliyor mu?', a: 'Evet. Tozluklu modellerimizde tozluk bölümü çıkarılabilir; takılıyken çizme, çıkarıldığında bot olarak kullanabilirsiniz.' }
                 : null,
             { q: 'Bot ile çizme arasındaki fark nedir?', a: 'Bot bileği veya bileğin biraz üstünü kapatır, çizme ise baldıra ya da dize kadar uzanır. Pantolonla bot, elbise ve etekle çizme daha çok tercih edilir.' },
+            SHIPPING_FAQ,
+            EXCHANGE_FAQ
+        ]
+    },
+    {
+        slug: 'tozluklu-cizme',
+        parent: 'kadin-bot-ve-cizme',
+        name: 'Tozluklu Çizme',
+        h1: 'Tozluklu Çizme ve Tozluklu Bot Modelleri',
+        title: 'Tozluklu Çizme ve Tozluklu Bot Modelleri | Nokta',
+        description: ({ min }) => `Tozluğu çıkarılabilen kadın çizme modelleri: tozlukla çizme, tozluksuz bot olarak giyin. ${min}'den başlayan fiyatlar, ücretsiz ve aynı gün kargo.`,
+        intro: ({ count }) => `Tozluğu takılınca çizme, çıkarılınca bot: tek ayakkabıyla iki ayrı görünüm. Tozluklu çizme modellerimizin ${count} renk seçeneğini aşağıda inceleyebilirsiniz.`,
+        audience: 'female',
+        match: (p) => p.generic && isWomenBoot(p) && /tozluklu/.test(p.t),
+        guide: [
+            ['Tozluklu çizme nedir?', [
+                'Tozluklu çizme, bilek üstüne takılan ve istenince çıkarılabilen bir tozluk bölümüyle gelen kadın botudur. Tozluk takılıyken baldırı saran bir çizme, çıkarıldığında ise bilek boyu bir bot olarak giyilir. Bu yüzden "tozluklu bot" ve "tozluklu çizme" aynı modeli anlatır.'
+            ]],
+            ['Neden tozluklu çizme?', [
+                '<strong>İki ayakkabı yerine bir:</strong> Elbise ve etekle çizme, pantolon ve kotla bot görünümü aynı üründe.',
+                '<strong>Soğukta ekstra koruma:</strong> Tozluk baldırı rüzgâr ve soğuktan korur; hava ısınınca çıkarıp bot olarak kullanmaya devam edersiniz.',
+                '<strong>Dolapta daha az yer:</strong> Sonbahar ve kış sezonunu tek bir modelle karşılamak isteyenler için pratik bir seçimdir.'
+            ]],
+            ['Hangi renk?', [
+                '<strong>Siyah</strong> tozluklu çizme siyah tayt, koyu kot ve her renk montla uyumludur; ilk tozluklu çizmeniz için en güvenli tercihtir. <strong>Acı kahve</strong> ise krem, bej ve camel tonlarıyla, triko elbise ve kaşe kabanla daha sıcak, sonbahar havası olan kombinler kurar.'
+            ]],
+            ['Numara seçimi', [
+                'Tozluklu çizmeyi kalın çorapla giyecekseniz ve iki numara arasında kalıyorsanız büyük numarayı tercih edin. Ölçü tablosu için <a href="/rehber/ayakkabi-numarasi-nasil-secilir/">ayakkabı numarası rehberimize</a>, kombin fikirleri için <a href="/rehber/tozluklu-cizme-nasil-kombinlenir/">tozluklu çizme kombin rehberimize</a> göz atabilirsiniz.'
+            ]]
+        ],
+        faq: [
+            { q: 'Tozluklu çizmenin tozluğu çıkarılabiliyor mu?', a: 'Evet. Tozluk bölümü çıkarılabilir; takılıyken çizme, çıkarıldığında bot olarak giyilir.' },
+            { q: 'Tozluklu bot ile tozluklu çizme aynı şey mi?', a: 'Evet. Tozluk takılıyken çizme, çıkarıldığında bot görünümü verdiği için iki isim de aynı modeli anlatır.' },
+            { q: 'Tozluklu çizme hangi mevsimde giyilir?', a: 'Sonbahar ve kış için idealdir. Soğuk günlerde tozlukla çizme olarak, daha ılık günlerde tozluk çıkarılıp bot olarak giyilebilir.' },
             SHIPPING_FAQ,
             EXCHANGE_FAQ
         ]
@@ -489,6 +530,49 @@ const GUIDES = [
             { q: '25 cm ayak kaç numara?', a: '25 cm ayak uzunluğu yaklaşık 39-40 numaraya karşılık gelir. Dar kalıplı modellerde 40 numara daha rahat edebilir.' },
             { q: 'Çocuk ayakkabısında ne kadar pay bırakılmalı?', a: 'Ayak uzunluğuna 1-1,5 cm pay eklenmelidir. Bu pay hem yürürken ayağın öne kaymasını hem de büyümeyi karşılar.' },
             EXCHANGE_FAQ
+        ]
+    },
+    {
+        slug: 'tozluklu-cizme-nasil-kombinlenir',
+        date: '2026-11-08',
+        title: 'Tozluklu Çizme Nasıl Kombinlenir? 6 Kombin Önerisi',
+        h1: 'Tozluklu Çizme Nasıl Kombinlenir?',
+        description: 'Tozluklu çizme ve tozluklu bot kombin önerileri: elbise, etek, tayt, kot ve pantolonla nasıl giyilir? Tozluklu ve tozluksuz kullanım ipuçları.',
+        lead: 'Tozluklu çizmenin en güzel yanı tek ayakkabıyla iki görünüm sunması: tozluk takılıyken çizme, çıkarıldığında bot. Bu rehberde elbiseden kota, ofisten hafta sonuna tozluklu çizmeyi nasıl kombinleyebileceğinizi ve tozluğu ne zaman çıkarmanız gerektiğini anlattık.',
+        sections: [
+            ['Tozluklu mu, tozluksuz mu?', [
+                'Kural basit: bacak ne kadar açıksa tozluk o kadar işe yarar. Elbise, etek ve şortla tozluğu takarak çizme görünümü elde edin. Kot ve kumaş pantolonla ise tozluğu çıkarıp bot olarak giymek daha sade durur. Pantolonun paçası botun üzerine düşüyorsa tozluğa gerek yoktur.'
+            ]],
+            ['6 tozluklu çizme kombini', [
+                { ordered: [
+                    '<strong>Triko elbise + tozluklu çizme:</strong> Diz boyu ya da midi triko elbiseyle tozluk takılı giyin. Uzun bir kaban ekleyince soğuk kış günleri için tam kombin olur.',
+                    '<strong>Siyah tayt + uzun kazak + siyah tozluklu çizme:</strong> Tek renk siyah, bacağı olduğundan uzun gösterir. Günlük kullanım ve alışveriş için rahat bir kombin.',
+                    '<strong>Mini etek + kalın çorap + tozluklu çizme:</strong> Siyah veya ten rengi kalın çorapla tozluğu takın; deri ceket veya oversize blazerla tamamlayın.',
+                    '<strong>Dar paça kot + bot görünümü:</strong> Tozluğu çıkarın, kotun paçasını botun içine sokun ya da kıvırın. Puf mont veya kaşe kaban ile hafta sonu kombini.',
+                    '<strong>Kumaş pantolon + acı kahve bot:</strong> Ofis için tozluğu çıkarın; krem, bej veya camel tonlarında pantolon ve triko ile acı kahve rengi sıcak bir uyum yakalar.',
+                    '<strong>Midi etek + tozluklu çizme:</strong> Eteğin boyu tozluğun üst kısmını hafifçe örtecek şekilde seçin; arada çıplak bacak kalmaması kombini daha bütün gösterir.'
+                ] }
+            ]],
+            ['Renge göre kombin', [
+                { list: [
+                    '<strong>Siyah tozluklu çizme:</strong> Siyah, gri, lacivert ve beyazla her zaman uyumlu. Desenli elbiseleri sakinleştirir.',
+                    '<strong>Acı kahve tozluklu çizme:</strong> Krem, bej, camel, haki ve bordo ile sıcak tonlu sonbahar kombinleri kurar. Mavi kotla da çok iyi gider.'
+                ] }
+            ]],
+            ['Kısa boylular için ipucu', [
+                'Tozluklu çizmeyi tayt veya çorapla aynı renkte giymek bacak çizgisini kesintisiz gösterir ve boyu uzun gösterir. Ayakkabı ile etek arasında kalan bölümü kısa tutmak da aynı etkiyi verir.'
+            ]],
+            ['Bakım', [
+                'Tozluğu ayrı saklamak hem biçimini korur hem de botu tozluksuz kullanırken kaybolmasını önler. Islandıktan sonra içine kâğıt doldurup oda sıcaklığında, kaloriferden uzakta kurutun.'
+            ]],
+            ['Modellerimiz', [
+                'Siyah ve acı kahve renk seçenekleriyle <a href="/kategori/tozluklu-cizme/">tozluklu çizme modellerimizi</a> ve diğer <a href="/kategori/kadin-bot-ve-cizme/">kadın bot ve çizme modellerimizi</a> inceleyebilirsiniz.'
+            ]]
+        ],
+        faq: [
+            { q: 'Tozluklu çizme pantolonla giyilir mi?', a: 'Evet. Dar paça pantolon ve kotla tozluğu çıkarıp bot olarak giymek en sade sonucu verir; paçayı botun içine de sokabilirsiniz.' },
+            { q: 'Tozluklu çizme elbiseyle nasıl giyilir?', a: 'Tozluğu takarak çizme görünümünde giyin; triko ve midi elbiseler, kalın çorap veya tayt ile en iyi sonucu verir.' },
+            { q: 'Tozluklu çizme hangi renk alınmalı?', a: 'İlk tozluklu çizmeniz için siyah her kombine uyar. Krem, bej ve camel tonlarını seviyorsanız acı kahve daha sıcak bir görünüm sağlar.' }
         ]
     }
 ];
@@ -898,8 +982,8 @@ function renderGuide(g) {
         headline: g.h1,
         description: g.description,
         inLanguage: 'tr-TR',
-        datePublished: GUIDE_DATE,
-        dateModified: GUIDE_DATE,
+        datePublished: g.date || GUIDE_DATE,
+        dateModified: g.date || GUIDE_DATE,
         mainEntityOfPage: `${SITE}${g.url}`,
         image: `${SITE}/og-image.jpg`,
         author: organizationRef,
@@ -1001,11 +1085,12 @@ function renderProduct(p) {
     const priceText = formatPrice(p.price);
 
     // Google ~60 karakterden sonrasını keser: önce fiyatlı, sığmazsa kısa marka ekiyle.
+    const titleName = SEO_TITLES[p.id]?.title || p.name;
     const metaTitle = [
-        `${p.name} – ${priceText} | Nokta Ayakkabıcılık`,
-        `${p.name} | Nokta Ayakkabıcılık`,
-        `${p.name} | Nokta`
-    ].find((candidate) => candidate.length <= 62) || `${p.name} | Nokta`;
+        `${titleName} – ${priceText} | Nokta Ayakkabıcılık`,
+        `${titleName} | Nokta Ayakkabıcılık`,
+        `${titleName} | Nokta`
+    ].find((candidate) => candidate.length <= 62) || `${titleName} | Nokta`;
     const metaDescription = truncate(`${productPitch(p)}${p.sizes ? `, ${p.sizes} numara` : ''}: ${priceText}. Ücretsiz kargo, 17:00'ye kadar siparişte aynı gün kargoda. İade ve değişim garantisi.`, 158);
     const inStockSizes = p.sizeStock ? p.sizeStock.filter((v) => v.stock > 0).map((v) => v.size) : null;
     const soldOut = p.stock === 0 || (inStockSizes && p.sizeStock.length > 0 && inStockSizes.length === 0);
@@ -1094,7 +1179,7 @@ ${crumbs.html}
   </div>
   <div class="sp-info">
     ${p.mainCategory ? `<a class="sp-eyebrow" href="${p.mainCategory.url}">${esc(p.mainCategory.name)}</a>` : ''}
-    <h1>${esc(p.name)}</h1>
+    <h1>${esc(SEO_TITLES[p.id]?.h1 || p.name)}</h1>
     <p class="sp-price">${priceText}</p>
     ${p.sizeStock && p.sizeStock.length
         ? `<div class="sp-size-list"><span>${soldOut ? 'Şu an stokta numara yok' : 'Stoktaki numaralar'}</span><ul>${p.sizeStock.map((v) => `<li${v.stock > 0 ? '' : ' class="is-out" title="Tükendi"'}>${esc(v.size)}</li>`).join('')}</ul></div>`

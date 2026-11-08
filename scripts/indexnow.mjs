@@ -23,7 +23,7 @@ const urls = new Set();
 for (const file of changed) {
     if (file === 'index.html') urls.add('/');
     else if (/^(katalog|bilgilendirme)\.html$/.test(file)) urls.add('/' + file);
-    else if (/^(kategori|urun)\/[^/]+\/index\.html$/.test(file)) urls.add('/' + file.replace(/index\.html$/, ''));
+    else if (/^(kategori|urun|rehber)\/[^/]+\/index\.html$/.test(file)) urls.add('/' + file.replace(/index\.html$/, ''));
 }
 if (!urls.size) {
     console.log('IndexNow: değişen sayfa yok.');
