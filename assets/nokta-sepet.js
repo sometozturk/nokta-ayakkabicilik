@@ -37,7 +37,7 @@
     /* ---------- stil ---------- */
     var css = '' +
         '.ns-bag{position:relative;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 13px;border:1px solid rgba(25,23,21,.14);border-radius:999px;background:#191715;color:#f6f1e6;font-size:12px;font-weight:700;line-height:1;font-family:inherit;cursor:pointer;margin-right:8px}' +
-        '.ns-bag-sp{margin:0 0 0 auto;flex:0 0 auto}.ns-bag-sp+.sp-ig{margin-left:10px}' +
+        '.ns-bag-sp{margin:0 0 0 auto;flex:0 0 auto;background:transparent;color:inherit;border-color:currentColor}.ns-bag-sp+.sp-ig{margin-left:10px}' +
         '.ns-bag svg{width:17px;height:17px}' +
         '.ns-bag b{min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#e34b35;color:#fff;font-size:10.5px;display:inline-flex;align-items:center;justify-content:center}' +
         '.ns-bag.bump{animation:nsbump .45s ease}@keyframes nsbump{40%{transform:scale(1.12)}}' +
