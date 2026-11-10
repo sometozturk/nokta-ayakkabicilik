@@ -1,0 +1,21 @@
+name: Shopier checkout check
+
+# Tek ödemeli sepetin Shopier API adımlarını dener (gizli test ürünü oluşturup hemen siler).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Check checkout API steps
+        env:
+          SHOPIER_PAT: ${{ secrets.SHOPIER_PAT }}
+        run: node scripts/shopier-checkout-check.mjs
