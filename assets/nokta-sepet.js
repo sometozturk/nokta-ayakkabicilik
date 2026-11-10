@@ -227,7 +227,7 @@
             foot.appendChild(disc);
         }
         var tot = el('div', 'ns-total');
-        tot.innerHTML = '<span>' + c.count + ' çift</span><strong>' + (promoOk ? '<span class="ns-old">' + fmt(c.total) + '</span>' + fmt(c.total - PROMO.discount) : fmt(c.total)) + '</strong>';
+        tot.innerHTML = '<span>' + c.count + ' ürün</span><strong>' + (promoOk ? '<span class="ns-old">' + fmt(c.total) + '</span>' + fmt(c.total - PROMO.discount) : fmt(c.total)) + '</strong>';
         foot.appendChild(tot);
         if (promoOk) {
             foot.appendChild(el('div', 'ns-promo ok', '400 TL indirim Shopier ödeme sayfasında otomatik düşer.'));

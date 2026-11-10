@@ -488,7 +488,7 @@ function renderCart() {
     });
     const tot = document.createElement('div'); tot.className = 'cart-total';
     const promoOk = total >= 2500;
-    tot.innerHTML = `<span>${count} çift</span><strong>${promoOk ? `<s style="font-size:14px;opacity:.55;margin-right:6px">${fmt(total)}</s>${fmt(total - 400)}` : fmt(total)}</strong>`;
+    tot.innerHTML = `<span>${count} ürün</span><strong>${promoOk ? `<s style="font-size:14px;opacity:.55;margin-right:6px">${fmt(total)}</s>${fmt(total - 400)}` : fmt(total)}</strong>`;
     foot.appendChild(tot);
     const promo = document.createElement('div'); promo.className = 'checkout-note';
     promo.innerHTML = promoOk ? '🎁 <b>400 TL sepet indirimi</b> Shopier ödeme sayfasında otomatik düşer.' : `🎁 <b>${fmt(2500 - total)}</b> daha ekle, sepette <b>400 TL indirim</b> kazan.`;
