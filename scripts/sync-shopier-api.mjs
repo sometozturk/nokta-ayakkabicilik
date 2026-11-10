@@ -125,6 +125,11 @@ if (CHECK) {
     console.log(`Varyant alanları: ${Object.keys((first.variants || [])[0] || {}).join(', ')}`);
     console.log(`Fotoğraf bulunan ürün: ${products.filter((p) => imagesOf(p).length).length}`);
     console.log(`Fiyat okunan ürün: ${products.filter((p) => priceOf(p)).length}`);
+    const vis = products.filter((p) => !isHidden(p));
+    console.log(`placementScore türleri: ${[...new Set(vis.map((p) => typeof p.placementScore))].join(',')} | farklı değer: ${new Set(vis.map((p) => p.placementScore)).size}`);
+    console.log(`API sırası (ilk 25): ${vis.slice(0, 25).map((p) => p.id).join(' ')}`);
+    console.log(`placementScore büyükten küçüğe (ilk 25): ${[...vis].sort((a, b) => Number(b.placementScore) - Number(a.placementScore)).slice(0, 25).map((p) => `${p.id}:${p.placementScore}`).join(' ')}`);
+    console.log(`placementScore küçükten büyüğe (ilk 25): ${[...vis].sort((a, b) => Number(a.placementScore) - Number(b.placementScore)).slice(0, 25).map((p) => `${p.id}:${p.placementScore}`).join(' ')}`);
     process.exit(0);
 }
 
