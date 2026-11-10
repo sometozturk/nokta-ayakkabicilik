@@ -99,7 +99,7 @@ test('iki ürünlük sepetten tek gizli Shopier ürünü oluşturur, fiyatı sun
   assert.strictEqual(post.body.priceData.vatPercent, 20, 'Shopier KDV oranını sayı olarak bekliyor');
   assert.equal(post.body.media.length, 3, 'kapak + 2 ürün fotoğrafı');
   assert.match(post.body.media[0].url, /\/collage\/(51724140-51724107|51724107-51724140)\.png$/, 'ilk fotoğraf tüm ürünleri gösteren kapak');
-  assert.match(post.body.title, /^Nokta Sepeti · 2 çift · /);
+  assert.match(post.body.title, /^Sepet Paketi \(2 ürün\) · /);
   assert.match(post.body.description, /Nike Dunk Low Pro White \(36-45\) — 40 numara — 1 adet/);
 });
 

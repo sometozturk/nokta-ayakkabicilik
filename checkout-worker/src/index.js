@@ -172,11 +172,13 @@ async function priceCart(env, cart) {
 function bundleBody({ lines, total }, code, collageUrl) {
   const pairs = lines.reduce((s, l) => s + l.qty, 0);
   const summary = lines.map(l => `${l.title.replace(/\s*\(\d{2}\s*-\s*\d{2}\)\s*$/, '')} ${l.size}${l.qty > 1 ? ` x${l.qty}` : ''}`).join(' + ');
-  let title = `Nokta Sepeti · ${pairs} çift · ${summary}`;
+  let title = `Sepet Paketi (${pairs} ürün) · ${summary}`;
   // Shopier ürün başlığı en fazla 100 karakter olabilir (fazlasında 400 "invalid").
   if (title.length > 100) title = title.slice(0, 99) + '…';
   const description = [
     `Sepet kodu: ${code}`,
+    '',
+    `Bu paket, sepetindeki ${pairs} ürünün tamamını içerir (1 adet = tüm sepet).`,
     '',
     'Sepetindeki ürünler:',
     ...lines.map((l, i) => `${i + 1}) ${l.title} — ${l.size} numara — ${l.qty} adet — ${money(l.price * l.qty)}`),
