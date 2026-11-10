@@ -8,6 +8,8 @@
     var CART_KEY = 'nokta-3d-sepet';
     var CHECKOUT_API = 'https://nokta-checkout.samet1453pro.workers.dev/checkout';
     var MAX_QTY = 5, MAX_LINES = 8;
+    // Shopier mağaza kampanyası: sepet 2.500 TL ve üzeriyse 400 TL indirim (Shopier ödeme sayfasında düşer)
+    var PROMO = { threshold: 2500, discount: 400 };
 
     var products = new Map();       // site id -> ürün
     var byShopier = new Map();      // shopier id -> ürün
@@ -76,6 +78,15 @@
         '.ns-size{padding:11px 0;border:1px solid rgba(25,23,21,.2);border-radius:10px;background:#fff;font-size:14px;font-weight:700;line-height:1;font-family:inherit;cursor:pointer;color:#191715}' +
         '.ns-size.sel{background:#191715;color:#fff;border-color:#191715}' +
         '.ns-size[disabled]{opacity:.35;text-decoration:line-through;cursor:not-allowed}' +
+        '.ns-promo-bar{background:#e34b35;color:#fff;text-align:center;font-size:12.5px;font-weight:700;padding:8px 12px;letter-spacing:.01em}' +
+        '.ns-promo-bar b{font-weight:800}' +
+        '.ns-promo{font-size:12.5px;line-height:1.45;color:#473e38}' +
+        '.ns-promo b{color:#191715}' +
+        '.ns-promo.ok{color:#18552d;font-weight:700}' +
+        '.ns-prog{height:6px;border-radius:99px;background:#e6ddd0;overflow:hidden;margin-top:6px}' +
+        '.ns-prog i{display:block;height:100%;background:#e34b35;border-radius:99px;transition:width .3s}' +
+        '.ns-disc{display:flex;justify-content:space-between;font-size:13px;color:#18552d;font-weight:700}' +
+        '.ns-old{text-decoration:line-through;color:#8b8177;font-size:14px;font-family:inherit;font-weight:600;margin-right:6px}' +
         '.ns-toast{position:fixed;left:50%;bottom:24px;z-index:95;transform:translate(-50%,20px);background:#191715;color:#f6f1e6;padding:12px 18px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s;max-width:calc(100% - 32px);text-align:center}' +
         '.ns-toast.on{opacity:1;transform:translate(-50%,0)}';
     var style = el('style'); style.textContent = css; document.head.appendChild(style);
@@ -102,6 +113,8 @@
     bagBtn.addEventListener('click', function () { render(); open(panel); });
 
     function mount() {
+        var promoBar = el('div', 'ns-promo-bar'); promoBar.innerHTML = '🎁 2.500 TL ve üzeri alışverişte <b>400 TL indirim</b> · Ücretsiz kargo';
+        document.body.insertBefore(promoBar, document.body.firstChild);
         document.body.appendChild(scrim); document.body.appendChild(panel); document.body.appendChild(sheet); document.body.appendChild(toastEl);
         var spHeader = document.querySelector('.sp-header-inner');
         if (spHeader) { spHeader.insertBefore(bagBtn, spHeader.querySelector('.sp-ig')); bagBtn.classList.add('ns-bag-sp'); return; }
@@ -150,6 +163,10 @@
         });
         body.appendChild(grid);
         body.appendChild(el('div', 'ns-m', 'İki numara arasında kaldıysan Instagram\'dan bize yazabilirsin.'));
+        var inCart = counts().total;
+        body.appendChild(Object.assign(el('div', 'ns-note'), { innerHTML: inCart + Number(p.price) >= PROMO.threshold
+            ? '🎁 Bu ürünle sepetin 2.500 TL\'yi geçiyor: <b>400 TL indirim</b> kazanırsın.'
+            : '🎁 2.500 TL ve üzeri sepette <b>400 TL indirim</b>.' }));
         addBtn.addEventListener('click', function () {
             if (!chosen) return;
             add(p, chosen);
@@ -197,8 +214,23 @@
             row.appendChild(img); row.appendChild(mid); row.appendChild(right); body.appendChild(row);
         });
         var c = counts();
-        var tot = el('div', 'ns-total'); tot.innerHTML = '<span>' + c.count + ' çift</span><strong>' + fmt(c.total) + '</strong>';
+        var promoOk = c.total >= PROMO.threshold;
+        if (promoOk) {
+            var disc = el('div', 'ns-disc'); disc.innerHTML = '<span>Sepet indirimi (2.500 TL ve üzeri)</span><span>−' + fmt(PROMO.discount) + '</span>';
+            foot.appendChild(disc);
+        }
+        var tot = el('div', 'ns-total');
+        tot.innerHTML = '<span>' + c.count + ' çift</span><strong>' + (promoOk ? '<span class="ns-old">' + fmt(c.total) + '</span>' + fmt(c.total - PROMO.discount) : fmt(c.total)) + '</strong>';
         foot.appendChild(tot);
+        if (promoOk) {
+            foot.appendChild(el('div', 'ns-promo ok', '400 TL indirim Shopier ödeme sayfasında otomatik düşer.'));
+        } else {
+            var promo = el('div', 'ns-promo');
+            promo.innerHTML = '<b>' + fmt(PROMO.threshold - c.total) + '</b> daha ekle, sepette <b>400 TL indirim</b> kazan.';
+            var prog = el('div', 'ns-prog'); var bar = el('i'); bar.style.width = Math.min(100, Math.round(c.total / PROMO.threshold * 100)) + '%'; prog.appendChild(bar);
+            promo.appendChild(prog);
+            foot.appendChild(promo);
+        }
         var btn = el('button', 'ns-btn'); btn.type = 'button';
         if (mode === 'bundle' && bundle) {
             btn.textContent = 'Ödeme sayfasını aç';
