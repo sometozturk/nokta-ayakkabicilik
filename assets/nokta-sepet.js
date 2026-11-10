@@ -37,6 +37,7 @@
     /* ---------- stil ---------- */
     var css = '' +
         '.ns-bag{position:relative;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 13px;border:1px solid rgba(25,23,21,.14);border-radius:999px;background:#191715;color:#f6f1e6;font-size:12px;font-weight:700;line-height:1;font-family:inherit;cursor:pointer;margin-right:8px}' +
+        '.ns-bag-sp{margin:0 0 0 auto;flex:0 0 auto}.ns-bag-sp+.sp-ig{margin-left:10px}' +
         '.ns-bag svg{width:17px;height:17px}' +
         '.ns-bag b{min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#e34b35;color:#fff;font-size:10.5px;display:inline-flex;align-items:center;justify-content:center}' +
         '.ns-bag.bump{animation:nsbump .45s ease}@keyframes nsbump{40%{transform:scale(1.12)}}' +
@@ -102,6 +103,8 @@
 
     function mount() {
         document.body.appendChild(scrim); document.body.appendChild(panel); document.body.appendChild(sheet); document.body.appendChild(toastEl);
+        var spHeader = document.querySelector('.sp-header-inner');
+        if (spHeader) { spHeader.insertBefore(bagBtn, spHeader.querySelector('.sp-ig')); bagBtn.classList.add('ns-bag-sp'); return; }
         var host = document.querySelector('.nav-actions') || document.querySelector('.nav') || document.body;
         host.insertBefore(bagBtn, host.firstChild);
     }
@@ -283,7 +286,7 @@
 
     /* ---------- "Sepete Ekle" butonlarını yakala ---------- */
     window.addEventListener('click', function (e) {
-        var btn = e.target.closest && e.target.closest('a.satin-al-buton');
+        var btn = e.target.closest && e.target.closest('a.satin-al-buton, a.sp-buy');
         if (!btn || !products.size) return;
         var p = byShopier.get(shopierIdOf(btn.getAttribute('href')));
         if (!p) return;                         // bilinmeyen ürün: eski davranış (Shopier'e git)
@@ -295,7 +298,7 @@
 
     /* Ana sayfa butonlarının yazısı */
     function relabel(root) {
-        (root || document).querySelectorAll('a.satin-al-buton').forEach(function (a) {
+        (root || document).querySelectorAll('a.satin-al-buton, a.sp-buy').forEach(function (a) {
             if (a.dataset.nsLabel || !byShopier.has(shopierIdOf(a.getAttribute('href')))) return;
             a.dataset.nsLabel = '1';
             a.textContent = 'Sepete Ekle';
