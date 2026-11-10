@@ -249,7 +249,7 @@
             foot.appendChild(backButton());
         } else if (mode === 'manual') {
             btn.textContent = 'Shopier sepetime git ve öde';
-            btn.addEventListener('click', function () { window.open('https://www.shopier.com/basket/noktaayakkabi', '_blank', 'noopener'); });
+            btn.addEventListener('click', function () { window.open('https://www.shopier.com/s/basket/noktaayakkabi', '_blank', 'noopener'); });
             foot.appendChild(btn);
             foot.appendChild(doneButton());
             foot.appendChild(backButton());
