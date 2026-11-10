@@ -332,6 +332,9 @@ function sizesOf(p) {
 const CART_KEY = 'nokta-3d-sepet';
 const SHOPIER_BASKET = 'https://www.shopier.com/s/basket/noktaayakkabi';
 const CHECKOUT_API = 'https://nokta-checkout.samet1453pro.workers.dev/checkout';
+// Telefonda / Instagram tarayıcısında yeni sekme engelleniyor: ödeme sayfasını aynı sekmede aç.
+const SAME_TAB = (window.matchMedia && matchMedia('(max-width: 767px), (pointer: coarse)').matches) || /Instagram|FBAN|FBAV|FB_IAB|TikTok|Line\//i.test(navigator.userAgent || '');
+const go = url => { if (SAME_TAB) window.location.href = url; else window.open(url, '_blank', 'noopener'); };
 let bundle = null;          // { url, total } — tek ödemeli sepet linki
 let checkoutBusy = false;
 let cart = [];
@@ -498,7 +501,7 @@ function renderCart() {
         foot.appendChild(btn);
     } else if (checkoutMode === 'bundle' && bundle) {
         btn.textContent = 'Ödeme sayfasını aç';
-        btn.addEventListener('click', () => window.open(bundle.url, '_blank', 'noopener'));
+        btn.addEventListener('click', () => go(bundle.url));
         foot.appendChild(btn);
         const done = document.createElement('button'); done.type = 'button'; done.className = 'secondary';
         done.style.border = '0'; done.style.background = 'none'; done.style.cursor = 'pointer';
@@ -521,7 +524,7 @@ function renderCart() {
             if (cart.length > 1) {
                 btn.textContent = 'Shopier sepetime git ve öde';
                 btn.addEventListener('click', () => {
-                    window.open(SHOPIER_BASKET, '_blank', 'noopener');
+                    go(SHOPIER_BASKET);
                     if (typeof fbq === 'function') fbq('trackCustom', 'ShopierSepet', { num_items: count, value: total, currency: 'TRY' });
                 });
                 foot.appendChild(btn);
@@ -542,8 +545,8 @@ function renderCart() {
 }
 function openOnShopier(item) {
     const p = productById.get(item.id);
-    window.open(p.url, '_blank', 'noopener');
     item.done = true; saveCart();
+    go(p.url);
     if (typeof fbq === 'function') fbq('trackCustom', 'ShopierTikla', { content_ids: [String(p.shopierId)], content_type: 'product', value: Number(p.price) * item.qty, currency: 'TRY' });
     renderCart();
 }
@@ -566,7 +569,7 @@ async function createBundle(count, total) {
     // Açılır pencere engeline takılmamak için sekmeyi tıklama anında aç
     let win = null;
     try {
-        win = window.open('', '_blank');
+        if (!SAME_TAB) win = window.open('', '_blank');
         if (win) { win.opener = null; win.document.title = 'Nokta Ayakkabıcılık'; win.document.body.innerHTML = '<p style="font:16px sans-serif;padding:32px;color:#333">Shopier ödeme sayfan hazırlanıyor…</p>'; }
     } catch (e) {}
     let fallback = true;
@@ -581,7 +584,8 @@ async function createBundle(count, total) {
             bundle = { url: data.url, total: Number(data.total) || total };
             try { if (data.code) localStorage.setItem('nokta-son-paket', data.code); } catch (e) {}
             checkoutMode = 'bundle';
-            if (win && !win.closed) win.location.href = data.url; else window.open(data.url, '_blank', 'noopener');
+            saveCart();
+            if (win && !win.closed) win.location.href = data.url; else go(data.url);
             if (typeof fbq === 'function') fbq('trackCustom', 'ShopierSepet', { num_items: count, value: bundle.total, currency: 'TRY' });
             toast('Ödeme sayfan açıldı');
             return;

@@ -11,6 +11,10 @@
     function lastCode() { try { return localStorage.getItem(LAST_KEY) || ''; } catch (e) { return ''; } }
     function setLastCode(c) { try { if (c) localStorage.setItem(LAST_KEY, c); else localStorage.removeItem(LAST_KEY); } catch (e) {} }
     var MAX_QTY = 5, MAX_LINES = 8;
+    // Telefonda ve Instagram/Facebook uygulama içi tarayıcısında yeni sekme açmak engelleniyor ya da kayboluyor:
+    // orada ödeme sayfası aynı sekmede açılır (geri tuşuyla siteye dönülür, sepet kalır).
+    var SAME_TAB = (window.matchMedia && matchMedia('(max-width: 767px), (pointer: coarse)').matches) || /Instagram|FBAN|FBAV|FB_IAB|TikTok|Line\//i.test(navigator.userAgent || '');
+    function go(url) { if (SAME_TAB) window.location.href = url; else window.open(url, '_blank', 'noopener'); }
     // Shopier mağaza kampanyası: sepet 2.500 TL ve üzeriyse 400 TL indirim (Shopier ödeme sayfasında düşer)
     var PROMO = { threshold: 2500, discount: 400 };
 
@@ -49,7 +53,7 @@
         '@media(max-width:700px){.ns-bag .ns-bag-label{display:none}.ns-bag{padding:0 10px;margin-right:6px}}' +
         '.ns-scrim{position:fixed;inset:0;z-index:90;background:rgba(15,13,11,.45);opacity:0;pointer-events:none;transition:opacity .25s}' +
         '.ns-scrim.on{opacity:1;pointer-events:auto}' +
-        '.ns-panel{position:fixed;z-index:91;top:0;right:0;height:100%;width:min(410px,100%);background:#fbf8f2;color:#191715;display:flex;flex-direction:column;transform:translateX(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);box-shadow:-18px 0 40px rgba(0,0,0,.18)}' +
+        '.ns-panel{position:fixed;z-index:91;top:0;right:0;height:100%;height:100dvh;width:min(410px,100%);background:#fbf8f2;color:#191715;display:flex;flex-direction:column;transform:translateX(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);box-shadow:-18px 0 40px rgba(0,0,0,.18)}' +
         '.ns-panel.on{transform:none}' +
         '.ns-sheet{top:auto;bottom:0;height:auto;max-height:88vh;left:50%;right:auto;width:min(460px,100%);border-radius:18px 18px 0 0;transform:translate(-50%,105%)}' +
         '.ns-sheet.on{transform:translate(-50%,0)}' +
@@ -57,7 +61,7 @@
         '.ns-head h2{margin:0;font-family:Fraunces,serif;font-size:22px;font-weight:560}' +
         '.ns-x{width:34px;height:34px;border:1px solid rgba(25,23,21,.18);border-radius:50%;background:#fff;font-size:20px;line-height:1;cursor:pointer;color:#191715}' +
         '.ns-body{flex:1;overflow:auto;padding:6px 20px 12px}' +
-        '.ns-foot{padding:14px 20px 20px;border-top:1px solid rgba(25,23,21,.1);display:flex;flex-direction:column;gap:9px}' +
+        '.ns-foot{padding:14px 20px calc(20px + env(safe-area-inset-bottom));border-top:1px solid rgba(25,23,21,.1);display:flex;flex-direction:column;gap:9px}' +
         '.ns-empty{padding:46px 8px;text-align:center;color:#6c6259;font-size:14px;line-height:1.6}' +
         '.ns-item{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(25,23,21,.08)}' +
         '.ns-item img{width:62px;height:62px;object-fit:cover;border-radius:10px;background:#eee7dc}' +
@@ -107,8 +111,8 @@
     var bagBtn = el('button', 'ns-bag'); bagBtn.type = 'button'; bagBtn.setAttribute('aria-label', 'Sepeti aç');
     bagBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><span class="ns-bag-label">Sepet</span><b>0</b>';
 
-    function closeAll() { [panel, sheet].forEach(function (p) { p.classList.remove('on'); p.setAttribute('aria-hidden', 'true'); }); scrim.classList.remove('on'); }
-    function open(p) { closeAll(); p.classList.add('on'); p.setAttribute('aria-hidden', 'false'); scrim.classList.add('on'); }
+    function closeAll() { [panel, sheet].forEach(function (p) { p.classList.remove('on'); p.setAttribute('aria-hidden', 'true'); }); scrim.classList.remove('on'); document.documentElement.style.overflow = ''; }
+    function open(p) { closeAll(); p.classList.add('on'); p.setAttribute('aria-hidden', 'false'); scrim.classList.add('on'); document.documentElement.style.overflow = 'hidden'; }
     scrim.addEventListener('click', closeAll);
     panel.querySelector('.ns-x').addEventListener('click', closeAll);
     sheet.querySelector('.ns-x').addEventListener('click', closeAll);
@@ -237,19 +241,19 @@
         var btn = el('button', 'ns-btn'); btn.type = 'button';
         if (mode === 'bundle' && bundle) {
             btn.textContent = 'Ödeme sayfasını aç';
-            btn.addEventListener('click', function () { window.open(bundle.url, '_blank', 'noopener'); });
+            btn.addEventListener('click', function () { go(bundle.url); });
             foot.appendChild(btn);
             foot.appendChild(doneButton());
             foot.appendChild(backButton());
         } else if (mode === 'single') {
             btn.textContent = 'Ürünü Shopier\'de aç';
-            btn.addEventListener('click', function () { window.open(products.get(cart[0].id).url, '_blank', 'noopener'); });
+            btn.addEventListener('click', function () { go(products.get(cart[0].id).url); });
             foot.appendChild(btn);
             foot.appendChild(doneButton());
             foot.appendChild(backButton());
         } else if (mode === 'manual') {
             btn.textContent = 'Shopier sepetime git ve öde';
-            btn.addEventListener('click', function () { window.open('https://www.shopier.com/s/basket/noktaayakkabi', '_blank', 'noopener'); });
+            btn.addEventListener('click', function () { go('https://www.shopier.com/s/basket/noktaayakkabi'); });
             foot.appendChild(btn);
             foot.appendChild(doneButton());
             foot.appendChild(backButton());
@@ -279,10 +283,10 @@
         track('track', 'InitiateCheckout', { content_ids: cart.map(function (i) { return shopierIdOf(products.get(i.id).url); }), content_type: 'product', num_items: c.count, value: c.total, currency: 'TRY' });
         if (cart.length === 1 && cart[0].qty === 1) {
             var p = products.get(cart[0].id);
-            window.open(p.url, '_blank', 'noopener');
             track('trackCustom', 'ShopierTikla', { content_ids: [shopierIdOf(p.url)], content_type: 'product', value: Number(p.price), currency: 'TRY' });
             toast('Shopier açılıyor · ' + cart[0].size + ' numarayı seçmeyi unutma');
             mode = 'single'; render();
+            if (SAME_TAB) setTimeout(function () { go(p.url); }, 350); else go(p.url);
             return;
         }
         createBundle(c);
@@ -290,7 +294,7 @@
     function createBundle(c) {
         busy = true; render();
         var win = null;
-        try {
+        if (!SAME_TAB) try {
             win = window.open('', '_blank');
             if (win) { win.opener = null; win.document.title = 'Nokta Ayakkabıcılık'; win.document.body.innerHTML = '<p style="font:16px sans-serif;padding:32px;color:#333">Shopier ödeme sayfan hazırlanıyor…</p>'; }
         } catch (e) {}
@@ -306,7 +310,10 @@
                 bundle = { url: r.data.url, total: Number(r.data.total) || c.total };
                 setLastCode(r.data.code);
                 mode = 'bundle';
-                if (win && !win.closed) win.location.href = r.data.url; else window.open(r.data.url, '_blank', 'noopener');
+                save();
+                if (win && !win.closed) win.location.href = r.data.url;
+                else if (SAME_TAB) setTimeout(function () { go(r.data.url); }, 350);
+                else go(r.data.url);
                 track('trackCustom', 'ShopierSepet', { num_items: c.count, value: bundle.total, currency: 'TRY' });
                 toast('Ödeme sayfan açıldı');
                 return;
