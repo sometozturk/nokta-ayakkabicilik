@@ -77,7 +77,7 @@ beforeEach(() => {
     ['51724140', product('51724140', 'Nike Dunk Low Pro White (36-45)', 1249, { 40: 3, 42: 0, 43: 2 })],
     ['51724107', product('51724107', 'Nike Airforce 1 Black (36-45)', 1650, { 41: 2, 44: 1 }, { priceData: { currency: 'TRY', price: '1650', discount: true, discountedPrice: '1400', vatPercent: '20' } })]
   ]);
-  env = { DB: makeD1(), SHOPIER_PAT: 'pat-test', ADMIN_KEY: 'admin-test', STOCK_SYNC: 'on' };
+  env = { DB: makeD1(), SHOPIER_PAT: 'pat-test', ADMIN_KEY: 'admin-test', STOCK_SYNC: 'on', IMAGE_WAIT_TRIES: '1' };
 });
 
 test('iki ürünlük sepetten tek gizli Shopier ürünü oluşturur, fiyatı sunucu hesaplar', async () => {

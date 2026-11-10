@@ -245,12 +245,33 @@ async function handleCheckout(request, env) {
     product = await shopier(env, 'POST', '/products', bundleBody(priced, code));
   }
   if (!product?.id || !product?.url) throw httpError(502, 'Shopier ürün linkini döndürmedi.', 'NO_URL');
+  // Shopier fotoğrafları birkaç saniye içinde hazırlıyor; müşteri sayfayı boş fotoğrafla görmesin diye bekle.
+  await waitForImages(env, product);
 
   await env.DB.prepare(
     "INSERT INTO checkout_bundles (product_id, code, cart_hash, items, total, url, status, created_at) VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)"
   ).bind(String(product.id), code, cartHash, JSON.stringify(priced.lines.map(({ shopierId, size, qty, price, title }) => ({ shopierId, size, qty, price, title }))), String(priced.total), product.url, now()).run();
 
   return json(request, 200, { url: product.url, total: priced.total, code });
+}
+
+/* ---------- fotoğrafların hazır olmasını bekleme ---------- */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+async function waitForImages(env, product, { tries = Number(env.IMAGE_WAIT_TRIES ?? 14), delay = 700 } = {}) {
+  try {
+    let media = product.media;
+    if (!media?.length) media = (await shopier(env, 'GET', `/products/${product.id}`))?.media;
+    const urls = (media || []).map(m => m?.url).filter(Boolean).slice(0, 3);
+    if (!urls.length) return false;
+    for (let i = 0; i < tries; i++) {
+      const ok = await Promise.all(urls.map(u => fetch(u, { method: 'HEAD', cf: { cacheTtl: 0 } }).then(r => r.ok).catch(() => false)));
+      if (ok.every(Boolean)) return true;
+      await sleep(delay);
+    }
+  } catch (err) {
+    console.error('waitForImages', err.message);
+  }
+  return false;
 }
 
 /* ---------- sepet kapak fotoğrafı ---------- */
