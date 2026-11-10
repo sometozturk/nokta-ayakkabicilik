@@ -171,9 +171,12 @@ for (const p of live) {
     });
 }
 
-// Sıralama: mevcut ürünler eski sıralarını korur, yeni ürünler en başa gelir.
-const prevIndex = new Map(existing.map((p, i) => [p.url, i]));
-out.sort((a, b) => (prevIndex.has(a.url) ? prevIndex.get(a.url) : -1) - (prevIndex.has(b.url) ? prevIndex.get(b.url) : -1));
+// Sıralama: Shopier mağazasındaki "Tüm ürünler" sırasıyla aynı.
+// Vitrinde sabitlenen ürünlerin placementScore'u var (büyük olan üstte); kalanlar Shopier'deki gibi en yeni üstte (API sırası).
+const scoreByUrl = new Map(live.map((p) => [shopierUrl(p), Number(p.placementScore)]));
+const apiIndex = new Map(live.map((p, i) => [shopierUrl(p), i]));
+const pinScore = (url) => { const v = scoreByUrl.get(url); return Number.isFinite(v) && v > 0 ? v : 0; };
+out.sort((a, b) => (pinScore(b.url) - pinScore(a.url)) || (apiIndex.get(a.url) - apiIndex.get(b.url)));
 
 // Güvenlik: API beklenenden çok az ürün döndürürse kataloğu silmemek için dur.
 if (out.length < Math.floor(existing.length * 0.6)) {

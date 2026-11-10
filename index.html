@@ -1037,6 +1037,15 @@ document.addEventListener('click', function (e) {
     .footer-category-links{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;}
     @media (max-width:640px){.category-links h2{font-size:22px;}.category-links a{font-size:12px;padding:8px 12px;}}
 </style>
+<style id="brand-filter-arrows">
+    /* Kategori çubuğu: kaydırma çubuğu yerine kenarlarda ok butonları */
+    .brand-filters{scrollbar-width:none;scroll-behavior:smooth;}
+    .brand-filters::-webkit-scrollbar{display:none;}
+    .bf-arrow{position:absolute;z-index:3;display:none;align-items:center;justify-content:center;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--paper);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;box-shadow:0 0 0 10px var(--paper),0 0 16px 14px var(--paper);transition:transform .15s ease,background .15s ease;}
+    .bf-arrow:hover{transform:scale(1.08);background:var(--ink);color:var(--paper);}
+    .bf-arrow.on{display:inline-flex;}
+    @media (max-width:640px),(hover:none){.bf-arrow{display:none!important;}}
+</style>
 <style id="mobile-sticky-filters">
     /* Mobilde marka kategorileri aşağı kaydırırken üstte yapışık kalır. */
     @media (max-width:640px){
@@ -2750,7 +2759,9 @@ document.addEventListener('click', function (e) {
             localImage: product.localImage ?? product.filename ?? '',
             url: product.url || 'https://shopier.com/noktaayakkabi',
             category: product.category || '',
-            categories: Array.isArray(product.categories) ? product.categories : []
+            categories: Array.isArray(product.categories) ? product.categories : [],
+            // products.json, Shopier'deki "Tüm ürünler" sırasıyla yazılır
+            rank: fallbackId || 0
         };
     };
 
@@ -3356,6 +3367,10 @@ document.addEventListener('click', function (e) {
                         return (Number(a.productData && a.productData.id) || 0) - (Number(b.productData && b.productData.id) || 0);
                     }
                     if(mode === 'default'){
+                        // Shopier mağazasındaki sırayla aynı (en çok bakılanlar vitrinde üstte)
+                        const rankA = Number(a.productData && a.productData.rank) || 0;
+                        const rankB = Number(b.productData && b.productData.rank) || 0;
+                        if(rankA && rankB) return rankA - rankB;
                         const getProductPriority = card => {
                             const productCategories = card.dataset.categories.split(' ');
                             if(productCategories.includes('cocuk-sneakers')) return brandOrder.length + 3;
@@ -3428,5 +3443,37 @@ document.addEventListener('click', function (e) {
         })();
     </script>
 
+
+<script>
+/* Kategori çubuğu okları: sadece kaydırılacak yer varsa görünür */
+(function(){
+    var row = document.querySelector('.brand-filter-row');
+    var bar = document.getElementById('brand-filters');
+    if(!row || !bar) return;
+    function make(dir){
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'bf-arrow bf-' + dir;
+        b.setAttribute('aria-label', dir === 'left' ? 'Kategorileri sola kaydır' : 'Kategorileri sağa kaydır');
+        b.innerHTML = dir === 'left' ? '&#8249;' : '&#8250;';
+        b.addEventListener('click', function(){ bar.scrollBy({ left: (dir === 'left' ? -1 : 1) * Math.max(160, bar.clientWidth * 0.7), behavior: 'smooth' }); });
+        row.appendChild(b); return b;
+    }
+    var left = make('left'), right = make('right');
+    function update(){
+        var max = bar.scrollWidth - bar.clientWidth;
+        var top = bar.offsetTop + (bar.offsetHeight - 34) / 2;
+        left.style.top = right.style.top = top + 'px';
+        left.style.left = (bar.offsetLeft - 4) + 'px';
+        right.style.left = (bar.offsetLeft + bar.clientWidth - 30) + 'px';
+        left.classList.toggle('on', bar.scrollLeft > 4);
+        right.classList.toggle('on', max > 4 && bar.scrollLeft < max - 4);
+    }
+    bar.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    new MutationObserver(update).observe(bar, { childList: true });
+    if (window.ResizeObserver) new ResizeObserver(update).observe(bar);
+    update();
+})();
+</script>
 </body>
 </html>
