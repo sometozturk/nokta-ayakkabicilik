@@ -331,6 +331,9 @@ function sizesOf(p) {
    ========================================================= */
 const CART_KEY = 'nokta-3d-sepet';
 const SHOPIER_BASKET = 'https://www.shopier.com/basket/noktaayakkabi';
+const CHECKOUT_API = 'https://nokta-checkout.samet1453pro.workers.dev/checkout';
+let bundle = null;          // { url, total } — tek ödemeli sepet linki
+let checkoutBusy = false;
 let cart = [];
 try { cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]') || []; } catch (e) { cart = []; }
 const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} };
@@ -440,7 +443,12 @@ function renderCart() {
         body.innerHTML = '<div class="cart-empty">Sepetin boş.<br>Reyonlardaki bir ayakkabıya tıkla, numaranı seç ve sepete ekle.</div>';
         return;
     }
-    if (checkoutMode) {
+    if (checkoutMode === 'bundle' && bundle) {
+        const note = document.createElement('div');
+        note.className = 'checkout-note';
+        note.innerHTML = '<b>Ödeme sayfan hazır.</b><br>Tüm ürünlerin tek bir Shopier sayfasında toplandı, numaraların açıklamada yazıyor. Yeni sekmede açılmadıysa aşağıdaki butona bas.';
+        body.appendChild(note);
+    } else if (checkoutMode) {
         const note = document.createElement('div');
         note.className = 'checkout-note';
         note.innerHTML = '<b>Tek seferde ödemek için:</b><br>1. Ürünleri sırayla aç, Shopier sayfasında <b>aynı numarayı</b> seç ve <b>“Sepete ekle”</b>ye bas (“Hemen al”a değil).<br>2. Hepsini ekleyince <b>“Shopier sepetime git”</b> ile tüm ürünleri tek ödemede tamamla.';
@@ -454,7 +462,9 @@ function renderCart() {
             <div class="ci-right"><div class="ci-price">${fmt(Number(p.price) * i.qty)}</div></div>`;
         row.querySelector('.ci-title').textContent = p.title;
         const right = row.querySelector('.ci-right');
-        if (checkoutMode) {
+        if (checkoutMode === 'bundle') {
+            /* paket modunda satır işlemi yok */
+        } else if (checkoutMode) {
             const go = document.createElement('a');
             go.className = 'ci-go' + (i.done ? ' done' : '');
             go.href = p.url; go.target = '_blank'; go.rel = 'noopener';
@@ -478,9 +488,24 @@ function renderCart() {
     foot.appendChild(tot);
     const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'primary';
     if (!checkoutMode) {
-        btn.textContent = 'Sipariş ver';
+        btn.textContent = checkoutBusy ? 'Ödeme sayfası hazırlanıyor…' : 'Sipariş ver';
+        btn.disabled = checkoutBusy;
         btn.addEventListener('click', startCheckout);
         foot.appendChild(btn);
+    } else if (checkoutMode === 'bundle' && bundle) {
+        btn.textContent = 'Ödeme sayfasını aç';
+        btn.addEventListener('click', () => window.open(bundle.url, '_blank', 'noopener'));
+        foot.appendChild(btn);
+        const done = document.createElement('button'); done.type = 'button'; done.className = 'secondary';
+        done.style.border = '0'; done.style.background = 'none'; done.style.cursor = 'pointer';
+        done.textContent = 'Siparişimi tamamladım, sepeti boşalt';
+        done.addEventListener('click', () => { cart = []; checkoutMode = false; bundle = null; saveCart(); renderCart(); toast('Teşekkürler! Siparişin bize ulaşınca kargolarız.'); });
+        foot.appendChild(done);
+        const back = document.createElement('button'); back.type = 'button'; back.className = 'secondary';
+        back.style.border = '0'; back.style.background = 'none'; back.style.cursor = 'pointer';
+        back.textContent = '← Sepete dön';
+        back.addEventListener('click', () => { checkoutMode = false; renderCart(); });
+        foot.appendChild(back);
     } else {
         const next = cart.find(i => !i.done);
         const opened = cart.filter(i => i.done).length;
@@ -522,13 +547,54 @@ function startCheckout() {
     const { count, total } = cartTotals();
     if (typeof fbq === 'function') fbq('track', 'InitiateCheckout', { content_ids: cart.map(i => String(productById.get(i.id).shopierId)), content_type: 'product', num_items: count, value: total, currency: 'TRY' });
     cart.forEach(i => { i.done = false; });
-    if (cart.length === 1) {
+    if (cart.length === 1 && cart[0].qty === 1) {
         checkoutMode = true;
         openOnShopier(cart[0]);
         toast(`Shopier açılıyor · ${cart[0].size} numarayı seçmeyi unutma`);
         return;
     }
-    checkoutMode = true; saveCart(); renderCart();
+    createBundle(count, total);
+}
+/* Birden fazla ürün: tek ödemeli Shopier sayfası oluştur. Olmazsa eski (tek tek) akışa düş. */
+async function createBundle(count, total) {
+    if (checkoutBusy) return;
+    checkoutBusy = true; renderCart();
+    // Açılır pencere engeline takılmamak için sekmeyi tıklama anında aç
+    let win = null;
+    try {
+        win = window.open('', '_blank');
+        if (win) { win.opener = null; win.document.title = 'Nokta Ayakkabıcılık'; win.document.body.innerHTML = '<p style="font:16px sans-serif;padding:32px;color:#333">Shopier ödeme sayfan hazırlanıyor…</p>'; }
+    } catch (e) {}
+    let fallback = true;
+    try {
+        const res = await fetch(CHECKOUT_API, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ items: cart.map(i => ({ shopierId: String(productById.get(i.id).shopierId), size: String(i.size), qty: i.qty })) })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.url) {
+            bundle = { url: data.url, total: Number(data.total) || total };
+            checkoutMode = 'bundle';
+            if (win && !win.closed) win.location.href = data.url; else window.open(data.url, '_blank', 'noopener');
+            if (typeof fbq === 'function') fbq('trackCustom', 'ShopierSepet', { num_items: count, value: bundle.total, currency: 'TRY' });
+            toast('Ödeme sayfan açıldı');
+            return;
+        }
+        if (res.status === 409 || res.status === 400) fallback = false;   // stok/numara sorunu: kullanıcı sepeti düzeltsin
+        throw new Error(data.error || 'Ödeme sayfası oluşturulamadı.');
+    } catch (err) {
+        try { if (win && !win.closed) win.close(); } catch (e) {}
+        if (fallback) {
+            checkoutMode = true;
+            toast('Tek sayfa oluşturulamadı, ürünleri sırayla açabilirsin');
+        } else {
+            checkoutMode = false;
+            toast(err.message);
+        }
+    } finally {
+        checkoutBusy = false; saveCart(); renderCart();
+    }
 }
 $('bag-btn').addEventListener('click', () => { renderCart(); openPanel(cartPanel); });
 
