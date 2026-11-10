@@ -168,7 +168,8 @@ function bundleBody({ lines, total }, code) {
   const pairs = lines.reduce((s, l) => s + l.qty, 0);
   const summary = lines.map(l => `${l.title.replace(/\s*\(\d{2}\s*-\s*\d{2}\)\s*$/, '')} ${l.size}${l.qty > 1 ? ` x${l.qty}` : ''}`).join(' + ');
   let title = `Nokta Sepeti · ${pairs} çift · ${summary}`;
-  if (title.length > 120) title = title.slice(0, 117) + '…';
+  // Shopier ürün başlığı en fazla 100 karakter olabilir (fazlasında 400 "invalid").
+  if (title.length > 100) title = title.slice(0, 99) + '…';
   const description = [
     `Sepet kodu: ${code}`,
     '',
