@@ -181,13 +181,14 @@ function bundleBody({ lines, total }, code) {
     '14 gün iade ve değişim · Saat 17:00\'ye kadar verilen siparişler aynı gün kargoda.'
   ].join('\n');
   const images = [...new Set(lines.map(l => l.image).filter(Boolean))].slice(0, 5);
-  const vat = lines.find(l => l.vat)?.vat;
+  // Shopier yeni üründe KDV oranını sayı olarak bekliyor; metin ("20") gönderilince 400 "invalid" dönüyor.
+  const vat = lines.map(l => Number(l.vat)).find(v => Number.isFinite(v) && v > 0);
   return {
     title,
     description,
     type: 'physical',
     media: images.map((url, i) => ({ type: 'image', url, placement: i + 1 })),
-    priceData: { currency: 'TRY', price: total.toFixed(2), ...(vat ? { vatPercent: String(vat) } : {}) },
+    priceData: { currency: 'TRY', price: total.toFixed(2), ...(vat ? { vatPercent: vat } : {}) },
     stockQuantity: 1,
     shippingPayer: 'sellerPays',
     customListing: true,
