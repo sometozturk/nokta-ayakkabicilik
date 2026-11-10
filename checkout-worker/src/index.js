@@ -9,11 +9,16 @@
 //   POST /webhooks/shopier      order.created bildirimi: paketi "ödendi" işaretler
 //   POST /admin/setup-webhook   (X-Admin-Key) order.created aboneliğini kurar
 //   GET  /admin/product?id=     (X-Admin-Key) API'nin ürünü nasıl gördüğünü gösterir
+//   GET  /collage/<id-id>.png   sepetteki ürünlerin tek kapak fotoğrafı (Shopier bunu indirip saklar)
 //   cron                        ödenmeyen paketleri BUNDLE_TTL_HOURS sonra siler
 //
 // Gizli değişkenler (wrangler secret): SHOPIER_PAT, ADMIN_KEY
 
+import { compose, encodePNG, gunzip } from './collage.js';
+
 const API = 'https://api.shopier.com/v1';
+const TILE_BASE = 'https://www.noktaayakkabicilik.com/assets/tiles/';
+const MAX_COLLAGE = 9;
 const ALLOWED_ORIGINS = new Set([
   'https://www.noktaayakkabicilik.com',
   'https://noktaayakkabicilik.com',
@@ -164,7 +169,7 @@ async function priceCart(env, cart) {
   return { lines, total };
 }
 
-function bundleBody({ lines, total }, code) {
+function bundleBody({ lines, total }, code, collageUrl) {
   const pairs = lines.reduce((s, l) => s + l.qty, 0);
   const summary = lines.map(l => `${l.title.replace(/\s*\(\d{2}\s*-\s*\d{2}\)\s*$/, '')} ${l.size}${l.qty > 1 ? ` x${l.qty}` : ''}`).join(' + ');
   let title = `Nokta Sepeti · ${pairs} çift · ${summary}`;
@@ -188,7 +193,7 @@ function bundleBody({ lines, total }, code) {
     title,
     description,
     type: 'physical',
-    media: images.map((url, i) => ({ type: 'image', url, placement: i + 1 })),
+    media: [...(collageUrl ? [collageUrl] : []), ...images].slice(0, 6).map((url, i) => ({ type: 'image', url, placement: i + 1 })),
     priceData: { currency: 'TRY', price: total.toFixed(2), ...(vat ? { vatPercent: vat } : {}) },
     stockQuantity: 1,
     shippingPayer: 'sellerPays',
@@ -228,7 +233,17 @@ async function handleCheckout(request, env) {
 
   const priced = await priceCart(env, cart);
   const code = 'NS-' + cartHash.slice(0, 6).toUpperCase() + '-' + now().toString(36).toUpperCase();
-  const product = await shopier(env, 'POST', '/products', bundleBody(priced, code));
+  // 2+ farklı ürün varsa hepsini gösteren kapak fotoğrafı ilk sırada; Shopier fotoğrafı alamazsa kapaksız dene.
+  const ids = [...new Set(priced.lines.map(l => l.shopierId))];
+  const collageUrl = ids.length >= 2 ? `${new URL(request.url).origin}/collage/${ids.slice(0, MAX_COLLAGE).join('-')}.png` : null;
+  let product;
+  try {
+    product = await shopier(env, 'POST', '/products', bundleBody(priced, code, collageUrl));
+  } catch (err) {
+    if (!collageUrl || err.code !== 'SHOPIER_API' || err.status !== 400) throw err;
+    console.error('collage', JSON.stringify(err.detail || {}).slice(0, 200));
+    product = await shopier(env, 'POST', '/products', bundleBody(priced, code));
+  }
   if (!product?.id || !product?.url) throw httpError(502, 'Shopier ürün linkini döndürmedi.', 'NO_URL');
 
   await env.DB.prepare(
@@ -236,6 +251,23 @@ async function handleCheckout(request, env) {
   ).bind(String(product.id), code, cartHash, JSON.stringify(priced.lines.map(({ shopierId, size, qty, price, title }) => ({ shopierId, size, qty, price, title }))), String(priced.total), product.url, now()).run();
 
   return json(request, 200, { url: product.url, total: priced.total, code });
+}
+
+/* ---------- sepet kapak fotoğrafı ---------- */
+async function handleCollage(url) {
+  const m = url.pathname.match(/^\/collage\/(\d{4,12}(?:-\d{4,12}){1,8})\.png$/);
+  if (!m) return new Response('not found', { status: 404 });
+  const ids = m[1].split('-');
+  const tiles = await Promise.all(ids.map(async id => {
+    const res = await fetch(TILE_BASE + id + '.bin', { cf: { cacheTtl: 86400, cacheEverything: true } });
+    if (!res.ok) return null;
+    try { return await gunzip(await res.arrayBuffer()); } catch { return null; }
+  }));
+  const ok = tiles.filter(t => t && t.length === 300 * 300 * 3);
+  if (ok.length < 2) return new Response('not found', { status: 404 });
+  return new Response(encodePNG(compose(ok)), {
+    headers: { 'content-type': 'image/png', 'cache-control': 'public, max-age=86400' }
+  });
 }
 
 /* ---------- stok düşme (STOCK_SYNC=on iken) ---------- */
@@ -369,6 +401,7 @@ export default {
         if (request.method !== 'POST') return json(request, 405, { error: 'Yalnızca POST desteklenir.' });
         return await handleCheckout(request, env);
       }
+      if (url.pathname.startsWith('/collage/') && request.method === 'GET') return await handleCollage(url);
       if (url.pathname === '/webhooks/shopier' && request.method === 'POST') return await handleWebhook(request, env, ctx);
       if (url.pathname.startsWith('/admin/')) return await handleAdmin(request, env, url);
       return new Response('Nokta checkout', { status: 200 });
@@ -388,4 +421,4 @@ export default {
 };
 
 // Testler için.
-export const _internal = { parseCart, priceCart, bundleBody, findVariant, unitPrice, decrementStock, cleanup, processOrder };
+export const _internal = { handleCollage, parseCart, priceCart, bundleBody, findVariant, unitPrice, decrementStock, cleanup, processOrder };

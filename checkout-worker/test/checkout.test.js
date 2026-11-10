@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
 import worker from '../src/index.js';
+import { _internal } from '../src/index.js';
 
 // --- D1 taklidi (node:sqlite üstünde) ---
 function makeD1() {
@@ -96,7 +97,8 @@ test('iki ürünlük sepetten tek gizli Shopier ürünü oluşturur, fiyatı sun
   assert.equal(post.body.priceData.price, '2649.00');
   assert.ok(post.body.title.length <= 100, 'Shopier ürün başlığı en fazla 100 karakter');
   assert.strictEqual(post.body.priceData.vatPercent, 20, 'Shopier KDV oranını sayı olarak bekliyor');
-  assert.equal(post.body.media.length, 2);
+  assert.equal(post.body.media.length, 3, 'kapak + 2 ürün fotoğrafı');
+  assert.match(post.body.media[0].url, /\/collage\/(51724140-51724107|51724107-51724140)\.png$/, 'ilk fotoğraf tüm ürünleri gösteren kapak');
   assert.match(post.body.title, /^Nokta Sepeti · 2 çift · /);
   assert.match(post.body.description, /Nike Dunk Low Pro White \(36-45\) — 40 numara — 1 adet/);
 });
@@ -223,4 +225,20 @@ test('süresi dolan ödenmemiş paketler silinir, ödenenler kalır', async () =
   assert.equal(products.has(b.url.split('/').pop()), true);
   const statuses = env.DB.raw.prepare('SELECT status FROM checkout_bundles ORDER BY url').all().map(r => r.status);
   assert.deepEqual(statuses.sort(), ['expired', 'paid']);
+});
+
+test('kapak fotoğrafı: parçaları birleştirip PNG döner, geçersiz yolda 404', async () => {
+  const { gzipSync } = await import('node:zlib');
+  const tile = gzipSync(new Uint8Array(300 * 300 * 3).fill(120));
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (u) => String(u).includes('/assets/tiles/') ? new Response(tile) : new Response('', { status: 404 });
+  try {
+    const ok = await _internal.handleCollage(new URL('https://w.example/collage/51724140-51724107.png'));
+    assert.equal(ok.status, 200);
+    assert.equal(ok.headers.get('content-type'), 'image/png');
+    const png = new Uint8Array(await ok.arrayBuffer());
+    assert.deepEqual([...png.slice(1, 4)], [80, 78, 71]);
+    const bad = await _internal.handleCollage(new URL('https://w.example/collage/../../etc.png'));
+    assert.equal(bad.status, 404);
+  } finally { globalThis.fetch = realFetch; }
 });

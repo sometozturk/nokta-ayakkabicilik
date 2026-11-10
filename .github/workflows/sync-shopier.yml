@@ -28,6 +28,15 @@ jobs:
           SHOPIER_PAT: ${{ secrets.SHOPIER_PAT }}
         run: node scripts/sync-shopier-api.mjs
 
+      # Sepet kapak fotoğrafı için yeni ürünlerin kare parçaları (assets/tiles). Hata verirse senkron yine devam eder.
+      - name: Build collage tiles
+        continue-on-error: true
+        run: |
+          mkdir -p /tmp/sharp && (cd /tmp/sharp && npm init -y >/dev/null && npm i sharp --silent)
+          ln -sfn /tmp/sharp/node_modules scripts/node_modules
+          node scripts/build-tiles.mjs
+          rm -f scripts/node_modules
+
       # Kategori/ürün sayfalarını ve sitemap.xml'i güncel ürünlerle yeniden üretir.
       - name: Rebuild SEO pages
         run: node scripts/build-seo.mjs
@@ -37,7 +46,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A products.json shopier-urls.json sitemap.xml index.html merchant-feed.xml kategori urun
+          git add -A products.json shopier-urls.json sitemap.xml index.html merchant-feed.xml kategori urun assets/tiles
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
