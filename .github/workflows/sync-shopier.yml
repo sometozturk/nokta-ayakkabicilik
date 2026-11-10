@@ -20,20 +20,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
-
-      - name: Configure runner Chrome
-        run: |
-          CHROME_PATH=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
-          test -n "$CHROME_PATH"
-          echo "PUPPETEER_EXECUTABLE_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
-          echo "Using Chrome at $CHROME_PATH"
-
-      - name: Sync Shopier catalog
-        run: node sync_shopier.js
+      # Resmi Shopier API'si (mağaza sayfalarını taramak Cloudflare'e takılıyordu).
+      # API hata verirse iş başarısız olur; eski verilerle sessizce devam etmez.
+      - name: Sync Shopier catalog (API)
+        env:
+          SHOPIER_PAT: ${{ secrets.SHOPIER_PAT }}
+        run: node scripts/sync-shopier-api.mjs
 
       # Kategori/ürün sayfalarını ve sitemap.xml'i güncel ürünlerle yeniden üretir.
       - name: Rebuild SEO pages

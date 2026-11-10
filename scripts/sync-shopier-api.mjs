@@ -97,9 +97,14 @@ function stockOf(p, sizeStock) {
 const isHidden = (p) => Boolean(p.customListing) || p.status === 'inactive' || p.isActive === false || p.active === false;
 const shopierUrl = (p) => `${STORE}/${p.id}`;
 
+// Sitenin kullandığı Shopier kategorileri; yeni ürünlerde önce Shopier'deki kategoriye bakılır.
+const SITE_CATEGORIES = ['Topuklu Nokta Shic', 'Kadın Bot', 'Erkek Bot', 'Çocuk Sneakers'];
+const shopierCategories = (p) => collectStrings(p.categories).map(clean).filter((c) => SITE_CATEGORIES.includes(c));
+
 // sync_shopier.js ile aynı kategori kuralları
-function getCategory(title, previousCategory = '') {
+function getCategory(title, previousCategory = '', fromShopier = []) {
     if (previousCategory) return previousCategory;
+    if (fromShopier.length) return fromShopier[0];
     if (/çocuk/i.test(title)) return 'Çocuk Sneakers';
     if (/\bbot\b|çizme/i.test(title)) return /kadın|topuklu|çizme|\bugg\b/i.test(title) ? 'Kadın Bot' : 'Erkek Bot';
     return '';
@@ -144,7 +149,8 @@ for (const p of live) {
     const images = imagesOf(p);
     const sizeStock = sizeStockOf(p);
     const stock = stockOf(p, sizeStock);
-    const category = getCategory(title, prev.category);
+    const fromShopier = shopierCategories(p);
+    const category = getCategory(title, prev.category, fromShopier);
     out.push({
         id,
         title,
@@ -154,7 +160,7 @@ for (const p of live) {
         filename: prev.filename || `${id}.jpeg`,
         url,
         category,
-        categories: getCategories(title, category, prev.categories),
+        categories: getCategories(title, category, [...(prev.categories || []), ...fromShopier]),
         ...(stock !== undefined ? { stock } : prev.stock !== undefined ? { stock: prev.stock } : {}),
         ...(sizeStock ? { sizeStock } : prev.sizeStock ? { sizeStock: prev.sizeStock } : {})
     });

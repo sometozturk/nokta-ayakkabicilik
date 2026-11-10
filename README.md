@@ -29,6 +29,10 @@ npm start
 
 `kategori/` ve `urun/` klasörlerini elle düzenlemeyin; her çalıştırmada sıfırdan üretilir. Başlığında üçüncü taraf marka adı geçen ürünler için ayrı sayfa üretilmez. Kategori metinleri ve kuralları betiğin başındaki `CATEGORIES` listesinde.
 
+## Shopier senkronu
+
+`scripts/sync-shopier-api.mjs` kataloğu resmi Shopier API'sinden (`SHOPIER_PAT` sırrı) çeker ve `products.json`'u günceller; `sync-shopier.yml` bunu saatte iki kez çalıştırır. Eski tarayıcı tabanlı `sync_shopier.js` Cloudflare engeline takıldığı için kullanılmıyor. Bağlantıyı denemek için **Shopier API check** iş akışını elle çalıştırın (kayıtlara ürün verisi yazılmaz).
+
 ## Try-on backend
 
 Run the Cloud Functions checks from `functions/`:
