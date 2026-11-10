@@ -53,7 +53,8 @@ jobs:
             git commit -m "chore: sync Shopier catalog"
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
-          git push
+          # Aynı anda başka bir commit gelirse üstüne alıp tekrar dene
+          for i in 1 2 3; do git push && break; git pull --rebase -X theirs origin main || break; done
 
       # Bot'un push'u (GITHUB_TOKEN) özel yayın iş akışını kendiliğinden başlatmaz;
       # Pages kaynağı "GitHub Actions" olsa bile yeni ürünler bu adımla yayına çıkar.
