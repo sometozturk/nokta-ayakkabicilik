@@ -66,8 +66,8 @@ globalThis.fetch = async (url, init = {}) => {
 let env;
 const ORIGIN = 'https://www.noktaayakkabicilik.com';
 const ctx = () => { const jobs = []; return { jobs, waitUntil: p => jobs.push(p) }; };
-const checkout = (items, origin = ORIGIN, ip = '1.2.3.4') => worker.fetch(new Request('https://nokta-checkout.example.workers.dev/checkout', {
-  method: 'POST', headers: { origin, 'content-type': 'application/json', 'cf-connecting-ip': ip }, body: JSON.stringify({ items })
+const checkout = (items, origin = ORIGIN, ip = '1.2.3.4', extra = {}) => worker.fetch(new Request('https://nokta-checkout.example.workers.dev/checkout', {
+  method: 'POST', headers: { origin, 'content-type': 'application/json', 'cf-connecting-ip': ip }, body: JSON.stringify({ items, ...extra })
 }), env, ctx());
 
 beforeEach(() => {
@@ -241,4 +241,16 @@ test('kapak fotoğrafı: parçaları birleştirip PNG döner, geçersiz yolda 40
     const bad = await _internal.handleCollage(new URL('https://w.example/collage/../../etc.png'));
     assert.equal(bad.status, 404);
   } finally { globalThis.fetch = realFetch; }
+});
+
+test('sepet değişip yeniden sipariş verilince önceki paket ürünü silinir', async () => {
+  const a = await (await checkout([{ shopierId: '51724140', size: '40', qty: 1 }])).json();
+  const b = await (await checkout([{ shopierId: '51724140', size: '43', qty: 1 }], ORIGIN, '1.2.3.4', { replace: a.code })).json();
+  assert.notEqual(a.url, b.url);
+  const oldId = a.url.split('/').pop();
+  assert.ok(calls.some(c => c.method === 'DELETE' && c.path === `/v1/products/${oldId}`), 'eski paket silinmeli');
+  // aynı kodla tekrar: zaten silinmiş, ikinci DELETE yok
+  const before = calls.filter(c => c.method === 'DELETE').length;
+  await checkout([{ shopierId: '51724140', size: '40', qty: 2 }], ORIGIN, '1.2.3.4', { replace: a.code });
+  assert.equal(calls.filter(c => c.method === 'DELETE').length, before);
 });

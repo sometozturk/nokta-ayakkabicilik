@@ -7,6 +7,9 @@
     'use strict';
     var CART_KEY = 'nokta-3d-sepet';
     var CHECKOUT_API = 'https://nokta-checkout.samet1453pro.workers.dev/checkout';
+    var LAST_KEY = 'nokta-son-paket';   // önceki tek ödeme sayfasının kodu (yenisi açılınca eskisi silinir)
+    function lastCode() { try { return localStorage.getItem(LAST_KEY) || ''; } catch (e) { return ''; } }
+    function setLastCode(c) { try { if (c) localStorage.setItem(LAST_KEY, c); else localStorage.removeItem(LAST_KEY); } catch (e) {} }
     var MAX_QTY = 5, MAX_LINES = 8;
     // Shopier mağaza kampanyası: sepet 2.500 TL ve üzeriyse 400 TL indirim (Shopier ödeme sayfasında düşer)
     var PROMO = { threshold: 2500, discount: 400 };
@@ -260,7 +263,7 @@
     }
     function doneButton() {
         var b = el('button', 'ns-btn ghost', 'Siparişimi tamamladım, sepeti boşalt'); b.type = 'button';
-        b.addEventListener('click', function () { cart = []; changed(); closeAll(); toast('Teşekkürler! Siparişin bize ulaşınca kargolarız.'); });
+        b.addEventListener('click', function () { cart = []; setLastCode(''); changed(); closeAll(); toast('Teşekkürler! Siparişin bize ulaşınca kargolarız.'); });
         return b;
     }
     function backButton() {
@@ -295,12 +298,13 @@
         fetch(CHECKOUT_API, {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ items: cart.map(function (i) { return { shopierId: shopierIdOf(products.get(i.id).url), size: String(i.size), qty: i.qty }; }) })
+            body: JSON.stringify({ replace: lastCode(), items: cart.map(function (i) { return { shopierId: shopierIdOf(products.get(i.id).url), size: String(i.size), qty: i.qty }; }) })
         }).then(function (res) {
             return res.json().catch(function () { return {}; }).then(function (data) { return { res: res, data: data }; });
         }).then(function (r) {
             if (r.res.ok && r.data.url) {
                 bundle = { url: r.data.url, total: Number(r.data.total) || c.total };
+                setLastCode(r.data.code);
                 mode = 'bundle';
                 if (win && !win.closed) win.location.href = r.data.url; else window.open(r.data.url, '_blank', 'noopener');
                 track('trackCustom', 'ShopierSepet', { num_items: c.count, value: bundle.total, currency: 'TRY' });

@@ -217,9 +217,14 @@ async function handleCheckout(request, env) {
   // Aynı sepet kısa süre önce paketlendiyse aynı linki ver (yeni ürün açma).
   const reuseAfter = now() - cfg.reuseMinutes * 60;
   const existing = await env.DB.prepare(
-    "SELECT product_id, url, total FROM checkout_bundles WHERE cart_hash = ? AND status = 'pending' AND created_at > ? ORDER BY created_at DESC LIMIT 1"
+    "SELECT product_id, code, url, total FROM checkout_bundles WHERE cart_hash = ? AND status = 'pending' AND created_at > ? ORDER BY created_at DESC LIMIT 1"
   ).bind(cartHash, reuseAfter).first();
-  if (existing?.url) return json(request, 200, { url: existing.url, total: Number(existing.total), reused: true });
+  // Aynı tarayıcının önceki (artık farklı) sepet ürününü sil: Shopier sepetinde eski paketler birikmesin, iki kez ödenmesin.
+  const replaceCode = typeof body?.replace === 'string' ? body.replace.trim() : '';
+  if (existing?.url) {
+    await retireBundle(env, replaceCode, existing.product_id);
+    return json(request, 200, { url: existing.url, total: Number(existing.total), code: existing.code, reused: true });
+  }
 
   const ip = request.headers.get('cf-connecting-ip') || 'unknown';
   const ipKey = 'ip_' + (await sha256('nokta-checkout:' + ip)).slice(0, 32);
@@ -252,7 +257,21 @@ async function handleCheckout(request, env) {
     "INSERT INTO checkout_bundles (product_id, code, cart_hash, items, total, url, status, created_at) VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)"
   ).bind(String(product.id), code, cartHash, JSON.stringify(priced.lines.map(({ shopierId, size, qty, price, title }) => ({ shopierId, size, qty, price, title }))), String(priced.total), product.url, now()).run();
 
+  await retireBundle(env, replaceCode, String(product.id));
   return json(request, 200, { url: product.url, total: priced.total, code });
+}
+
+async function retireBundle(env, code, keepProductId) {
+  if (!/^NS-[A-F0-9]{6}-[A-Z0-9]{4,10}$/.test(code)) return false;
+  const row = await env.DB.prepare("SELECT product_id FROM checkout_bundles WHERE code = ? AND status = 'pending'").bind(code).first();
+  if (!row || row.product_id === keepProductId) return false;
+  try {
+    await shopier(env, 'DELETE', `/products/${row.product_id}`);
+  } catch (err) {
+    if (err.status !== 404) { console.error('retire', row.product_id, err.message); return false; }
+  }
+  await env.DB.prepare("UPDATE checkout_bundles SET status = 'replaced' WHERE product_id = ? AND status = 'pending'").bind(row.product_id).run();
+  return true;
 }
 
 /* ---------- fotoğrafların hazır olmasını bekleme ---------- */

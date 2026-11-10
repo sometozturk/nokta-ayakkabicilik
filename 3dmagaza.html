@@ -503,7 +503,7 @@ function renderCart() {
         const done = document.createElement('button'); done.type = 'button'; done.className = 'secondary';
         done.style.border = '0'; done.style.background = 'none'; done.style.cursor = 'pointer';
         done.textContent = 'Siparişimi tamamladım, sepeti boşalt';
-        done.addEventListener('click', () => { cart = []; checkoutMode = false; bundle = null; saveCart(); renderCart(); toast('Teşekkürler! Siparişin bize ulaşınca kargolarız.'); });
+        done.addEventListener('click', () => { cart = []; checkoutMode = false; bundle = null; try { localStorage.removeItem('nokta-son-paket'); } catch (e) {} saveCart(); renderCart(); toast('Teşekkürler! Siparişin bize ulaşınca kargolarız.'); });
         foot.appendChild(done);
         const back = document.createElement('button'); back.type = 'button'; back.className = 'secondary';
         back.style.border = '0'; back.style.background = 'none'; back.style.cursor = 'pointer';
@@ -574,11 +574,12 @@ async function createBundle(count, total) {
         const res = await fetch(CHECKOUT_API, {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ items: cart.map(i => ({ shopierId: String(productById.get(i.id).shopierId), size: String(i.size), qty: i.qty })) })
+            body: JSON.stringify({ replace: (() => { try { return localStorage.getItem('nokta-son-paket') || ''; } catch (e) { return ''; } })(), items: cart.map(i => ({ shopierId: String(productById.get(i.id).shopierId), size: String(i.size), qty: i.qty })) })
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.url) {
             bundle = { url: data.url, total: Number(data.total) || total };
+            try { if (data.code) localStorage.setItem('nokta-son-paket', data.code); } catch (e) {}
             checkoutMode = 'bundle';
             if (win && !win.closed) win.location.href = data.url; else window.open(data.url, '_blank', 'noopener');
             if (typeof fbq === 'function') fbq('trackCustom', 'ShopierSepet', { num_items: count, value: bundle.total, currency: 'TRY' });
