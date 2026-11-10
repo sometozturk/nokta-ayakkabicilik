@@ -18,6 +18,10 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash as __sepetHash } from 'node:crypto';
+import { readFileSync as __sepetRead } from 'node:fs';
+// Sepet scripti değişince tarayıcı önbelleği eski dosyayı kullanmasın
+const SEPET_VERSION = __sepetHash('sha1').update(__sepetRead(new URL('../assets/nokta-sepet.js', import.meta.url))).digest('hex').slice(0, 8);
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = process.argv[2] ? resolve(process.argv[2]) : ROOT;
@@ -806,7 +810,7 @@ ${preloadImage ? `<link rel="preload" as="image" href="${esc(preloadImage)}"${pr
 ${schema.map(jsonLd).join('\n')}
 <script src="/assets/nokta-pixel.js" defer></script>
 <script src="/assets/nokta-ga.js" defer></script>
-<script src="/assets/nokta-sepet.js" defer></script>
+<script src="/assets/nokta-sepet.js?v=${SEPET_VERSION}" defer></script>
 <script src="/consent.js" defer></script>
 </head>
 <body${bodyAttrs}>
@@ -1337,3 +1341,11 @@ console.log(`  Kategori sayfası: ${activeCategories.length} (${activeCategories
 console.log(`  Ürün sayfası:     ${pageProducts.length} / ${products.length} ürün (marka adı geçen ${products.length - pageProducts.length} ürün atlandı)`);
 console.log(`  Rehber yazısı:    ${GUIDES.length}`);
 console.log(`  sitemap.xml:      ${2 + activeCategories.length + pageProducts.length + GUIDES.length + 1} URL`);
+
+// Ana sayfadaki sepet script'inin sürümünü de güncel tut
+{
+    const indexPath = new URL('../index.html', import.meta.url);
+    const html = __sepetRead(indexPath, 'utf8');
+    const next = html.replace(/\/assets\/nokta-sepet\.js(\?v=[0-9a-f]+)?"/, `/assets/nokta-sepet.js?v=${SEPET_VERSION}"`);
+    if (next !== html) writeFileSync(indexPath, next);
+}
