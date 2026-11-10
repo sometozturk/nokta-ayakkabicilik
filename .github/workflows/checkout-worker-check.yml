@@ -1,0 +1,21 @@
+name: Checkout worker check
+
+# Sepet sunucusunun Shopier'e ulaşıp ulaşamadığını yönetim ucuyla dener.
+# Kayıtlara ürün verisi yazılmaz: sadece HTTP durumu ve hata mesajı.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call admin endpoint
+        env:
+          ADMIN_KEY: ${{ secrets.CHECKOUT_ADMIN_KEY }}
+        run: |
+          code=$(curl -s -o out.json -w '%{http_code}' -H "x-admin-key: $ADMIN_KEY" "https://nokta-checkout.samet1453pro.workers.dev/admin/product?id=50853560")
+          echo "HTTP: $code"
+          node -e 'const d=JSON.parse(require("fs").readFileSync("out.json","utf8")); if (d.error) { const det=d.detail; console.log("hata:", d.error, "| shopier durumu:", d.status, "| ayrıntı:", JSON.stringify(det && (det.error||det.errors||det.message||det.title||det.raw||det)).slice(0,400)); } else { console.log("tamam, alanlar:", Object.keys(d).join(", ")); }'
