@@ -87,6 +87,7 @@
         '.ns-size[disabled]{opacity:.35;text-decoration:line-through;cursor:not-allowed}' +
         '.ns-promo-bar{background:#e34b35;color:#fff;text-align:center;font-size:12.5px;font-weight:700;padding:8px 12px;letter-spacing:.01em}' +
         '.ns-promo-bar b{font-weight:800}' +
+        '.ns-br{display:none}.ns-sep{opacity:.7;margin:0 6px}@media(max-width:560px){.ns-br{display:inline}.ns-sep{display:none}.ns-promo-bar{line-height:1.45}}' +
         '.ns-promo{font-size:12.5px;line-height:1.45;color:#473e38}' +
         '.ns-promo b{color:#191715}' +
         '.ns-promo.ok{color:#18552d;font-weight:700}' +
@@ -120,7 +121,7 @@
     bagBtn.addEventListener('click', function () { render(); open(panel); });
 
     function mount() {
-        var promoBar = el('div', 'ns-promo-bar'); promoBar.innerHTML = '🎁 2.500 TL ve üzeri alışverişte <b>400 TL indirim</b> · Ücretsiz kargo';
+        var promoBar = el('div', 'ns-promo-bar'); promoBar.innerHTML = '📦 <b>Tüm siparişlerde ücretsiz kargo</b><span class="ns-sep"> | </span><br class="ns-br">🎁 2.500 TL ve üzeri alışverişte <b>400 TL indirim</b>';
         document.body.insertBefore(promoBar, document.body.firstChild);
         document.body.appendChild(scrim); document.body.appendChild(panel); document.body.appendChild(sheet); document.body.appendChild(toastEl);
         var spHeader = document.querySelector('.sp-header-inner');
