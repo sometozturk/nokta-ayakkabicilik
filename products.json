@@ -502,7 +502,7 @@
     "url": "https://www.shopier.com/noktaayakkabi/51008200",
     "category": "",
     "categories": [],
-    "stock": 32,
+    "stock": 31,
     "sizeStock": [
       {
         "size": "36",
@@ -546,7 +546,7 @@
       },
       {
         "size": "46",
-        "stock": 3
+        "stock": 2
       }
     ]
   },
@@ -3066,7 +3066,7 @@
     "url": "https://www.shopier.com/noktaayakkabi/41689597",
     "category": "",
     "categories": [],
-    "stock": 30,
+    "stock": 29,
     "sizeStock": [
       {
         "size": "36",
@@ -3106,7 +3106,7 @@
       },
       {
         "size": "45",
-        "stock": 3
+        "stock": 2
       }
     ]
   },
