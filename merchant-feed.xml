@@ -5,19 +5,104 @@
     <link>https://www.noktaayakkabicilik.com/</link>
     <description>Nokta Ayakkabıcılık ürün listesi</description>
     <item>
-      <g:id>NK-174-40</g:id>
-      <g:item_group_id>NK-174</g:item_group_id>
-      <g:title>Chelsea Lastikli Bot</g:title>
-      <g:description>Chelsea Lastikli Bot, bir erkek bot modelidir. Sonbahar ve kış kombinleri için uygundur. 40-44 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/chelsea-lastikli-bot-174/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_25a04022b0208e15ced22d1252a2774d.jpeg</g:image_link>
-      <g:price>2960.00 TRY</g:price>
+      <g:id>NK-179-36</g:id>
+      <g:item_group_id>NK-179</g:item_group_id>
+      <g:title>Salamon White</g:title>
+      <g:description>Salamon White, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-white-179/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_da8f3f7df4136af293a0f63768e63ffd.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_044305e896f8ab9e482f7c64e7c1dc9a.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
       <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
-      <g:gender>male</g:gender>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>36</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-179-37</g:id>
+      <g:item_group_id>NK-179</g:item_group_id>
+      <g:title>Salamon White</g:title>
+      <g:description>Salamon White, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-white-179/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_da8f3f7df4136af293a0f63768e63ffd.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_044305e896f8ab9e482f7c64e7c1dc9a.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>37</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-179-38</g:id>
+      <g:item_group_id>NK-179</g:item_group_id>
+      <g:title>Salamon White</g:title>
+      <g:description>Salamon White, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-white-179/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_da8f3f7df4136af293a0f63768e63ffd.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_044305e896f8ab9e482f7c64e7c1dc9a.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>38</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-179-39</g:id>
+      <g:item_group_id>NK-179</g:item_group_id>
+      <g:title>Salamon White</g:title>
+      <g:description>Salamon White, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-white-179/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_da8f3f7df4136af293a0f63768e63ffd.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_044305e896f8ab9e482f7c64e7c1dc9a.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>39</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-179-40</g:id>
+      <g:item_group_id>NK-179</g:item_group_id>
+      <g:title>Salamon White</g:title>
+      <g:description>Salamon White, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-white-179/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_da8f3f7df4136af293a0f63768e63ffd.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_044305e896f8ab9e482f7c64e7c1dc9a.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
+      <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>40</g:size>
@@ -25,19 +110,20 @@
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-174-41</g:id>
-      <g:item_group_id>NK-174</g:item_group_id>
-      <g:title>Chelsea Lastikli Bot</g:title>
-      <g:description>Chelsea Lastikli Bot, bir erkek bot modelidir. Sonbahar ve kış kombinleri için uygundur. 40-44 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/chelsea-lastikli-bot-174/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_25a04022b0208e15ced22d1252a2774d.jpeg</g:image_link>
-      <g:price>2960.00 TRY</g:price>
+      <g:id>NK-179-41</g:id>
+      <g:item_group_id>NK-179</g:item_group_id>
+      <g:title>Salamon White</g:title>
+      <g:description>Salamon White, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-white-179/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_da8f3f7df4136af293a0f63768e63ffd.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_044305e896f8ab9e482f7c64e7c1dc9a.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
       <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
-      <g:gender>male</g:gender>
+      <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>41</g:size>
@@ -45,19 +131,20 @@
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-174-42</g:id>
-      <g:item_group_id>NK-174</g:item_group_id>
-      <g:title>Chelsea Lastikli Bot</g:title>
-      <g:description>Chelsea Lastikli Bot, bir erkek bot modelidir. Sonbahar ve kış kombinleri için uygundur. 40-44 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/chelsea-lastikli-bot-174/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_25a04022b0208e15ced22d1252a2774d.jpeg</g:image_link>
-      <g:price>2960.00 TRY</g:price>
+      <g:id>NK-179-42</g:id>
+      <g:item_group_id>NK-179</g:item_group_id>
+      <g:title>Salamon White</g:title>
+      <g:description>Salamon White, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-white-179/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_da8f3f7df4136af293a0f63768e63ffd.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_044305e896f8ab9e482f7c64e7c1dc9a.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
       <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
-      <g:gender>male</g:gender>
+      <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>42</g:size>
@@ -65,19 +152,20 @@
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-174-43</g:id>
-      <g:item_group_id>NK-174</g:item_group_id>
-      <g:title>Chelsea Lastikli Bot</g:title>
-      <g:description>Chelsea Lastikli Bot, bir erkek bot modelidir. Sonbahar ve kış kombinleri için uygundur. 40-44 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/chelsea-lastikli-bot-174/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_25a04022b0208e15ced22d1252a2774d.jpeg</g:image_link>
-      <g:price>2960.00 TRY</g:price>
+      <g:id>NK-179-43</g:id>
+      <g:item_group_id>NK-179</g:item_group_id>
+      <g:title>Salamon White</g:title>
+      <g:description>Salamon White, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-white-179/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_da8f3f7df4136af293a0f63768e63ffd.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_044305e896f8ab9e482f7c64e7c1dc9a.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
       <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
-      <g:gender>male</g:gender>
+      <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>43</g:size>
@@ -85,19 +173,20 @@
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-174-44</g:id>
-      <g:item_group_id>NK-174</g:item_group_id>
-      <g:title>Chelsea Lastikli Bot</g:title>
-      <g:description>Chelsea Lastikli Bot, bir erkek bot modelidir. Sonbahar ve kış kombinleri için uygundur. 40-44 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/chelsea-lastikli-bot-174/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_25a04022b0208e15ced22d1252a2774d.jpeg</g:image_link>
-      <g:price>2960.00 TRY</g:price>
+      <g:id>NK-179-44</g:id>
+      <g:item_group_id>NK-179</g:item_group_id>
+      <g:title>Salamon White</g:title>
+      <g:description>Salamon White, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-white-179/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_da8f3f7df4136af293a0f63768e63ffd.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_044305e896f8ab9e482f7c64e7c1dc9a.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
       <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
-      <g:gender>male</g:gender>
+      <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>44</g:size>
@@ -105,217 +194,191 @@
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-103-36</g:id>
-      <g:item_group_id>NK-103</g:item_group_id>
-      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot</g:title>
-      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot, siyah renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-siyah-bot-103/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_388bf066ff0ec8495964146eabe6e4a6.jpeg</g:image_link>
-      <g:price>3250.00 TRY</g:price>
+      <g:id>NK-180-36</g:id>
+      <g:item_group_id>NK-180</g:item_group_id>
+      <g:title>Salamon Black</g:title>
+      <g:description>Salamon Black, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-black-180/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_45c19ae68b89e066aa5be71a3bcc795b.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_c9ec883f54bdbd9f6d5c37689abb4587.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
-      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
       <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
-      <g:color>Siyah</g:color>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>36</g:size>
       <g:size_system>EU</g:size_system>
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-103-37</g:id>
-      <g:item_group_id>NK-103</g:item_group_id>
-      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot</g:title>
-      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot, siyah renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-siyah-bot-103/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_388bf066ff0ec8495964146eabe6e4a6.jpeg</g:image_link>
-      <g:price>3250.00 TRY</g:price>
+      <g:id>NK-180-37</g:id>
+      <g:item_group_id>NK-180</g:item_group_id>
+      <g:title>Salamon Black</g:title>
+      <g:description>Salamon Black, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-black-180/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_45c19ae68b89e066aa5be71a3bcc795b.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_c9ec883f54bdbd9f6d5c37689abb4587.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
-      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
       <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
-      <g:color>Siyah</g:color>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>37</g:size>
       <g:size_system>EU</g:size_system>
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-103-38</g:id>
-      <g:item_group_id>NK-103</g:item_group_id>
-      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot</g:title>
-      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot, siyah renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-siyah-bot-103/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_388bf066ff0ec8495964146eabe6e4a6.jpeg</g:image_link>
-      <g:price>3250.00 TRY</g:price>
+      <g:id>NK-180-38</g:id>
+      <g:item_group_id>NK-180</g:item_group_id>
+      <g:title>Salamon Black</g:title>
+      <g:description>Salamon Black, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-black-180/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_45c19ae68b89e066aa5be71a3bcc795b.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_c9ec883f54bdbd9f6d5c37689abb4587.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
-      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
       <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
-      <g:color>Siyah</g:color>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>38</g:size>
       <g:size_system>EU</g:size_system>
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-103-39</g:id>
-      <g:item_group_id>NK-103</g:item_group_id>
-      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot</g:title>
-      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot, siyah renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-siyah-bot-103/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_388bf066ff0ec8495964146eabe6e4a6.jpeg</g:image_link>
-      <g:price>3250.00 TRY</g:price>
+      <g:id>NK-180-39</g:id>
+      <g:item_group_id>NK-180</g:item_group_id>
+      <g:title>Salamon Black</g:title>
+      <g:description>Salamon Black, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-black-180/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_45c19ae68b89e066aa5be71a3bcc795b.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_c9ec883f54bdbd9f6d5c37689abb4587.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
-      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
       <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
-      <g:color>Siyah</g:color>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>39</g:size>
       <g:size_system>EU</g:size_system>
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-103-40</g:id>
-      <g:item_group_id>NK-103</g:item_group_id>
-      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot</g:title>
-      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot, siyah renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-siyah-bot-103/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_388bf066ff0ec8495964146eabe6e4a6.jpeg</g:image_link>
-      <g:price>3250.00 TRY</g:price>
+      <g:id>NK-180-40</g:id>
+      <g:item_group_id>NK-180</g:item_group_id>
+      <g:title>Salamon Black</g:title>
+      <g:description>Salamon Black, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-black-180/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_45c19ae68b89e066aa5be71a3bcc795b.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_c9ec883f54bdbd9f6d5c37689abb4587.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
-      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
       <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
-      <g:color>Siyah</g:color>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>40</g:size>
       <g:size_system>EU</g:size_system>
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-104-36</g:id>
-      <g:item_group_id>NK-104</g:item_group_id>
-      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot</g:title>
-      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot, acı kahve renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-aci-kahve-bot-104/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_0dd8fc6fae24f67b08682cd751b30aaa.jpeg</g:image_link>
-      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_26107c370fc1c5e23308d1ee786818f1.jpeg</g:additional_image_link>
-      <g:price>3250.00 TRY</g:price>
+      <g:id>NK-180-41</g:id>
+      <g:item_group_id>NK-180</g:item_group_id>
+      <g:title>Salamon Black</g:title>
+      <g:description>Salamon Black, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-black-180/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_45c19ae68b89e066aa5be71a3bcc795b.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_c9ec883f54bdbd9f6d5c37689abb4587.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
-      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
       <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
-      <g:color>Acı kahve</g:color>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
-      <g:size>36</g:size>
+      <g:size>41</g:size>
       <g:size_system>EU</g:size_system>
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-104-37</g:id>
-      <g:item_group_id>NK-104</g:item_group_id>
-      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot</g:title>
-      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot, acı kahve renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-aci-kahve-bot-104/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_0dd8fc6fae24f67b08682cd751b30aaa.jpeg</g:image_link>
-      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_26107c370fc1c5e23308d1ee786818f1.jpeg</g:additional_image_link>
-      <g:price>3250.00 TRY</g:price>
+      <g:id>NK-180-42</g:id>
+      <g:item_group_id>NK-180</g:item_group_id>
+      <g:title>Salamon Black</g:title>
+      <g:description>Salamon Black, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-black-180/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_45c19ae68b89e066aa5be71a3bcc795b.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_c9ec883f54bdbd9f6d5c37689abb4587.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
-      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
       <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
-      <g:color>Acı kahve</g:color>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
-      <g:size>37</g:size>
+      <g:size>42</g:size>
       <g:size_system>EU</g:size_system>
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-104-38</g:id>
-      <g:item_group_id>NK-104</g:item_group_id>
-      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot</g:title>
-      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot, acı kahve renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-aci-kahve-bot-104/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_0dd8fc6fae24f67b08682cd751b30aaa.jpeg</g:image_link>
-      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_26107c370fc1c5e23308d1ee786818f1.jpeg</g:additional_image_link>
-      <g:price>3250.00 TRY</g:price>
+      <g:id>NK-180-43</g:id>
+      <g:item_group_id>NK-180</g:item_group_id>
+      <g:title>Salamon Black</g:title>
+      <g:description>Salamon Black, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-black-180/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_45c19ae68b89e066aa5be71a3bcc795b.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_c9ec883f54bdbd9f6d5c37689abb4587.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
-      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
       <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
-      <g:color>Acı kahve</g:color>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
-      <g:size>38</g:size>
+      <g:size>43</g:size>
       <g:size_system>EU</g:size_system>
       <g:availability>in_stock</g:availability>
     </item>
     <item>
-      <g:id>NK-104-39</g:id>
-      <g:item_group_id>NK-104</g:item_group_id>
-      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot</g:title>
-      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot, acı kahve renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-aci-kahve-bot-104/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_0dd8fc6fae24f67b08682cd751b30aaa.jpeg</g:image_link>
-      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_26107c370fc1c5e23308d1ee786818f1.jpeg</g:additional_image_link>
-      <g:price>3250.00 TRY</g:price>
+      <g:id>NK-180-44</g:id>
+      <g:item_group_id>NK-180</g:item_group_id>
+      <g:title>Salamon Black</g:title>
+      <g:description>Salamon Black, bir kadın bot modelidir. Sonbahar ve kış kombinleri için uygundur. 36-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/salamon-black-180/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_45c19ae68b89e066aa5be71a3bcc795b.webp</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_c9ec883f54bdbd9f6d5c37689abb4587.webp</g:additional_image_link>
+      <g:price>3200.00 TRY</g:price>
       <g:condition>new</g:condition>
       <g:brand>Nokta Ayakkabıcılık</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>187</g:google_product_category>
-      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
       <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
-      <g:color>Acı kahve</g:color>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
-      <g:size>39</g:size>
-      <g:size_system>EU</g:size_system>
-      <g:availability>in_stock</g:availability>
-    </item>
-    <item>
-      <g:id>NK-104-40</g:id>
-      <g:item_group_id>NK-104</g:item_group_id>
-      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot</g:title>
-      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot, acı kahve renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
-      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-aci-kahve-bot-104/</g:link>
-      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_0dd8fc6fae24f67b08682cd751b30aaa.jpeg</g:image_link>
-      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_26107c370fc1c5e23308d1ee786818f1.jpeg</g:additional_image_link>
-      <g:price>3250.00 TRY</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Nokta Ayakkabıcılık</g:brand>
-      <g:identifier_exists>no</g:identifier_exists>
-      <g:google_product_category>187</g:google_product_category>
-      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
-      <g:gender>female</g:gender>
-      <g:age_group>adult</g:age_group>
-      <g:color>Acı kahve</g:color>
-      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
-      <g:size>40</g:size>
+      <g:size>44</g:size>
       <g:size_system>EU</g:size_system>
       <g:availability>in_stock</g:availability>
     </item>
@@ -421,6 +484,106 @@
       <g:age_group>adult</g:age_group>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>40</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-174-40</g:id>
+      <g:item_group_id>NK-174</g:item_group_id>
+      <g:title>Chelsea Lastikli Bot</g:title>
+      <g:description>Chelsea Lastikli Bot, bir erkek bot modelidir. Sonbahar ve kış kombinleri için uygundur. 40-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/chelsea-lastikli-bot-174/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_25a04022b0208e15ced22d1252a2774d.jpeg</g:image_link>
+      <g:price>2960.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
+      <g:gender>male</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>40</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-174-41</g:id>
+      <g:item_group_id>NK-174</g:item_group_id>
+      <g:title>Chelsea Lastikli Bot</g:title>
+      <g:description>Chelsea Lastikli Bot, bir erkek bot modelidir. Sonbahar ve kış kombinleri için uygundur. 40-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/chelsea-lastikli-bot-174/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_25a04022b0208e15ced22d1252a2774d.jpeg</g:image_link>
+      <g:price>2960.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
+      <g:gender>male</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>41</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-174-42</g:id>
+      <g:item_group_id>NK-174</g:item_group_id>
+      <g:title>Chelsea Lastikli Bot</g:title>
+      <g:description>Chelsea Lastikli Bot, bir erkek bot modelidir. Sonbahar ve kış kombinleri için uygundur. 40-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/chelsea-lastikli-bot-174/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_25a04022b0208e15ced22d1252a2774d.jpeg</g:image_link>
+      <g:price>2960.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
+      <g:gender>male</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>42</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-174-43</g:id>
+      <g:item_group_id>NK-174</g:item_group_id>
+      <g:title>Chelsea Lastikli Bot</g:title>
+      <g:description>Chelsea Lastikli Bot, bir erkek bot modelidir. Sonbahar ve kış kombinleri için uygundur. 40-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/chelsea-lastikli-bot-174/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_25a04022b0208e15ced22d1252a2774d.jpeg</g:image_link>
+      <g:price>2960.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
+      <g:gender>male</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>43</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-174-44</g:id>
+      <g:item_group_id>NK-174</g:item_group_id>
+      <g:title>Chelsea Lastikli Bot</g:title>
+      <g:description>Chelsea Lastikli Bot, bir erkek bot modelidir. Sonbahar ve kış kombinleri için uygundur. 40-44 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/chelsea-lastikli-bot-174/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_25a04022b0208e15ced22d1252a2774d.jpeg</g:image_link>
+      <g:price>2960.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Erkek</g:product_type>
+      <g:gender>male</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>44</g:size>
       <g:size_system>EU</g:size_system>
       <g:availability>in_stock</g:availability>
     </item>
@@ -5951,6 +6114,221 @@
       <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
       <g:gender>female</g:gender>
       <g:age_group>adult</g:age_group>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>40</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-103-36</g:id>
+      <g:item_group_id>NK-103</g:item_group_id>
+      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot</g:title>
+      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot, siyah renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-siyah-bot-103/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_388bf066ff0ec8495964146eabe6e4a6.jpeg</g:image_link>
+      <g:price>3250.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:color>Siyah</g:color>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>36</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-103-37</g:id>
+      <g:item_group_id>NK-103</g:item_group_id>
+      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot</g:title>
+      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot, siyah renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-siyah-bot-103/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_388bf066ff0ec8495964146eabe6e4a6.jpeg</g:image_link>
+      <g:price>3250.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:color>Siyah</g:color>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>37</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-103-38</g:id>
+      <g:item_group_id>NK-103</g:item_group_id>
+      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot</g:title>
+      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot, siyah renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-siyah-bot-103/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_388bf066ff0ec8495964146eabe6e4a6.jpeg</g:image_link>
+      <g:price>3250.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:color>Siyah</g:color>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>38</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-103-39</g:id>
+      <g:item_group_id>NK-103</g:item_group_id>
+      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot</g:title>
+      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot, siyah renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-siyah-bot-103/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_388bf066ff0ec8495964146eabe6e4a6.jpeg</g:image_link>
+      <g:price>3250.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:color>Siyah</g:color>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>39</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-103-40</g:id>
+      <g:item_group_id>NK-103</g:item_group_id>
+      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot</g:title>
+      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Siyah Bot, siyah renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-siyah-bot-103/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_388bf066ff0ec8495964146eabe6e4a6.jpeg</g:image_link>
+      <g:price>3250.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:color>Siyah</g:color>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>40</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-104-36</g:id>
+      <g:item_group_id>NK-104</g:item_group_id>
+      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot</g:title>
+      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot, acı kahve renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-aci-kahve-bot-104/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_0dd8fc6fae24f67b08682cd751b30aaa.jpeg</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_26107c370fc1c5e23308d1ee786818f1.jpeg</g:additional_image_link>
+      <g:price>3250.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:color>Acı kahve</g:color>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>36</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-104-37</g:id>
+      <g:item_group_id>NK-104</g:item_group_id>
+      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot</g:title>
+      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot, acı kahve renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-aci-kahve-bot-104/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_0dd8fc6fae24f67b08682cd751b30aaa.jpeg</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_26107c370fc1c5e23308d1ee786818f1.jpeg</g:additional_image_link>
+      <g:price>3250.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:color>Acı kahve</g:color>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>37</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-104-38</g:id>
+      <g:item_group_id>NK-104</g:item_group_id>
+      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot</g:title>
+      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot, acı kahve renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-aci-kahve-bot-104/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_0dd8fc6fae24f67b08682cd751b30aaa.jpeg</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_26107c370fc1c5e23308d1ee786818f1.jpeg</g:additional_image_link>
+      <g:price>3250.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:color>Acı kahve</g:color>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>38</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-104-39</g:id>
+      <g:item_group_id>NK-104</g:item_group_id>
+      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot</g:title>
+      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot, acı kahve renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-aci-kahve-bot-104/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_0dd8fc6fae24f67b08682cd751b30aaa.jpeg</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_26107c370fc1c5e23308d1ee786818f1.jpeg</g:additional_image_link>
+      <g:price>3250.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:color>Acı kahve</g:color>
+      <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
+      <g:size>39</g:size>
+      <g:size_system>EU</g:size_system>
+      <g:availability>in_stock</g:availability>
+    </item>
+    <item>
+      <g:id>NK-104-40</g:id>
+      <g:item_group_id>NK-104</g:item_group_id>
+      <g:title>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot</g:title>
+      <g:description>Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve Bot, acı kahve renkli bir kadın çizme modelidir. Çıkarılabilir tozluk detayı ile öne çıkar. Sonbahar ve kış kombinleri için uygundur. 36-40 numara aralığında sunulur.</g:description>
+      <g:link>https://www.noktaayakkabicilik.com/urun/kadin-tozluklu-cikartilabilir-cizme-aci-kahve-bot-104/</g:link>
+      <g:image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_0dd8fc6fae24f67b08682cd751b30aaa.jpeg</g:image_link>
+      <g:additional_image_link>https://cdn.shopier.app/pictures_large/noktaayakkabi_26107c370fc1c5e23308d1ee786818f1.jpeg</g:additional_image_link>
+      <g:price>3250.00 TRY</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Nokta Ayakkabıcılık</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>187</g:google_product_category>
+      <g:product_type>Ayakkabı &gt; Kadın &gt; Bot ve Çizme</g:product_type>
+      <g:gender>female</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:color>Acı kahve</g:color>
       <g:shipping><g:country>TR</g:country><g:price>0.00 TRY</g:price></g:shipping>
       <g:size>40</g:size>
       <g:size_system>EU</g:size_system>
