@@ -85,6 +85,25 @@
         #stage canvas{display:block;width:100%;height:100%;outline:none;cursor:grab;}
         #stage canvas.dragging{cursor:grabbing;}
         #stage canvas.pointing{cursor:pointer;}
+        #stage canvas.locked{cursor:none;}
+        /* CS tarzı nişangâh (sadece fare kilitliyken) */
+        .xhair{position:absolute;left:50%;top:50%;z-index:6;width:0;height:0;pointer-events:none;display:none;--gap:5px;--len:9px;--c:#f6f1e6;}
+        .xhair.on{display:block;}
+        .xhair i{position:absolute;background:var(--c);box-shadow:0 0 0 1px rgba(0,0,0,.55);transition:transform .15s ease,background .15s ease;}
+        .xhair .t,.xhair .b{width:2px;height:var(--len);left:-1px;}
+        .xhair .l,.xhair .r{height:2px;width:var(--len);top:-1px;}
+        .xhair .t{bottom:var(--gap);} .xhair .b{top:var(--gap);}
+        .xhair .l{right:var(--gap);} .xhair .r{left:var(--gap);}
+        .xhair .d{width:2px;height:2px;left:-1px;top:-1px;}
+        .xhair.aim{--c:#e34b35;}
+        .xhair.aim .t{transform:translateY(-4px);} .xhair.aim .b{transform:translateY(4px);}
+        .xhair.aim .l{transform:translateX(-4px);} .xhair.aim .r{transform:translateX(4px);}
+        .xhair.shoot .t,.xhair.shoot .b,.xhair.shoot .l,.xhair.shoot .r{transition-duration:.05s;}
+        .xtip{position:absolute;left:50%;top:calc(50% + 26px);transform:translateX(-50%);z-index:6;pointer-events:none;padding:7px 11px;border-radius:8px;background:rgba(27,23,18,.82);color:#f6f1e6;font-size:12px;line-height:1.35;text-align:center;white-space:nowrap;display:none;}
+        .xtip strong{display:block;font-size:12.5px;}
+        .xtip span{color:#ffb39f;font-weight:700;}
+        .lock-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;pointer-events:none;padding:10px 16px;border-radius:999px;background:rgba(27,23,18,.72);color:#f6f1e6;font-size:13px;font-weight:600;display:none;}
+        .lock-hint.on{display:block;}
 
         .zones{position:absolute;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;display:flex;gap:6px;padding:6px;border-radius:999px;background:rgba(27,23,18,.72);backdrop-filter:blur(8px);}
         .zone-btn{border:0;border-radius:999px;padding:9px 15px;background:transparent;color:#f6f1e6;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s ease,color .2s ease;}
@@ -221,6 +240,9 @@
     <h1 class="visually-hidden">Nokta Ayakkabıcılık 3D Mağaza</h1>
     <div class="hint" id="hint">Sürükleyerek etrafına bak · Yere dokunup yürü · Ayakkabıya tıkla</div>
     <div class="tip" id="tip"></div>
+    <div class="xhair" id="xhair" aria-hidden="true"><i class="t"></i><i class="b"></i><i class="l"></i><i class="r"></i><i class="d"></i></div>
+    <div class="xtip" id="xtip"></div>
+    <div class="lock-hint" id="lock-hint">Fareyle bakmak için tıkla</div>
     <div class="joystick" id="joystick" aria-hidden="true"><div class="joystick-knob" id="knob"></div></div>
     <nav class="zones" id="zones" aria-label="Reyonlar">
         <button class="zone-btn" type="button" data-zone="giris" aria-pressed="true">Giriş</button>
@@ -240,7 +262,7 @@
         <p>Spor ayakkabı, topuklu, kadın bot, erkek bot ve çocuk reyonlarını gez. Beğendiğin ayakkabıya tıkla, numaranı seç, sepete ekle. Siparişini Shopier'de güvenle tamamla.</p>
         <div class="progress" aria-hidden="true"><div id="progress"></div></div>
         <button class="enter-btn" id="enter-btn" type="button" disabled>Raflar diziliyor…</button>
-        <div class="intro-keys">Bilgisayarda <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> veya ok tuşlarıyla yürü, fareyle sürükleyerek bak.<br>Telefonda soldaki kolla yürü, ekranı kaydırarak bak.</div>
+        <div class="intro-keys">Bilgisayarda <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> veya ok tuşlarıyla yürü, fareyle bak, ortadaki nişangâhla ayakkabıya nişan alıp tıkla. <kbd>Esc</kbd> ile imleci geri al.<br>Telefonda soldaki kolla yürü, ekranı kaydırarak bak.</div>
     </div>
 </div>
 
@@ -360,6 +382,7 @@ function toast(msg) {
     clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 function openPanel(panel) {
+    if (document.pointerLockElement) document.exitPointerLock();
     PANELS().forEach(p => { if (p !== panel) { p.classList.remove('open'); p.setAttribute('aria-hidden', 'true'); } });
     panel.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
     if (window.matchMedia('(max-width:640px)').matches) scrim.classList.add('show');
@@ -367,6 +390,7 @@ function openPanel(panel) {
 function closePanels() {
     PANELS().forEach(p => { p.classList.remove('open'); p.setAttribute('aria-hidden', 'true'); });
     scrim.classList.remove('show');
+    if (window.syncLockHint) window.syncLockHint();
 }
 scrim.addEventListener('click', closePanels);
 document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closePanels));
@@ -1213,6 +1237,62 @@ const ndc = new THREE.Vector2();
 let drag = null, hovered = null;
 const tip = $('tip');
 
+/* ---------- CS tarzı fare kilidi + nişangâh (masaüstü) ---------- */
+const FPS = !coarse && 'requestPointerLock' in canvas;
+const xhair = $('xhair'), xtip = $('xtip'), lockHint = $('lock-hint');
+let locked = false, entered = false, aimed = null;
+if (FPS) $('hint').textContent = 'Fareyle bak · WASD ile yürü · Nişan alıp tıkla · Esc: imleç';
+function lockMouse() {
+    if (!FPS || locked || panelOpen()) return;
+    try { const r = canvas.requestPointerLock(); if (r && r.catch) r.catch(() => {}); } catch (e) {}
+}
+window.syncLockHint = () => lockHint.classList.toggle('on', FPS && entered && !locked && !panelOpen());
+document.addEventListener('pointerlockchange', () => {
+    locked = document.pointerLockElement === canvas;
+    xhair.classList.toggle('on', locked);
+    canvas.classList.toggle('locked', locked);
+    if (!locked) { aimed = null; xhair.classList.remove('aim'); xtip.style.display = 'none'; }
+    else setHover(null);
+    window.syncLockHint();
+});
+function aimAt() {
+    // Ekranın tam ortasına (nişangâha) ışın
+    const r = canvas.getBoundingClientRect();
+    return pick(r.left + r.width / 2, r.top + r.height / 2, true);
+}
+function updateAim() {
+    const h = aimAt();
+    const o = h && (h.object.userData.product || h.object.userData.kasa || h.object.userData.tryon) ? h.object : null;
+    if (o === aimed) return;
+    if (aimed && aimed.userData.baseScale) aimed.scale.copy(aimed.userData.baseScale);
+    aimed = o;
+    xhair.classList.toggle('aim', !!o);
+    if (!o) { xtip.style.display = 'none'; return; }
+    xtip.innerHTML = '';
+    const st = document.createElement('strong');
+    if (o.userData.product) {
+        o.scale.copy(o.userData.baseScale).multiplyScalar(1.08);
+        st.textContent = o.userData.product.title;
+        const pr = document.createElement('span'); pr.textContent = fmt(o.userData.product.price);
+        xtip.append(st, pr);
+    } else { st.textContent = o.userData.kasa ? 'Kasa · sepetini gör' : 'Kombininde dene'; xtip.append(st); }
+    xtip.style.display = 'block';
+}
+function shoot() {
+    xhair.animate([{ transform: 'scale(1.6)' }, { transform: 'scale(1)' }], { duration: 160 });
+    const h = aimAt();
+    if (!h) return;
+    const o = h.object;
+    if (o.userData.product) { showProduct(o.userData.product, o.userData.zone); }
+    else if (o.userData.kasa) { renderCart(); openPanel(cartPanel); }
+    else if (o.userData.tryon) { openTryonPanel(); }
+    else if (o === floor) {
+        const [x, z] = collide(h.point.x, h.point.z);
+        glide = { x, z };
+        document.querySelectorAll('.zone-btn').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    }
+}
+
 function pick(clientX, clientY, withFloor) {
     const r = canvas.getBoundingClientRect();
     ndc.set(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
@@ -1221,11 +1301,20 @@ function pick(clientX, clientY, withFloor) {
     return hits.find(h => h.object === floor || h.object.userData.kasa || h.object.userData.tryon || (h.object.material.map && h.object.material.opacity > 0)) || null;
 }
 canvas.addEventListener('pointerdown', e => {
+    if (locked) { if (e.button === 0) { hideHint(); shoot(); } return; }
     if (e.button !== 0 && e.pointerType === 'mouse') return;
     drag = { id: e.pointerId, x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, moved: false };
     canvas.setPointerCapture(e.pointerId);
 });
 canvas.addEventListener('pointermove', e => {
+    if (locked) {
+        if (flyIn) return; // giriş animasyonunda bakış sabit
+        const k = .0022;
+        player.yaw -= e.movementX * k;
+        player.pitch = Math.max(-1.1, Math.min(.9, player.pitch - e.movementY * k));
+        if (glide) { delete glide.yaw; delete glide.pitch; }
+        return;
+    }
     if (drag && drag.id === e.pointerId) {
         const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
         drag.x = e.clientX; drag.y = e.clientY;
@@ -1236,7 +1325,7 @@ canvas.addEventListener('pointermove', e => {
         }
         return;
     }
-    if (e.pointerType !== 'mouse') return;
+    if (e.pointerType !== 'mouse' || FPS) return;
     const h = pick(e.clientX, e.clientY, false);
     setHover(h && h.object.userData.product ? h.object : null, e);
     canvas.classList.toggle('pointing', !!(h && (h.object.userData.product || h.object.userData.kasa || h.object.userData.tryon)));
@@ -1246,6 +1335,7 @@ function endDrag(e) {
     if (!drag || drag.id !== e.pointerId) return;
     const wasClick = !drag.moved; drag = null; canvas.classList.remove('dragging');
     if (!wasClick) return;
+    if (FPS && e.pointerType === 'mouse') { lockMouse(); return; }
     const h = pick(e.clientX, e.clientY, true);
     if (!h) return;
     hideHint();
@@ -1357,6 +1447,7 @@ function frame() {
         if (flyIn.t >= 1) flyIn = null;
     }
     if (heroSpin) heroSpin.rotation.y = Math.sin(clock.elapsedTime * .55) * .5;
+    if (locked) updateAim();
     bob = moving ? bob + dt * 9 : bob * .9;
     camera.position.set(player.x, EYE + Math.sin(bob) * .018, player.z);
     camera.rotation.set(player.pitch, player.yaw, 0);
@@ -1378,6 +1469,7 @@ setTimeout(markReady, 9000); // yavaş bağlantıda bekletmeyelim; kalan raflar 
 enterBtn.addEventListener('click', () => {
     $('intro').classList.add('hide');
     canvas.focus({ preventScroll: true });
+    entered = true; lockMouse(); window.syncLockHint();
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         player.x = 0; player.yaw = 0; player.z = ROOM.z1 + 5.2;
         flyIn = { t: 0, start: performance.now() + 250, dur: 3.2, z0: player.z, p0: .2 }; player.pitch = .2;
