@@ -87,18 +87,10 @@
         #stage canvas.pointing{cursor:pointer;}
         #stage canvas.locked{cursor:none;}
         /* CS tarzı nişangâh (sadece fare kilitliyken) */
-        .xhair{position:absolute;left:50%;top:50%;z-index:6;width:0;height:0;pointer-events:none;display:none;--gap:5px;--len:9px;--c:#f6f1e6;}
+        .xhair{position:absolute;left:50%;top:50%;z-index:6;width:0;height:0;pointer-events:none;display:none;}
         .xhair.on{display:block;}
-        .xhair i{position:absolute;background:var(--c);box-shadow:0 0 0 1px rgba(0,0,0,.55);transition:transform .15s ease,background .15s ease;}
-        .xhair .t,.xhair .b{width:2px;height:var(--len);left:-1px;}
-        .xhair .l,.xhair .r{height:2px;width:var(--len);top:-1px;}
-        .xhair .t{bottom:var(--gap);} .xhair .b{top:var(--gap);}
-        .xhair .l{right:var(--gap);} .xhair .r{left:var(--gap);}
-        .xhair .d{width:2px;height:2px;left:-1px;top:-1px;}
-        .xhair.aim{--c:#e34b35;}
-        .xhair.aim .t{transform:translateY(-4px);} .xhair.aim .b{transform:translateY(4px);}
-        .xhair.aim .l{transform:translateX(-4px);} .xhair.aim .r{transform:translateX(4px);}
-        .xhair.shoot .t,.xhair.shoot .b,.xhair.shoot .l,.xhair.shoot .r{transition-duration:.05s;}
+        .xhair .d{position:absolute;width:6px;height:6px;left:-3px;top:-3px;border-radius:50%;background:#f6f1e6;box-shadow:0 0 0 1.5px rgba(0,0,0,.6);transition:transform .15s ease,background .15s ease;}
+        .xhair.aim .d{background:#e34b35;transform:scale(1.5);}
         .xtip{position:absolute;left:50%;top:calc(50% + 26px);transform:translateX(-50%);z-index:6;pointer-events:none;padding:7px 11px;border-radius:8px;background:rgba(27,23,18,.82);color:#f6f1e6;font-size:12px;line-height:1.35;text-align:center;white-space:nowrap;display:none;}
         .xtip strong{display:block;font-size:12.5px;}
         .xtip span{color:#ffb39f;font-weight:700;}
@@ -240,7 +232,7 @@
     <h1 class="visually-hidden">Nokta Ayakkabıcılık 3D Mağaza</h1>
     <div class="hint" id="hint">Sürükleyerek etrafına bak · Yere dokunup yürü · Ayakkabıya tıkla</div>
     <div class="tip" id="tip"></div>
-    <div class="xhair" id="xhair" aria-hidden="true"><i class="t"></i><i class="b"></i><i class="l"></i><i class="r"></i><i class="d"></i></div>
+    <div class="xhair" id="xhair" aria-hidden="true"><i class="d"></i></div>
     <div class="xtip" id="xtip"></div>
     <div class="lock-hint" id="lock-hint">Fareyle bakmak için tıkla</div>
     <div class="joystick" id="joystick" aria-hidden="true"><div class="joystick-knob" id="knob"></div></div>
@@ -262,7 +254,7 @@
         <p>Spor ayakkabı, topuklu, kadın bot, erkek bot ve çocuk reyonlarını gez. Beğendiğin ayakkabıya tıkla, numaranı seç, sepete ekle. Siparişini Shopier'de güvenle tamamla.</p>
         <div class="progress" aria-hidden="true"><div id="progress"></div></div>
         <button class="enter-btn" id="enter-btn" type="button" disabled>Raflar diziliyor…</button>
-        <div class="intro-keys">Bilgisayarda <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> veya ok tuşlarıyla yürü, fareyle bak, ortadaki nişangâhla ayakkabıya nişan alıp tıkla. <kbd>Esc</kbd> ile imleci geri al.<br>Telefonda soldaki kolla yürü, ekranı kaydırarak bak.</div>
+        <div class="intro-keys">Bilgisayarda <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> veya ok tuşlarıyla yürü, fareyle bak, ortadaki noktayla ayakkabıya nişan alıp tıkla. <kbd>Esc</kbd> ile imleci geri al.<br>Telefonda soldaki kolla yürü, ekranı kaydırarak bak.</div>
     </div>
 </div>
 
