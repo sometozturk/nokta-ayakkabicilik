@@ -101,6 +101,7 @@
         .zone-btn{border:0;border-radius:999px;padding:9px 15px;background:transparent;color:#f6f1e6;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s ease,color .2s ease;}
         .zone-btn:hover{background:rgba(255,255,255,.12);}
         .zone-btn[aria-pressed="true"]{background:#f6f1e6;color:var(--ink);}
+        .zone-key{display:inline-block;margin-right:6px;font-size:10px;font-weight:700;opacity:.55;}
         .zone-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px;}
 
         .hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:5;padding:8px 14px;border-radius:999px;background:rgba(27,23,18,.66);color:#f6f1e6;font-size:12px;white-space:nowrap;pointer-events:none;transition:opacity .6s ease;}
@@ -254,7 +255,7 @@
         <p>Spor ayakkabı, topuklu, kadın bot, erkek bot ve çocuk reyonlarını gez. Beğendiğin ayakkabıya tıkla, numaranı seç, sepete ekle. Siparişini Shopier'de güvenle tamamla.</p>
         <div class="progress" aria-hidden="true"><div id="progress"></div></div>
         <button class="enter-btn" id="enter-btn" type="button" disabled>Raflar diziliyor…</button>
-        <div class="intro-keys">Bilgisayarda <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> veya ok tuşlarıyla yürü, fareyle bak, ortadaki noktayla ayakkabıya nişan alıp tıkla. <kbd>Esc</kbd> ile imleci geri al.<br>Telefonda soldaki kolla yürü, ekranı kaydırarak bak.</div>
+        <div class="intro-keys">Bilgisayarda <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> veya ok tuşlarıyla yürü, fareyle bak, ortadaki noktayla ayakkabıya nişan alıp tıkla. <kbd>1</kbd>–<kbd>7</kbd> reyonlara ışınlar, <kbd>B</kbd> sepeti açar, <kbd>Esc</kbd> imleci geri verir.<br>Telefonda soldaki kolla yürü, ekranı kaydırarak bak.</div>
     </div>
 </div>
 
@@ -1113,7 +1114,7 @@ async function build() {
     // Sol duvar: Spor Ayakkabı (5 kat)
     // Markalara göre: önce Nike, Adidas, Vans; sonra diğerleri. Marka içinde seriler yan yana.
     const BRANDS = [['Nike', /^nike/i], ['Adidas', /^adidas/i], ['Vans', /^vans/i], ['Lacoste', /^lacoste/i],
-        ['Calvin Klein', /^calvin/i], ['Alexander McQueen', /^alexander/i], ['Prada', /^prada/i], ['Golden Goose', /^golden/i], ['Lufian', /^lufian/i]];
+        ['Calvin Klein', /^calvin/i], ['Alexander McQueen', /^alexander/i], ['Prada', /^prada/i], ['Golden Goose', /^golden/i], ['Salomon', /^salomon/i], ['Lufian', /^lufian/i]];
     const byBrand = new Map(BRANDS.map(([b]) => [b, []])); byBrand.set('Diğer', []);
     groups.spor.forEach(p => {
         const b = BRANDS.find(([, re]) => re.test(p.title.trim()));
@@ -1217,6 +1218,9 @@ document.querySelectorAll('.zone-btn').forEach(b => b.addEventListener('click', 
 window.addEventListener('keydown', e => {
     if (panelOpen() || e.target.closest('input,textarea')) return;
     const k = e.key.toLowerCase();
+    // CS tarzı kısayollar: 1-7 reyonlar, B sepet
+    if (entered && /^[1-7]$/.test(k)) { const b = document.querySelectorAll('.zone-btn')[+k - 1]; if (b) goZone(b.dataset.zone); return; }
+    if (entered && k === 'b') { renderCart(); openPanel(cartPanel); return; }
     if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'q', 'e'].includes(k)) { keys.add(k); glide = null; hideHint(); e.preventDefault(); }
 });
 window.addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
@@ -1233,7 +1237,8 @@ const tip = $('tip');
 const FPS = !coarse && 'requestPointerLock' in canvas;
 const xhair = $('xhair'), xtip = $('xtip'), lockHint = $('lock-hint');
 let locked = false, entered = false, aimed = null;
-if (FPS) $('hint').textContent = 'Fareyle bak · WASD ile yürü · Nişan alıp tıkla · Esc: imleç';
+if (FPS) document.querySelectorAll('.zone-btn').forEach((b, i) => { const n = document.createElement('span'); n.className = 'zone-key'; n.textContent = i + 1; b.prepend(n); });
+if (FPS) $('hint').textContent = 'Fareyle bak · WASD yürü · 1-7 reyonlar · B sepet · Esc imleç';
 function lockMouse() {
     if (!FPS || locked || panelOpen()) return;
     try { const r = canvas.requestPointerLock(); if (r && r.catch) r.catch(() => {}); } catch (e) {}
