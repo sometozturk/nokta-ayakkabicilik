@@ -1,0 +1,40 @@
+name: Build vitrin cutouts
+
+# Yeni ürünlerin 3D mağaza / vitrin dekupe görsellerini (assets/vitrin) üretir ve aynı branch'e işler.
+# Ana daldaki düzenli üretim sync-shopier.yml içinde; bu iş elle ya da betik değişince çalışır.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/build-vitrin.mjs'
+      - '.github/workflows/build-vitrin.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-vitrin-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build cutouts
+        run: |
+          mkdir -p /tmp/sharp && (cd /tmp/sharp && npm init -y >/dev/null && npm i sharp --silent)
+          ln -sfn /tmp/sharp/node_modules scripts/node_modules
+          node scripts/build-vitrin.mjs
+          rm -f scripts/node_modules
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/vitrin
+          if git diff --cached --quiet; then echo "yeni görsel yok"; exit 0; fi
+          git commit -m "chore: vitrin görselleri"
+          git push
