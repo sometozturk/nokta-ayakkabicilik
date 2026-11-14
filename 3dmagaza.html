@@ -746,15 +746,64 @@ function signTex(title, sub, z, w = 1024, h = 192) {
         }
     });
 }
+// Harf aralıklı yazı (tarayıcı letterSpacing desteklemese de çalışır)
+function trackedWidth(g, text, track) { let w = 0; for (const ch of text) w += g.measureText(ch).width + track; return w - track; }
+function drawTracked(g, text, cx, cy, track) {
+    let x = cx - trackedWidth(g, text, track) / 2; g.textAlign = 'left';
+    for (const ch of text) { g.fillText(ch, x, cy); x += g.measureText(ch).width + track; }
+}
+// Reyon tabelası: antrasit ışıklı kutu, kalın harf aralıklı başlık, kırmızı çizgi, ince alt başlık
+function wallSignTex(title, sub) {
+    const H = 220, T = title.toLocaleUpperCase('tr-TR'), S = (sub || '').toLocaleUpperCase('tr-TR');
+    const m = document.createElement('canvas').getContext('2d');
+    m.font = '700 92px "DM Sans", Arial, sans-serif'; const tw = trackedWidth(m, T, 14);
+    m.font = '600 26px "DM Sans", Arial, sans-serif'; const sw = S ? trackedWidth(m, S, 9) : 0;
+    const W = Math.ceil(Math.max(tw, sw) + 190);
+    const tex = canvasTex(W, H, (g, w, h) => {
+        const bg = g.createLinearGradient(0, 0, 0, h);
+        bg.addColorStop(0, '#2e3236'); bg.addColorStop(1, '#1f2225');
+        g.fillStyle = bg; g.fillRect(0, 0, w, h);
+        g.strokeStyle = 'rgba(255,255,255,.08)'; g.lineWidth = 2; g.strokeRect(8, 8, w - 16, h - 16);
+        g.fillStyle = '#ffffff'; g.textBaseline = 'middle';
+        g.font = '700 92px "DM Sans", Arial, sans-serif';
+        drawTracked(g, T, w / 2, S ? h * .4 : h / 2, 14);
+        if (S) {
+            g.fillStyle = '#d32f2f'; g.fillRect(w / 2 - 26, h * .64, 52, 4);
+            g.fillStyle = 'rgba(255,255,255,.7)'; g.font = '600 26px "DM Sans", Arial, sans-serif';
+            drawTracked(g, S, w / 2, h * .79, 9);
+        }
+    });
+    return { tex, aspect: W / H };
+}
+const BRAND_LOGOS = { 'Nike': 'nike', 'Adidas': 'adidas', 'Vans': 'vans', 'Lacoste': 'lacoste', 'Calvin Klein': 'calvin-klein',
+    'Alexander McQueen': 'alexander-mcqueen', 'Prada': 'prada', 'Golden Goose': 'golden-goose', 'Salomon': 'salomon', 'Lufian': 'lufian' };
 function brandTex(label, z, aspect) {
+    const tex = brandTextTex(label, z, aspect);
+    const file = BRAND_LOGOS[label];
+    if (!file) return tex;
+    // Marka logosu (beyaz, şeffaf) plakaya ortalanır; yüklenemezse yazı kalır
+    const img = new Image();
+    img.onload = () => {
+        const c = tex.image, g = c.getContext('2d'), w = c.width, h = c.height;
+        g.fillStyle = '#26292c'; g.fillRect(0, 0, w, h - 5);
+        const pad = h * .16, bw = w - pad * 2, bh = h - 5 - pad * 2;
+        const sc = Math.min(bw / img.width, bh / img.height);
+        const dw = img.width * sc, dh = img.height * sc;
+        g.drawImage(img, (w - dw) / 2, (h - 5 - dh) / 2, dw, dh);
+        tex.needsUpdate = true;
+    };
+    img.src = `assets/brands/${file}.png`;
+    return tex;
+}
+function brandTextTex(label, z, aspect) {
     // Doku oranı tabela oranıyla aynı olsun, yazı uzamasın
-    return canvasTex(Math.max(256, Math.min(2048, Math.round(96 * aspect))), 96, (g, w, h) => {
-        g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h);
-        g.fillStyle = z.accent; g.fillRect(0, h - 6, w, 6);
-        g.fillStyle = '#2b2e32'; g.textAlign = 'center'; g.textBaseline = 'middle';
-        let size = 54;
-        do { g.font = `700 ${size}px "DM Sans", Arial, sans-serif`; size -= 2; } while (g.measureText(label.toUpperCase()).width > w - 24 && size > 18);
-        g.fillText(label.toUpperCase(), w / 2, h / 2 - 2);
+    return canvasTex(Math.max(256, Math.min(2048, Math.round(160 * aspect))), 160, (g, w, h) => {
+        g.fillStyle = '#26292c'; g.fillRect(0, 0, w, h);
+        g.fillStyle = '#d32f2f'; g.fillRect(0, h - 4, w, 4);
+        g.fillStyle = '#ffffff'; g.textBaseline = 'middle';
+        const L = label.toUpperCase(); let size = 70, tr; // marka adı: ADIDAS, CALVIN (Türkçe İ değil)
+        do { g.font = `700 ${size}px "DM Sans", Arial, sans-serif`; tr = size * .22; size -= 2; } while (trackedWidth(g, L, tr) > w - 30 && size > 16);
+        drawTracked(g, L, w / 2, h / 2, tr);
     });
 }
 function glowTex() {
@@ -941,9 +990,17 @@ function buildWall({ items, zone, cols, tierYs, pitch, shoeW, pos, rotY, subtitl
         box(W - .16, .035, .34, M.shelf, 0, y - .018, .21, g);
     });
     // tabela
-    const signW = Math.min(W, 4.2), signH = signW * .1875;
-    const sign = new THREE.Mesh(new THREE.PlaneGeometry(signW, signH), new THREE.MeshBasicMaterial({ map: signTex(z.name, subtitle, z), toneMapped: false }));
-    sign.position.set(0, Math.min(top + .14 + signH / 2, ROOM.h - .16 - signH / 2), .09); g.add(sign);
+    const ws = wallSignTex(z.name, subtitle);
+    const signH = .5, signW = Math.min(W - .2, signH * ws.aspect);
+    const sideMat = new THREE.MeshStandardMaterial({ color: '#1f2225', roughness: .4, metalness: .3 });
+    const faceMat = new THREE.MeshBasicMaterial({ map: ws.tex, toneMapped: false });
+    const sign = new THREE.Mesh(new THREE.BoxGeometry(signW, signH, .07), [sideMat, sideMat, sideMat, sideMat, faceMat, sideMat]);
+    const sy = Math.min(top + .2 + signH / 2, ROOM.h - .2 - signH / 2);
+    sign.position.set(0, sy, .16); sign.castShadow = true; g.add(sign);
+    // duvardan ayrık durduğunu gösteren yumuşak hale ve iki taşıyıcı çubuk
+    const halo = new THREE.Mesh(new THREE.PlaneGeometry(signW + .5, signH + .4), new THREE.MeshBasicMaterial({ map: glow, transparent: true, opacity: .35, depthWrite: false, blending: THREE.AdditiveBlending }));
+    halo.position.set(0, sy, .065); g.add(halo);
+    [-signW * .35, signW * .35].forEach(x => box(.03, .03, .1, sideMat, x, sy, .08, g, false));
     // alt dolap
     box(W, .22, .4, M.darkOak, 0, .11, .2, g);
     // Markalara bölünmüş raf: her marka kendi sütunlarında, üstünde marka tabelası
@@ -957,8 +1014,9 @@ function buildWall({ items, zone, cols, tierYs, pitch, shoeW, pos, rotY, subtitl
                 const col = c0 + Math.floor(k / T), tier = T - 1 - (k % T);
                 addShoe(g, p, -W / 2 + .25 + (col + .5) * pitch, tierYs[tier], .24, shoeW, maxH, true).userData.zone = zone;
             });
-            const plate = new THREE.Mesh(new THREE.PlaneGeometry(wSec - .06, .17), new THREE.MeshBasicMaterial({ map: brandTex(sec.label, z, (wSec - .06) / .17), toneMapped: false }));
-            plate.position.set(x0 + wSec / 2, top - .04, .1); g.add(plate);
+            const PH = .26;
+            const plate = new THREE.Mesh(new THREE.PlaneGeometry(wSec - .06, PH), new THREE.MeshBasicMaterial({ map: brandTex(sec.label, z, (wSec - .06) / PH), toneMapped: false }));
+            plate.position.set(x0 + wSec / 2, top - .08, .1); g.add(plate);
             if (si > 0) box(.018, top - .3, .02, dividerMat, x0, (top - .3) / 2 + .2, .07, g, false);
             c0 += sec.cols;
         });
@@ -1136,7 +1194,7 @@ async function build() {
         fetch('numaralar.json', { cache: 'no-cache' }).then(r => r.json()).catch(() => ({}))
     ]);
     sizeData = sizes || {};
-    try { await Promise.race([document.fonts.load('600 40px Fraunces'), new Promise(r => setTimeout(r, 1500))]); } catch (e) {}
+    try { await Promise.race([Promise.all([document.fonts.load('600 40px Fraunces'), document.fonts.load('700 40px "DM Sans"'), document.fonts.load('600 40px "DM Sans"')]), new Promise(r => setTimeout(r, 1500))]); } catch (e) {}
 
     const groups = { spor: [], topuklu: [], kadinbot: [], erkekbot: [], cocuk: [], klasik: [] };
     products.filter(p => p && p.title && p.url && p.id != null && !/oxford/i.test(p.title)).forEach(p => {
