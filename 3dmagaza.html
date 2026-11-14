@@ -913,12 +913,25 @@ function addShoe(parent, p, x, baseY, z, width, maxH = width * 1.05, onWall = fa
     return mesh;
 }
 
+function flutedTex(W) {
+    const t = canvasTex(256, 64, (g, w, h) => {
+        g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h);
+        for (let x = 0; x < w; x += 16) {
+            const gr = g.createLinearGradient(x, 0, x + 16, 0);
+            gr.addColorStop(0, 'rgba(0,0,0,.07)'); gr.addColorStop(.25, 'rgba(0,0,0,0)'); gr.addColorStop(.7, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(0,0,0,.05)');
+            g.fillStyle = gr; g.fillRect(x, 0, 16, h);
+        }
+    });
+    t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(W / .4, 1);
+    return t;
+}
 function buildWall({ items, zone, cols, tierYs, pitch, shoeW, pos, rotY, subtitle, sections }) {
     const maxH = (tierYs[1] - tierYs[0]) - .07;
     const z = ZONES[zone];
     const g = new THREE.Group(); g.position.copy(pos); g.rotation.y = rotY; scene.add(g);
     const W = cols * pitch + .5, top = tierYs[tierYs.length - 1] + .55;
-    const panelMat = new THREE.MeshStandardMaterial({ color: z.panel, roughness: .85 });
+    // Raf arkası: beyaz, ince dikey oluklu (ayakkabılar net görünsün)
+    const panelMat = new THREE.MeshStandardMaterial({ color: '#f5f5f4', map: flutedTex(W), roughness: .75 });
     box(W, top + .1, .06, panelMat, 0, (top + .1) / 2, .03, g, false);
     // kenar ışık çubukları
     const accentMat = new THREE.MeshBasicMaterial({ color: z.accent });
@@ -926,9 +939,6 @@ function buildWall({ items, zone, cols, tierYs, pitch, shoeW, pos, rotY, subtitl
     // raflar + altlarında sıcak led
     tierYs.forEach(y => {
         box(W - .16, .035, .34, M.shelf, 0, y - .018, .21, g);
-        box(W - .2, .012, .02, M.led, 0, y - .042, .37, g, false);
-        const wash = new THREE.Mesh(new THREE.PlaneGeometry(W - .2, .5), new THREE.MeshBasicMaterial({ map: glow, transparent: true, opacity: .22, depthWrite: false, blending: THREE.AdditiveBlending }));
-        wash.position.set(0, y - .3, .065); g.add(wash);
     });
     // tabela
     const signW = Math.min(W, 4.2), signH = signW * .1875;
@@ -1129,7 +1139,7 @@ async function build() {
     try { await Promise.race([document.fonts.load('600 40px Fraunces'), new Promise(r => setTimeout(r, 1500))]); } catch (e) {}
 
     const groups = { spor: [], topuklu: [], kadinbot: [], erkekbot: [], cocuk: [], klasik: [] };
-    products.filter(p => p && p.title && p.url && p.id != null).forEach(p => {
+    products.filter(p => p && p.title && p.url && p.id != null && !/oxford/i.test(p.title)).forEach(p => {
         const item = { ...p, zone: zoneOf(p), shopierId: String(p.url).replace(/\/$/, '').split('/').pop() };
         productById.set(p.id, item); groups[item.zone].push(item);
         // 36-44 numaralı unisex botlar erkek rafında da durur
@@ -1185,8 +1195,6 @@ async function build() {
     galleryPedestal(1.0, -2.6, side[0], { h: 1.1, sub: 'Öne çıkan' });
     galleryPedestal(-2.6, -2.6, side[1], { sub: 'Öne çıkan' });
     galleryPedestal(2.6, -2.6, side[2], { sub: 'Öne çıkan' });
-    galleryPedestal(-1.4, -6.2, groups.klasik[0], { h: .9, sub: 'Klasik' });
-    galleryPedestal(1.4, -6.2, groups.klasik[1] || side[3], { h: .9, sub: groups.klasik[1] ? 'Klasik' : 'Yeni sezon' });
     mirror(ROOM.x1 - .08, 2.2);
     counter(4.6, 6.4);
     plant(-7.2, 8.2); plant(7.2, 8.2); plant(-7.2, -8.3); plant(6.6, -8.4);
