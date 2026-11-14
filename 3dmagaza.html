@@ -240,6 +240,7 @@
     <nav class="zones" id="zones" aria-label="Reyonlar">
         <button class="zone-btn" type="button" data-zone="giris" aria-pressed="true">Giriş</button>
         <button class="zone-btn" type="button" data-zone="spor"><span class="zone-dot" style="background:#d32f2f"></span>Spor Ayakkabı</button>
+        <button class="zone-btn" type="button" data-zone="marka"><span class="zone-dot" style="background:#d32f2f"></span>Markalar</button>
         <button class="zone-btn" type="button" data-zone="topuklu"><span class="zone-dot" style="background:#d32f2f"></span>Topuklu</button>
         <button class="zone-btn" type="button" data-zone="kadinbot"><span class="zone-dot" style="background:#d32f2f"></span>Kadın Bot</button>
         <button class="zone-btn" type="button" data-zone="erkekbot"><span class="zone-dot" style="background:#c9cdd2"></span>Erkek Bot</button>
@@ -255,7 +256,7 @@
         <p>Spor ayakkabı, topuklu, kadın bot, erkek bot ve çocuk reyonlarını gez. Beğendiğin ayakkabıya tıkla, numaranı seç, sepete ekle. Siparişini Shopier'de güvenle tamamla.</p>
         <div class="progress" aria-hidden="true"><div id="progress"></div></div>
         <button class="enter-btn" id="enter-btn" type="button" disabled>Raflar diziliyor…</button>
-        <div class="intro-keys">Bilgisayarda <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> veya ok tuşlarıyla yürü, fareyle bak, ortadaki noktayla ayakkabıya nişan alıp tıkla. <kbd>1</kbd>–<kbd>7</kbd> reyonlara ışınlar, <kbd>B</kbd> sepeti açar, <kbd>Esc</kbd> imleci geri verir.<br>Telefonda soldaki kolla yürü, ekranı kaydırarak bak.</div>
+        <div class="intro-keys">Bilgisayarda <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> veya ok tuşlarıyla yürü, fareyle bak, ortadaki noktayla ayakkabıya nişan alıp tıkla. <kbd>1</kbd>–<kbd>8</kbd> reyonlara ışınlar, <kbd>B</kbd> sepeti açar, <kbd>Esc</kbd> imleci geri verir.<br>Telefonda soldaki kolla yürü, ekranı kaydırarak bak.</div>
     </div>
 </div>
 
@@ -321,6 +322,7 @@ const ZONES = {
     kadinbot: { name: 'Kadın Bot',    accent: '#d32f2f', panel: '#34383d', text: '#ffffff' },
     erkekbot: { name: 'Erkek Bot',    accent: '#c9cdd2', panel: '#2b2e32', text: '#ffffff' },
     cocuk:   { name: 'Çocuk',         accent: '#d32f2f', panel: '#ececea', text: '#2b2e32' },
+    marka:   { name: 'Markalar',      accent: '#d32f2f', panel: '#2b2e32', text: '#ffffff' },
     klasik:  { name: 'Klasik',        accent: '#d32f2f', panel: '#f4f4f2', text: '#2b2e32' }
 };
 const fmt = n => Number(n).toLocaleString('tr-TR') + ' TL';
@@ -1094,8 +1096,8 @@ function plant(x, z) {
     }
     obstacles.push([x - .3, z - .3, x + .3, z + .3]);
 }
-function mirror(x, z) {
-    const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = -Math.PI / 2; scene.add(g);
+function mirror(x, z, rotY = -Math.PI / 2) {
+    const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rotY; scene.add(g);
     box(1.1, 2.1, .06, M.brass, 0, 1.25, .03, g, false);
     const glassTex = canvasTex(256, 512, (c, w, h) => {
         const gr = c.createLinearGradient(0, 0, w, h);
@@ -1106,12 +1108,13 @@ function mirror(x, z) {
     });
     const glass = new THREE.Mesh(new THREE.PlaneGeometry(1, 2), new THREE.MeshBasicMaterial({ map: glassTex, toneMapped: false }));
     glass.position.set(0, 1.25, .065); g.add(glass);
-    const sign = new THREE.Mesh(new THREE.PlaneGeometry(1.15, .26), new THREE.MeshBasicMaterial({ map: signTex('Kombininde Dene', 'Aynaya dokun', { panel: '#2b2e32', accent: '#d32f2f', text: '#ffffff' }, 768, 174), toneMapped: false }));
-    sign.position.set(0, 2.5, .07); g.add(sign);
+    const ws = wallSignTex('Kombininde Dene', 'Aynaya dokun'), sh = .3;
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(sh * ws.aspect, sh), new THREE.MeshBasicMaterial({ map: ws.tex, toneMapped: false }));
+    sign.position.set(0, 2.55, .07); g.add(sign);
     box(1.4, .45, .5, M.velvet, 0, .225, .9, g);
     const hit = new THREE.Mesh(new THREE.BoxGeometry(1.3, 2.5, .3), new THREE.MeshBasicMaterial({ visible: false }));
     hit.position.set(0, 1.35, .2); hit.userData.tryon = true; g.add(hit); clickable.push(hit);
-    obstacles.push([x - 1.2, z - .75, x, z + .75]);
+    obstacles.push(rotY === Math.PI ? [x - .75, z - 1.2, x + .75, z] : [x - 1.2, z - .75, x, z + .75]);
 }
 function counter(x, z) {
     const g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
@@ -1229,8 +1232,7 @@ async function build() {
     });
     renderCart();
 
-    // Sol duvar: Spor Ayakkabı (5 kat)
-    // Markalara göre: önce Nike, Adidas, Vans; sonra diğerleri. Marka içinde seriler yan yana.
+    // Markalara ayır: Nike + Adidas sol duvarda, diğer markalar girişin karşısındaki duvarda
     const BRANDS = [['Nike', /^nike/i], ['Adidas', /^adidas/i], ['Vans', /^vans/i], ['Lacoste', /^lacoste/i],
         ['Calvin Klein', /^calvin/i], ['Alexander McQueen', /^alexander/i], ['Prada', /^prada/i], ['Golden Goose', /^golden/i], ['Salomon', /^salomon/i], ['Lufian', /^lufian/i]];
     const byBrand = new Map(BRANDS.map(([b]) => [b, []])); byBrand.set('Diğer', []);
@@ -1238,47 +1240,47 @@ async function build() {
         const b = BRANDS.find(([, re]) => re.test(p.title.trim()));
         byBrand.get(b ? b[0] : 'Diğer').push(p);
     });
-    const allSec = [...byBrand].filter(([, list]) => list.length).map(([label, list]) => ({
-        label, items: list.sort((a, b) => a.title.localeCompare(b.title, 'tr')), cols: Math.ceil(list.length / 5)
-    }));
-    // 4 ve daha az modeli olan markalar tek blokta alt alta: duvar daralır, sneaker'lar büyür
-    const SMALL = 4, T5 = 5;
-    const big = allSec.filter(sc => sc.items.length > SMALL), small = allSec.filter(sc => sc.items.length <= SMALL).sort((a, b) => b.items.length - a.items.length);
-    let packed = null;
-    if (small.length > 1) {
-        for (let K = Math.max(...small.map(sc => sc.items.length)); K <= 12 && !packed; K++) {
-            const rows = [];
-            for (const sc of small) {
-                const r = rows.find(r => r.used + sc.items.length <= K);
-                if (r) { r.groups.push(sc); r.used += sc.items.length; } else rows.push({ used: sc.items.length, groups: [sc] });
-            }
-            if (rows.length <= T5) packed = { label: 'Seçkin Markalar', cols: K, items: small.flatMap(sc => sc.items), rows: rows.map(r => r.groups) };
-        }
+    const secOf = (label, list, T) => ({ label, items: list.sort((a, b) => a.title.localeCompare(b.title, 'tr')), cols: Math.ceil(list.length / T) });
+    const MAIN = ['Nike', 'Adidas'];
+    // Sol duvar: Nike + Adidas (5 kat, büyük ayakkabılar)
+    const leftSec = MAIN.filter(b => byBrand.get(b).length).map(b => secOf(b, byBrand.get(b), 5));
+    const leftCols = leftSec.reduce((n, sc) => n + sc.cols, 0);
+    const leftEnd = ROOM.z1 - 2.0, leftStart = ROOM.z0 + .25;
+    const sporPitch = Math.min(1.1, (leftEnd - leftStart - .5) / leftCols), sporW = leftCols * sporPitch + .5;
+    const sporZ = leftStart + sporW / 2;
+    buildWall({ items: [], zone: 'spor', cols: leftCols, pitch: sporPitch, shoeW: Math.min(.85, sporPitch * .8),
+        tierYs: [.42, .92, 1.42, 1.92, 2.42], pos: new THREE.Vector3(ROOM.x0 + .02, 0, sporZ), rotY: Math.PI / 2, subtitle: 'Nike & Adidas', sections: leftSec });
+    obstacles.push([ROOM.x0, ROOM.z0, ROOM.x0 + .55, leftStart + sporW]);
+    Object.assign(VIEWS.spor, { x: ROOM.x0 + 3.8, z: sporZ + 1.5, yaw: Math.PI / 2, pitch: -.08 });
+    // Arka duvar (girişin tam karşısı): diğer markalar, her biri kendi logosuyla (3 kat)
+    const backSec = [...byBrand].filter(([b, list]) => !MAIN.includes(b) && list.length).map(([b, list]) => secOf(b, list, 3));
+    if (backSec.length) {
+        const backCols = backSec.reduce((n, sc) => n + sc.cols, 0);
+        const backPitch = Math.min(1.2, (RW - 1.5) / backCols);
+        buildWall({ items: [], zone: 'marka', cols: backCols, pitch: backPitch, shoeW: Math.min(.85, backPitch * .78),
+            tierYs: [.55, 1.15, 1.75], pos: new THREE.Vector3(0, 0, ROOM.z0 + .02), rotY: 0, subtitle: 'Dünya markaları', sections: backSec });
     }
-    const sporSections = packed ? [...big, packed] : allSec;
-    const sporCols = sporSections.reduce((n, sec) => n + sec.cols, 0);
-    const sporPitch = Math.min(.95, (RD - 2.6) / sporCols);
-    buildWall({ items: groups.spor, zone: 'spor', cols: sporCols, pitch: sporPitch, shoeW: Math.min(.74, sporPitch * .82),
-        tierYs: [.42, .86, 1.3, 1.74, 2.18], pos: new THREE.Vector3(ROOM.x0 + .02, 0, -.6), rotY: Math.PI / 2, subtitle: 'Sneaker koleksiyonu', sections: sporSections });
-    // Arka duvar: Topuklu (5 kat)
-    // Topuklu arka duvarı baştan başa kaplar (4 kat, büyük ayakkabılar)
-    const topCols = Math.ceil(groups.topuklu.length / 4), topPitch = Math.min(1.25, (RW - 1.0) / topCols);
-    buildWall({ items: groups.topuklu, zone: 'topuklu', cols: topCols, pitch: topPitch, shoeW: Math.min(.7, topPitch * .68),
-        tierYs: [.45, 1.0, 1.55, 2.1], pos: new THREE.Vector3(0, 0, ROOM.z0 + .02), rotY: 0, subtitle: 'Nokta Shic' });
-    // Sağ duvar: Kadın Bot (4 kat) ve yanında Erkek Bot rafı
-    const kbCols = Math.ceil(groups.kadinbot.length / 4);
-    buildWall({ items: groups.kadinbot, zone: 'kadinbot', cols: kbCols, pitch: 1.08, shoeW: .72,
-        tierYs: [.42, 1.0, 1.58, 2.16], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -6.6), rotY: -Math.PI / 2, subtitle: 'Bot & çizme' });
-    const ebCols = Math.ceil(groups.erkekbot.length / 3);
-    buildWall({ items: groups.erkekbot, zone: 'erkekbot', cols: ebCols, pitch: 1.08, shoeW: .72,
-        tierYs: [.5, 1.12, 1.74], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -1.4), rotY: -Math.PI / 2, subtitle: 'Deri & su geçirmez' });
-    // Sağ duvar, giriş tarafı: Çocuk sneaker rafı (4 kat, daha alçak)
-    const cocukCols = Math.ceil(groups.cocuk.length / 4);
-    buildWall({ items: groups.cocuk, zone: 'cocuk', cols: cocukCols, pitch: .9, shoeW: .56,
-        tierYs: [.42, .84, 1.26, 1.68], pos: new THREE.Vector3(ROOM.x1 - .02, 0, 5.8), rotY: -Math.PI / 2, subtitle: 'Sneaker' });
-    obstacles.push([ROOM.x1 - .55, 3.6, ROOM.x1, 8.0]);
-    // Duvar dipleri yürünmesin
-    obstacles.push([ROOM.x0, ROOM.z0, ROOM.x0 + .55, ROOM.z1 - 1.2], [ROOM.x0, ROOM.z0, ROOM.x1, ROOM.z0 + .55], [ROOM.x1 - .55, ROOM.z0, ROOM.x1, .6]);
+    obstacles.push([ROOM.x0, ROOM.z0, ROOM.x1, ROOM.z0 + .55]);
+    // Sağ duvar, arkadan girişe: Kadın Bot → Erkek Bot → Nokta Shic (topuklu) → Çocuk; duvar boyuna sığacak şekilde ölçeklenir
+    const RIGHT = [
+        { zone: 'kadinbot', items: groups.kadinbot, tierYs: [.42, 1.0, 1.58, 2.16], base: 1.0, k: .72, sub: 'Bot & çizme' },
+        { zone: 'erkekbot', items: groups.erkekbot, tierYs: [.5, 1.12, 1.74], base: 1.0, k: .72, sub: 'Deri & su geçirmez' },
+        { zone: 'topuklu', items: groups.topuklu, tierYs: [.42, .92, 1.42, 1.92, 2.42], base: .82, k: .8, sub: 'Nokta Shic' },
+        { zone: 'cocuk', items: groups.cocuk, tierYs: [.42, .9, 1.38, 1.86], base: .82, k: .75, sub: 'Sneaker' }
+    ].filter(w => w.items.length);
+    RIGHT.forEach(w => { w.cols = Math.ceil(w.items.length / w.tierYs.length); });
+    const rStart = ROOM.z0 + .25, rEnd = ROOM.z1 - 1.0, GAP = .2;
+    const fixed = RIGHT.length * .5 + GAP * (RIGHT.length - 1), flex = RIGHT.reduce((n, w) => n + w.cols * w.base, 0);
+    const kScale = Math.min(1, (rEnd - rStart - fixed) / flex);
+    let zc = rStart;
+    RIGHT.forEach(w => {
+        const pitch = w.base * kScale, W = w.cols * pitch + .5, cz = zc + W / 2;
+        buildWall({ items: w.items, zone: w.zone, cols: w.cols, pitch, shoeW: pitch * w.k, tierYs: w.tierYs,
+            pos: new THREE.Vector3(ROOM.x1 - .02, 0, cz), rotY: -Math.PI / 2, subtitle: w.sub });
+        Object.assign(VIEWS[w.zone], { x: ROOM.x1 - 3.0, z: cz, yaw: -Math.PI / 2, pitch: w.zone === 'cocuk' ? -.12 : -.08 });
+        zc += W + GAP;
+    });
+    obstacles.push([ROOM.x1 - .55, ROOM.z0, ROOM.x1, zc]);
 
     // Orta sergi masaları: öne çıkanlar + klasik
     const featured = [28, 34, 25, 117, 107].map(id => productById.get(id)).filter(Boolean);
@@ -1289,11 +1291,13 @@ async function build() {
     }
     const side = featured.filter(p => p !== hero);
     // Ortada 2 m'lik koridor ve reyonlara giden yollar boş kalır (kamera kaidelerden geçmesin)
-    galleryPedestal(-1.0, -2.6, hero, { h: 1.1, sub: 'Haftanın Modeli', hero: true });
-    galleryPedestal(1.0, -2.6, side[0], { h: 1.1, sub: 'Öne çıkan' });
-    galleryPedestal(-2.6, -2.6, side[1], { sub: 'Öne çıkan' });
-    galleryPedestal(2.6, -2.6, side[2], { sub: 'Öne çıkan' });
-    mirror(ROOM.x1 - .08, 2.0);
+    galleryPedestal(-.95, -1.9, hero, { h: 1.1, sub: 'Haftanın Modeli', hero: true });
+    galleryPedestal(.95, -1.9, side[0], { h: 1.1, sub: 'Öne çıkan' });
+    galleryPedestal(-.95, -3.4, side[1], { sub: 'Öne çıkan' });
+    galleryPedestal(.95, -3.4, side[2], { sub: 'Öne çıkan' });
+    // Kombininde Dene aynası: girişte soldaki camekânın içinde, mağazaya dönük
+    mirror(-3.9, ROOM.z1 - .3, Math.PI);
+    Object.assign(VIEWS.ayna, { x: -3.9, z: ROOM.z1 - 3.6, yaw: Math.PI, pitch: -.04 });
     counter(2.6, ROOM.z1 - 1.9);
     plant(ROOM.x0 + .7, ROOM.z1 - .8); plant(ROOM.x1 - .7, ROOM.z1 - .8);
     // Slogan giriş duvarında, logonun altında (müşteri dönüp bakınca görür)
@@ -1306,6 +1310,7 @@ async function build() {
 const VIEWS = {
     giris:   { x: 0,    z: ROOM.z1 - 1.8, yaw: 0,      pitch: -.02 },
     spor:    { x: ROOM.x0 + 3.6, z: .6, yaw: Math.PI / 2, pitch: -.08 },
+    marka:   { x: 0,    z: ROOM.z0 + 5.6, yaw: 0,      pitch: -.06 },
     topuklu: { x: 0,    z: ROOM.z0 + 5.4, yaw: 0,      pitch: -.08 },
     kadinbot: { x: ROOM.x1 - 3.8, z: -6.6, yaw: -Math.PI / 2, pitch: -.08 },
     erkekbot: { x: ROOM.x1 - 3.4, z: -1.4, yaw: -Math.PI / 2, pitch: -.08 },
@@ -1334,9 +1339,28 @@ function collide(nx, nz) {
 }
 const angleLerp = (a, b, t) => { let d = ((b - a + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI; return a + d * t; };
 
+// Düz yol bir kaideye/mobilyaya çarpıyor mu? (kamera içinden geçmesin)
+function pathBlocked(x0, z0, x1, z1) {
+    const r = .35;
+    for (let t = 0; t <= 1; t += .02) {
+        const x = x0 + (x1 - x0) * t, z = z0 + (z1 - z0) * t;
+        for (const [a, b, c, d] of obstacles) {
+            if (c - a > 3 || d - b > 3) continue; // duvar dipleri değil, sadece mobilyalar
+            if (x > a - r && x < c + r && z > b - r && z < d + r) return true;
+        }
+    }
+    return false;
+}
 function goZone(name) {
     const v = VIEWS[name]; if (!v) return;
-    glide = { x: v.x, z: v.z, yaw: v.yaw, pitch: v.pitch + portraitTilt() };
+    const final = { x: v.x, z: v.z, yaw: v.yaw, pitch: v.pitch + portraitTilt() };
+    glide = final;
+    if (pathBlocked(player.x, player.z, v.x, v.z)) {
+        // Önce ortadaki koridora çık, oradan hedefe git
+        const cands = [[0, player.z], [0, v.z], [0, 1.2], [0, ROOM.z1 - 2]];
+        const wp = cands.find(([x, z]) => !pathBlocked(player.x, player.z, x, z) && !pathBlocked(x, z, v.x, v.z));
+        if (wp) glide = { x: wp[0], z: wp[1], yaw: Math.atan2(-(v.x - wp[0]), -(v.z - wp[1])), next: final };
+    }
     document.querySelectorAll('.zone-btn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.zone === name)));
     hideHint();
 }
@@ -1345,8 +1369,8 @@ document.querySelectorAll('.zone-btn').forEach(b => b.addEventListener('click', 
 window.addEventListener('keydown', e => {
     if (panelOpen() || e.target.closest('input,textarea')) return;
     const k = e.key.toLowerCase();
-    // CS tarzı kısayollar: 1-7 reyonlar, B sepet
-    if (entered && /^[1-7]$/.test(k)) { const b = document.querySelectorAll('.zone-btn')[+k - 1]; if (b) goZone(b.dataset.zone); return; }
+    // CS tarzı kısayollar: 1-8 reyonlar, B sepet
+    if (entered && /^[1-9]$/.test(k)) { const b = document.querySelectorAll('.zone-btn')[+k - 1]; if (b) goZone(b.dataset.zone); return; }
     if (entered && k === 'b') { renderCart(); openPanel(cartPanel); return; }
     if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'q', 'e'].includes(k)) { keys.add(k); glide = null; hideHint(); e.preventDefault(); }
 });
@@ -1365,7 +1389,7 @@ const FPS = !coarse && 'requestPointerLock' in canvas;
 const xhair = $('xhair'), xtip = $('xtip'), lockHint = $('lock-hint');
 let locked = false, entered = false, aimed = null;
 if (FPS) document.querySelectorAll('.zone-btn').forEach((b, i) => { const n = document.createElement('span'); n.className = 'zone-key'; n.textContent = i + 1; b.prepend(n); });
-if (FPS) $('hint').textContent = 'Fareyle bak · WASD yürü · 1-7 reyonlar · B sepet · Esc imleç';
+if (FPS) $('hint').textContent = 'Fareyle bak · WASD yürü · 1-8 reyonlar · B sepet · Esc imleç';
 function lockMouse() {
     if (!FPS || locked || panelOpen()) return;
     try { const r = canvas.requestPointerLock(); if (r && r.catch) r.catch(() => {}); } catch (e) {}
@@ -1561,7 +1585,8 @@ function frame() {
         player.x += (glide.x - player.x) * k; player.z += (glide.z - player.z) * k;
         if (glide.yaw !== undefined) player.yaw = angleLerp(player.yaw, glide.yaw, k);
         if (glide.pitch !== undefined) player.pitch += (glide.pitch - player.pitch) * k;
-        if (Math.hypot(glide.x - player.x, glide.z - player.z) < .02 && (glide.yaw === undefined || Math.abs(angleLerp(player.yaw, glide.yaw, 1) - player.yaw) < .01)) glide = null;
+        if (glide.next && Math.hypot(glide.x - player.x, glide.z - player.z) < .35) glide = glide.next; // ara durağı yumuşakça geç
+        else if (Math.hypot(glide.x - player.x, glide.z - player.z) < .02 && (glide.yaw === undefined || Math.abs(angleLerp(player.yaw, glide.yaw, 1) - player.yaw) < .01)) glide = null;
     }
     if (flyIn) {
         flyIn.t = Math.max(0, Math.min(1, (performance.now() - flyIn.start) / 1000 / flyIn.dur));
