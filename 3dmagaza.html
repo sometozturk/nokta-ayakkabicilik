@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="Nokta Ayakkabıcılık 3D mağazasında spor ayakkabı, topuklu, kadın bot, erkek bot ve çocuk reyonlarını gezin; beğendiğiniz modelin numarasını seçip sepete ekleyin, siparişinizi Shopier üzerinden güvenle tamamlayın.">
     <meta name="robots" content="index,follow,max-image-preview:large">
-    <meta name="theme-color" content="#1b1712">
+    <meta name="theme-color" content="#232629">
     <title>3D Mağaza | Reyonları Gezerek Alışveriş | Nokta Ayakkabıcılık</title>
     <link rel="canonical" href="https://www.noktaayakkabicilik.com/3dmagaza.html">
     <link rel="icon" type="image/png" href="logo-transparent.png">
@@ -53,18 +53,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,450;9..144,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root{
-            --ink:#1b1712;--paper:#f6f1e6;--surface:#fffdf8;--line:#e6ddca;--muted:#8a8073;
-            --accent:#c1291f;--accent-dark:#9d1f17;--shadow:0 18px 50px rgba(27,23,18,.22);
+            --ink:#232629;--paper:#f5f5f4;--surface:#ffffff;--line:#e3e4e6;--muted:#7d8186;
+            --accent:#d32f2f;--accent-dark:#b71c1c;--shadow:0 18px 50px rgba(35,38,41,.22);
             --bar:58px;
         }
         *{box-sizing:border-box;}
-        html,body{margin:0;height:100%;overflow:hidden;background:#1b1712;color:var(--ink);font-family:'DM Sans',sans-serif;}
+        html,body{margin:0;height:100%;overflow:hidden;background:#232629;color:var(--ink);font-family:'DM Sans',sans-serif;}
         a{color:inherit;}
         button{font:inherit;color:inherit;}
         .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
 
         /* ---------- üst bar ---------- */
-        .bar{position:fixed;top:0;left:0;right:0;z-index:20;height:var(--bar);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));background:rgba(246,241,230,.94);backdrop-filter:blur(10px);border-bottom:1px solid rgba(230,221,202,.9);}
+        .bar{position:fixed;top:0;left:0;right:0;z-index:20;height:var(--bar);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));background:rgba(245,245,244,.94);backdrop-filter:blur(10px);border-bottom:1px solid rgba(227,228,230,.9);}
         .bar-left{display:flex;align-items:center;gap:14px;min-width:0;}
         .wordmark img{display:block;height:30px;width:auto;}
         .bar-title{font-family:'Fraunces',serif;font-size:18px;font-weight:600;white-space:nowrap;}
@@ -89,48 +89,48 @@
         /* CS tarzı nişangâh (sadece fare kilitliyken) */
         .xhair{position:absolute;left:50%;top:50%;z-index:6;width:0;height:0;pointer-events:none;display:none;}
         .xhair.on{display:block;}
-        .xhair .d{position:absolute;width:6px;height:6px;left:-3px;top:-3px;border-radius:50%;background:#f6f1e6;box-shadow:0 0 0 1.5px rgba(0,0,0,.6);transition:transform .15s ease,background .15s ease;}
-        .xhair.aim .d{background:#e34b35;transform:scale(1.5);}
-        .xtip{position:absolute;left:50%;top:calc(50% + 26px);transform:translateX(-50%);z-index:6;pointer-events:none;padding:7px 11px;border-radius:8px;background:rgba(27,23,18,.82);color:#f6f1e6;font-size:12px;line-height:1.35;text-align:center;white-space:nowrap;display:none;}
+        .xhair .d{position:absolute;width:6px;height:6px;left:-3px;top:-3px;border-radius:50%;background:#f5f5f4;box-shadow:0 0 0 1.5px rgba(0,0,0,.6);transition:transform .15s ease,background .15s ease;}
+        .xhair.aim .d{background:#d32f2f;transform:scale(1.5);}
+        .xtip{position:absolute;left:50%;top:calc(50% + 26px);transform:translateX(-50%);z-index:6;pointer-events:none;padding:7px 11px;border-radius:8px;background:rgba(35,38,41,.82);color:#f5f5f4;font-size:12px;line-height:1.35;text-align:center;white-space:nowrap;display:none;}
         .xtip strong{display:block;font-size:12.5px;}
         .xtip span{color:#ffb39f;font-weight:700;}
-        .lock-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;pointer-events:none;padding:10px 16px;border-radius:999px;background:rgba(27,23,18,.72);color:#f6f1e6;font-size:13px;font-weight:600;display:none;}
+        .lock-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;pointer-events:none;padding:10px 16px;border-radius:999px;background:rgba(35,38,41,.72);color:#f5f5f4;font-size:13px;font-weight:600;display:none;}
         .lock-hint.on{display:block;}
 
-        .zones{position:absolute;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;display:flex;gap:6px;padding:6px;border-radius:999px;background:rgba(27,23,18,.72);backdrop-filter:blur(8px);}
-        .zone-btn{border:0;border-radius:999px;padding:9px 15px;background:transparent;color:#f6f1e6;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s ease,color .2s ease;}
+        .zones{position:absolute;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;display:flex;gap:6px;padding:6px;border-radius:999px;background:rgba(35,38,41,.72);backdrop-filter:blur(8px);}
+        .zone-btn{border:0;border-radius:999px;padding:9px 15px;background:transparent;color:#f5f5f4;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s ease,color .2s ease;}
         .zone-btn:hover{background:rgba(255,255,255,.12);}
-        .zone-btn[aria-pressed="true"]{background:#f6f1e6;color:var(--ink);}
+        .zone-btn[aria-pressed="true"]{background:#f5f5f4;color:var(--ink);}
         .zone-key{display:inline-block;margin-right:6px;font-size:10px;font-weight:700;opacity:.55;}
         .zone-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px;}
 
-        .hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:5;padding:8px 14px;border-radius:999px;background:rgba(27,23,18,.66);color:#f6f1e6;font-size:12px;white-space:nowrap;pointer-events:none;transition:opacity .6s ease;}
+        .hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:5;padding:8px 14px;border-radius:999px;background:rgba(35,38,41,.66);color:#f5f5f4;font-size:12px;white-space:nowrap;pointer-events:none;transition:opacity .6s ease;}
         .hint.gone{opacity:0;}
         .tip{position:absolute;z-index:6;pointer-events:none;padding:8px 11px;border-radius:8px;background:var(--surface);box-shadow:0 8px 24px rgba(0,0,0,.25);font-size:12px;line-height:1.35;max-width:240px;transform:translate(14px,14px);display:none;}
         .tip strong{display:block;font-size:12.5px;}
         .tip span{color:var(--accent);font-weight:700;}
 
-        .joystick{position:absolute;left:max(22px,env(safe-area-inset-left));bottom:max(84px,calc(env(safe-area-inset-bottom) + 70px));z-index:5;width:112px;height:112px;border-radius:50%;background:rgba(27,23,18,.35);border:1px solid rgba(246,241,230,.35);display:none;touch-action:none;}
-        .joystick-knob{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(246,241,230,.9);box-shadow:0 4px 14px rgba(0,0,0,.3);}
+        .joystick{position:absolute;left:max(22px,env(safe-area-inset-left));bottom:max(84px,calc(env(safe-area-inset-bottom) + 70px));z-index:5;width:112px;height:112px;border-radius:50%;background:rgba(35,38,41,.35);border:1px solid rgba(245,245,244,.35);display:none;touch-action:none;}
+        .joystick-knob{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(245,245,244,.9);box-shadow:0 4px 14px rgba(0,0,0,.3);}
         @media (pointer:coarse){.joystick{display:block;}}
 
         /* ---------- giriş / yükleme ---------- */
-        .intro{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 35%,#3a2f25 0%,#1b1712 70%);color:#f6f1e6;text-align:center;transition:opacity .6s ease,visibility .6s;}
+        .intro{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 35%,#3a3e43 0%,#232629 70%);color:#f5f5f4;text-align:center;transition:opacity .6s ease,visibility .6s;}
         .intro.hide{opacity:0;visibility:hidden;}
         .intro-inner{width:min(440px,100%);}
         .intro img{height:54px;width:auto;filter:invert(1) brightness(1.4);margin-bottom:22px;}
         .intro h1{margin:0 0 10px;font-family:'Fraunces',serif;font-size:clamp(30px,6vw,42px);font-weight:450;}
-        .intro p{margin:0 0 26px;color:#cfc4b4;font-size:14px;line-height:1.6;}
-        .progress{height:4px;border-radius:4px;background:rgba(246,241,230,.15);overflow:hidden;margin-bottom:18px;}
+        .intro p{margin:0 0 26px;color:#c4c7cb;font-size:14px;line-height:1.6;}
+        .progress{height:4px;border-radius:4px;background:rgba(245,245,244,.15);overflow:hidden;margin-bottom:18px;}
         .progress div{height:100%;width:0;background:var(--accent);transition:width .25s ease;}
-        .enter-btn{border:0;border-radius:999px;padding:14px 30px;background:#f6f1e6;color:var(--ink);font-size:14px;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:background .2s ease,color .2s ease,opacity .2s;}
+        .enter-btn{border:0;border-radius:999px;padding:14px 30px;background:#f5f5f4;color:var(--ink);font-size:14px;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:background .2s ease,color .2s ease,opacity .2s;}
         .enter-btn:hover:not(:disabled){background:var(--accent);color:#fff;}
         .enter-btn:disabled{opacity:.55;cursor:wait;}
-        .intro-keys{margin-top:22px;font-size:12px;color:#a99d8c;line-height:1.7;}
-        .intro-keys kbd{display:inline-block;min-width:22px;padding:1px 6px;border:1px solid #6d6155;border-radius:4px;font-family:inherit;font-size:11px;}
+        .intro-keys{margin-top:22px;font-size:12px;color:#9ea2a7;line-height:1.7;}
+        .intro-keys kbd{display:inline-block;min-width:22px;padding:1px 6px;border:1px solid #5f6368;border-radius:4px;font-family:inherit;font-size:11px;}
 
         /* ---------- ürün paneli ---------- */
-        .scrim{position:fixed;inset:0;z-index:28;background:rgba(27,23,18,.35);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s;}
+        .scrim{position:fixed;inset:0;z-index:28;background:rgba(35,38,41,.35);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s;}
         .scrim.show{opacity:1;visibility:visible;}
         .panel{position:fixed;z-index:30;top:calc(var(--bar) + 14px);right:14px;bottom:14px;width:min(380px,calc(100% - 28px));display:flex;flex-direction:column;border-radius:14px;background:var(--surface);box-shadow:var(--shadow);transform:translateX(calc(100% + 30px));transition:transform .35s cubic-bezier(.2,.8,.2,1);overflow:hidden;}
         .panel.open{transform:none;}
@@ -139,7 +139,7 @@
         .close-btn{width:34px;height:34px;border:0;border-radius:50%;background:var(--paper);cursor:pointer;font-size:18px;line-height:1;}
         .close-btn:hover{background:var(--line);}
         .panel-body{flex:1;overflow:auto;padding:16px;}
-        .p-img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:10px;background:linear-gradient(160deg,#f3ede1,#e8dfcf);margin-bottom:14px;}
+        .p-img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:10px;background:linear-gradient(160deg,#f4f4f3,#e6e7e8);margin-bottom:14px;}
         .p-zone{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
         .p-title{margin:0 0 6px;font-size:17px;line-height:1.35;}
         .p-price{font-family:'Fraunces',serif;font-size:24px;color:var(--accent);margin-bottom:16px;}
@@ -149,19 +149,19 @@
         .size{height:44px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:border-color .15s,background .15s,color .15s;}
         .size:hover:not(:disabled){border-color:var(--ink);}
         .size[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff;}
-        .size:disabled{color:#bdb4a6;background:repeating-linear-gradient(135deg,#faf7f1 0 6px,#f1ebe0 6px 7px);cursor:not-allowed;text-decoration:line-through;}
+        .size:disabled{color:#b4b7bb;background:repeating-linear-gradient(135deg,#fafafa 0 6px,#efefee 6px 7px);cursor:not-allowed;text-decoration:line-through;}
         .size-warn{min-height:18px;font-size:12px;color:var(--accent);margin-bottom:6px;}
         .panel-foot{padding:14px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);display:grid;gap:8px;}
         .primary{height:50px;border:0;border-radius:10px;background:var(--ink);color:#fff;font-size:14px;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:background .2s ease;}
         .primary:hover{background:var(--accent);}
-        .primary.need-size{background:#9b9285;}
+        .primary.need-size{background:#93979c;}
         .secondary{display:block;text-align:center;padding:10px;font-size:12.5px;font-weight:600;color:var(--muted);text-decoration:none;}
         .secondary:hover{color:var(--accent);}
 
         /* ---------- sepet ---------- */
         .cart-empty{padding:40px 10px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6;}
         .cart-item{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);}
-        .cart-item img{width:64px;height:52px;object-fit:contain;border-radius:8px;background:#f1ebe0;}
+        .cart-item img{width:64px;height:52px;object-fit:contain;border-radius:8px;background:#efefee;}
         .ci-title{font-size:13px;font-weight:600;line-height:1.35;}
         .ci-meta{font-size:12px;color:var(--muted);margin-top:3px;}
         .ci-meta b{color:var(--ink);}
@@ -180,7 +180,7 @@
         .pick{display:grid;grid-template-columns:64px 1fr 22px;gap:12px;align-items:center;width:100%;padding:10px;margin-bottom:8px;border:1px solid var(--line);border-radius:10px;background:#fff;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
         .pick:hover{border-color:var(--ink);}
         .pick[aria-checked="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset;}
-        .pick img{width:64px;height:52px;object-fit:contain;border-radius:8px;background:#f1ebe0;}
+        .pick img{width:64px;height:52px;object-fit:contain;border-radius:8px;background:#efefee;}
         .pick-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);}
         .pick[aria-checked="true"] .pick-dot{border-color:var(--ink);background:radial-gradient(circle,var(--ink) 0 45%,transparent 50%);}
         .tryon-lead{font-size:13px;line-height:1.55;color:var(--muted);margin:0 0 14px;}
@@ -188,8 +188,8 @@
         .toast.show{opacity:1;transform:translate(-50%,0);}
         .fly{position:fixed;z-index:50;pointer-events:none;object-fit:contain;transition:transform .7s cubic-bezier(.5,-.2,.3,1),opacity .7s ease;}
 
-        .fallback{position:fixed;inset:var(--bar) 0 0 0;display:grid;place-items:center;padding:24px;text-align:center;color:#f6f1e6;}
-        .fallback a{display:inline-block;margin-top:14px;padding:12px 22px;border-radius:999px;background:#f6f1e6;color:var(--ink);font-weight:700;text-decoration:none;}
+        .fallback{position:fixed;inset:var(--bar) 0 0 0;display:grid;place-items:center;padding:24px;text-align:center;color:#f5f5f4;}
+        .fallback a{display:inline-block;margin-top:14px;padding:12px 22px;border-radius:999px;background:#f5f5f4;color:var(--ink);font-weight:700;text-decoration:none;}
 
         @media (max-width:640px){
             :root{--bar:52px;}
@@ -239,12 +239,12 @@
     <div class="joystick" id="joystick" aria-hidden="true"><div class="joystick-knob" id="knob"></div></div>
     <nav class="zones" id="zones" aria-label="Reyonlar">
         <button class="zone-btn" type="button" data-zone="giris" aria-pressed="true">Giriş</button>
-        <button class="zone-btn" type="button" data-zone="spor"><span class="zone-dot" style="background:#e34b35"></span>Spor Ayakkabı</button>
-        <button class="zone-btn" type="button" data-zone="topuklu"><span class="zone-dot" style="background:#d98fa0"></span>Topuklu</button>
-        <button class="zone-btn" type="button" data-zone="kadinbot"><span class="zone-dot" style="background:#a8794f"></span>Kadın Bot</button>
-        <button class="zone-btn" type="button" data-zone="erkekbot"><span class="zone-dot" style="background:#7d8f9e"></span>Erkek Bot</button>
-        <button class="zone-btn" type="button" data-zone="cocuk"><span class="zone-dot" style="background:#3f9bd6"></span>Çocuk</button>
-        <button class="zone-btn" type="button" data-zone="ayna"><span class="zone-dot" style="background:#c9a35c"></span>Kombininde Dene</button>
+        <button class="zone-btn" type="button" data-zone="spor"><span class="zone-dot" style="background:#d32f2f"></span>Spor Ayakkabı</button>
+        <button class="zone-btn" type="button" data-zone="topuklu"><span class="zone-dot" style="background:#d32f2f"></span>Topuklu</button>
+        <button class="zone-btn" type="button" data-zone="kadinbot"><span class="zone-dot" style="background:#d32f2f"></span>Kadın Bot</button>
+        <button class="zone-btn" type="button" data-zone="erkekbot"><span class="zone-dot" style="background:#c9cdd2"></span>Erkek Bot</button>
+        <button class="zone-btn" type="button" data-zone="cocuk"><span class="zone-dot" style="background:#d32f2f"></span>Çocuk</button>
+        <button class="zone-btn" type="button" data-zone="ayna"><span class="zone-dot" style="background:#ffffff"></span>Kombininde Dene</button>
     </nav>
 </main>
 
@@ -316,12 +316,12 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
    Veri
    ========================================================= */
 const ZONES = {
-    spor:    { name: 'Spor Ayakkabı', accent: '#e34b35', panel: '#2c2723', text: '#f6f1e6' },
-    topuklu: { name: 'Topuklu',       accent: '#d98fa0', panel: '#ead6cf', text: '#3b2026' },
-    kadinbot: { name: 'Kadın Bot',    accent: '#a8794f', panel: '#4a3426', text: '#f6ead9' },
-    erkekbot: { name: 'Erkek Bot',    accent: '#7d8f9e', panel: '#26303a', text: '#eef2f5' },
-    cocuk:   { name: 'Çocuk',         accent: '#3f9bd6', panel: '#dcebf5', text: '#1d3a52' },
-    klasik:  { name: 'Klasik',        accent: '#1b1712', panel: '#e9e1d2', text: '#1b1712' }
+    spor:    { name: 'Spor Ayakkabı', accent: '#d32f2f', panel: '#2b2e32', text: '#ffffff' },
+    topuklu: { name: 'Topuklu',       accent: '#d32f2f', panel: '#f4f4f2', text: '#2b2e32' },
+    kadinbot: { name: 'Kadın Bot',    accent: '#d32f2f', panel: '#34383d', text: '#ffffff' },
+    erkekbot: { name: 'Erkek Bot',    accent: '#c9cdd2', panel: '#2b2e32', text: '#ffffff' },
+    cocuk:   { name: 'Çocuk',         accent: '#d32f2f', panel: '#ececea', text: '#2b2e32' },
+    klasik:  { name: 'Klasik',        accent: '#d32f2f', panel: '#f4f4f2', text: '#2b2e32' }
 };
 const fmt = n => Number(n).toLocaleString('tr-TR') + ' TL';
 const productById = new Map();
@@ -689,7 +689,7 @@ stage.prepend(renderer.domElement);
 renderer.domElement.setAttribute('tabindex', '0');
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#1b1712');
+scene.background = new THREE.Color('#1c1e21');
 // Ortam yansıması: pirinç, cam ve cilalı zemin gerçek gibi parlasın
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
@@ -717,32 +717,18 @@ function canvasTex(w, h, draw, repeat) {
     return t;
 }
 function woodFloor() {
+    // Antrasit, cilalı büyük ebat zemin karosu (ahşap yerine)
     return canvasTex(1024, 1024, (g, w, h) => {
-        const rows = 8, rh = h / rows;
-        const tones = ['#b98a5e', '#c4956a', '#ad7e54', '#bf9064', '#b48459', '#c99c70'];
-        for (let r = 0; r < rows; r++) {
-            let x = -((r * 397) % 600);
-            while (x < w) {
-                const len = 380 + ((r * 131 + x) % 260);
-                g.fillStyle = tones[(r * 7 + Math.abs(x)) % tones.length];
-                g.fillRect(x, r * rh, len, rh);
-                g.globalAlpha = .12;
-                for (let k = 0; k < 9; k++) {
-                    g.strokeStyle = k % 2 ? '#6e4a2c' : '#e2b98d';
-                    g.beginPath();
-                    const yy = r * rh + 6 + k * (rh - 12) / 8;
-                    g.moveTo(x, yy);
-                    g.bezierCurveTo(x + len * .3, yy + 3, x + len * .6, yy - 3, x + len, yy + 1);
-                    g.stroke();
-                }
-                g.globalAlpha = 1;
-                g.fillStyle = 'rgba(60,38,20,.55)';
-                g.fillRect(x, r * rh, 2, rh);
-                x += len;
-            }
-            g.fillStyle = 'rgba(60,38,20,.5)';
-            g.fillRect(0, r * rh, w, 2);
+        const n = 4, t = w / n;
+        for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+            const v = 46 + ((r * 7 + c * 13) % 5) * 2;
+            g.fillStyle = `rgb(${v},${v + 2},${v + 5})`; g.fillRect(c * t, r * t, t, t);
+            const gr = g.createLinearGradient(c * t, r * t, c * t + t, r * t + t);
+            gr.addColorStop(0, 'rgba(255,255,255,.035)'); gr.addColorStop(1, 'rgba(0,0,0,.05)');
+            g.fillStyle = gr; g.fillRect(c * t, r * t, t, t);
         }
+        g.fillStyle = 'rgba(20,21,23,.9)';
+        for (let i = 0; i <= n; i++) { g.fillRect(i * t - 1, 0, 2, h); g.fillRect(0, i * t - 1, w, 2); }
     }, [4, 4.5]);
 }
 function signTex(title, sub, z, w = 1024, h = 192) {
@@ -763,9 +749,9 @@ function signTex(title, sub, z, w = 1024, h = 192) {
 function brandTex(label, z, aspect) {
     // Doku oranı tabela oranıyla aynı olsun, yazı uzamasın
     return canvasTex(Math.max(256, Math.min(2048, Math.round(96 * aspect))), 96, (g, w, h) => {
-        g.fillStyle = '#f6f1e6'; g.fillRect(0, 0, w, h);
+        g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h);
         g.fillStyle = z.accent; g.fillRect(0, h - 6, w, 6);
-        g.fillStyle = '#1b1712'; g.textAlign = 'center'; g.textBaseline = 'middle';
+        g.fillStyle = '#2b2e32'; g.textAlign = 'center'; g.textBaseline = 'middle';
         let size = 54;
         do { g.font = `700 ${size}px "DM Sans", Arial, sans-serif`; size -= 2; } while (g.measureText(label.toUpperCase()).width > w - 24 && size > 18);
         g.fillText(label.toUpperCase(), w / 2, h / 2 - 2);
@@ -781,22 +767,22 @@ function glowTex() {
 
 /* ---------- malzemeler ---------- */
 const M = {
-    wall: new THREE.MeshStandardMaterial({ color: '#efe7da', roughness: .95 }),
-    ceiling: new THREE.MeshStandardMaterial({ color: '#2b2520', roughness: 1 }),
-    shelf: new THREE.MeshPhysicalMaterial({ color: '#f8f3ea', roughness: .32, clearcoat: .5, clearcoatRoughness: .2 }),
-    oak: new THREE.MeshStandardMaterial({ color: '#b78a5d', roughness: .6 }),
-    darkOak: new THREE.MeshStandardMaterial({ color: '#5a3d27', roughness: .55 }),
-    led: new THREE.MeshBasicMaterial({ color: new THREE.Color('#ffe7c4').multiplyScalar(3) }),
-    brass: new THREE.MeshStandardMaterial({ color: '#c9a35c', roughness: .22, metalness: 1 }),
-    marble: new THREE.MeshPhysicalMaterial({ color: '#f1ece4', roughness: .18, clearcoat: .8, clearcoatRoughness: .08 }),
+    wall: new THREE.MeshStandardMaterial({ color: '#e4e5e7', roughness: .95 }),
+    ceiling: new THREE.MeshStandardMaterial({ color: '#26292c', roughness: 1 }),
+    shelf: new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: .32, clearcoat: .5, clearcoatRoughness: .2 }),
+    oak: new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: .25, clearcoat: .6, clearcoatRoughness: .15 }),
+    darkOak: new THREE.MeshStandardMaterial({ color: '#2b2e32', roughness: .45, metalness: .2 }),
+    led: new THREE.MeshBasicMaterial({ color: new THREE.Color('#fff6ea').multiplyScalar(3) }),
+    brass: new THREE.MeshStandardMaterial({ color: '#d32f2f', roughness: .35, metalness: .1 }),
+    marble: new THREE.MeshPhysicalMaterial({ color: '#f6f6f4', roughness: .18, clearcoat: .8, clearcoatRoughness: .08 }),
     acrylic: new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: .04, transmission: 0, transparent: true, opacity: .22, clearcoat: 1, depthWrite: false }),
-    cove: new THREE.MeshBasicMaterial({ color: new THREE.Color('#ffd9a6').multiplyScalar(3.5) }),
-    plaster: new THREE.MeshStandardMaterial({ color: '#f4efe6', roughness: .7 }),
-    velvet: new THREE.MeshStandardMaterial({ color: '#8f2b26', roughness: .9 }),
-    rug: new THREE.MeshStandardMaterial({ color: '#d9cdb8', roughness: 1 }),
+    cove: new THREE.MeshBasicMaterial({ color: new THREE.Color('#fff4e6').multiplyScalar(3.5) }),
+    plaster: new THREE.MeshStandardMaterial({ color: '#f6f6f4', roughness: .6 }),
+    velvet: new THREE.MeshStandardMaterial({ color: '#d32f2f', roughness: .85 }),
+    rug: new THREE.MeshStandardMaterial({ color: '#bfc1c4', roughness: 1 }),
     glass: new THREE.MeshPhysicalMaterial({ color: '#cfe0e3', roughness: .03, metalness: 0, clearcoat: 1, transparent: true, opacity: .2 }),
     plant: new THREE.MeshStandardMaterial({ color: '#4f6f3e', roughness: .8 }),
-    pot: new THREE.MeshStandardMaterial({ color: '#d8cbb6', roughness: .8 })
+    pot: new THREE.MeshStandardMaterial({ color: '#2b2e32', roughness: .6 })
 };
 function box(w, h, d, mat, x, y, z, parent = scene, shadow = true) {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
@@ -833,14 +819,14 @@ box(16, .35, .2, M.darkOak, 0, .175, ROOM.z1, front, false);
 [-8, -2.6, -1.1, 1.1, 2.6, 8].forEach(x => box(.12, ROOM.h, .2, M.darkOak, x, ROOM.h / 2, ROOM.z1, front, false));
 [[-5.3, 5.2], [5.3, 5.2]].forEach(([x, w]) => box(w, ROOM.h - .85, .04, M.glass, x, .35 + (ROOM.h - .85) / 2, ROOM.z1, front, false));
 // Dış cephe: girişte kamera sokaktan içeri süzülür
-const facadeMat = new THREE.MeshStandardMaterial({ color: '#231d18', roughness: .8 });
+const facadeMat = new THREE.MeshStandardMaterial({ color: '#1f2124', roughness: .8 });
 box(40, 4, .3, facadeMat, 0, ROOM.h + 2, ROOM.z1 + .1, scene, false);
 box(12, ROOM.h, .3, facadeMat, -14, ROOM.h / 2, ROOM.z1 + .1, scene, false);
 box(12, ROOM.h, .3, facadeMat, 14, ROOM.h / 2, ROOM.z1 + .1, scene, false);
-const street = new THREE.Mesh(new THREE.PlaneGeometry(40, 8), new THREE.MeshPhysicalMaterial({ color: '#3a342e', roughness: .55, clearcoat: .4, clearcoatRoughness: .3 }));
+const street = new THREE.Mesh(new THREE.PlaneGeometry(40, 8), new THREE.MeshPhysicalMaterial({ color: '#33363a', roughness: .55, clearcoat: .4, clearcoatRoughness: .3 }));
 street.rotation.x = -Math.PI / 2; street.position.set(0, -.01, ROOM.z1 + 4); scene.add(street);
 box(18, .06, 1.6, M.marble, 0, .03, ROOM.z1 + .9, scene, false);
-const fascia = new THREE.Mesh(new THREE.PlaneGeometry(3.4, .62), new THREE.MeshBasicMaterial({ color: '#efe7da', toneMapped: false }));
+const fascia = new THREE.Mesh(new THREE.PlaneGeometry(3.4, .62), new THREE.MeshBasicMaterial({ color: '#ffffff', toneMapped: false }));
 fascia.position.set(0, ROOM.h + .42, ROOM.z1 + .27); scene.add(fascia);
 box(3.5, .02, .05, M.cove, 0, ROOM.h + .08, ROOM.z1 + .3, scene, false);
 texLoader.load('logo-transparent.png', t => {
@@ -854,10 +840,10 @@ outside.position.set(0, 3, ROOM.z1 + 6); outside.rotation.y = Math.PI; scene.add
 // Halı ve tavan spotları
 const rug = new THREE.Mesh(new THREE.CircleGeometry(2.4, 64), M.rug);
 rug.rotation.x = -Math.PI / 2; rug.position.set(0, .006, 1.2); rug.receiveShadow = true; scene.add(rug);
-const rugRing = new THREE.Mesh(new THREE.RingGeometry(2.25, 2.32, 64), new THREE.MeshStandardMaterial({ color: '#8f2b26' }));
+const rugRing = new THREE.Mesh(new THREE.RingGeometry(2.25, 2.32, 64), new THREE.MeshStandardMaterial({ color: '#d32f2f' }));
 rugRing.rotation.x = -Math.PI / 2; rugRing.position.set(0, .008, 1.2); scene.add(rugRing);
 const glow = glowTex();
-const spotMat = new THREE.MeshBasicMaterial({ color: new THREE.Color('#fff3df').multiplyScalar(4) });
+const spotMat = new THREE.MeshBasicMaterial({ color: new THREE.Color('#fff8ef').multiplyScalar(4) });
 for (let x = -6; x <= 6; x += 3) for (let z = -7; z <= 7; z += 3.5) {
     const s = new THREE.Mesh(new THREE.CircleGeometry(.11, 20), spotMat);
     s.rotation.x = Math.PI / 2; s.position.set(x, ROOM.h - .01, z); scene.add(s);
@@ -866,14 +852,14 @@ for (let x = -6; x <= 6; x += 3) for (let z = -7; z <= 7; z += 3.5) {
 }
 
 /* ---------- ışıklar ---------- */
-scene.add(new THREE.HemisphereLight('#fff3e2', '#6b5440', .9));
-const sun = new THREE.DirectionalLight('#fff1dc', 1.25);
+scene.add(new THREE.HemisphereLight('#fbf8f4', '#55585c', .95));
+const sun = new THREE.DirectionalLight('#fff7ee', 1.25);
 sun.position.set(4, 9, 6); sun.target.position.set(0, 0, -1);
 sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
 Object.assign(sun.shadow.camera, { left: -10, right: 10, top: 10, bottom: -10, near: 1, far: 25 });
 sun.shadow.bias = -.0005; sun.shadow.normalBias = .02;
 scene.add(sun, sun.target);
-[[-5, -1, '#ffd9a8'], [0, -6, '#ffe2bf'], [5, -4, '#ffd3a0'], [0, 3, '#fff0da']].forEach(([x, z, c]) => {
+[[-5, -1, '#fff1e2'], [0, -6, '#fff4e8'], [5, -4, '#fff1e2'], [0, 3, '#fff6ec']].forEach(([x, z, c]) => {
     const p = new THREE.PointLight(c, 5, 9, 1.6); p.position.set(x, 3.1, z); scene.add(p);
 });
 
@@ -1021,7 +1007,7 @@ function mirror(x, z) {
     });
     const glass = new THREE.Mesh(new THREE.PlaneGeometry(1, 2), new THREE.MeshBasicMaterial({ map: glassTex, toneMapped: false }));
     glass.position.set(0, 1.25, .065); g.add(glass);
-    const sign = new THREE.Mesh(new THREE.PlaneGeometry(1.15, .26), new THREE.MeshBasicMaterial({ map: signTex('Kombininde Dene', 'Aynaya dokun', { panel: '#1b1712', accent: '#c9a35c', text: '#f6ead9' }, 768, 174), toneMapped: false }));
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(1.15, .26), new THREE.MeshBasicMaterial({ map: signTex('Kombininde Dene', 'Aynaya dokun', { panel: '#2b2e32', accent: '#d32f2f', text: '#ffffff' }, 768, 174), toneMapped: false }));
     sign.position.set(0, 2.5, .07); g.add(sign);
     box(1.4, .45, .5, M.velvet, 0, .225, .9, g);
     const hit = new THREE.Mesh(new THREE.BoxGeometry(1.3, 2.5, .3), new THREE.MeshBasicMaterial({ visible: false }));
@@ -1034,8 +1020,8 @@ function counter(x, z) {
     box(2.5, .05, .8, M.oak, 0, 1.025, 0, g);
     const front = new THREE.Mesh(new THREE.PlaneGeometry(1.4, .26), new THREE.MeshBasicMaterial({ map: signTex('Kasa', 'Sepetini görmek için tıkla', ZONES.klasik, 768, 144), toneMapped: false }));
     front.position.set(0, .62, -.355); front.rotation.y = Math.PI; g.add(front);
-    box(.35, .25, .28, new THREE.MeshStandardMaterial({ color: '#1f1b17', roughness: .4 }), -.6, 1.18, 0, g);
-    const bag = box(.32, .38, .14, new THREE.MeshStandardMaterial({ color: '#f6f1e6', roughness: .9 }), .5, 1.24, 0, g);
+    box(.35, .25, .28, new THREE.MeshStandardMaterial({ color: '#2b2e32', roughness: .4 }), -.6, 1.18, 0, g);
+    const bag = box(.32, .38, .14, new THREE.MeshStandardMaterial({ color: '#d32f2f', roughness: .9 }), .5, 1.24, 0, g);
     const kasaHit = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.4, .9), new THREE.MeshBasicMaterial({ visible: false }));
     kasaHit.position.y = .7; kasaHit.userData.kasa = true; g.add(kasaHit); clickable.push(kasaHit);
     obstacles.push([x - 1.25, z - .4, x + 1.25, z + .4]);
@@ -1048,10 +1034,10 @@ texLoader.load('logo-transparent.png', t => {
     const logo = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 2.4 * ar), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false }));
     logo.position.set(0, ROOM.h - .6, ROOM.z1 - .15); logo.rotation.y = Math.PI; scene.add(logo);
     // Logo koyu cephede kaybolmasın: arkasına krem pano
-    const backing = new THREE.Mesh(new THREE.PlaneGeometry(3.0, 2.4 * ar + .28), new THREE.MeshBasicMaterial({ color: '#efe7da', toneMapped: false }));
+    const backing = new THREE.Mesh(new THREE.PlaneGeometry(3.0, 2.4 * ar + .28), new THREE.MeshBasicMaterial({ color: '#ffffff', toneMapped: false }));
     backing.position.set(0, ROOM.h - .6, ROOM.z1 - .13); backing.rotation.y = Math.PI; scene.add(backing);
 });
-const slogan = new THREE.Mesh(new THREE.PlaneGeometry(3.4, .5), new THREE.MeshBasicMaterial({ map: signTex('Ayakkabıcılıkta son nokta', null, { panel: '#5a3d27', accent: '#c9a35c', text: '#f6ead9' }, 1024, 150), toneMapped: false }));
+const slogan = new THREE.Mesh(new THREE.PlaneGeometry(3.4, .5), new THREE.MeshBasicMaterial({ map: signTex('Ayakkabıcılıkta son nokta', null, { panel: '#2b2e32', accent: '#d32f2f', text: '#ffffff' }, 1024, 150), toneMapped: false }));
 
 /* ---------- ışık hüzmeleri (sahte hacimsel ışık) ---------- */
 const coneTex = canvasTex(8, 256, (g, w, h) => {
@@ -1061,11 +1047,9 @@ const coneTex = canvasTex(8, 256, (g, w, h) => {
 });
 function lightCone(x, z, bottomY, rBot, op = .1) {
     const hgt = ROOM.h - .02 - bottomY;
-    const m = new THREE.Mesh(new THREE.CylinderGeometry(.09, rBot, hgt, 40, 1, true),
-        new THREE.MeshBasicMaterial({ map: coneTex, transparent: true, opacity: op, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }));
-    m.position.set(x, bottomY + hgt / 2, z); scene.add(m);
+    const m = null; // görünür ışık hüzmesi kaldırıldı, sadece yumuşak spot kalır
     if (HQ) {
-        const sp = new THREE.SpotLight('#ffe6c4', 9, hgt + 1.5, Math.atan(rBot / hgt) * 1.4, .55, 1.2);
+        const sp = new THREE.SpotLight('#fff6ec', 5, hgt + 1.5, Math.atan(rBot / hgt) * 1.4, .55, 1.2);
         sp.position.set(x, ROOM.h - .05, z); sp.target.position.set(x, 0, z); scene.add(sp, sp.target);
     }
     return m;
@@ -1083,7 +1067,7 @@ function heroPodium(x, z, p) {
     const dome = new THREE.Mesh(new THREE.CylinderGeometry(.5, .5, .7, 64, 1, true), M.acrylic);
     dome.position.y = 1.17; g.add(dome);
     const lid = new THREE.Mesh(new THREE.TorusGeometry(.5, .01, 6, 64), M.brass); lid.rotation.x = Math.PI / 2; lid.position.y = 1.52; g.add(lid);
-    const tag = new THREE.Mesh(new THREE.PlaneGeometry(.9, .2), new THREE.MeshBasicMaterial({ map: signTex('Haftanın Modeli', null, { panel: '#1b1712', accent: '#c9a35c', text: '#f6ead9' }, 640, 142), toneMapped: false }));
+    const tag = new THREE.Mesh(new THREE.PlaneGeometry(.9, .2), new THREE.MeshBasicMaterial({ map: signTex('Haftanın Modeli', null, { panel: '#2b2e32', accent: '#d32f2f', text: '#ffffff' }, 640, 142), toneMapped: false }));
     tag.position.set(0, .45, .69); tag.rotation.x = -.09; g.add(tag);
     heroSpin = new THREE.Group(); heroSpin.position.y = .82; g.add(heroSpin);
     if (p) addShoe(heroSpin, p, 0, 0, 0, .72, .62).userData.zone = p.zone;
