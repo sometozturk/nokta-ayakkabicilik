@@ -787,7 +787,7 @@ function brandTex(label, z, aspect) {
     img.onload = () => {
         const c = tex.image, g = c.getContext('2d'), w = c.width, h = c.height;
         g.fillStyle = '#26292c'; g.fillRect(0, 0, w, h - 5);
-        const pad = h * .16, bw = w - pad * 2, bh = h - 5 - pad * 2;
+        const pad = h * .11, bw = w - pad * 2, bh = h - 5 - pad * 2;
         const sc = Math.min(bw / img.width, bh / img.height);
         const dw = img.width * sc, dh = img.height * sc;
         g.drawImage(img, (w - dw) / 2, (h - 5 - dh) / 2, dw, dh);
@@ -798,11 +798,12 @@ function brandTex(label, z, aspect) {
 }
 function brandTextTex(label, z, aspect) {
     // Doku oranı tabela oranıyla aynı olsun, yazı uzamasın
-    return canvasTex(Math.max(256, Math.min(2048, Math.round(160 * aspect))), 160, (g, w, h) => {
+    const cw = Math.max(256, Math.min(2048, Math.round(160 * aspect)));
+    return canvasTex(cw, Math.max(32, Math.round(cw / aspect)), (g, w, h) => { // oran korunur, logo/yazı uzamaz
         g.fillStyle = '#26292c'; g.fillRect(0, 0, w, h);
         g.fillStyle = '#d32f2f'; g.fillRect(0, h - 4, w, 4);
         g.fillStyle = '#ffffff'; g.textBaseline = 'middle';
-        const L = label.toUpperCase(); let size = 70, tr; // marka adı: ADIDAS, CALVIN (Türkçe İ değil)
+        const L = BRAND_LOGOS[label] ? label.toUpperCase() : label.toLocaleUpperCase('tr-TR'); let size = Math.round(h * .44), tr; // marka adı: ADIDAS, CALVIN (Türkçe İ değil)
         do { g.font = `700 ${size}px "DM Sans", Arial, sans-serif`; tr = size * .22; size -= 2; } while (trackedWidth(g, L, tr) > w - 30 && size > 16);
         drawTracked(g, L, w / 2, h / 2, tr);
     });
@@ -1021,7 +1022,19 @@ function buildWall({ items, zone, cols, tierYs, pitch, shoeW, pos, rotY, subtitl
         let c0 = 0;
         sections.forEach((sec, si) => {
             const x0 = -W / 2 + .25 + c0 * pitch, wSec = sec.cols * pitch;
-            sec.items.forEach((p, k) => {
+            if (sec.rows) {
+                // Az modelli markalar: her raf katında bir-iki marka, logosu rafın ön kenarında
+                sec.rows.forEach((row, ri) => {
+                    const tier = T - 1 - ri; let c = 0;
+                    row.forEach(grp => {
+                        grp.items.forEach((p, k) => addShoe(g, p, x0 + (c + k + .5) * pitch, tierYs[tier], .24, shoeW, maxH, true).userData.zone = zone);
+                        const tw = grp.items.length * pitch - .08, TH = .12;
+                        const tag = new THREE.Mesh(new THREE.PlaneGeometry(tw, TH), new THREE.MeshBasicMaterial({ map: brandTex(grp.label, z, tw / TH), toneMapped: false }));
+                        tag.position.set(x0 + (c + grp.items.length / 2) * pitch, tierYs[tier] - .045 - TH / 2 + .03, .386); g.add(tag);
+                        c += grp.items.length;
+                    });
+                });
+            } else sec.items.forEach((p, k) => {
                 const col = c0 + Math.floor(k / T), tier = T - 1 - (k % T);
                 addShoe(g, p, -W / 2 + .25 + (col + .5) * pitch, tierYs[tier], .24, shoeW, maxH, true).userData.zone = zone;
             });
@@ -1225,12 +1238,27 @@ async function build() {
         const b = BRANDS.find(([, re]) => re.test(p.title.trim()));
         byBrand.get(b ? b[0] : 'Diğer').push(p);
     });
-    const sporSections = [...byBrand].filter(([, list]) => list.length).map(([label, list]) => ({
+    const allSec = [...byBrand].filter(([, list]) => list.length).map(([label, list]) => ({
         label, items: list.sort((a, b) => a.title.localeCompare(b.title, 'tr')), cols: Math.ceil(list.length / 5)
     }));
+    // 4 ve daha az modeli olan markalar tek blokta alt alta: duvar daralır, sneaker'lar büyür
+    const SMALL = 4, T5 = 5;
+    const big = allSec.filter(sc => sc.items.length > SMALL), small = allSec.filter(sc => sc.items.length <= SMALL).sort((a, b) => b.items.length - a.items.length);
+    let packed = null;
+    if (small.length > 1) {
+        for (let K = Math.max(...small.map(sc => sc.items.length)); K <= 12 && !packed; K++) {
+            const rows = [];
+            for (const sc of small) {
+                const r = rows.find(r => r.used + sc.items.length <= K);
+                if (r) { r.groups.push(sc); r.used += sc.items.length; } else rows.push({ used: sc.items.length, groups: [sc] });
+            }
+            if (rows.length <= T5) packed = { label: 'Seçkin Markalar', cols: K, items: small.flatMap(sc => sc.items), rows: rows.map(r => r.groups) };
+        }
+    }
+    const sporSections = packed ? [...big, packed] : allSec;
     const sporCols = sporSections.reduce((n, sec) => n + sec.cols, 0);
-    const sporPitch = Math.min(.86, (RD - 2.6) / sporCols);
-    buildWall({ items: groups.spor, zone: 'spor', cols: sporCols, pitch: sporPitch, shoeW: Math.min(.62, sporPitch * .76),
+    const sporPitch = Math.min(.95, (RD - 2.6) / sporCols);
+    buildWall({ items: groups.spor, zone: 'spor', cols: sporCols, pitch: sporPitch, shoeW: Math.min(.74, sporPitch * .82),
         tierYs: [.42, .86, 1.3, 1.74, 2.18], pos: new THREE.Vector3(ROOM.x0 + .02, 0, -.6), rotY: Math.PI / 2, subtitle: 'Sneaker koleksiyonu', sections: sporSections });
     // Arka duvar: Topuklu (5 kat)
     // Topuklu arka duvarı baştan başa kaplar (4 kat, büyük ayakkabılar)
