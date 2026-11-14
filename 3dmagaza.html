@@ -842,6 +842,13 @@ const rug = new THREE.Mesh(new THREE.CircleGeometry(2.4, 64), M.rug);
 rug.rotation.x = -Math.PI / 2; rug.position.set(0, .006, 1.2); rug.receiveShadow = true; scene.add(rug);
 const rugRing = new THREE.Mesh(new THREE.RingGeometry(2.25, 2.32, 64), new THREE.MeshStandardMaterial({ color: '#d32f2f' }));
 rugRing.rotation.x = -Math.PI / 2; rugRing.position.set(0, .008, 1.2); scene.add(rugRing);
+// Halının ortasında siyah NOKTA logosu (girişten bakınca düz okunur)
+texLoader.load('logo-transparent.png', t => {
+    t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
+    const ar = t.image.height / t.image.width, lw = 2.9;
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(lw, lw * ar), new THREE.MeshStandardMaterial({ map: t, color: '#111214', transparent: true, roughness: .9, polygonOffset: true, polygonOffsetFactor: -2 }));
+    m.rotation.x = -Math.PI / 2; m.position.set(0, .011, 1.2); m.receiveShadow = true; scene.add(m);
+});
 const glow = glowTex();
 const spotMat = new THREE.MeshBasicMaterial({ color: new THREE.Color('#fff8ef').multiplyScalar(4) });
 for (let x = -6; x <= 6; x += 3) for (let z = -7; z <= 7; z += 3.5) {
@@ -1057,6 +1064,41 @@ function lightCone(x, z, bottomY, rBot, op = .1) {
 
 /* ---------- Haftanın Modeli podyumu ---------- */
 let heroSpin = null;
+const spinners = [];
+const ledRed = new THREE.MeshBasicMaterial({ color: new THREE.Color('#ff2a2a').multiplyScalar(2.2) });
+function plaqueTex(title, sub) {
+    return canvasTex(512, 120, (g, w, h) => {
+        g.fillStyle = '#2b2e32'; g.fillRect(0, 0, w, h);
+        g.fillStyle = '#d32f2f'; g.fillRect(0, h - 6, w, 6);
+        g.fillStyle = '#ffffff'; g.textAlign = 'center'; g.textBaseline = 'middle';
+        let size = 34; const t = title.replace(/\s*\(\d{2}\s*-\s*\d{2}\)\s*$/, '');
+        do { g.font = `700 ${size}px "DM Sans", Arial, sans-serif`; size -= 2; } while (g.measureText(t).width > w - 30 && size > 14);
+        g.fillText(t, w / 2, sub ? h * .38 : h / 2);
+        if (sub) { g.globalAlpha = .65; g.font = `600 18px "DM Sans", Arial, sans-serif`; g.fillText(sub.toUpperCase().split('').join(' '), w / 2, h * .75); g.globalAlpha = 1; }
+    });
+}
+// Galeri kaidesi: beyaz kolon, antrasit taban, kırmızı LED çizgi, akrilik küp içinde dönen ayakkabı
+function galleryPedestal(x, z, p, { h = 1.0, sub = null, hero = false } = {}) {
+    if (!p) return;
+    const g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
+    const W = hero ? .56 : .46;
+    box(W + .12, .05, W + .12, M.darkOak, 0, .025, 0, g);
+    box(W, h, W, M.marble, 0, .05 + h / 2, 0, g);
+    box(W + .004, .012, W + .004, ledRed, 0, h - .06, 0, g, false);
+    box(W + .06, .02, W + .06, M.darkOak, 0, .05 + h + .01, 0, g);
+    const top = .05 + h + .02;
+    const cube = new THREE.Mesh(new THREE.BoxGeometry(W + .02, W * .95, W + .02), M.acrylic);
+    cube.position.y = top + W * .475; g.add(cube);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(cube.geometry), new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: .35 }));
+    edges.position.copy(cube.position); g.add(edges);
+    const spin = new THREE.Group(); spin.position.y = top; g.add(spin);
+    addShoe(spin, p, 0, 0, 0, W * .9, W * .8).userData.zone = p.zone;
+    spinners.push({ g: spin, phase: spinners.length * 1.3 });
+    const plaque = new THREE.Mesh(new THREE.PlaneGeometry(W - .04, (W - .04) * 120 / 512), new THREE.MeshBasicMaterial({ map: plaqueTex(p.title, sub), toneMapped: false }));
+    plaque.position.set(0, h * .62, W / 2 + .002); g.add(plaque);
+    lightCone(x, z, top, .45);
+    obstacles.push([x - W / 2 - .1, z - W / 2 - .1, x + W / 2 + .1, z + W / 2 + .1]);
+}
 function heroPodium(x, z, p) {
     const g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
     const base = new THREE.Mesh(new THREE.CylinderGeometry(.62, .7, .78, 64), M.marble);
@@ -1132,24 +1174,19 @@ async function build() {
 
     // Orta sergi masaları: öne çıkanlar + klasik
     const featured = [28, 34, 25, 117, 107].map(id => productById.get(id)).filter(Boolean);
-    const t1 = displayTable(-2.3, -2.6, 1.7, .9, 'Öne Çıkanlar', 'spor');
-    const t2 = displayTable(2.3, -2.6, 1.7, .9, 'Klasik', 'klasik');
-    featured.slice(0, 3).forEach((p, i) => {
-        const h = [.18, .34, .1][i]; const x = -.55 + i * .55;
-        riser(t1, x, 0, h);
-        addShoe(t1, p, x, .81 + h, .02, .5);
-    });
-    groups.klasik.forEach((p, i) => { const x = -.4 + i * .8; riser(t2, x, 0, .14 + i * .14); addShoe(t2, p, x, .95 + i * .14, .02, .55); });
-    const t3 = displayTable(0, -6.6, 1.4, .8, 'Yeni Sezon', 'topuklu');
-    featured.slice(3).forEach((p, i) => { const x = -.32 + i * .64; riser(t3, x, 0, .12 + i * .1); addShoe(t3, p, x, .93 + i * .1, .02, .5); });
-    ottoman(0, 1.2);
-    // En çok bakılan spor model (ürün sırası Shopier'deki gibi) podyumda döner
+    // Orta galeri: en çok bakılan model ortada (Haftanın Modeli), yanlarda öne çıkanlar ve klasikler
     let hero = featured[0];
     for (const p of groups.spor.slice(0, 6)) {
         try { if ((await fetch(`assets/vitrin/${p.id}.webp`, { method: 'HEAD' })).ok) { hero = p; break; } } catch (e) {}
     }
-    heroPodium(0, 3.7, hero);
-    lightCone(-2.3, -2.6, .82, .55, .045); lightCone(2.3, -2.6, .82, .55, .045); lightCone(0, -6.6, .82, .5, .045);
+    const side = featured.filter(p => p !== hero);
+    // Ortada 2 m'lik koridor ve reyonlara giden yollar boş kalır (kamera kaidelerden geçmesin)
+    galleryPedestal(-1.0, -2.6, hero, { h: 1.1, sub: 'Haftanın Modeli', hero: true });
+    galleryPedestal(1.0, -2.6, side[0], { h: 1.1, sub: 'Öne çıkan' });
+    galleryPedestal(-2.6, -2.6, side[1], { sub: 'Öne çıkan' });
+    galleryPedestal(2.6, -2.6, side[2], { sub: 'Öne çıkan' });
+    galleryPedestal(-1.4, -6.2, groups.klasik[0], { h: .9, sub: 'Klasik' });
+    galleryPedestal(1.4, -6.2, groups.klasik[1] || side[3], { h: .9, sub: groups.klasik[1] ? 'Klasik' : 'Yeni sezon' });
     mirror(ROOM.x1 - .08, 2.2);
     counter(4.6, 6.4);
     plant(-7.2, 8.2); plant(7.2, 8.2); plant(-7.2, -8.3); plant(6.6, -8.4);
@@ -1427,7 +1464,7 @@ function frame() {
         player.pitch = flyIn.p0 + (VIEWS.giris.pitch + portraitTilt() - flyIn.p0) * e;
         if (flyIn.t >= 1) flyIn = null;
     }
-    if (heroSpin) heroSpin.rotation.y = Math.sin(clock.elapsedTime * .55) * .5;
+    for (const sp of spinners) sp.g.rotation.y = Math.sin(clock.elapsedTime * .5 + sp.phase) * .45;
     if (locked) updateAim();
     bob = moving ? bob + dt * 9 : bob * .9;
     camera.position.set(player.x, EYE + Math.sin(bob) * .018, player.z);
