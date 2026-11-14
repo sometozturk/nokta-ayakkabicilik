@@ -700,7 +700,8 @@ const camera = new THREE.PerspectiveCamera(coarse ? 70 : 62, 1, 0.05, 80);
 camera.rotation.order = 'YXZ';
 
 // Oda ölçüleri (metre)
-const ROOM = { x0: -8, x1: 8, z0: -9, z1: 9, h: 3.6 };
+const ROOM = { x0: -6, x1: 6, z0: -10, z1: 10, h: 4.4 }; // 12 x 20 m dikdörtgen, yüksek tavan
+const RW = ROOM.x1 - ROOM.x0, RD = ROOM.z1 - ROOM.z0;
 const EYE = 1.6;
 
 const manager = new THREE.LoadingManager();
@@ -844,34 +845,51 @@ function box(w, h, d, mat, x, y, z, parent = scene, shadow = true) {
 const floor = new THREE.Mesh(new THREE.PlaneGeometry(ROOM.x1 - ROOM.x0, ROOM.z1 - ROOM.z0), new THREE.MeshPhysicalMaterial({ map: woodFloor(), roughness: .42, clearcoat: .55, clearcoatRoughness: .12 }));
 floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; floor.name = 'floor';
 scene.add(floor);
-const ceil = new THREE.Mesh(new THREE.PlaneGeometry(16, 18), M.ceiling);
+const ceil = new THREE.Mesh(new THREE.PlaneGeometry(RW, RD), M.ceiling);
 ceil.rotation.x = Math.PI / 2; ceil.position.y = ROOM.h; scene.add(ceil);
 // Asma tavan: kenarlarda alçıpan bant, içinde gizli sıcak LED (bloom ile parlar)
-[[16, .9, 0, ROOM.z0 + .45], [16, .9, 0, ROOM.z1 - .45]].forEach(([w, d, x, z]) => box(w, .12, d, M.plaster, x, ROOM.h - .06, z, scene, false));
-[[.9, 16.2, ROOM.x0 + .45, 0], [.9, 16.2, ROOM.x1 - .45, 0]].forEach(([w, d, x, z]) => box(w, .12, d, M.plaster, x, ROOM.h - .06, z, scene, false));
-box(14.1, .025, .025, M.cove, 0, ROOM.h - .13, ROOM.z0 + .91, scene, false);
-box(14.1, .025, .025, M.cove, 0, ROOM.h - .13, ROOM.z1 - .91, scene, false);
-box(.025, .025, 16.1, M.cove, ROOM.x0 + .91, ROOM.h - .13, 0, scene, false);
-box(.025, .025, 16.1, M.cove, ROOM.x1 - .91, ROOM.h - .13, 0, scene, false);
+[[RW, .9, 0, ROOM.z0 + .45], [RW, .9, 0, ROOM.z1 - .45]].forEach(([w, d, x, z]) => box(w, .12, d, M.plaster, x, ROOM.h - .06, z, scene, false));
+[[.9, RD - 1.8, ROOM.x0 + .45, 0], [.9, RD - 1.8, ROOM.x1 - .45, 0]].forEach(([w, d, x, z]) => box(w, .12, d, M.plaster, x, ROOM.h - .06, z, scene, false));
+box(RW - 1.8, .025, .025, M.cove, 0, ROOM.h - .13, ROOM.z0 + .91, scene, false);
+box(RW - 1.8, .025, .025, M.cove, 0, ROOM.h - .13, ROOM.z1 - .91, scene, false);
+box(.025, .025, RD - 1.8, M.cove, ROOM.x0 + .91, ROOM.h - .13, 0, scene, false);
+box(.025, .025, RD - 1.8, M.cove, ROOM.x1 - .91, ROOM.h - .13, 0, scene, false);
+// Gömme çizgisel LED hatları (yuvarlak spot yerine): tavan boyunca 3 ince ışık çizgisi, siyah gölge kanalı içinde
+const slotMat = new THREE.MeshStandardMaterial({ color: '#111214', roughness: .6 });
+const lineMat = new THREE.MeshBasicMaterial({ color: new THREE.Color('#fffaf3').multiplyScalar(1.6) });
+[-RW / 4, 0, RW / 4].forEach(x => {
+    box(.16, .02, RD - 3.2, slotMat, x, ROOM.h - .13, 0, scene, false);
+    box(.05, .012, RD - 3.4, lineMat, x, ROOM.h - .145, 0, scene, false);
+});
+// Duvarların üst kuşağı antrasit, altında ince kırmızı çizgi (yüksek tavanı toparlar)
+const bandMat = new THREE.MeshStandardMaterial({ color: '#2b2e32', roughness: .7 });
+const BAND = 3.75, bandH = ROOM.h - .12 - BAND;
+box(.02, bandH, RD, bandMat, ROOM.x0 + .012, BAND + bandH / 2, 0, scene, false);
+box(.02, bandH, RD, bandMat, ROOM.x1 - .012, BAND + bandH / 2, 0, scene, false);
+box(RW, bandH, .02, bandMat, 0, BAND + bandH / 2, ROOM.z0 + .012, scene, false);
+const redLine = new THREE.MeshBasicMaterial({ color: '#d32f2f' });
+box(.022, .02, RD, redLine, ROOM.x0 + .013, BAND, 0, scene, false);
+box(.022, .02, RD, redLine, ROOM.x1 - .013, BAND, 0, scene, false);
+box(RW, .02, .022, redLine, 0, BAND, ROOM.z0 + .013, scene, false);
 // Süpürgelik
-[[ROOM.x0 + .015, Math.PI / 2], [ROOM.x1 - .015, -Math.PI / 2]].forEach(([x]) => box(.03, .12, 18, M.darkOak, x, .06, 0, scene, false));
-box(16, .12, .03, M.darkOak, 0, .06, ROOM.z0 + .015, scene, false);
-const wallGeoX = new THREE.PlaneGeometry(18, ROOM.h), wallGeoZ = new THREE.PlaneGeometry(16, ROOM.h);
+[[ROOM.x0 + .015, Math.PI / 2], [ROOM.x1 - .015, -Math.PI / 2]].forEach(([x]) => box(.03, .12, RD, M.darkOak, x, .06, 0, scene, false));
+box(RW, .12, .03, M.darkOak, 0, .06, ROOM.z0 + .015, scene, false);
+const wallGeoX = new THREE.PlaneGeometry(RD, ROOM.h), wallGeoZ = new THREE.PlaneGeometry(RW, ROOM.h);
 [[wallGeoX, ROOM.x0, 0, Math.PI / 2], [wallGeoX, ROOM.x1, 0, -Math.PI / 2]].forEach(([g, x, z, ry]) => {
     const w = new THREE.Mesh(g, M.wall); w.position.set(x, ROOM.h / 2, z); w.rotation.y = ry; w.receiveShadow = true; scene.add(w);
 });
 const back = new THREE.Mesh(wallGeoZ, M.wall); back.position.set(0, ROOM.h / 2, ROOM.z0); back.receiveShadow = true; scene.add(back);
 // Ön cephe: vitrin camı ve kapı
 const front = new THREE.Group(); scene.add(front);
-box(16, .5, .2, M.darkOak, 0, ROOM.h - .25, ROOM.z1, front, false);
-box(16, .35, .2, M.darkOak, 0, .175, ROOM.z1, front, false);
-[-8, -2.6, -1.1, 1.1, 2.6, 8].forEach(x => box(.12, ROOM.h, .2, M.darkOak, x, ROOM.h / 2, ROOM.z1, front, false));
-[[-5.3, 5.2], [5.3, 5.2]].forEach(([x, w]) => box(w, ROOM.h - .85, .04, M.glass, x, .35 + (ROOM.h - .85) / 2, ROOM.z1, front, false));
+box(RW, .5, .2, M.darkOak, 0, ROOM.h - .25, ROOM.z1, front, false);
+box(RW, .35, .2, M.darkOak, 0, .175, ROOM.z1, front, false);
+[ROOM.x0, -2.6, -1.1, 1.1, 2.6, ROOM.x1].forEach(x => box(.12, ROOM.h, .2, M.darkOak, x, ROOM.h / 2, ROOM.z1, front, false));
+[[-(2.7 + ROOM.x1) / 2, ROOM.x1 - 2.7], [(2.7 + ROOM.x1) / 2, ROOM.x1 - 2.7]].forEach(([x, w]) => box(w, ROOM.h - .85, .04, M.glass, x, .35 + (ROOM.h - .85) / 2, ROOM.z1, front, false));
 // Dış cephe: girişte kamera sokaktan içeri süzülür
 const facadeMat = new THREE.MeshStandardMaterial({ color: '#1f2124', roughness: .8 });
 box(40, 4, .3, facadeMat, 0, ROOM.h + 2, ROOM.z1 + .1, scene, false);
-box(12, ROOM.h, .3, facadeMat, -14, ROOM.h / 2, ROOM.z1 + .1, scene, false);
-box(12, ROOM.h, .3, facadeMat, 14, ROOM.h / 2, ROOM.z1 + .1, scene, false);
+box(12, ROOM.h, .3, facadeMat, ROOM.x0 - 6, ROOM.h / 2, ROOM.z1 + .1, scene, false);
+box(12, ROOM.h, .3, facadeMat, ROOM.x1 + 6, ROOM.h / 2, ROOM.z1 + .1, scene, false);
 const street = new THREE.Mesh(new THREE.PlaneGeometry(40, 8), new THREE.MeshPhysicalMaterial({ color: '#33363a', roughness: .55, clearcoat: .4, clearcoatRoughness: .3 }));
 street.rotation.x = -Math.PI / 2; street.position.set(0, -.01, ROOM.z1 + 4); scene.add(street);
 box(18, .06, 1.6, M.marble, 0, .03, ROOM.z1 + .9, scene, false);
@@ -899,24 +917,17 @@ texLoader.load('logo-transparent.png', t => {
     m.rotation.x = -Math.PI / 2; m.position.set(0, .011, 1.2); m.receiveShadow = true; scene.add(m);
 });
 const glow = glowTex();
-const spotMat = new THREE.MeshBasicMaterial({ color: new THREE.Color('#fff8ef').multiplyScalar(4) });
-for (let x = -6; x <= 6; x += 3) for (let z = -7; z <= 7; z += 3.5) {
-    const s = new THREE.Mesh(new THREE.CircleGeometry(.11, 20), spotMat);
-    s.rotation.x = Math.PI / 2; s.position.set(x, ROOM.h - .01, z); scene.add(s);
-    const h = new THREE.Mesh(new THREE.PlaneGeometry(.9, .9), new THREE.MeshBasicMaterial({ map: glow, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .55 }));
-    h.rotation.x = Math.PI / 2; h.position.set(x, ROOM.h - .02, z); scene.add(h);
-}
 
 /* ---------- ışıklar ---------- */
 scene.add(new THREE.HemisphereLight('#fbf8f4', '#55585c', .95));
 const sun = new THREE.DirectionalLight('#fff7ee', 1.25);
 sun.position.set(4, 9, 6); sun.target.position.set(0, 0, -1);
 sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
-Object.assign(sun.shadow.camera, { left: -10, right: 10, top: 10, bottom: -10, near: 1, far: 25 });
+Object.assign(sun.shadow.camera, { left: -12, right: 12, top: 12, bottom: -12, near: 1, far: 30 });
 sun.shadow.bias = -.0005; sun.shadow.normalBias = .02;
 scene.add(sun, sun.target);
-[[-5, -1, '#fff1e2'], [0, -6, '#fff4e8'], [5, -4, '#fff1e2'], [0, 3, '#fff6ec']].forEach(([x, z, c]) => {
-    const p = new THREE.PointLight(c, 5, 9, 1.6); p.position.set(x, 3.1, z); scene.add(p);
+[[-3.5, -1, '#fff1e2'], [0, -7, '#fff4e8'], [3.5, -5, '#fff1e2'], [0, 4, '#fff6ec'], [-3.5, 6, '#fff4e8'], [3.5, 3, '#fff4e8']].forEach(([x, z, c]) => {
+    const p = new THREE.PointLight(c, 5, 10, 1.5); p.position.set(x, ROOM.h - .6, z); scene.add(p);
 });
 
 /* ---------- raf duvarları ---------- */
@@ -998,7 +1009,7 @@ function buildWall({ items, zone, cols, tierYs, pitch, shoeW, pos, rotY, subtitl
     const sy = Math.min(top + .2 + signH / 2, ROOM.h - .2 - signH / 2);
     sign.position.set(0, sy, .16); sign.castShadow = true; g.add(sign);
     // duvardan ayrık durduğunu gösteren yumuşak hale ve iki taşıyıcı çubuk
-    const halo = new THREE.Mesh(new THREE.PlaneGeometry(signW + .5, signH + .4), new THREE.MeshBasicMaterial({ map: glow, transparent: true, opacity: .35, depthWrite: false, blending: THREE.AdditiveBlending }));
+    const halo = new THREE.Mesh(new THREE.PlaneGeometry(signW + .5, signH + .4), new THREE.MeshBasicMaterial({ map: glow, transparent: true, opacity: .18, depthWrite: false, blending: THREE.AdditiveBlending }));
     halo.position.set(0, sy, .065); g.add(halo);
     [-signW * .35, signW * .35].forEach(x => box(.03, .03, .1, sideMat, x, sy, .08, g, false));
     // alt dolap
@@ -1218,27 +1229,28 @@ async function build() {
         label, items: list.sort((a, b) => a.title.localeCompare(b.title, 'tr')), cols: Math.ceil(list.length / 5)
     }));
     const sporCols = sporSections.reduce((n, sec) => n + sec.cols, 0);
-    const sporPitch = Math.min(.86, 15.7 / sporCols);
+    const sporPitch = Math.min(.86, (RD - 2.6) / sporCols);
     buildWall({ items: groups.spor, zone: 'spor', cols: sporCols, pitch: sporPitch, shoeW: Math.min(.62, sporPitch * .76),
-        tierYs: [.42, .86, 1.3, 1.74, 2.18], pos: new THREE.Vector3(ROOM.x0 + .02, 0, -.4), rotY: Math.PI / 2, subtitle: 'Sneaker koleksiyonu', sections: sporSections });
+        tierYs: [.42, .86, 1.3, 1.74, 2.18], pos: new THREE.Vector3(ROOM.x0 + .02, 0, -.6), rotY: Math.PI / 2, subtitle: 'Sneaker koleksiyonu', sections: sporSections });
     // Arka duvar: Topuklu (5 kat)
-    const topCols = Math.ceil(groups.topuklu.length / 5);
-    buildWall({ items: groups.topuklu, zone: 'topuklu', cols: topCols, pitch: .92, shoeW: .6,
-        tierYs: [.42, .86, 1.3, 1.74, 2.18], pos: new THREE.Vector3(.4, 0, ROOM.z0 + .02), rotY: 0, subtitle: 'Nokta Shic' });
+    // Topuklu arka duvarı baştan başa kaplar (4 kat, büyük ayakkabılar)
+    const topCols = Math.ceil(groups.topuklu.length / 4), topPitch = Math.min(1.25, (RW - 1.0) / topCols);
+    buildWall({ items: groups.topuklu, zone: 'topuklu', cols: topCols, pitch: topPitch, shoeW: Math.min(.7, topPitch * .68),
+        tierYs: [.45, 1.0, 1.55, 2.1], pos: new THREE.Vector3(0, 0, ROOM.z0 + .02), rotY: 0, subtitle: 'Nokta Shic' });
     // Sağ duvar: Kadın Bot (4 kat) ve yanında Erkek Bot rafı
     const kbCols = Math.ceil(groups.kadinbot.length / 4);
     buildWall({ items: groups.kadinbot, zone: 'kadinbot', cols: kbCols, pitch: 1.08, shoeW: .72,
-        tierYs: [.42, 1.0, 1.58, 2.16], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -5.3), rotY: -Math.PI / 2, subtitle: 'Bot & çizme' });
+        tierYs: [.42, 1.0, 1.58, 2.16], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -6.6), rotY: -Math.PI / 2, subtitle: 'Bot & çizme' });
     const ebCols = Math.ceil(groups.erkekbot.length / 3);
     buildWall({ items: groups.erkekbot, zone: 'erkekbot', cols: ebCols, pitch: 1.08, shoeW: .72,
-        tierYs: [.5, 1.12, 1.74], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -.45), rotY: -Math.PI / 2, subtitle: 'Deri & su geçirmez' });
+        tierYs: [.5, 1.12, 1.74], pos: new THREE.Vector3(ROOM.x1 - .02, 0, -1.4), rotY: -Math.PI / 2, subtitle: 'Deri & su geçirmez' });
     // Sağ duvar, giriş tarafı: Çocuk sneaker rafı (4 kat, daha alçak)
     const cocukCols = Math.ceil(groups.cocuk.length / 4);
     buildWall({ items: groups.cocuk, zone: 'cocuk', cols: cocukCols, pitch: .9, shoeW: .56,
-        tierYs: [.42, .84, 1.26, 1.68], pos: new THREE.Vector3(ROOM.x1 - .02, 0, 5.6), rotY: -Math.PI / 2, subtitle: 'Sneaker' });
-    obstacles.push([ROOM.x1 - .55, 3.3, ROOM.x1, 7.9]);
+        tierYs: [.42, .84, 1.26, 1.68], pos: new THREE.Vector3(ROOM.x1 - .02, 0, 5.8), rotY: -Math.PI / 2, subtitle: 'Sneaker' });
+    obstacles.push([ROOM.x1 - .55, 3.6, ROOM.x1, 8.0]);
     // Duvar dipleri yürünmesin
-    obstacles.push([ROOM.x0, -9, ROOM.x0 + .55, 9], [-8, ROOM.z0, 8, ROOM.z0 + .55], [ROOM.x1 - .55, -9, ROOM.x1, 1.5]);
+    obstacles.push([ROOM.x0, ROOM.z0, ROOM.x0 + .55, ROOM.z1 - 1.2], [ROOM.x0, ROOM.z0, ROOM.x1, ROOM.z0 + .55], [ROOM.x1 - .55, ROOM.z0, ROOM.x1, .6]);
 
     // Orta sergi masaları: öne çıkanlar + klasik
     const featured = [28, 34, 25, 117, 107].map(id => productById.get(id)).filter(Boolean);
@@ -1253,9 +1265,9 @@ async function build() {
     galleryPedestal(1.0, -2.6, side[0], { h: 1.1, sub: 'Öne çıkan' });
     galleryPedestal(-2.6, -2.6, side[1], { sub: 'Öne çıkan' });
     galleryPedestal(2.6, -2.6, side[2], { sub: 'Öne çıkan' });
-    mirror(ROOM.x1 - .08, 2.2);
-    counter(4.6, 6.4);
-    plant(-7.2, 8.2); plant(7.2, 8.2); plant(-7.2, -8.3); plant(6.6, -8.4);
+    mirror(ROOM.x1 - .08, 2.0);
+    counter(2.6, ROOM.z1 - 1.9);
+    plant(ROOM.x0 + .7, ROOM.z1 - .8); plant(ROOM.x1 - .7, ROOM.z1 - .8);
     // Slogan giriş duvarında, logonun altında (müşteri dönüp bakınca görür)
     slogan.position.set(0, ROOM.h - 1.55, ROOM.z1 - .12); slogan.rotation.y = Math.PI; scene.add(slogan);
 }
@@ -1264,13 +1276,13 @@ async function build() {
    Hareket: birinci şahıs gezinti
    ========================================================= */
 const VIEWS = {
-    giris:   { x: 0,    z: 7.2,  yaw: 0,              pitch: -.06 },
-    spor:    { x: -4.4, z: -.4,  yaw: Math.PI / 2,    pitch: -.1 },
-    topuklu: { x: .4,   z: -4.4, yaw: 0,              pitch: -.1 },
-    kadinbot: { x: 4.2, z: -5.3, yaw: -Math.PI / 2,   pitch: -.1 },
-    erkekbot: { x: 4.6, z: -.45, yaw: -Math.PI / 2,   pitch: -.1 },
-    ayna:     { x: 4.9, z: 2.2,  yaw: -Math.PI / 2,   pitch: -.04 },
-    cocuk:   { x: 5.0,  z: 5.35, yaw: -Math.PI / 2,   pitch: -.16 },
+    giris:   { x: 0,    z: ROOM.z1 - 1.8, yaw: 0,      pitch: -.02 },
+    spor:    { x: ROOM.x0 + 3.6, z: .6, yaw: Math.PI / 2, pitch: -.08 },
+    topuklu: { x: 0,    z: ROOM.z0 + 5.4, yaw: 0,      pitch: -.08 },
+    kadinbot: { x: ROOM.x1 - 3.8, z: -6.6, yaw: -Math.PI / 2, pitch: -.08 },
+    erkekbot: { x: ROOM.x1 - 3.4, z: -1.4, yaw: -Math.PI / 2, pitch: -.08 },
+    ayna:     { x: ROOM.x1 - 3.1, z: 2.0, yaw: -Math.PI / 2, pitch: -.04 },
+    cocuk:   { x: ROOM.x1 - 3.0, z: 5.8, yaw: -Math.PI / 2, pitch: -.14 },
 };
 // Dikey (telefon) ekranda tavan çok görünmesin diye bakışı biraz aşağı eğ
 const portraitTilt = () => (window.innerHeight > window.innerWidth ? -.16 : 0);
@@ -1480,7 +1492,7 @@ let composer = null;
 if (HQ) {
     composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    composer.addPass(new UnrealBloomPass(new THREE.Vector2(2, 2), .38, .55, 1.1));
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(2, 2), .14, .25, 1.35));
     composer.addPass(new ShaderPass({
         uniforms: { tDiffuse: { value: null }, amount: { value: .55 } },
         vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
