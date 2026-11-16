@@ -669,7 +669,7 @@
     "url": "https://www.shopier.com/noktaayakkabi/50853560",
     "category": "",
     "categories": [],
-    "stock": 31,
+    "stock": 30,
     "sizeStock": [
       {
         "size": "36",
@@ -713,7 +713,7 @@
       },
       {
         "size": "46",
-        "stock": 3
+        "stock": 2
       }
     ]
   },
@@ -1323,7 +1323,7 @@
     "url": "https://www.shopier.com/noktaayakkabi/51009454",
     "category": "",
     "categories": [],
-    "stock": 26,
+    "stock": 25,
     "sizeStock": [
       {
         "size": "36",
@@ -1351,7 +1351,7 @@
       },
       {
         "size": "42",
-        "stock": 3
+        "stock": 2
       },
       {
         "size": "43",
@@ -1535,7 +1535,7 @@
     "url": "https://www.shopier.com/noktaayakkabi/40842418",
     "category": "",
     "categories": [],
-    "stock": 29,
+    "stock": 28,
     "sizeStock": [
       {
         "size": "36",
@@ -1575,7 +1575,7 @@
       },
       {
         "size": "45",
-        "stock": 3
+        "stock": 2
       }
     ]
   },
@@ -2387,44 +2387,6 @@
     ]
   },
   {
-    "id": 106,
-    "title": "Prada Su Geçirmez Deri Bot (40-44)",
-    "price": "2990",
-    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_5d483f2cba5aee0a59c61da357acf61e.jpeg",
-    "images": [
-      "https://cdn.shopier.app/pictures_large/noktaayakkabi_5d483f2cba5aee0a59c61da357acf61e.jpeg"
-    ],
-    "filename": "106.jpeg",
-    "url": "https://www.shopier.com/noktaayakkabi/51722063",
-    "category": "Erkek Bot",
-    "categories": [
-      "Erkek Bot"
-    ],
-    "stock": 14,
-    "sizeStock": [
-      {
-        "size": "40",
-        "stock": 3
-      },
-      {
-        "size": "41",
-        "stock": 3
-      },
-      {
-        "size": "42",
-        "stock": 3
-      },
-      {
-        "size": "43",
-        "stock": 3
-      },
-      {
-        "size": "44",
-        "stock": 2
-      }
-    ]
-  },
-  {
     "id": 55,
     "title": "Nike Airforce1 White (45-46-47)",
     "price": "1750",
@@ -3223,6 +3185,26 @@
       {
         "size": "44",
         "stock": 3
+      }
+    ]
+  },
+  {
+    "id": 181,
+    "title": "Nike dunk low pro indirim",
+    "price": "850",
+    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_8537e46960cc5a75fc9dceb4123c73f8.jpeg",
+    "images": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_8537e46960cc5a75fc9dceb4123c73f8.jpeg"
+    ],
+    "filename": "181.jpeg",
+    "url": "https://www.shopier.com/noktaayakkabi/53006239",
+    "category": "",
+    "categories": [],
+    "stock": 0,
+    "sizeStock": [
+      {
+        "size": "37",
+        "stock": 0
       }
     ]
   },
@@ -7177,59 +7159,6 @@
     ]
   },
   {
-    "id": 58,
-    "title": "Prada High Taban (36-44)",
-    "price": "1560",
-    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_3567039da005c7fc2b8068d3f00b73be.jpeg",
-    "images": [
-      "https://cdn.shopier.app/pictures_large/noktaayakkabi_3567039da005c7fc2b8068d3f00b73be.jpeg",
-      "https://cdn.shopier.app/pictures_large/noktaayakkabi_3ad2d442c929827c8525145826dc7f97.jpeg"
-    ],
-    "filename": "58.jpeg",
-    "url": "https://www.shopier.com/noktaayakkabi/51013740",
-    "category": "",
-    "categories": [],
-    "stock": 27,
-    "sizeStock": [
-      {
-        "size": "36",
-        "stock": 3
-      },
-      {
-        "size": "37",
-        "stock": 3
-      },
-      {
-        "size": "38",
-        "stock": 3
-      },
-      {
-        "size": "39",
-        "stock": 3
-      },
-      {
-        "size": "40",
-        "stock": 3
-      },
-      {
-        "size": "41",
-        "stock": 3
-      },
-      {
-        "size": "42",
-        "stock": 3
-      },
-      {
-        "size": "43",
-        "stock": 3
-      },
-      {
-        "size": "44",
-        "stock": 3
-      }
-    ]
-  },
-  {
     "id": 59,
     "title": "Nike Court Borough Mid Black (36-44)",
     "price": "2099",
@@ -7417,47 +7346,6 @@
       {
         "size": "39",
         "stock": 3
-      },
-      {
-        "size": "40",
-        "stock": 3
-      },
-      {
-        "size": "41",
-        "stock": 3
-      },
-      {
-        "size": "42",
-        "stock": 3
-      },
-      {
-        "size": "43",
-        "stock": 3
-      },
-      {
-        "size": "44",
-        "stock": 3
-      }
-    ]
-  },
-  {
-    "id": 64,
-    "title": "Prada Elite (40-44)",
-    "price": "2350",
-    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_72ca030bc117893dd69f607c1a494969.jpeg",
-    "images": [
-      "https://cdn.shopier.app/pictures_large/noktaayakkabi_72ca030bc117893dd69f607c1a494969.jpeg",
-      "https://cdn.shopier.app/pictures_large/noktaayakkabi_745415049c2094236fc0589d5bdf6b60.jpeg"
-    ],
-    "filename": "64.jpeg",
-    "url": "https://www.shopier.com/noktaayakkabi/51011917",
-    "category": "",
-    "categories": [],
-    "stock": 15,
-    "sizeStock": [
-      {
-        "size": "39",
-        "stock": 0
       },
       {
         "size": "40",
