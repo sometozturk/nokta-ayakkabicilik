@@ -422,11 +422,11 @@
     "url": "https://www.shopier.com/noktaayakkabi/43639776",
     "category": "",
     "categories": [],
-    "stock": 25,
+    "stock": 24,
     "sizeStock": [
       {
         "size": "36",
-        "stock": 3
+        "stock": 2
       },
       {
         "size": "37",
@@ -3185,26 +3185,6 @@
       {
         "size": "44",
         "stock": 3
-      }
-    ]
-  },
-  {
-    "id": 181,
-    "title": "Nike dunk low pro indirim",
-    "price": "850",
-    "image": "https://cdn.shopier.app/pictures_large/noktaayakkabi_8537e46960cc5a75fc9dceb4123c73f8.jpeg",
-    "images": [
-      "https://cdn.shopier.app/pictures_large/noktaayakkabi_8537e46960cc5a75fc9dceb4123c73f8.jpeg"
-    ],
-    "filename": "181.jpeg",
-    "url": "https://www.shopier.com/noktaayakkabi/53006239",
-    "category": "",
-    "categories": [],
-    "stock": 0,
-    "sizeStock": [
-      {
-        "size": "37",
-        "stock": 0
       }
     ]
   },
