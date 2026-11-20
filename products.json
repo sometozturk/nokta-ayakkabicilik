@@ -6025,7 +6025,7 @@
       "Erkek Bot",
       "Kadın Bot"
     ],
-    "stock": 26,
+    "stock": 25,
     "sizeStock": [
       {
         "size": "36",
@@ -6045,7 +6045,7 @@
       },
       {
         "size": "40",
-        "stock": 3
+        "stock": 2
       },
       {
         "size": "41",
