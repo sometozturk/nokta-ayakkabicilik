@@ -211,7 +211,7 @@
     "url": "https://www.shopier.com/noktaayakkabi/51008327",
     "category": "",
     "categories": [],
-    "stock": 22,
+    "stock": 19,
     "sizeStock": [
       {
         "size": "36",
@@ -239,15 +239,15 @@
       },
       {
         "size": "42",
-        "stock": 3
-      },
-      {
-        "size": "43",
         "stock": 2
       },
       {
-        "size": "44",
+        "size": "43",
         "stock": 1
+      },
+      {
+        "size": "44",
+        "stock": 0
       }
     ]
   },
@@ -370,7 +370,7 @@
     "url": "https://www.shopier.com/noktaayakkabi/40841802",
     "category": "",
     "categories": [],
-    "stock": 21,
+    "stock": 20,
     "sizeStock": [
       {
         "size": "36",
@@ -402,7 +402,7 @@
       },
       {
         "size": "43",
-        "stock": 2
+        "stock": 1
       },
       {
         "size": "44",
@@ -2488,7 +2488,7 @@
     "url": "https://www.shopier.com/noktaayakkabi/51009727",
     "category": "",
     "categories": [],
-    "stock": 27,
+    "stock": 26,
     "sizeStock": [
       {
         "size": "36",
@@ -2516,7 +2516,7 @@
       },
       {
         "size": "42",
-        "stock": 3
+        "stock": 2
       },
       {
         "size": "43",
@@ -7842,7 +7842,7 @@
     "url": "https://www.shopier.com/noktaayakkabi/40841951",
     "category": "",
     "categories": [],
-    "stock": 24,
+    "stock": 23,
     "sizeStock": [
       {
         "size": "36",
@@ -7870,7 +7870,7 @@
       },
       {
         "size": "42",
-        "stock": 3
+        "stock": 2
       },
       {
         "size": "43",
