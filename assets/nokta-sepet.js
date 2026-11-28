@@ -15,8 +15,8 @@
     // orada ödeme sayfası aynı sekmede açılır (geri tuşuyla siteye dönülür, sepet kalır).
     var SAME_TAB = (window.matchMedia && matchMedia('(max-width: 767px), (pointer: coarse)').matches) || /Instagram|FBAN|FBAV|FB_IAB|TikTok|Line\//i.test(navigator.userAgent || '');
     function go(url) { if (SAME_TAB) window.location.href = url; else window.open(url, '_blank', 'noopener'); }
-    // Shopier mağaza kampanyası: sepet 2.500 TL ve üzeriyse 400 TL indirim (Shopier ödeme sayfasında düşer)
-    var PROMO = { threshold: 2500, discount: 400 };
+    // Shopier mağaza kampanyası: sepet 3.000 TL ve üzeriyse 400 TL indirim (Shopier ödeme sayfasında düşer)
+    var PROMO = { threshold: 3000, discount: 400 };
 
     var products = new Map();       // site id -> ürün
     var byShopier = new Map();      // shopier id -> ürün
@@ -121,7 +121,7 @@
     bagBtn.addEventListener('click', function () { render(); open(panel); });
 
     function mount() {
-        var promoBar = el('div', 'ns-promo-bar'); promoBar.innerHTML = '📦 <b>Tüm siparişlerde ücretsiz kargo</b><span class="ns-sep"> | </span><br class="ns-br">🎁 2.500 TL ve üzeri alışverişte <b>400 TL indirim</b>';
+        var promoBar = el('div', 'ns-promo-bar'); promoBar.innerHTML = '📦 <b>Tüm siparişlerde ücretsiz kargo</b><span class="ns-sep"> | </span><br class="ns-br">🎁 3.000 TL ve üzeri alışverişte <b>400 TL indirim</b>';
         document.body.insertBefore(promoBar, document.body.firstChild);
         document.body.appendChild(scrim); document.body.appendChild(panel); document.body.appendChild(sheet); document.body.appendChild(toastEl);
         var spHeader = document.querySelector('.sp-header-inner');
@@ -173,8 +173,8 @@
         body.appendChild(el('div', 'ns-m', 'İki numara arasında kaldıysan Instagram\'dan bize yazabilirsin.'));
         var inCart = counts().total;
         body.appendChild(Object.assign(el('div', 'ns-note'), { innerHTML: inCart + Number(p.price) >= PROMO.threshold
-            ? '🎁 Bu ürünle sepetin 2.500 TL\'yi geçiyor: <b>400 TL indirim</b> kazanırsın.'
-            : '🎁 2.500 TL ve üzeri sepette <b>400 TL indirim</b>.' }));
+            ? '🎁 Bu ürünle sepetin 3.000 TL\'yi geçiyor: <b>400 TL indirim</b> kazanırsın.'
+            : '🎁 3.000 TL ve üzeri sepette <b>400 TL indirim</b>.' }));
         addBtn.addEventListener('click', function () {
             if (!chosen) return;
             add(p, chosen);
@@ -224,7 +224,7 @@
         var c = counts();
         var promoOk = c.total >= PROMO.threshold;
         if (promoOk) {
-            var disc = el('div', 'ns-disc'); disc.innerHTML = '<span>Sepet indirimi (2.500 TL ve üzeri)</span><span>−' + fmt(PROMO.discount) + '</span>';
+            var disc = el('div', 'ns-disc'); disc.innerHTML = '<span>Sepet indirimi (3.000 TL ve üzeri)</span><span>−' + fmt(PROMO.discount) + '</span>';
             foot.appendChild(disc);
         }
         var tot = el('div', 'ns-total');
