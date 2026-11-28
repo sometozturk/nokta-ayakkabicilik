@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://www.noktaayakkabicilik.com/tozluklu-cizme/">
 <meta property="og:image" content="https://www.noktaayakkabicilik.com/assets/tozluklu/hero-logolu.webp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#efebe5">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" type="image/png" href="/logo-transparent.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
 <script src="/assets/nokta-sepet.js?v=tz2" defer></script>
 <style>
 :root{
-  --bg:#efebe5; --paper:#f7f4ef; --white:#fff; --ink:#1b1917; --muted:#77706a; --line:#d9d2c8;
+  --bg:#ffffff; --paper:#ffffff; --white:#fff; --ink:#1b1917; --muted:#77706a; --line:#e5e5e5;
   --kahve:#5b3a2b; --serif:'Fraunces',Georgia,serif; --sans:'DM Sans',system-ui,sans-serif;
   --ease:cubic-bezier(.22,1,.36,1);
 }
@@ -43,7 +43,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;letter-spacing:-.015em;line-he
 em{font-style:italic}
 
 /* header */
-.top{position:sticky;top:0;z-index:40;background:rgba(239,235,229,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s}
+.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s}
 .top.scrolled{border-color:var(--line)}
 .top-in{display:flex;align-items:center;justify-content:space-between;gap:24px;height:64px}
 .top nav{margin-left:auto}
@@ -56,7 +56,7 @@ em{font-style:italic}
 
 /* hero */
 .hero{display:grid;grid-template-columns:1.05fr 1fr;min-height:calc(100svh - 64px);align-items:stretch}
-.hero-img{position:relative;overflow:hidden;background:#e7e3de}
+.hero-img{position:relative;overflow:hidden;background:#fff}
 .hero-img img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;transform:scale(1.04);animation:settle 1.8s var(--ease) forwards}
 @keyframes settle{to{transform:scale(1)}}
 .hero-txt{display:flex;flex-direction:column;justify-content:center;padding:64px clamp(24px,6vw,96px)}
@@ -86,7 +86,7 @@ em{font-style:italic}
 .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
 .duo h2{font-size:clamp(40px,5vw,72px);margin:18px 0 24px}
 .duo p{color:#4a4540;max-width:28em}
-.toggle{display:inline-flex;margin-top:36px;padding:5px;border-radius:999px;background:var(--bg);position:relative}
+.toggle{display:inline-flex;margin-top:36px;padding:5px;border-radius:999px;background:#f2f2f2;position:relative}
 .toggle button{position:relative;z-index:1;height:44px;padding:0 28px;border-radius:999px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--muted);transition:color .3s}
 .toggle button[aria-pressed=true]{color:#f5f1eb}
 .toggle .pill{position:absolute;top:5px;bottom:5px;left:5px;border-radius:999px;background:var(--ink);transition:transform .45s var(--ease),width .45s var(--ease)}
@@ -114,12 +114,12 @@ em{font-style:italic}
 .shop-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:72px;align-items:start}
 .gallery{display:grid;grid-template-columns:84px 1fr;gap:16px;position:sticky;top:96px}
 .thumbs{display:flex;flex-direction:column;gap:10px}
-.thumbs button{aspect-ratio:3/4;background:var(--white);border:1px solid transparent;overflow:hidden;transition:border-color .2s,opacity .2s;opacity:.65}
+.thumbs button{aspect-ratio:4/5;background:var(--white);border:1px solid transparent;overflow:hidden;transition:border-color .2s,opacity .2s;opacity:.65}
 .thumbs button:hover{opacity:1}
 .thumbs button[aria-current=true]{border-color:var(--ink);opacity:1}
-.thumbs img{width:100%;height:100%;object-fit:cover}
+.thumbs img{width:100%;height:100%;object-fit:contain}
 .main-img{aspect-ratio:4/5;background:var(--white);overflow:hidden;position:relative}
-.main-img img{width:100%;height:100%;object-fit:contain;transform:scale(1.12);transition:opacity .35s}
+.main-img img{width:100%;height:100%;object-fit:contain;transition:opacity .35s}
 .info h2{font-size:clamp(36px,3.8vw,56px);margin:16px 0 18px}
 .info .price-row{margin:18px 0 6px}
 .swatches{margin-top:34px}
@@ -160,9 +160,9 @@ details p{padding:0 0 18px;color:var(--muted);font-size:14px}
 .strip h2{font-size:clamp(36px,4.4vw,64px)}
 .rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,1fr);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px;scrollbar-width:thin}
 .rail figure{scroll-snap-align:start}
-.rail .ph{aspect-ratio:3/4.4;overflow:hidden;background:#fff}
-.rail img{width:100%;height:100%;object-fit:contain;transform:scale(1.18);transition:transform 1.2s var(--ease)}
-.rail figure:hover img{transform:scale(1.23)}
+.rail .ph{aspect-ratio:4/5;overflow:hidden;background:#fff}
+.rail img{width:100%;height:100%;object-fit:contain;transition:transform 1.2s var(--ease)}
+.rail figure:hover img{transform:scale(1.03)}
 .rail figcaption{font-size:13px;color:var(--muted);margin-top:12px;letter-spacing:.02em}
 
 /* street */
@@ -241,14 +241,14 @@ footer a{text-decoration:none;margin:0 10px}
     <div class="rv">
       <span class="eyebrow">2'si 1 arada</span>
       <h2>Tak, çizme.<br><em>Çıkar, bot.</em></h2>
-      <p>Tozluk, botun üzerine geçen ayrı bir parça. Fermuarı aç, çıkar, katla, çantaya at. Tek çiftle iki ayrı ayakkabının işini görürsün.</p>
+      <p>Tozluk, botun üzerine geçen ayrı bir parça. Çekip çıkar, katla, çantaya at. Tek çiftle iki ayrı ayakkabının işini görürsün.</p>
       <div class="toggle" role="group" aria-label="Görünüm">
         <span class="pill"></span>
         <button type="button" aria-pressed="true" data-v="cizme">Çizme</button>
         <button type="button" aria-pressed="false" data-v="bot">Bot</button>
       </div>
       <div class="steps">
-        <div><b>01</b><span>Yan fermuarlı bot, kolay giyilir</span></div>
+        <div><b>01</b><span>Botun yanında fermuar var, kolay giyilir</span></div>
         <div><b>02</b><span>Tozluğu üstten geçir, diz boyu çizme olsun</span></div>
         <div><b>03</b><span>Kalın blok topuk, gün boyu rahat</span></div>
       </div>
@@ -303,7 +303,7 @@ footer a{text-decoration:none;margin:0 10px}
         <li><b>30 yıllık mağaza</b><span>İthal kalite, 2 fiziki şube</span></li>
       </ul>
       <details><summary>Numara nasıl seçilir?</summary><p>Normal giydiğin numarayı seç. İki numara arasında kaldıysan Instagram'dan @nokta.ayakkabicilik hesabına yaz, birlikte karar verelim.</p></details>
-      <details><summary>Tozluk nasıl takılıp çıkarılır?</summary><p>Tozluk botun üzerine geçirilen ayrı bir parçadır. Fermuarını açıp çıkarınca bot, tekrar geçirince diz boyu çizme olarak giyilir.</p></details>
+      <details><summary>Tozluk nasıl takılıp çıkarılır?</summary><p>Tozluk botun üzerine geçirilen ayrı bir parçadır, fermuarı yoktur. Çekip çıkarınca bot, tekrar geçirince diz boyu çizme olarak giyilir. Botun kendisi yandan fermuarlıdır.</p></details>
       <details><summary>Kargo ne zaman gelir?</summary><p>17:00'ye kadar verilen siparişler aynı gün kargoya verilir, sonrası ertesi gün. Kargo ücretsizdir.</p></details>
     </div>
   </div>
@@ -317,9 +317,9 @@ footer a{text-decoration:none;margin:0 10px}
     </div>
     <div class="rail">
       <figure><div class="ph"><img src="/assets/tozluklu/siyah-on.webp" alt="Siyah tozluklu çizme önden" loading="lazy"></div><figcaption>Siyah · Önden</figcaption></figure>
-      <figure><div class="ph"><img src="/assets/tozluklu/kahve-arka.webp" alt="Acı kahve tozluklu çizme arkadan, fermuarlı" loading="lazy"></div><figcaption>Acı Kahve · Arkadan fermuarlı tozluk</figcaption></figure>
+      <figure><div class="ph"><img src="/assets/tozluklu/kahve-arka.webp" alt="Acı kahve tozluklu çizme arkadan" loading="lazy"></div><figcaption>Acı Kahve · Arkadan</figcaption></figure>
       <figure><div class="ph"><img src="/assets/tozluklu/siyah-bot-ust.webp" alt="Siyah bot üstten, içi astarlı" loading="lazy"></div><figcaption>Siyah · İçi astarlı bot</figcaption></figure>
-      <figure><div class="ph"><img src="/assets/tozluklu/kahve-bot-yan.webp" alt="Acı kahve bot yandan, yan fermuarlı" loading="lazy"></div><figcaption>Acı Kahve · Yan fermuar</figcaption></figure>
+      <figure><div class="ph"><img src="/assets/tozluklu/kahve-bot-yan.webp" alt="Acı kahve bot yandan, yan fermuarlı" loading="lazy"></div><figcaption>Acı Kahve · Botun yan fermuarı</figcaption></figure>
       <figure><div class="ph"><img src="/assets/tozluklu/siyah-arka.webp" alt="Siyah tozluklu çizme arkadan" loading="lazy"></div><figcaption>Siyah · Arkadan</figcaption></figure>
       <figure><div class="ph"><img src="/assets/tozluklu/kahve-bot-ust.webp" alt="Acı kahve bot üstten" loading="lazy"></div><figcaption>Acı Kahve · Üstten</figcaption></figure>
     </div>
