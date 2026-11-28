@@ -1,0 +1,26 @@
+{
+  "_not": "Bu dosya değişince .github/workflows/shopier-media.yml Shopier ürün fotoğraflarını bu listeyle değiştirir (sırayla).",
+  "products": {
+    "51722203": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_d7e61f40c82732298ff845f3daa2e581.jpeg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/siyah-cift.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/siyah-capraz.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/siyah-bot-yan.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/sokak.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/siyah-on.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/siyah-arka.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/siyah-bot-ust.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/ayna.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/giyerken.jpg"
+    ],
+    "51722178": [
+      "https://cdn.shopier.app/pictures_large/noktaayakkabi_bf8d6ca3873837ab34095ce5b319b701.jpeg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/kahve-cift.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/kahve-capraz.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/kahve-bot-yan.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/hero-logolu.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/kahve-arka.jpg",
+      "https://www.noktaayakkabicilik.com/assets/tozluklu/shopier/kahve-bot-ust.jpg"
+    ]
+  }
+}

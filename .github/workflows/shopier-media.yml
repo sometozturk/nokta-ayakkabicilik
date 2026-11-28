@@ -1,0 +1,29 @@
+name: Shopier ürün fotoğrafları
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/shopier-media.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  media:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Fotoğrafları Shopier'e yükle
+        env:
+          SHOPIER_PAT: ${{ secrets.SHOPIER_PAT }}
+        run: node scripts/shopier-media.mjs
+      - name: Siteyi Shopier'den yeniden senkronla
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: sleep 20 && gh workflow run sync-shopier.yml --ref main
