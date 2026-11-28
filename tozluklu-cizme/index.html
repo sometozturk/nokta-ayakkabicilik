@@ -20,7 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/assets/tozluklu/hero-logolu.webp">
+<link rel="preload" as="image" href="/assets/tozluklu/hero-genis.webp" media="(min-width:901px)">
+<link rel="preload" as="image" href="/assets/tozluklu/hero-logolu.webp" media="(max-width:900px)">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProductGroup","name":"Kadın Tozluklu Çıkartılabilir Çizme","description":"Tozluğu çıkarılabilen kadın çizme: tozluk takılıyken çizme, çıkarıldığında bilek boyu bot.","brand":{"@type":"Brand","name":"Nokta Ayakkabıcılık"},"variesBy":["https://schema.org/color","https://schema.org/size"],"hasVariant":[{"@type":"Product","name":"Kadın Tozluklu Çıkartılabilir Çizme Siyah","color":"Siyah","image":"https://www.noktaayakkabicilik.com/assets/tozluklu/siyah-cift.webp","offers":{"@type":"Offer","price":"2449","priceCurrency":"TRY","availability":"https://schema.org/InStock","url":"https://www.shopier.com/noktaayakkabi/51722203"}},{"@type":"Product","name":"Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve","color":"Acı Kahve","image":"https://www.noktaayakkabicilik.com/assets/tozluklu/kahve-cift.webp","offers":{"@type":"Offer","price":"2449","priceCurrency":"TRY","availability":"https://schema.org/InStock","url":"https://www.shopier.com/noktaayakkabi/51722178"}}]}</script>
 <script src="/assets/nokta-pixel.js" defer></script>
 <script src="/assets/nokta-ga.js" defer></script>
@@ -55,9 +56,10 @@ em{font-style:italic}
 .top-ann b{font-weight:600}
 
 /* hero */
-.hero{display:grid;grid-template-columns:auto 1fr;height:calc(100svh - 100px);min-height:520px;max-height:1100px;align-items:stretch}
-.hero-img{position:relative;overflow:hidden;background:#fff;height:100%;aspect-ratio:768/1360}
-.hero-img img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);animation:settle 1.8s var(--ease) forwards}
+.hero{position:relative;display:grid;grid-template-columns:1fr 1fr;height:calc(100svh - 100px);min-height:560px;max-height:1000px;align-items:center;background:#e4e1dd;overflow:hidden}
+.hero-img{position:absolute;inset:0}
+.hero-img img{width:100%;height:100%;object-fit:cover;object-position:18% 50%;transform:scale(1.04);animation:settle 1.8s var(--ease) forwards}
+.hero-txt{position:relative;grid-column:2}
 @keyframes settle{to{transform:scale(1)}}
 .hero-txt{display:flex;flex-direction:column;justify-content:center;padding:64px clamp(24px,6vw,96px)}
 .hero-txt h1{font-size:clamp(44px,min(6vw,10vh),104px);margin:22px 0 26px}
@@ -82,6 +84,14 @@ em{font-style:italic}
 .rv.in{opacity:1;transform:none}
 
 /* 2-in-1 */
+.renkler{padding:110px 0 40px;background:#fff;text-align:center}
+.renk-head h2{font-size:clamp(40px,5.2vw,80px);margin:16px 0 28px}
+.renk-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:48px auto 0;max-width:860px}
+.renk-kart{display:block;text-decoration:none;color:inherit}
+.rk-img{display:block;aspect-ratio:4/5;overflow:hidden;background:#fff}
+.rk-img img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;transition:transform 1.2s var(--ease)}
+.renk-kart:hover .rk-img img{transform:scale(1.04)}
+.rk-ad{display:block;margin-top:18px;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
 .duo{padding:140px 0 120px;background:var(--white)}
 .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
 .duo h2{font-size:clamp(40px,5vw,72px);margin:18px 0 24px}
@@ -189,9 +199,14 @@ footer a{text-decoration:none;margin:0 10px}
 @media (max-width:900px){
   .top nav{display:none}
   .hero{grid-template-columns:1fr;height:auto;min-height:0;max-height:none}
-  .hero-img{height:auto;width:100%}
+  .hero{display:block;background:#fff}
+  .hero-img{position:relative;inset:auto}
+  .hero-img img{height:auto;aspect-ratio:768/1360}
+  .hero-txt{grid-column:auto}
   .hero-txt{padding:44px 24px 64px}
   .duo{padding:84px 0}
+  .renkler{padding:72px 0 20px}
+  .renk-grid{gap:10px;margin-top:36px}
   .duo-grid,.shop-grid{grid-template-columns:1fr;gap:40px}
   .duo-stage{order:-1}
   .steps{grid-template-columns:1fr;gap:18px}
@@ -223,7 +238,7 @@ footer a{text-decoration:none;margin:0 10px}
 
 <main>
 <section class="hero">
-  <div class="hero-img"><img src="/assets/tozluklu/hero-logolu.webp" alt="Acı kahve tozluklu çizme giyen kadın, arkada Nokta logosu" width="768" height="1360" fetchpriority="high"></div>
+  <div class="hero-img"><picture><source media="(min-width:901px)" srcset="/assets/tozluklu/hero-genis.webp"><img src="/assets/tozluklu/hero-logolu.webp" alt="Acı kahve tozluklu çizme giyen kadın, arkada Nokta logosu" width="768" height="1360" fetchpriority="high"></picture></div>
   <div class="hero-txt">
     <span class="eyebrow">Nokta · Kış koleksiyonu</span>
     <h1>İki görünüm.<br><em>Tek çift.</em></h1>
@@ -233,6 +248,16 @@ footer a{text-decoration:none;margin:0 10px}
     <div class="cta-row">
       <a class="btn btn-dark" href="#satin-al" data-renk="siyah"><span class="dot s"></span>Siyah</a>
       <a class="btn btn-line" href="#satin-al" data-renk="kahve"><span class="dot k"></span>Acı Kahve</a>
+    </div>
+  </div>
+</section>
+
+<section class="renkler" aria-label="Renkler">
+  <div class="wrap">
+    <div class="renk-head rv"><span class="eyebrow">Tozluklu Çizme</span><h2>İki renk. <em>İki görünüm.</em></h2><a class="btn btn-dark" href="#satin-al">2.449 TL · Hemen Al</a></div>
+    <div class="renk-grid">
+      <a class="renk-kart rv" href="#satin-al" data-renk="siyah"><span class="rk-img"><img src="/assets/tozluklu/siyah-cift.webp" alt="Siyah tozluklu çizme, tozluk takılı ve çıkarılmış" loading="lazy"></span><span class="rk-ad">Siyah</span></a>
+      <a class="renk-kart rv" href="#satin-al" data-renk="kahve"><span class="rk-img"><img src="/assets/tozluklu/kahve-cift.webp" alt="Acı kahve tozluklu çizme, tozluk takılı ve çıkarılmış" loading="lazy"></span><span class="rk-ad">Acı Kahve</span></a>
     </div>
   </div>
 </section>
