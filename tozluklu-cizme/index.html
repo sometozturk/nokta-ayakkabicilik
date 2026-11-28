@@ -142,6 +142,8 @@ em{font-style:italic}
 .bag-host{display:flex;align-items:center}
 .bag-host .ns-bag{margin:0}
 .buy{margin-top:34px;width:100%;height:60px}
+.tryon{margin-top:12px;width:100%;height:56px}
+.tryon-note{font-size:12.5px;color:var(--muted);text-align:center;margin-top:10px}
 .perks{list-style:none;margin-top:30px;border-top:1px solid var(--line)}
 .perks li{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);font-size:14px}
 .perks li b{font-weight:500;min-width:150px}
@@ -291,6 +293,8 @@ footer a{text-decoration:none;margin:0 10px}
       </div>
 
       <button type="button" class="btn btn-dark buy" id="buyBtn">Sepete Ekle</button>
+      <a class="btn btn-line tryon" id="tryOn" href="/?kombin=103"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Kombininde Dene</a>
+      <p class="tryon-note">Fotoğrafını yükle, bu çizmeyi kendi kombininde gör.</p>
 
       <ul class="perks">
         <li><b>Ücretsiz kargo</b><span>17:00'ye kadar verilen siparişler aynı gün kargoda</span></li>
@@ -348,9 +352,9 @@ footer a{text-decoration:none;margin:0 10px}
   var A='/assets/tozluklu/';
   var R={
     siyah:{ad:'Siyah',url:'https://www.shopier.com/noktaayakkabi/51722203',cizme:'siyah-cift',bot:'siyah-bot-yan',
-      foto:[['siyah-capraz','Çapraz'],['siyah-cift','Tozluk takılı ve çıkarılmış'],['siyah-on','Önden'],['siyah-arka','Arkadan'],['siyah-bot-yan','Bot hali'],['siyah-bot-ust','Üstten']]},
+      id:103, foto:[['siyah-capraz','Çapraz'],['siyah-cift','Tozluk takılı ve çıkarılmış'],['siyah-on','Önden'],['siyah-arka','Arkadan'],['siyah-bot-yan','Bot hali'],['siyah-bot-ust','Üstten']]},
     kahve:{ad:'Acı Kahve',url:'https://www.shopier.com/noktaayakkabi/51722178',cizme:'kahve-cift',bot:'kahve-bot-yan',
-      foto:[['kahve-capraz','Çapraz'],['kahve-cift','Tozluk takılı ve çıkarılmış'],['kahve-arka','Arkadan'],['kahve-bot-yan','Bot hali'],['kahve-bot-ust','Üstten']]}
+      id:104, foto:[['kahve-capraz','Çapraz'],['kahve-cift','Tozluk takılı ve çıkarılmış'],['kahve-arka','Arkadan'],['kahve-bot-yan','Bot hali'],['kahve-bot-ust','Üstten']]}
   };
   var renk='siyah', gorunum='cizme', secim=null;
   var szWrap=document.getElementById('sz'), hint=document.getElementById('szHint'), secNum=document.getElementById('secNum');
@@ -392,6 +396,7 @@ footer a{text-decoration:none;margin:0 10px}
     document.getElementById('renkAd').textContent=d.ad;
     document.getElementById('barRenk').textContent=d.ad+' · 36-40';
     refreshSizes();
+    document.getElementById('tryOn').href='/?kombin='+d.id;
     document.querySelectorAll('.sw button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.renk===r?'true':'false');});
     thumbs.innerHTML='';
     d.foto.forEach(function(f,ix){
