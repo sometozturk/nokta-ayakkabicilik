@@ -124,6 +124,8 @@
         var promoBar = el('div', 'ns-promo-bar'); promoBar.innerHTML = '📦 <b>Tüm siparişlerde ücretsiz kargo</b><span class="ns-sep"> | </span><br class="ns-br">🎁 3.000 TL ve üzeri alışverişte <b>400 TL indirim</b>';
         document.body.insertBefore(promoBar, document.body.firstChild);
         document.body.appendChild(scrim); document.body.appendChild(panel); document.body.appendChild(sheet); document.body.appendChild(toastEl);
+        var ownHost = document.querySelector('[data-ns-bag]');
+        if (ownHost) { ownHost.appendChild(bagBtn); return; }
         var spHeader = document.querySelector('.sp-header-inner');
         if (spHeader) { spHeader.insertBefore(bagBtn, spHeader.querySelector('.sp-ig')); bagBtn.classList.add('ns-bag-sp'); return; }
         var host = document.querySelector('.nav-actions') || document.querySelector('.nav') || document.body;
@@ -358,6 +360,16 @@
                 products.set(p.id, p); byShopier.set(shopierIdOf(p.url), p);
             });
             render(); relabel();
+            window.NoktaSepet = {
+                product: function (shopierId) { return byShopier.get(String(shopierId)) || null; },
+                sizes: function (shopierId) { var p = byShopier.get(String(shopierId)); return p ? sizesOf(p) : []; },
+                add: function (shopierId, size) {
+                    var p = byShopier.get(String(shopierId)); if (!p || !size) return false;
+                    add(p, String(size)); toast('Sepete eklendi · ' + size + ' numara'); return true;
+                },
+                openCart: function () { render(); open(panel); }
+            };
+            document.dispatchEvent(new CustomEvent('nokta-sepet-hazir'));
             new MutationObserver(function () { relabel(); }).observe(document.body, { childList: true, subtree: true });
         }).catch(function () { bagBtn.hidden = true; });
     }

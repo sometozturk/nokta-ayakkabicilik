@@ -24,7 +24,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProductGroup","name":"Kadın Tozluklu Çıkartılabilir Çizme","description":"Tozluğu çıkarılabilen kadın çizme: tozluk takılıyken çizme, çıkarıldığında bilek boyu bot.","brand":{"@type":"Brand","name":"Nokta Ayakkabıcılık"},"variesBy":["https://schema.org/color","https://schema.org/size"],"hasVariant":[{"@type":"Product","name":"Kadın Tozluklu Çıkartılabilir Çizme Siyah","color":"Siyah","image":"https://www.noktaayakkabicilik.com/assets/tozluklu/siyah-cift.webp","offers":{"@type":"Offer","price":"3250","priceCurrency":"TRY","availability":"https://schema.org/InStock","url":"https://www.shopier.com/noktaayakkabi/51722203"}},{"@type":"Product","name":"Kadın Tozluklu Çıkartılabilir Çizme Acı Kahve","color":"Acı Kahve","image":"https://www.noktaayakkabicilik.com/assets/tozluklu/kahve-cift.webp","offers":{"@type":"Offer","price":"3250","priceCurrency":"TRY","availability":"https://schema.org/InStock","url":"https://www.shopier.com/noktaayakkabi/51722178"}}]}</script>
 <script src="/assets/nokta-pixel.js" defer></script>
 <script src="/assets/nokta-ga.js" defer></script>
-<script src="/assets/nokta-sepet.js?v=tz1" defer></script>
+<script src="/assets/nokta-sepet.js?v=tz2" defer></script>
 <style>
 :root{
   --bg:#efebe5; --paper:#f7f4ef; --white:#fff; --ink:#1b1917; --muted:#77706a; --line:#d9d2c8;
@@ -45,7 +45,8 @@ em{font-style:italic}
 /* header */
 .top{position:sticky;top:0;z-index:40;background:rgba(239,235,229,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s}
 .top.scrolled{border-color:var(--line)}
-.top-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+.top-in{display:flex;align-items:center;justify-content:space-between;gap:24px;height:64px}
+.top nav{margin-left:auto}
 .top img{height:26px;width:auto}
 .top nav{display:flex;gap:28px;font-size:13px;letter-spacing:.04em}
 .top nav a{text-decoration:none;color:var(--muted);transition:color .2s}
@@ -130,7 +131,16 @@ em{font-style:italic}
 .sw button[aria-pressed=true]{border-color:var(--ink);background:var(--white)}
 .sizes{margin-top:30px}
 .sz{display:flex;gap:8px;flex-wrap:wrap}
-.sz span{width:52px;height:48px;display:grid;place-items:center;border:1px solid var(--line);font-size:14px;background:var(--white)}
+.sz button{width:56px;height:50px;display:grid;place-items:center;border:1px solid var(--line);font-size:15px;background:var(--white);transition:background .2s,color .2s,border-color .2s,transform .2s var(--ease)}
+.sz button:hover{border-color:var(--ink)}
+.sz button[aria-checked=true]{background:var(--ink);color:#f5f1eb;border-color:var(--ink)}
+.sz button:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+.sz.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.sz-hint{font-size:13px;color:var(--muted);margin-top:10px;transition:color .2s}
+.sz-hint.err{color:#b4372a}
+.bag-host{display:flex;align-items:center}
+.bag-host .ns-bag{margin:0}
 .buy{margin-top:34px;width:100%;height:60px}
 .perks{list-style:none;margin-top:30px;border-top:1px solid var(--line)}
 .perks li{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);font-size:14px}
@@ -204,6 +214,7 @@ footer a{text-decoration:none;margin:0 10px}
   <div class="wrap top-in">
     <a href="/" aria-label="Nokta Ayakkabıcılık ana sayfa"><img src="/logo-transparent.png" alt="Nokta Ayakkabıcılık" width="73" height="26"></a>
     <nav aria-label="Sayfa"><a href="#iki-gorunum">İki görünüm</a><a href="#satin-al">Renk ve numara</a><a href="#detaylar">Detaylar</a><a href="/">Tüm modeller</a></nav>
+    <div class="bag-host" data-ns-bag></div>
   </div>
 </header>
 
@@ -274,11 +285,12 @@ footer a{text-decoration:none;margin:0 10px}
       </div>
 
       <div class="sizes">
-        <div class="label">Numaralar <b>36 · 37 · 38 · 39 · 40</b></div>
-        <div class="sz"><span>36</span><span>37</span><span>38</span><span>39</span><span>40</span></div>
+        <div class="label">Numara <b id="secNum">Seçilmedi</b></div>
+        <div class="sz" id="sz" role="radiogroup" aria-label="Numara"><button type="button" role="radio" aria-checked="false" data-n="36">36</button><button type="button" role="radio" aria-checked="false" data-n="37">37</button><button type="button" role="radio" aria-checked="false" data-n="38">38</button><button type="button" role="radio" aria-checked="false" data-n="39">39</button><button type="button" role="radio" aria-checked="false" data-n="40">40</button></div>
+        <p class="sz-hint" id="szHint">Numaranı seç, sonra sepete ekle.</p>
       </div>
 
-      <a class="btn btn-dark buy sp-buy" id="buyBtn" href="https://www.shopier.com/noktaayakkabi/51722203">Sepete Ekle</a>
+      <button type="button" class="btn btn-dark buy" id="buyBtn">Sepete Ekle</button>
 
       <ul class="perks">
         <li><b>Ücretsiz kargo</b><span>17:00'ye kadar verilen siparişler aynı gün kargoda</span></li>
@@ -328,7 +340,7 @@ footer a{text-decoration:none;margin:0 10px}
 
 <div class="bar" id="bar" aria-hidden="true">
   <div class="p">2.850 TL<small id="barRenk">Siyah · 36-40</small></div>
-  <a class="btn sp-buy" id="barBuy" href="https://www.shopier.com/noktaayakkabi/51722203">Sepete Ekle</a>
+  <button type="button" class="btn" id="barBuy">Sepete Ekle</button>
 </div>
 
 <script>
@@ -340,7 +352,34 @@ footer a{text-decoration:none;margin:0 10px}
     kahve:{ad:'Acı Kahve',url:'https://www.shopier.com/noktaayakkabi/51722178',cizme:'kahve-cift',bot:'kahve-bot-yan',
       foto:[['kahve-capraz','Çapraz'],['kahve-cift','Tozluk takılı ve çıkarılmış'],['kahve-arka','Arkadan'],['kahve-bot-yan','Bot hali'],['kahve-bot-ust','Üstten']]}
   };
-  var renk='siyah', gorunum='cizme';
+  var renk='siyah', gorunum='cizme', secim=null;
+  var szWrap=document.getElementById('sz'), hint=document.getElementById('szHint'), secNum=document.getElementById('secNum');
+  function sid(){return R[renk].url.split('/').pop();}
+  function refreshSizes(){
+    var st={}; if(window.NoktaSepet){window.NoktaSepet.sizes(sid()).forEach(function(x){st[x.size]=x.stock;});}
+    szWrap.querySelectorAll('button').forEach(function(b){
+      var n=b.dataset.n, yok=(n in st)&&st[n]<=0;
+      b.disabled=yok; b.title=yok?'Tükendi':'';
+      b.setAttribute('aria-checked',secim===n?'true':'false');
+    });
+    secNum.textContent=secim?secim+' numara':'Seçilmedi';
+    hint.classList.remove('err'); hint.textContent=secim?R[renk].ad+' · '+secim+' numara seçildi':'Numaranı seç, sonra sepete ekle.';
+    document.getElementById('buyBtn').textContent=secim?'Sepete Ekle · '+secim+' numara':'Sepete Ekle';
+  }
+  szWrap.addEventListener('click',function(e){var b=e.target.closest('button');if(!b||b.disabled)return;secim=b.dataset.n;refreshSizes();});
+  document.addEventListener('nokta-sepet-hazir',refreshSizes);
+  function sepeteEkle(fromBar){
+    if(!secim){
+      if(fromBar){document.getElementById('satin-al').scrollIntoView({behavior:'smooth'});}
+      hint.textContent='Önce numaranı seç'; hint.classList.add('err');
+      szWrap.classList.remove('shake'); void szWrap.offsetWidth; szWrap.classList.add('shake');
+      return;
+    }
+    if(window.NoktaSepet&&window.NoktaSepet.add(sid(),secim)){hint.textContent='Sepete eklendi · '+R[renk].ad+' '+secim+' numara';}
+    else{window.location.href=R[renk].url;}
+  }
+  document.getElementById('buyBtn').addEventListener('click',function(){sepeteEkle(false);});
+  document.getElementById('barBuy').addEventListener('click',function(){sepeteEkle(true);});
   var thumbs=document.getElementById('thumbs'), main=document.getElementById('mainImg');
 
   function setMain(f,alt,btn){
@@ -352,7 +391,7 @@ footer a{text-decoration:none;margin:0 10px}
     renk=r; var d=R[r];
     document.getElementById('renkAd').textContent=d.ad;
     document.getElementById('barRenk').textContent=d.ad+' · 36-40';
-    ['buyBtn','barBuy'].forEach(function(id){document.getElementById(id).href=d.url;});
+    refreshSizes();
     document.querySelectorAll('.sw button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.renk===r?'true':'false');});
     thumbs.innerHTML='';
     d.foto.forEach(function(f,ix){
