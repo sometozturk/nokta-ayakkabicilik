@@ -284,15 +284,15 @@
         if (busy || !cart.length) return;
         var c = counts();
         track('track', 'InitiateCheckout', { content_ids: cart.map(function (i) { return shopierIdOf(products.get(i.id).url); }), content_type: 'product', num_items: c.count, value: c.total, currency: 'TRY' });
-        if (cart.length === 1 && cart[0].qty === 1) {
-            var p = products.get(cart[0].id);
-            track('trackCustom', 'ShopierTikla', { content_ids: [shopierIdOf(p.url)], content_type: 'product', value: Number(p.price), currency: 'TRY' });
-            toast('Shopier açılıyor · ' + cart[0].size + ' numarayı seçmeyi unutma');
-            mode = 'single'; render();
-            if (SAME_TAB) setTimeout(function () { go(p.url); }, 350); else go(p.url);
-            return;
-        }
+        // Tek ürün de olsa tek ödeme sayfası oluşturulur: numara hazır gelir, müşteri doğrudan öder.
         createBundle(c);
+    }
+    function singleFallback() {
+        var p = products.get(cart[0].id);
+        track('trackCustom', 'ShopierTikla', { content_ids: [shopierIdOf(p.url)], content_type: 'product', value: Number(p.price), currency: 'TRY' });
+        toast('Shopier açılıyor · ' + cart[0].size + ' numarayı seçmeyi unutma');
+        mode = 'single'; render();
+        if (SAME_TAB) setTimeout(function () { go(p.url); }, 350); else go(p.url);
     }
     function createBundle(c) {
         busy = true; render();
@@ -325,6 +325,7 @@
             throw new Error(r.data.error || 'Ödeme sayfası oluşturulamadı.');
         }).catch(function (err) {
             try { if (win && !win.closed) win.close(); } catch (e) {}
+            if (fallback && cart.length === 1 && cart[0].qty === 1) { busy = false; singleFallback(); return; }
             if (fallback) { mode = 'manual'; toast('Tek sayfa oluşturulamadı, ürünleri sırayla açabilirsin'); }
             else { mode = 'cart'; toast(err.message); }
         }).then(function () { busy = false; save(); render(); });
@@ -367,7 +368,12 @@
                     var p = byShopier.get(String(shopierId)); if (!p || !size) return false;
                     add(p, String(size)); toast('Sepete eklendi · ' + size + ' numara'); return true;
                 },
-                openCart: function () { render(); open(panel); }
+                openCart: function () { render(); open(panel); },
+                buyNow: function (shopierId, size) {
+                    var p = byShopier.get(String(shopierId)); if (!p || !size) return false;
+                    if (!cart.some(function (i) { return i.id === p.id && i.size === String(size); })) add(p, String(size));
+                    mode = 'cart'; bundle = null; render(); open(panel); checkout(); return true;
+                }
             };
             document.dispatchEvent(new CustomEvent('nokta-sepet-hazir'));
             new MutationObserver(function () { relabel(); }).observe(document.body, { childList: true, subtree: true });
